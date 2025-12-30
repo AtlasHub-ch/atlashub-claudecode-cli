@@ -1,7 +1,7 @@
 {
-  "name": "@atlashub/claude-gitflow",
+  "name": "@atlashub/claude-tools",
   "version": "1.0.0",
-  "description": "GitFlow automation commands for Claude Code with EF Core migration support",
+  "description": "Claude Code automation toolkit - GitFlow, APEX, EF Core migrations, prompts and more",
   "author": {
     "name": "David Truninger",
     "email": "david@atlashub.ch",
@@ -13,8 +13,8 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "bin": {
-    "claude-gitflow": "./dist/index.js",
-    "cgf": "./dist/index.js"
+    "claude-tools": "./dist/index.js",
+    "ct": "./dist/index.js"
   },
   "files": [
     "dist",
@@ -30,19 +30,23 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/atlashub/claude-gitflow.git"
+    "url": "git+https://github.com/atlashub/claude-tools.git"
   },
   "keywords": [
     "claude",
     "claude-code",
+    "atlashub",
+    "claude-tools",
     "gitflow",
+    "apex",
     "efcore",
     "entity-framework",
     "migrations",
     "cli",
     "automation",
     "anthropic",
-    "dotnet"
+    "dotnet",
+    "prompts"
   ],
   "scripts": {
     "dev": "tsup --watch",

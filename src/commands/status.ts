@@ -13,7 +13,7 @@ export const statusCommand = new Command('status')
   .option('-l, --local', 'Check project directory ./.claude')
   .option('-v, --verbose', 'Show detailed command list')
   .action(async (options) => {
-    logger.header('Claude GitFlow Status');
+    logger.header('Claude Tools Status');
 
     const isGlobal = !options.local;
 
@@ -36,7 +36,7 @@ export const statusCommand = new Command('status')
     } else {
       licenseTable.push(
         [`Status: ${chalk.yellow('Not activated')}`],
-        [`Run: ${chalk.cyan('claude-gitflow activate <KEY>')}`]
+        [`Run: ${chalk.cyan('claude-tools activate <KEY>')}`]
       );
     }
 
@@ -144,6 +144,6 @@ export const statusCommand = new Command('status')
     // Quick help
     if (!installation.installed) {
       console.log();
-      logger.info(`Run ${chalk.cyan('claude-gitflow install')} to install commands`);
+      logger.info(`Run ${chalk.cyan('claude-tools install')} to install commands`);
     }
   });

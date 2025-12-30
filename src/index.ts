@@ -16,8 +16,8 @@ const pkg = JSON.parse(readFileSync(join(__dirname, '..', 'package.json'), 'utf-
 const program = new Command();
 
 program
-  .name('claude-gitflow')
-  .description(chalk.cyan('GitFlow automation commands for Claude Code'))
+  .name('claude-tools')
+  .description(chalk.cyan('Claude Code automation toolkit by Atlashub'))
   .version(pkg.version, '-v, --version');
 
 // Register commands
@@ -32,8 +32,8 @@ program.action(() => {
   console.log(chalk.cyan(`
 ╔═══════════════════════════════════════════════════════════╗
 ║                                                           ║
-║   ${chalk.bold('Claude GitFlow')} - v${pkg.version}                           ║
-║   GitFlow automation for Claude Code                      ║
+║   ${chalk.bold('Claude Tools')} by Atlashub - v${pkg.version}                  ║
+║   GitFlow, APEX, EF Core, Prompts & more                  ║
 ║                                                           ║
 ╚═══════════════════════════════════════════════════════════╝
 `));

@@ -1,6 +1,6 @@
-# @atlashub/claude-gitflow
+# @atlashub/claude-tools
 
-Professional GitFlow automation CLI for Claude Code with EF Core migration support.
+Claude Code automation toolkit - GitFlow, APEX, EF Core migrations, prompts and more.
 
 ## Features
 
@@ -8,6 +8,7 @@ Professional GitFlow automation CLI for Claude Code with EF Core migration suppo
 - Advanced EF Core migration management (multi-context, validation, rollback)
 - APEX methodology (Analyze-Plan-Execute-eXamine)
 - Git workflow commands (commit, PR creation, merge)
+- Prompt generation tools
 - License key validation system
 - Interactive CLI with colored output
 - Project auto-detection (Git, .NET, EF Core)
@@ -15,29 +16,54 @@ Professional GitFlow automation CLI for Claude Code with EF Core migration suppo
 
 ## Installation
 
+### Depuis GitHub (Recommande)
+
+```bash
+# Installation globale directe depuis GitHub
+npm install -g github:atlashub/claude-tools
+
+# Ou depuis une branche specifique
+npm install -g github:atlashub/claude-tools#develop
+
+# Ou depuis un tag
+npm install -g github:atlashub/claude-tools#v1.0.0
+```
+
+### Depuis GitHub Packages (npm)
+
 ```bash
 # Configure npm for GitHub Packages
 npm config set @atlashub:registry https://npm.pkg.github.com
 npm config set //npm.pkg.github.com/:_authToken YOUR_GITHUB_TOKEN
 
 # Install globally
-npm install -g @atlashub/claude-gitflow
+npm install -g @atlashub/claude-tools
+```
+
+### Comme dependance de projet
+
+```bash
+# Ajouter au projet
+npm install -D github:atlashub/claude-tools
+
+# Utiliser via npx
+npx claude-tools install --local --skip-license
 ```
 
 ## Quick Start
 
 ```bash
 # Activate your license
-claude-gitflow activate YOUR-LICENSE-KEY
+claude-tools activate YOUR-LICENSE-KEY
 
 # Install commands to ~/.claude (global - default)
-claude-gitflow install
+claude-tools install
 
 # Or install to project directory ./.claude (local)
-claude-gitflow install --local
+claude-tools install --local
 
 # Check status
-claude-gitflow status
+claude-tools status
 ```
 
 ## CLI Commands
@@ -54,39 +80,39 @@ claude-gitflow status
 
 ```bash
 # Install all components (default)
-claude-gitflow install
+claude-tools install
 
 # Install specific components only
-claude-gitflow install --commands-only
-claude-gitflow install --agents-only
-claude-gitflow install --hooks-only
+claude-tools install --commands-only
+claude-tools install --agents-only
+claude-tools install --hooks-only
 
 # Install to project directory instead of user directory
-claude-gitflow install --local
+claude-tools install --local
 
 # Force overwrite existing files
-claude-gitflow install --force
+claude-tools install --force
 
 # Skip config file creation
-claude-gitflow install --no-config
+claude-tools install --no-config
 ```
 
 ### Uninstall Options
 
 ```bash
 # Remove all components
-claude-gitflow uninstall
+claude-tools uninstall
 
 # Remove specific components only
-claude-gitflow uninstall --commands-only
-claude-gitflow uninstall --agents-only
-claude-gitflow uninstall --hooks-only
+claude-tools uninstall --commands-only
+claude-tools uninstall --agents-only
+claude-tools uninstall --hooks-only
 
 # Keep configuration file
-claude-gitflow uninstall --keep-config
+claude-tools uninstall --keep-config
 
 # Skip confirmation
-claude-gitflow uninstall --yes
+claude-tools uninstall --yes
 ```
 
 ## Claude Code Commands (after installation)
@@ -159,7 +185,7 @@ After installation, configuration is stored in `~/.claude/gitflow/config.json`:
 
 ```json
 {
-  "$schema": "https://atlashub.ch/schemas/claude-gitflow-config.json",
+  "$schema": "https://atlashub.ch/schemas/claude-tools-config.json",
   "version": "1.0.0",
   "git": {
     "branches": {
@@ -242,10 +268,10 @@ After installation, the following structure is created:
 
 ## License
 
-This software requires a valid license key. Visit [atlashub.ch/claude-gitflow](https://atlashub.ch/claude-gitflow) for licensing information.
+This software requires a valid license key. Visit [atlashub.ch/claude-tools](https://atlashub.ch/claude-tools) for licensing information.
 
 ## Support
 
 - Documentation: [atlashub.ch/docs](https://atlashub.ch/docs)
-- Issues: [GitHub Issues](https://github.com/atlashub/claude-gitflow/issues)
+- Issues: [GitHub Issues](https://github.com/atlashub/claude-tools/issues)
 - Email: support@atlashub.ch

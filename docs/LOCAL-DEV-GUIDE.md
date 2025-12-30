@@ -1,6 +1,6 @@
-# Guide d'installation locale - VS Code
+# Guide d'installation - Claude Tools
 
-Installation et test du CLI claude-gitflow en local dans votre projet.
+Installation du CLI claude-tools depuis GitHub.
 
 ## Prerequis
 
@@ -8,14 +8,53 @@ Installation et test du CLI claude-gitflow en local dans votre projet.
 - VS Code avec extension Claude Code
 - Git
 
-## Installation rapide
+---
+
+## Installation depuis GitHub (Recommande)
+
+### Option 1: Installation globale directe
+
+```bash
+# Installer directement depuis GitHub
+npm install -g github:atlashub/claude-tools
+
+# Verifier
+claude-tools --version
+
+# Installer les commandes dans ~/.claude
+claude-tools install --skip-license
+```
+
+### Option 2: Installation depuis une branche specifique
+
+```bash
+# Depuis develop
+npm install -g github:atlashub/claude-tools#develop
+
+# Depuis un tag
+npm install -g github:atlashub/claude-tools#v1.0.0
+```
+
+### Option 3: Installation locale au projet
+
+```bash
+# Ajouter comme dependance de dev
+npm install -D github:atlashub/claude-tools
+
+# Utiliser via npx
+npx claude-tools install --local --skip-license
+```
+
+---
+
+## Installation pour developpement
 
 ### 1. Cloner et builder
 
 ```bash
 # Cloner le repo
-git clone https://github.com/atlashub/claude-gitflow.git
-cd claude-gitflow
+git clone https://github.com/atlashub/claude-tools.git
+cd claude-tools
 
 # Installer les dependances
 npm install
@@ -31,17 +70,18 @@ npm run build
 npm link
 
 # Verifier
-claude-gitflow --version
+claude-tools --version
 ```
 
-### 3. Installer les commandes localement
+### 3. Installer les commandes
 
 ```bash
-# Dans votre projet cible
-cd /chemin/vers/mon-projet
+# Global (~/.claude) - recommande
+claude-tools install --skip-license
 
-# Installer en local (./.claude)
-claude-gitflow install --local --skip-license
+# Ou local (./.claude) dans un projet specifique
+cd /chemin/vers/mon-projet
+claude-tools install --local --skip-license
 ```
 
 ## Structure apres installation
@@ -68,7 +108,7 @@ mon-projet/
 
 1. Editer dans `templates/commands/`
 2. Rebuild: `npm run build`
-3. Reinstaller: `claude-gitflow install --local --force --skip-license`
+3. Reinstaller: `claude-tools install --local --force --skip-license`
 4. Tester dans Claude Code: `/gitflow:1-init`
 
 ### Script de dev rapide
@@ -86,7 +126,7 @@ npm run build
 
 Write-Host "Installing to $target..." -ForegroundColor Cyan
 Push-Location $target
-claude-gitflow install --local --force --skip-license
+claude-tools install --local --force --skip-license
 Pop-Location
 
 Write-Host "Done!" -ForegroundColor Green
@@ -110,7 +150,7 @@ npm run build
 
 echo "Installing to $TARGET..."
 pushd "$TARGET" > /dev/null
-claude-gitflow install --local --force --skip-license
+claude-tools install --local --force --skip-license
 popd > /dev/null
 
 echo "Done!"
@@ -198,10 +238,10 @@ Ajouter dans `.vscode/launch.json`:
 
 ```bash
 # Verifier l'installation
-claude-gitflow status --local
+claude-tools status --local
 
 # Lister les commandes installees
-claude-gitflow status --local --verbose
+claude-tools status --local --verbose
 ```
 
 ### Dans Claude Code
@@ -221,7 +261,7 @@ claude-gitflow status --local --verbose
 ls -la .claude/commands/
 
 # Reinstaller
-claude-gitflow install --local --force --skip-license
+claude-tools install --local --force --skip-license
 ```
 
 ### Erreur "Cannot find module"
@@ -253,7 +293,7 @@ node dist/index.js install --local --skip-license
 
 1. **Developper** - Editer `templates/commands/*.md`
 2. **Builder** - `npm run build`
-3. **Installer** - `claude-gitflow install --local --force --skip-license`
+3. **Installer** - `claude-tools install --local --force --skip-license`
 4. **Tester** - Dans Claude Code: `/gitflow:1-init`
 5. **Iterer** - Retour etape 1
 
@@ -262,10 +302,10 @@ node dist/index.js install --local --skip-license
 | Action | Commande |
 |--------|----------|
 | Build | `npm run build` |
-| Install local | `claude-gitflow install --local --skip-license` |
-| Reinstall | `claude-gitflow install --local --force --skip-license` |
-| Status | `claude-gitflow status --local` |
-| Uninstall | `claude-gitflow uninstall --local --yes` |
+| Install local | `claude-tools install --local --skip-license` |
+| Reinstall | `claude-tools install --local --force --skip-license` |
+| Status | `claude-tools status --local` |
+| Uninstall | `claude-tools uninstall --local --yes` |
 | Watch mode | `npm run dev` (si configure) |
 
 ## Ajouter watch mode

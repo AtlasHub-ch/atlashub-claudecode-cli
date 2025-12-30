@@ -33,7 +33,53 @@ Une migration EF Core valide = **3 fichiers** :
 - Le build compile (`dotnet build`)
 - Pas de conflit ModelSnapshot avec develop
 
-### 3. Classifier le commit
+### 3. ⚠️ SAFETY CHECK - Operations destructives
+
+**BLOQUANT** - Scanner les migrations pour operations dangereuses :
+
+```bash
+# Patterns a detecter dans les fichiers .cs de migration
+grep -n "DropTable\|DropColumn\|DropIndex\|DropForeignKey\|DeleteData" {migration}.cs
+grep -n "migrationBuilder.Sql" {migration}.cs | grep -i "DELETE\|DROP\|TRUNCATE"
+```
+
+**Si detecte :**
+
+```
+╔══════════════════════════════════════════════════════════╗
+║  ⛔ OPERATIONS DESTRUCTIVES DETECTEES                     ║
+╠══════════════════════════════════════════════════════════╣
+║  Fichier: {migration}.cs                                 ║
+║  Ligne {X}: DropTable("Users")                           ║
+║  Ligne {Y}: DropColumn("Email", "Customers")             ║
+╠══════════════════════════════════════════════════════════╣
+║  RISQUES:                                                ║
+║  - Perte de donnees irreversible                         ║
+║  - Verifiez que vous avez un BACKUP                      ║
+╚══════════════════════════════════════════════════════════╝
+```
+
+**Actions:**
+1. Afficher alerte detaillee (fichier, ligne, operation)
+2. Demander confirmation explicite : "Confirmez-vous? (oui/non)"
+3. Si "non" → Annuler commit
+4. Si "oui" → Logger dans `.claude/gitflow/logs/dangerous-migrations.json`
+5. Continuer le commit
+
+**Patterns dangereux:**
+
+| Pattern | Risque | Niveau |
+|---------|--------|--------|
+| `DropTable` | Suppression table entiere | CRITICAL |
+| `DropColumn` | Perte donnees colonne | CRITICAL |
+| `DeleteData` | Suppression lignes | CRITICAL |
+| `DropForeignKey` | Casse integrite | HIGH |
+| `DropIndex` | Impact performance | MEDIUM |
+| `Sql("DELETE...")` | SQL brut destructif | CRITICAL |
+| `Sql("DROP...")` | SQL brut destructif | CRITICAL |
+| `Sql("TRUNCATE...")` | Vidage table | CRITICAL |
+
+### 4. Classifier le commit
 
 | Fichiers | Type | Prefix |
 |----------|------|--------|
@@ -42,7 +88,7 @@ Une migration EF Core valide = **3 fichiers** :
 | Code sans migration | code | Selon type branche |
 | Config/docs | chore | `chore:` |
 
-### 4. Generer message (si absent)
+### 5. Generer message (si absent)
 
 **Migration:**
 ```
@@ -61,13 +107,13 @@ feat({scope}): {description}
 Migrations: {liste}
 ```
 
-### 5. Executer commit
+### 6. Executer commit
 
 - Ajouter fichiers migration manquants si necessaire
 - Verifier une derniere fois
 - Commit avec message
 
-### 6. Post-commit
+### 7. Post-commit
 
 - Verifier qu'il ne reste pas de fichiers migration non commites
 - Afficher resume
@@ -82,6 +128,7 @@ Migrations: {liste}
 | Designer manquant | Ajouter le fichier |
 | Build echoue | `dotnet ef migrations remove` + corriger |
 | Conflit detecte | Rebase d'abord |
+| **Operation destructive** | Confirmer ou modifier la migration |
 
 ## Modes
 
