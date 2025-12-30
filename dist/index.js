@@ -45674,7 +45674,7 @@ async function checkLicense() {
 var import_path2 = require("path");
 var import_os3 = require("os");
 var import_fs_extra2 = __toESM(require_lib());
-var PACKAGE_ROOT = (0, import_path2.join)(__dirname, "..", "..");
+var PACKAGE_ROOT = (0, import_path2.join)(__dirname, "..");
 var TEMPLATES_DIR = (0, import_path2.join)(PACKAGE_ROOT, "templates");
 var INSTALL_DIRS = ["commands", "agents", "hooks"];
 function getClaudeDir(global3) {
@@ -45727,7 +45727,7 @@ async function installCommands(options = {}) {
           result.skipped++;
           continue;
         }
-        await import_fs_extra2.default.ensureDir(dirname(dest));
+        await import_fs_extra2.default.ensureDir((0, import_path2.dirname)(dest));
         await import_fs_extra2.default.copy(src, dest, { overwrite: options.force });
         result.installed++;
         if (file.endsWith(".md") && !file.includes("/")) {
