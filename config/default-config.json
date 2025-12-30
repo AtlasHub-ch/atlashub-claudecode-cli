@@ -1,0 +1,25 @@
+{
+  "git": {
+    "branches": {
+      "main": "main",
+      "develop": "develop"
+    },
+    "remote": "origin",
+    "mergeStrategy": "--no-ff",
+    "tagPrefix": "v"
+  },
+  "efcore": {
+    "enabled": true,
+    "projectPath": "auto-detect",
+    "contextName": "ApplicationDbContext",
+    "migrationsFolder": "Migrations",
+    "generateScript": true,
+    "scriptOutputPath": "./scripts"
+  },
+  "workflow": {
+    "requireConfirmation": true,
+    "autoDeleteBranch": false,
+    "createCheckpoints": true,
+    "verboseLogging": false
+  }
+}
