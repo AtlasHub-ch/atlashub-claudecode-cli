@@ -1,12 +1,32 @@
 ---
-description: Phase 10 - Start a new feature, release or hotfix branch
+description: Phase 10 - Start a new feature, release or hotfix branch with worktree
 ---
 
-# Phase 10: START - Demarrer une branche GitFlow
+# Phase 10: START - Demarrer une branche GitFlow (Worktree)
 
-Tu es expert GitFlow. Cree une branche selon les conventions.
+Tu es expert GitFlow. Cree une branche dans un **worktree separe** (par defaut).
 
-**Argument:** `$ARGUMENTS` = `{type} {name}` ou interactif si absent
+**Argument:** `$ARGUMENTS` = `{type} {name} [--no-worktree]`
+
+---
+
+## Pourquoi Worktree par defaut ?
+
+| Avantage | Description |
+|----------|-------------|
+| **Hotfix urgent** | Pas besoin de stash, ouvrir autre dossier |
+| **Build cache** | Conserve par branche (node_modules, bin/) |
+| **IDE** | Plusieurs fenetres, pas de reload |
+| **Comparaison** | Code cote a cote |
+| **Isolation** | Pas de pollution entre branches |
+
+**Structure:**
+```
+projet/                    ← develop (main worktree)
+projet-feature-auth/       ← feature/auth (worktree)
+projet-hotfix-login/       ← hotfix/login-fix (worktree)
+projet-release-v1.2.0/     ← release/v1.2.0 (worktree)
+```
 
 ---
 
@@ -72,26 +92,33 @@ CURRENT=$(cat package.json | jq -r '.version')
 | Branche n'existe pas | `git branch --list {branch}` | Erreur |
 | Base a jour | `git fetch origin` | - |
 
-### 4. Creer la branche
+### 4. Creer le worktree + branche
 
 ```bash
+# Variables
+PROJECT_NAME=$(basename $(pwd))
+WORKTREE_PATH="../${PROJECT_NAME}-${TYPE}-${NAME}"
+
+# Fetch pour avoir les refs a jour
+git fetch origin
+
+# Creer worktree avec nouvelle branche
 # Feature (depuis develop)
-git checkout develop
-git pull origin develop
-git checkout -b feature/{name}
+git worktree add -b feature/{name} "$WORKTREE_PATH" origin/develop
 
 # Release (depuis develop)
-git checkout develop
-git pull origin develop
-git checkout -b release/v{version}
+git worktree add -b release/v{version} "$WORKTREE_PATH" origin/develop
 
 # Hotfix (depuis main)
-git checkout main
-git pull origin main
-git checkout -b hotfix/{name}
+git worktree add -b hotfix/{name} "$WORKTREE_PATH" origin/main
 ```
 
 ### 5. Actions post-creation
+
+**Aller dans le worktree:**
+```bash
+cd "$WORKTREE_PATH"
+```
 
 **Release uniquement** - Bump version :
 ```bash
@@ -106,6 +133,22 @@ sed -i 's/<Version>.*<\/Version>/<Version>{version}<\/Version>/' *.csproj
 ```bash
 git push -u origin {branch}
 ```
+
+**Ouvrir dans IDE (optionnel):**
+```bash
+code "$WORKTREE_PATH"  # VS Code
+rider "$WORKTREE_PATH" # Rider
+```
+
+### Alternative: --no-worktree
+
+Si vous preferez le mode classique (switch de branche) :
+
+```bash
+/gitflow:10-start feature ma-feature --no-worktree
+```
+
+Ceci fait un simple `git checkout -b` sans creer de worktree.
 
 ---
 
