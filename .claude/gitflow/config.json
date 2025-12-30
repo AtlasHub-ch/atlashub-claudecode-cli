@@ -1,14 +1,6 @@
 {
   "$schema": "https://atlashub.ch/schemas/claude-gitflow-config.json",
-  "version": "1.0.0",
-  "repository": {
-    "name": "@atlashub/claude-tools",
-    "folder": "atlashub-claudecode-cli-develop",
-    "type": "nodejs",
-    "language": "typescript",
-    "description": "Claude Code automation toolkit - GitFlow, APEX, EF Core migrations, prompts and more",
-    "remoteUrl": "https://github.com/SIMON-Atlashub/atlashub-claudecode-cli.git"
-  },
+  "version": "1.1.0",
   "git": {
     "branches": {
       "main": "main",
@@ -23,21 +15,18 @@
     "protectedBranches": ["main", "develop"],
     "requireLinearHistory": false
   },
-  "versioning": {
-    "strategy": "SemVer",
-    "source": "package.json",
-    "sourceFile": "package.json",
-    "autoIncrement": {
-      "feature": "minor",
-      "hotfix": "patch",
-      "release": "manual"
-    }
-  },
   "efcore": {
-    "enabled": false,
-    "note": "Ce projet Node.js/TypeScript contient des outils pour gérer EF Core dans d'autres projets .NET",
-    "autoDetect": false,
-    "contexts": [],
+    "enabled": true,
+    "autoDetect": true,
+    "contexts": [
+      {
+        "name": "ApplicationDbContext",
+        "projectPath": "auto-detect",
+        "startupProject": "auto-detect",
+        "migrationsFolder": "Migrations",
+        "migrationsAssembly": null
+      }
+    ],
     "scripts": {
       "generateOnRelease": true,
       "generateOnHotfix": true,

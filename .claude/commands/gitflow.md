@@ -13,11 +13,31 @@ Tu es expert GitFlow et EF Core. Gere le workflow de branches et migrations pour
 ## Overview
 
 ```
-1. INIT → 2. STATUS → 3. COMMIT → 4. PLAN → 5. EXEC
-                                       ↓
-                    7. PULL-REQUEST → 8. REVIEW → 9. MERGE
-                                                      ↓
-                              6. ABORT ←──────────────┘
+                    ┌─────────────────────────────────────────┐
+                    │           GITFLOW WORKFLOW              │
+                    └─────────────────────────────────────────┘
+
+10. START ──────────────────────────────────────────────────────┐
+     │                                                          │
+     ▼                                                          │
+feature/* ──3.COMMIT──► 7.PR ──► 8.REVIEW ──► 9.MERGE ──► develop
+     │                                                          │
+     │                                                          │
+10. START (release) ────────────────────────────────────────────┤
+     │                                                          │
+     ▼                                                          │
+release/* ──3.COMMIT──► 7.PR(main) ──► 9.MERGE ──► 11.FINISH ──► main + tag
+     │                                               │
+     └───────────────── merge back ◄─────────────────┘
+                                                          │
+10. START (hotfix) ──────────────────────────────────────┤
+     │                                                    │
+     ▼                                                    │
+hotfix/* ──3.COMMIT──► 7.PR(main) ──► 9.MERGE ──► 11.FINISH ──► main + tag
+     │                                               │
+     └───────────────── merge back ◄─────────────────┘
+
+                    6. ABORT ◄── (rollback si probleme)
 ```
 
 ## Phases
@@ -33,6 +53,28 @@ Tu es expert GitFlow et EF Core. Gere le workflow de branches et migrations pour
 | 7 | `/gitflow:7-pull-request` | Feature prete | Creer PR + checks |
 | 8 | `/gitflow:8-review` | Review PR | Checklist + feedback |
 | 9 | `/gitflow:9-merge` | PR approuvee | Merge + post-actions |
+| 10 | `/gitflow:10-start` | Nouvelle branche | Creer feature/release/hotfix |
+| 11 | `/gitflow:11-finish` | Apres merge | Tag + merge back + cleanup |
+
+## Workflow typique
+
+```bash
+# 1. Demarrer une feature
+/gitflow:10-start feature ma-feature
+
+# 2. Developper + commiter
+/gitflow:3-commit
+
+# 3. Creer PR vers develop
+/gitflow:7-pull-request
+
+# 4. Review et merge
+/gitflow:8-review {PR}
+/gitflow:9-merge {PR}
+
+# 5. Pour release: finaliser (tag + merge back)
+/gitflow:11-finish
+```
 
 ## Versioning (.NET)
 

@@ -48,9 +48,6 @@ AskUserQuestion({
         label: "<nom-du-fichier>.md",
         description: "Verifier l'implementation .claude/ba/implementations/<nom-du-fichier>.md"
       }
-      // Exemple concret :
-      // { label: "2025-12-30-user-auth.md", description: "Verifier l'implementation .claude/ba/implementations/2025-12-30-user-auth.md" }
-      // { label: "2025-12-30-payment.md", description: "Verifier l'implementation .claude/ba/implementations/2025-12-30-payment.md" }
     ],
     multiSelect: false
   }]

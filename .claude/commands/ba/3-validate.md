@@ -47,9 +47,6 @@ AskUserQuestion({
         label: "<nom-du-fichier>.md",
         description: "Valider l'analyse .claude/ba/analyses/<nom-du-fichier>.md"
       }
-      // Exemple concret :
-      // { label: "2025-12-30-user-auth.md", description: "Valider l'analyse .claude/ba/analyses/2025-12-30-user-auth.md" }
-      // { label: "2025-12-30-payment.md", description: "Valider l'analyse .claude/ba/analyses/2025-12-30-payment.md" }
     ],
     multiSelect: false
   }]
