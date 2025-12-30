@@ -1,11 +1,13 @@
-import { join } from 'path';
+import { join, dirname } from 'path';
 import { homedir } from 'os';
 import fs from 'fs-extra';
 import { logger } from './logger.js';
 
 // __dirname is available in CommonJS
+// When bundled by tsup, __dirname = /path/to/package/dist
+// So we only go up ONE level to reach package root
 
-const PACKAGE_ROOT = join(__dirname, '..', '..');
+const PACKAGE_ROOT = join(__dirname, '..');
 const TEMPLATES_DIR = join(PACKAGE_ROOT, 'templates');
 
 // Directories to install
