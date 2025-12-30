@@ -51,7 +51,7 @@ dotnet format  # si necessaire
 Pour chaque groupe d'erreurs :
 
 ```
-Task(subagent_type="snipper", prompt="
+Task(subagent_type="snipper", model="opus", prompt="
 Fix erreurs .NET:
 {liste_erreurs_avec_fichier_ligne}
 Contexte: .NET 8 / ASP.NET Core / EF Core

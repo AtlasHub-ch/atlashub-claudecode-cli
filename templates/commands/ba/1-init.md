@@ -8,10 +8,18 @@ Expert Business Analyst. Initialise le contexte projet.
 
 ## Etape 1 : Scan projet
 
-Lance l'agent de scan (Haiku) :
+Lance l'agent exploration (Haiku - lecture seule) :
 
 ```
-Task(subagent_type="ba:scan", model="haiku", prompt="Scan le projet courant")
+Task(subagent_type="explore-codebase", model="haiku", prompt="
+Scan ce projet .NET et trouve:
+- Fichiers .sln et .csproj (architecture)
+- Entites EF Core existantes (Domain/Entities/)
+- DbContext (nom, location)
+- Controllers API existants (roles/permissions)
+- Pages Blazor existantes
+Retourne un resume structure.
+")
 ```
 
 ## Etape 2 : Creation config

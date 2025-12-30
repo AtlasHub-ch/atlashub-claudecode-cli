@@ -11,23 +11,41 @@ Expert developpeur .NET senior. Generation de code Microsoft stack.
 
 Verifier : `.claude/ba/validations/*.md` existe (sinon `/ba:3-validate`)
 
+## Strategie Agents
+
+| Tache | Model | Raison |
+|-------|-------|--------|
+| Exploration | haiku | Lecture seule, low cost |
+| Generation code | opus | Qualite maximale |
+
 ## Workflow
 
 ### 1. Charger contexte
 
 1. Lire `config.json` → architecture
 2. Lire spec validee → entites, endpoints, pages
-3. Scanner projet → patterns existants, namespaces
 
-### 2. Pour chaque ENTITE
-
-Lancer agent :
+### 2. Explorer patterns existants (HAIKU)
 
 ```
-Task(subagent_type="snipper", model="haiku", prompt="
-Genere entite .NET 8 pour: {EntityName}
+Task(subagent_type="explore-codebase", model="haiku", prompt="
+Trouve les patterns .NET existants:
+- Entite EF Core (Domain/Entities/)
+- Configuration EF (Infrastructure/Configurations/)
+- Controller API (Api/Controllers/)
+- Page Blazor (Pages/)
+- Test xUnit (Tests/)
+Retourne chemins + code modele.
+")
+```
+
+### 3. Pour chaque ENTITE (OPUS)
+
+```
+Task(subagent_type="snipper", model="opus", prompt="
+Genere entite .NET 8: {EntityName}
 Specs: {specs}
-Pattern: suivre {existing_entity}
+Pattern: {existing_entity}
 Creer:
 - Domain/Entities/{Entity}.cs
 - Infrastructure/Configurations/{Entity}Configuration.cs
@@ -35,7 +53,7 @@ Creer:
 ")
 ```
 
-### 3. Migration EF Core
+### 4. Migration EF Core
 
 ```bash
 dotnet ef migrations add Add{Entity} --project src/Infrastructure --startup-project src/Api
@@ -43,47 +61,47 @@ dotnet ef migrations add Add{Entity} --project src/Infrastructure --startup-proj
 
 **NE PAS** executer `database update`
 
-### 4. Pour chaque ENDPOINT
+### 5. Pour chaque ENDPOINT (OPUS)
 
 ```
-Task(subagent_type="snipper", model="haiku", prompt="
-Genere API .NET 8 pour: {Entity}
+Task(subagent_type="snipper", model="opus", prompt="
+Genere API .NET 8: {Entity}
 Endpoints: {from_specs}
 Roles: {roles}
-Pattern: suivre {existing_controller}
+Pattern: {existing_controller}
 Creer:
 - Application/DTOs/{Entity}/*.cs
 - Api/Controllers/{Entity}sController.cs
 ")
 ```
 
-### 5. Pour chaque PAGE Blazor
+### 6. Pour chaque PAGE Blazor (OPUS)
 
 ```
-Task(subagent_type="snipper", model="haiku", prompt="
-Genere pages Blazor pour: {Entity}
+Task(subagent_type="snipper", model="opus", prompt="
+Genere pages Blazor: {Entity}
 UI specs: {from_validation}
 Wireframe: {from_analyse}
-Pattern: suivre {existing_page}
+Pattern: {existing_page}
 Creer:
 - Pages/{Entity}s/Index.razor
 - Pages/{Entity}s/Form.razor
 ")
 ```
 
-### 6. Tests
+### 7. Tests (OPUS)
 
 ```
-Task(subagent_type="snipper", model="haiku", prompt="
-Genere tests xUnit pour: {Entity}sController
+Task(subagent_type="snipper", model="opus", prompt="
+Genere tests xUnit: {Entity}sController
 Cas: GET all, GET by id, POST, PUT, DELETE, 404, validation
-Pattern: suivre {existing_tests}
+Pattern: {existing_tests}
 ")
 ```
 
-### 7. Log implementation
+### 8. Log implementation
 
-Creer `.claude/ba/implementations/YYYY-MM-DD-{feature}.md` avec liste fichiers crees.
+Creer `.claude/ba/implementations/YYYY-MM-DD-{feature}.md`
 
 ## Resume
 
@@ -101,8 +119,8 @@ Prochain: /ba:5-verify
 
 ## Regles
 
-1. Scanner patterns existants AVANT generation
-2. Un agent par composant
-3. Agents Haiku pour rapidite
+1. Explorer patterns (haiku) AVANT generation
+2. Generer code avec opus (qualite maximale)
+3. Un agent par composant
 4. Suivre conventions projet
 5. NE PAS appliquer migration

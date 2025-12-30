@@ -90,16 +90,23 @@ Expert Business Analyst pour applications Microsoft. Workflow complet EPCT.
 | SQL Server | 2019+ | Database |
 | Identity | Core | Auth |
 
-## Agents utilises
+## Strategie Agents
 
-| Agent | Model | Phase | Role |
+| Tache | Agent | Model | Cout |
 |-------|-------|-------|------|
-| ba:scan | haiku | 1-init | Scan projet .NET |
-| ba:entity-analyzer | haiku | 2-analyse | Analyse entites |
-| ba:doc-generator | haiku | 2-analyse | Generation doc |
-| ba:code-generator | haiku | 4-implement | Generation code C# |
-| ba:blazor-generator | haiku | 4-implement | Generation Blazor |
-| snipper | sonnet | 5-verify | Fix erreurs |
+| Exploration/Lecture | explore-codebase | haiku | Low |
+| Generation code | snipper | opus | High |
+| Fix erreurs | snipper | opus | High |
+
+### Par phase
+
+| Phase | Agent | Model | Role |
+|-------|-------|-------|------|
+| 1-init | explore-codebase | haiku | Scan projet .NET |
+| 2-analyse | explore-codebase | haiku | Analyse entites existantes |
+| 4-implement | explore-codebase | haiku | Trouver patterns |
+| 4-implement | snipper | opus | Generer code qualite max |
+| 5-verify | snipper | opus | Fix erreurs build/test |
 
 ## Regles
 

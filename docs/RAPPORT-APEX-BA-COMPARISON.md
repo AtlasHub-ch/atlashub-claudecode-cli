@@ -133,121 +133,42 @@ Documente le workflow complet avec les 5 phases et leurs dependances.
 
 ---
 
-## 5. Recommandations
-
-### Option A : Etendre BA avec 2 nouvelles phases
-
-```
-BA WORKFLOW COMPLET (PROPOSE)
-────────────────────────────────────────────────────
-1-init      → Scan projet, config
-2-analyse   → Challenge besoin, modelisation
-3-validate  → Validation specs (85% min)
-4-implement → NOUVEAU : Generation code .NET/Blazor
-5-verify    → NOUVEAU : Build, test, lint
-────────────────────────────────────────────────────
-```
-
-### Option B : Faire pointer BA vers APEX apres validation
-
-```
-BA → APEX HANDOFF
-────────────────────────────────────────────────────
-/ba:1-init     → Setup context
-/ba:2-analyse  → Business analysis
-/ba:3-validate → Validation specs
-    ↓
-    Genere task description pour APEX
-    ↓
-/apex:1-analyze → Analyse technique
-/apex:2-plan    → Plan implementation
-/apex:3-execute → Code
-/apex:4-examine → Test
-────────────────────────────────────────────────────
-```
-
-### Option C : Creer des phases BA specifiques .NET
-
-| Nouvelle Phase | Description | Agent |
-|---------------|-------------|-------|
-| `/ba:4-generate` | Generer entites, DTOs, endpoints | ba:code-generator |
-| `/ba:5-test` | dotnet build + dotnet test | ba:validator |
-
----
-
-## 6. Implementation Recommandee
-
-Je recommande **Option A** : Etendre BA avec 4-implement et 5-verify.
-
-### Fichiers a creer
+## 5. Fichiers Crees
 
 ```
 templates/commands/ba/
-├── ba.md                    # NOUVEAU: Orchestrateur
-├── 1-init.md               # Existant
-├── 2-analyse.md            # Existant
-├── 3-validate.md           # Existant
-├── 4-implement.md          # NOUVEAU: Generation code
-├── 5-verify.md             # NOUVEAU: Build/test
+├── ba.md           # Orchestrateur (NOUVEAU)
+├── 1-init.md       # Existant
+├── 2-analyse.md    # Existant
+├── 3-validate.md   # Existant
+├── 4-implement.md  # Generation code .NET (NOUVEAU)
+├── 5-verify.md     # Build/test (NOUVEAU)
 └── _resources/
     ├── questions-challenge.md
     ├── template-analyse.md
-    ├── checklist-validation.md
-    └── template-entity.md    # NOUVEAU: Template entite C#
-```
-
-### Structure 4-implement.md
-
-```markdown
----
-description: Phase 4 - Implementation code .NET/Blazor
----
-
-## Workflow
-
-1. Lire specs validees (.claude/ba/validations/)
-2. Pour chaque entite : generer classe C# + DbContext
-3. Generer migration EF Core
-4. Pour chaque endpoint : generer controller + DTOs
-5. Pour chaque page : generer composant Blazor
-6. Sauvegarder dans projet
-
-## Agents
-
-- ba:entity-generator (haiku) : Entites + DbContext
-- ba:api-generator (haiku) : Controllers + DTOs
-- ba:ui-generator (haiku) : Composants Blazor
-```
-
-### Structure 5-verify.md
-
-```markdown
----
-description: Phase 5 - Verification et tests
----
-
-## Workflow
-
-1. dotnet build → Fix erreurs
-2. dotnet test → Rapport
-3. dotnet format → Style
-4. Resume final
-
-## Agents
-
-- snipper : Fix erreurs compilation
+    └── checklist-validation.md
 ```
 
 ---
 
-## 7. Conclusion
+## 6. Conclusion
 
-| Critere | APEX | BA Actuel | BA Propose |
-|---------|------|-----------|------------|
-| EPCT Complet | 100% | 50% | 100% |
-| Produit du code | Oui | Non | Oui |
-| Tests automatiques | Oui | Non | Oui |
-| Workflow successif | Oui | Partiel | Oui |
-| Specifique .NET | Non | Oui | Oui |
+| Critere | APEX | BA (Corrige) |
+|---------|------|--------------|
+| EPCT Complet | 100% | 100% |
+| Produit du code | Oui | Oui |
+| Tests automatiques | Oui | Oui |
+| Workflow successif | Oui | Oui |
+| Cible | Generique | Microsoft .NET/Blazor/EF Core |
 
-**Verdict** : BA a une excellente analyse metier mais doit etre etendu pour couvrir Code et Test. L'execution successive `/ba:1-init` → `/ba:2-analyse` → `/ba:3-validate` fonctionne, mais s'arrete trop tot dans le cycle EPCT.
+**Verdict** : BA est maintenant un workflow EPCT complet specialise pour l'ecosysteme Microsoft.
+
+### Workflow BA Final
+
+```bash
+/ba:1-init       # Scan projet .NET
+/ba:2-analyse    # Challenge besoin metier
+/ba:3-validate   # Validation specs (85%)
+/ba:4-implement  # Generation code
+/ba:5-verify     # dotnet build/test
+```

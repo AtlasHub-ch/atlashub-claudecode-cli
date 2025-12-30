@@ -55,15 +55,21 @@ QUESTION DECISIVE :
 
 ## Etape 3 : Modelisation
 
-### Entites (utilise agent Haiku pour chaque)
+### Analyse entites existantes (HAIKU)
+
+Si besoin de comprendre entites existantes :
 
 ```
-Task(subagent_type="ba:entity-analyzer", model="haiku", prompt="Analyse <EntityName>")
+Task(subagent_type="explore-codebase", model="haiku", prompt="
+Analyse les entites EF Core existantes liees a: {domaine}
+Cherche dans Domain/Entities/
+Retourne: proprietes, relations, patterns utilises
+")
 ```
 
 ### Schema donnees
 
-Genere schema Mermaid erDiagram.
+Genere schema Mermaid erDiagram base sur les specs.
 
 ### Endpoints API
 
@@ -84,11 +90,7 @@ Pour chaque ecran : schema + URL + roles + fonctionnalites.
 
 ## Etape 5 : Generation document
 
-Lance agent doc (Haiku) :
-
-```
-Task(subagent_type="ba:doc-generator", model="haiku", prompt="Genere doc avec: <DATA>")
-```
+Generer le document d'analyse directement (pas d'agent necessaire).
 
 Sauvegarde : `.claude/ba/analyses/YYYY-MM-DD-<feature>.md`
 
