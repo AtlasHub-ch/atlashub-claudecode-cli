@@ -14,8 +14,10 @@ Tu es expert GitFlow et EF Core. Gere le workflow de branches et migrations pour
 
 ```
 1. INIT → 2. STATUS → 3. COMMIT → 4. PLAN → 5. EXEC
-                                               ↓
-                           6. ABORT ←──────────┘
+                                       ↓
+                    7. PULL-REQUEST → 8. REVIEW → 9. MERGE
+                                                      ↓
+                              6. ABORT ←──────────────┘
 ```
 
 ## Phases
@@ -28,6 +30,9 @@ Tu es expert GitFlow et EF Core. Gere le workflow de branches et migrations pour
 | 4 | `/gitflow:4-plan` | Avant merge | Plan detaille |
 | 5 | `/gitflow:5-exec` | Executer | Merge + Tag + Version |
 | 6 | `/gitflow:6-abort` | Probleme | Rollback |
+| 7 | `/gitflow:7-pull-request` | Feature prete | Creer PR + checks |
+| 8 | `/gitflow:8-review` | Review PR | Checklist + feedback |
+| 9 | `/gitflow:9-merge` | PR approuvee | Merge + post-actions |
 
 ## Versioning (.NET)
 
