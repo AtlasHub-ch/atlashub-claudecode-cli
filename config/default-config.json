@@ -1,25 +1,86 @@
 {
+  "$schema": "https://atlashub.ch/schemas/claude-gitflow-config.json",
+  "version": "1.1.0",
   "git": {
     "branches": {
       "main": "main",
-      "develop": "develop"
+      "develop": "develop",
+      "featurePrefix": "feature/",
+      "releasePrefix": "release/",
+      "hotfixPrefix": "hotfix/"
     },
     "remote": "origin",
     "mergeStrategy": "--no-ff",
-    "tagPrefix": "v"
+    "tagPrefix": "v",
+    "protectedBranches": ["main", "develop"],
+    "requireLinearHistory": false
   },
   "efcore": {
     "enabled": true,
-    "projectPath": "auto-detect",
-    "contextName": "ApplicationDbContext",
-    "migrationsFolder": "Migrations",
-    "generateScript": true,
-    "scriptOutputPath": "./scripts"
+    "autoDetect": true,
+    "contexts": [
+      {
+        "name": "ApplicationDbContext",
+        "projectPath": "auto-detect",
+        "startupProject": "auto-detect",
+        "migrationsFolder": "Migrations",
+        "migrationsAssembly": null
+      }
+    ],
+    "scripts": {
+      "generateOnRelease": true,
+      "generateOnHotfix": true,
+      "idempotent": true,
+      "outputPath": "./scripts/migrations",
+      "namingPattern": "{type}_{version}_{timestamp}.sql"
+    },
+    "validation": {
+      "validateBeforeCommit": true,
+      "validateBeforeMerge": true,
+      "checkModelSnapshotConflicts": true,
+      "requireBuildSuccess": true,
+      "warnOnPendingMigrations": true
+    },
+    "backup": {
+      "enabled": true,
+      "beforeRebase": true,
+      "beforeMerge": true,
+      "retentionDays": 7
+    },
+    "naming": {
+      "migrationPrefix": "",
+      "hotfixPrefix": "Hotfix_",
+      "timestampFormat": "yyyyMMddHHmmss"
+    }
   },
   "workflow": {
     "requireConfirmation": true,
     "autoDeleteBranch": false,
     "createCheckpoints": true,
-    "verboseLogging": false
+    "verboseLogging": false,
+    "interactiveMode": true,
+    "commitConventions": {
+      "enabled": true,
+      "migration": "db(migrations): ",
+      "feature": "feat: ",
+      "fix": "fix: ",
+      "release": "release: ",
+      "hotfix": "hotfix: ",
+      "chore": "chore: "
+    },
+    "hooks": {
+      "prePlan": null,
+      "postPlan": null,
+      "preExec": null,
+      "postExec": null,
+      "preCommit": null,
+      "postCommit": null
+    }
+  },
+  "ui": {
+    "colors": true,
+    "showProgress": true,
+    "compactMode": false,
+    "language": "fr"
   }
 }

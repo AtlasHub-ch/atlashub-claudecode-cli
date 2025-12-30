@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(\"C:\\Users\\simon\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python312\\Scripts\\dbt.exe\" --version)",
+      "Bash(pip install:*)",
+      "Read(//d/sig/**)",
+      "Bash(code:*)",
+      "Bash(git clone:*)",
+      "Bash(mkdir:*)",
+      "WebFetch(domain:*)",
+      "mcp__context7__*"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
