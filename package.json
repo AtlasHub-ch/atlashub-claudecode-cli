@@ -49,7 +49,6 @@
     "prompts"
   ],
   "scripts": {
-    "prepare": "npm run build",
     "dev": "tsup --watch",
     "build": "npx tsup",
     "lint": "eslint src --ext .ts",
