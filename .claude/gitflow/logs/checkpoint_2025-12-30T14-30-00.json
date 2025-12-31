@@ -1,0 +1,14 @@
+{
+  "timestamp": "2025-12-30T14:30:00Z",
+  "plan": "feature-gitflow-start-finish_2025-12-30.md",
+  "branch": "develop",
+  "commit": "dcddf368afc991d332891f8c50f891cafe76cd2c",
+  "status": "clean",
+  "source_branch": "feature/gitflow-start-finish",
+  "target_branch": "develop",
+  "version_before": "1.0.0",
+  "version_after": "1.1.0",
+  "type": "feature-integration",
+  "migrations": null,
+  "notes": "Node.js project - no EF Core migrations"
+}
