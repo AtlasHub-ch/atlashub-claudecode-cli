@@ -27,6 +27,14 @@
         "migrationsAssembly": null
       }
     ],
+    "database": {
+      "configFile": "appsettings.Local.json",
+      "connectionStringName": "DefaultConnection",
+      "provider": "SqlServer",
+      "seedOnDeploy": false,
+      "confirmBeforeReset": true,
+      "backupBeforeReset": true
+    },
     "scripts": {
       "generateOnRelease": true,
       "generateOnHotfix": true,
@@ -50,7 +58,19 @@
     "naming": {
       "migrationPrefix": "",
       "hotfixPrefix": "Hotfix_",
-      "timestampFormat": "yyyyMMddHHmmss"
+      "timestampFormat": "yyyyMMddHHmmss",
+      "pattern": "{BranchType}_{Version}_{BranchName}_{Description}",
+      "examples": {
+        "feature": "Feature_1.2.0_UserAuth_AddRolesTable",
+        "hotfix": "Hotfix_1.2.1_LoginFix_FixNullEmail",
+        "release": "Release_1.3.0_Initial"
+      }
+    },
+    "rules": {
+      "oneMigrationPerFeature": true,
+      "recreateOnChange": true,
+      "requireDescription": true,
+      "validateNaming": true
     }
   },
   "workflow": {

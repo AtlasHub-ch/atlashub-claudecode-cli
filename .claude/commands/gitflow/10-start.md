@@ -256,6 +256,110 @@ git checkout -b hotfix/{name}
 
 ---
 
+## ETAPE 6.5: Configuration appsettings.Local.json (Projets .NET)
+
+**Detecter les projets .NET dans le worktree:**
+
+```bash
+# Chercher les fichiers appsettings.json
+APPSETTINGS=$(find . -name "appsettings.json" -not -path "*/bin/*" -not -path "*/obj/*" 2>/dev/null)
+```
+
+**Si appsettings.json trouve:**
+
+```javascript
+AskUserQuestion({
+  questions: [{
+    question: "Fichier appsettings.json detecte. Creer un appsettings.Local.json pour la config locale ?",
+    header: "AppSettings",
+    options: [
+      { label: "Oui", description: "Copier et configurer la connexion DB (Recommande)" },
+      { label: "Non", description: "Ignorer - je configurerai plus tard" }
+    ],
+    multiSelect: false
+  }]
+})
+```
+
+**Si OUI - Demander la configuration DB:**
+
+```javascript
+AskUserQuestion({
+  questions: [
+    {
+      question: "Type d'authentification SQL Server ?",
+      header: "Auth",
+      options: [
+        { label: "Windows Auth", description: "Trusted_Connection=true (Recommande)" },
+        { label: "SQL Auth", description: "Username/Password" }
+      ],
+      multiSelect: false
+    }
+  ]
+})
+
+// Puis demander les infos en texte libre :
+// - Server : (defaut: localhost ou .\SQLEXPRESS)
+// - Database : nom de la base de donnees
+// - Si SQL Auth : Username et Password
+```
+
+**Creer le fichier appsettings.Local.json:**
+
+```bash
+# Copier appsettings.json comme base
+cp appsettings.json appsettings.Local.json
+
+# Generer la connection string
+# Windows Auth:
+CONNECTION_STRING="Server=${SERVER};Database=${DATABASE};Trusted_Connection=true;TrustServerCertificate=true"
+
+# SQL Auth:
+CONNECTION_STRING="Server=${SERVER};Database=${DATABASE};User Id=${USERNAME};Password=${PASSWORD};TrustServerCertificate=true"
+```
+
+**Mettre a jour le fichier avec la connection string:**
+
+```json
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "<CONNECTION_STRING>"
+  }
+}
+```
+
+**Ajouter au .gitignore si absent:**
+
+```bash
+if ! grep -q "appsettings.Local.json" .gitignore 2>/dev/null; then
+  echo "" >> .gitignore
+  echo "# Local settings (ne pas committer)" >> .gitignore
+  echo "appsettings.Local.json" >> .gitignore
+  echo "appsettings.*.Local.json" >> .gitignore
+fi
+```
+
+**Afficher resume:**
+
+```
+================================================================================
+                    CONFIGURATION LOCALE CREEE
+================================================================================
+
+FICHIER:  appsettings.Local.json
+SERVER:   {SERVER}
+DATABASE: {DATABASE}
+AUTH:     {Windows|SQL}
+
+⚠️  Ce fichier est ignore par git (credentials securises)
+
+PROCHAINE ETAPE:
+  /efcore:db-deploy  → Deployer la base de donnees
+================================================================================
+```
+
+---
+
 ## ETAPE 7: Actions post-creation
 
 **Release uniquement** - Bump version :
