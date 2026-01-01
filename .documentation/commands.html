@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Commandes - Claude Tools</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Global Header (single unified element) -->
+        <header class="global-header">
+            <div class="logo">CT</div>
+            <span class="site-title">Claude Tools</span>
+            <span class="version-badge">v1.2.0</span>
+            <div class="header-divider"></div>
+            <span class="page-title" data-lang="fr">Référence des commandes</span>
+            <span class="page-title" data-lang="en">Command Reference</span>
+            <nav class="breadcrumb">
+                <a href="index.html">
+                    <span data-lang="fr">Accueil</span>
+                    <span data-lang="en">Home</span>
+                </a>
+                <span class="breadcrumb-separator">&#8250;</span>
+                <span data-lang="fr">Outils</span>
+                <span data-lang="en">Tools</span>
+                <span class="breadcrumb-separator">&#8250;</span>
+                <span class="breadcrumb-current" data-lang="fr">Commandes</span>
+                <span class="breadcrumb-current" data-lang="en">Commands</span>
+            </nav>
+            <!-- Language Select -->
+            <select class="lang-select" id="lang-select" onchange="setLanguage(this.value); localStorage.setItem('doc-language', this.value);">
+                <option value="fr">🇫🇷 FR</option>
+                <option value="en">🇬🇧 EN</option>
+            </select>
+            <!-- Search -->
+            <div class="header-search">
+                <div class="search-input-wrapper">
+                    <span class="search-icon">&#128269;</span>
+                    <input type="text" id="search-input" class="search-input" placeholder="Rechercher..." data-placeholder-fr="Rechercher..." data-placeholder-en="Search..." autocomplete="off">
+                    <span class="search-shortcut">Ctrl+K</span>
+                </div>
+                <div id="search-results" class="search-results"></div>
+            </div>
+        </header>
+
+        <!-- App Body -->
+        <div class="app-body">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <button class="sidebar-toggle" title="Toggle sidebar">
+                    <span class="toggle-icon-collapse">&#171;</span>
+                    <span class="toggle-icon-expand">&#187;</span>
+                </button>
+
+                <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-section-title">
+                        <span data-lang="fr">Demarrage</span>
+                        <span data-lang="en">Getting Started</span>
+                    </div>
+                    <a href="index.html" class="nav-item">
+                        <span class="icon">&#127968;</span>
+                        <span class="nav-text" data-lang="fr">Accueil</span>
+                        <span class="nav-text" data-lang="en">Home</span>
+                    </a>
+                    <a href="installation.html" class="nav-item">
+                        <span class="icon">&#128230;</span>
+                        <span class="nav-text">Installation</span>
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Workflows</div>
+                    <a href="gitflow.html" class="nav-item">
+                        <span class="icon">&#128256;</span>
+                        <span class="nav-text">GitFlow</span>
+                    </a>
+                    <a href="efcore.html" class="nav-item">
+                        <span class="icon">&#128452;</span>
+                        <span class="nav-text">EF Core</span>
+                    </a>
+                    <a href="apex.html" class="nav-item">
+                        <span class="icon">&#127919;</span>
+                        <span class="nav-text">APEX</span>
+                    </a>
+                    <a href="ba.html" class="nav-item">
+                        <span class="icon">&#128202;</span>
+                        <span class="nav-text">BA</span>
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">
+                        <span data-lang="fr">Outils</span>
+                        <span data-lang="en">Tools</span>
+                    </div>
+                    <a href="agents.html" class="nav-item">
+                        <span class="icon">&#129302;</span>
+                        <span class="nav-text">Agents</span>
+                    </a>
+                    <a href="commands.html" class="nav-item active">
+                        <span class="icon">&#9889;</span>
+                        <span class="nav-text" data-lang="fr">Commandes</span>
+                        <span class="nav-text" data-lang="en">Commands</span>
+                    </a>
+                    <a href="hooks.html" class="nav-item">
+                        <span class="icon">&#128279;</span>
+                        <span class="nav-text">Hooks</span>
+                    </a>
+                    <a href="test-web.html" class="nav-item">
+                        <span class="icon">&#127760;</span>
+                        <span class="nav-text">Test Web</span>
+                    </a>
+                </div>
+            </nav>
+
+            </aside>
+
+            <!-- Main Content -->
+            <main class="main-content">
+                <div class="content content-wide">
+                <!-- GitFlow Commands -->
+                <section id="gitflow">
+                    <h2>GitFlow Workflow</h2>
+
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th data-lang="fr">Commande</th>
+                                    <th data-lang="en">Command</th>
+                                    <th data-lang="fr">Description</th>
+                                    <th data-lang="en">Description</th>
+                                    <th>Page</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code>/gitflow</code></td>
+                                    <td data-lang="fr">Orchestrateur principal GitFlow</td>
+                                    <td data-lang="en">Main GitFlow orchestrator</td>
+                                    <td><a href="gitflow.html">GitFlow</a></td>
+                                </tr>
+                                <tr>
+                                    <td><code>/gitflow:1-init</code></td>
+                                    <td data-lang="fr">Initialiser la structure GitFlow</td>
+                                    <td data-lang="en">Initialize GitFlow structure</td>
+                                    <td><a href="gitflow.html#commands">GitFlow</a></td>
+                                </tr>
+                                <tr>
+                                    <td><code>/gitflow:2-status</code></td>
+                                    <td data-lang="fr">Afficher le statut detaille</td>
+                                    <td data-lang="en">Show detailed status</td>
+                                    <td><a href="gitflow.html#commands">GitFlow</a></td>
+                                </tr>
+                                <tr>
+                                    <td><code>/gitflow:3-commit</code></td>
+                                    <td data-lang="fr">Commit intelligent avec validation EF Core</td>
+                                    <td data-lang="en">Smart commit with EF Core validation</td>
+                                    <td><a href="gitflow.html#commands">GitFlow</a></td>
+                                </tr>
+                                <tr>
+                                    <td><code>/gitflow:4-plan</code></td>
+                                    <td data-lang="fr">Creer un plan d'integration</td>
+                                    <td data-lang="en">Create integration plan</td>
+                                    <td><a href="gitflow.html#commands">GitFlow</a></td>
+                                </tr>
+                                <tr>
+                                    <td><code>/gitflow:5-exec</code></td>
+                                    <td data-lang="fr">Executer le plan d'integration</td>
+                                    <td data-lang="en">Execute integration plan</td>
+                                    <td><a href="gitflow.html#commands">GitFlow</a></td>
+                                </tr>
+                                <tr>
+                                    <td><code>/gitflow:6-abort</code></td>
+                                    <td data-lang="fr">Annuler une operation en cours</td>
+                                    <td data-lang="en">Abort ongoing operation</td>
+                                    <td><a href="gitflow.html#commands">GitFlow</a></td>
+                                </tr>
+                                <tr>
+                                    <td><code>/gitflow:10-start</code></td>
+                                    <td data-lang="fr">Demarrer une branche (feature/release/hotfix)</td>
+                                    <td data-lang="en">Start a branch (feature/release/hotfix)</td>
+                                    <td><a href="gitflow.html#commands">GitFlow</a></td>
+                                </tr>
+                                <tr>
+                                    <td><code>/gitflow:11-finish</code></td>
+                                    <td data-lang="fr">Terminer une branche (merge + tag)</td>
+                                    <td data-lang="en">Finish a branch (merge + tag)</td>
+                                    <td><a href="gitflow.html#commands">GitFlow</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- APEX Commands -->
+                <section id="apex">
+                    <h2>APEX Methodology</h2>
+
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th data-lang="fr">Commande</th>
+                                    <th data-lang="en">Command</th>
+                                    <th data-lang="fr">Description</th>
+                                    <th data-lang="en">Description</th>
+                                    <th>Page</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code>/apex</code></td>
+                                    <td data-lang="fr">Workflow APEX complet</td>
+                                    <td data-lang="en">Complete APEX workflow</td>
+                                    <td><a href="apex.html">APEX</a></td>
+                                </tr>
+                                <tr>
+                                    <td><code>/apex:1-analyze</code></td>
+                                    <td data-lang="fr">Phase d'analyse - collecter le contexte</td>
+                                    <td data-lang="en">Analysis phase - gather context</td>
+                                    <td><a href="apex.html#analyze">APEX</a></td>
+                                </tr>
+                                <tr>
+                                    <td><code>/apex:2-plan</code></td>
+                                    <td data-lang="fr">Phase de planification - creer la strategie</td>
+                                    <td data-lang="en">Planning phase - create strategy</td>
+                                    <td><a href="apex.html#plan">APEX</a></td>
+                                </tr>
+                                <tr>
+                                    <td><code>/apex:3-execute</code></td>
+                                    <td data-lang="fr">Phase d'execution - implementer le plan</td>
+                                    <td data-lang="en">Execution phase - implement plan</td>
+                                    <td><a href="apex.html#execute">APEX</a></td>
+                                </tr>
+                                <tr>
+                                    <td><code>/apex:4-examine</code></td>
+                                    <td data-lang="fr">Phase de validation - tester et verifier</td>
+                                    <td data-lang="en">Validation phase - test and verify</td>
+                                    <td><a href="apex.html#examine">APEX</a></td>
+                                </tr>
+                                <tr>
+                                    <td><code>/apex:5-tasks</code></td>
+                                    <td data-lang="fr">Diviser le plan en taches individuelles</td>
+                                    <td data-lang="en">Divide plan into individual tasks</td>
+                                    <td><a href="apex.html#tasks">APEX</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Git Commands -->
+                <section id="git">
+                    <h2>Git Commands</h2>
+
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th data-lang="fr">Commande</th>
+                                    <th data-lang="en">Command</th>
+                                    <th data-lang="fr">Description</th>
+                                    <th data-lang="en">Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code>/git:commit</code></td>
+                                    <td data-lang="fr">Commit rapide avec message propre</td>
+                                    <td data-lang="en">Quick commit with clean message</td>
+                                </tr>
+                                <tr>
+                                    <td><code>/git:commitizen</code></td>
+                                    <td data-lang="fr">Commit avec format conventionnel</td>
+                                    <td data-lang="en">Commit with conventional format</td>
+                                </tr>
+                                <tr>
+                                    <td><code>/git:create-pr</code></td>
+                                    <td data-lang="fr">Creer une Pull Request</td>
+                                    <td data-lang="en">Create a Pull Request</td>
+                                </tr>
+                                <tr>
+                                    <td><code>/git:fix-pr-comments</code></td>
+                                    <td data-lang="fr">Corriger les commentaires de PR</td>
+                                    <td data-lang="en">Fix PR review comments</td>
+                                </tr>
+                                <tr>
+                                    <td><code>/git:merge</code></td>
+                                    <td data-lang="fr">Merge intelligent avec resolution de conflits</td>
+                                    <td data-lang="en">Smart merge with conflict resolution</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Development Commands -->
+                <section id="development">
+                    <h2>
+                        <span data-lang="fr">Commandes de developpement</span>
+                        <span data-lang="en">Development Commands</span>
+                    </h2>
+
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th data-lang="fr">Commande</th>
+                                    <th data-lang="en">Command</th>
+                                    <th data-lang="fr">Description</th>
+                                    <th data-lang="en">Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code>/epct</code></td>
+                                    <td data-lang="fr">Methodologie Explore-Plan-Code-Test</td>
+                                    <td data-lang="en">Explore-Plan-Code-Test methodology</td>
+                                </tr>
+                                <tr>
+                                    <td><code>/oneshot</code></td>
+                                    <td data-lang="fr">Implementation ultra-rapide de feature</td>
+                                    <td data-lang="en">Ultra-fast feature implementation</td>
+                                </tr>
+                                <tr>
+                                    <td><code>/debug</code></td>
+                                    <td data-lang="fr">Debugging systematique de bugs</td>
+                                    <td data-lang="en">Systematic bug debugging</td>
+                                </tr>
+                                <tr>
+                                    <td><code>/explore</code></td>
+                                    <td data-lang="fr">Exploration profonde du codebase</td>
+                                    <td data-lang="en">Deep codebase exploration</td>
+                                </tr>
+                                <tr>
+                                    <td><code>/explain</code></td>
+                                    <td data-lang="fr">Explication de code avec diagrammes</td>
+                                    <td data-lang="en">Code explanation with diagrams</td>
+                                </tr>
+                                <tr>
+                                    <td><code>/review</code></td>
+                                    <td data-lang="fr">Revue de code rapide</td>
+                                    <td data-lang="en">Quick code review</td>
+                                </tr>
+                                <tr>
+                                    <td><code>/quick-search</code></td>
+                                    <td data-lang="fr">Recherche ultra-rapide</td>
+                                    <td data-lang="en">Lightning-fast search</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Prompt Commands -->
+                <section id="prompts">
+                    <h2>
+                        <span data-lang="fr">Generation de prompts</span>
+                        <span data-lang="en">Prompt Generation</span>
+                    </h2>
+
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th data-lang="fr">Commande</th>
+                                    <th data-lang="en">Command</th>
+                                    <th data-lang="fr">Description</th>
+                                    <th data-lang="en">Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code>/prompts:create</code></td>
+                                    <td data-lang="fr">Creer des prompts optimises</td>
+                                    <td data-lang="en">Create optimized prompts</td>
+                                </tr>
+                                <tr>
+                                    <td><code>/prompts:agent</code></td>
+                                    <td data-lang="fr">Creer des prompts pour agents</td>
+                                    <td data-lang="en">Create agent prompts</td>
+                                </tr>
+                                <tr>
+                                    <td><code>/prompts:command</code></td>
+                                    <td data-lang="fr">Creer des prompts pour commandes</td>
+                                    <td data-lang="en">Create command prompts</td>
+                                </tr>
+                                <tr>
+                                    <td><code>/prompts:claude-memory</code></td>
+                                    <td data-lang="fr">Creer/mettre a jour CLAUDE.md</td>
+                                    <td data-lang="en">Create/update CLAUDE.md</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- CLI Commands -->
+                <section id="cli">
+                    <h2>CLI (claude-tools)</h2>
+
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th data-lang="fr">Commande</th>
+                                    <th data-lang="en">Command</th>
+                                    <th>Alias</th>
+                                    <th data-lang="fr">Description</th>
+                                    <th data-lang="en">Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code>claude-tools activate &lt;key&gt;</code></td>
+                                    <td><code>a</code></td>
+                                    <td data-lang="fr">Activer la licence</td>
+                                    <td data-lang="en">Activate license</td>
+                                </tr>
+                                <tr>
+                                    <td><code>claude-tools install</code></td>
+                                    <td><code>i</code></td>
+                                    <td data-lang="fr">Installer les commandes et agents</td>
+                                    <td data-lang="en">Install commands and agents</td>
+                                </tr>
+                                <tr>
+                                    <td><code>claude-tools uninstall</code></td>
+                                    <td><code>u</code></td>
+                                    <td data-lang="fr">Desinstaller les commandes et agents</td>
+                                    <td data-lang="en">Uninstall commands and agents</td>
+                                </tr>
+                                <tr>
+                                    <td><code>claude-tools status</code></td>
+                                    <td><code>s</code></td>
+                                    <td data-lang="fr">Afficher le statut d'installation</td>
+                                    <td data-lang="en">Show installation status</td>
+                                </tr>
+                                <tr>
+                                    <td><code>claude-tools update</code></td>
+                                    <td>-</td>
+                                    <td data-lang="fr">Mettre a jour les commandes</td>
+                                    <td data-lang="en">Update commands</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3 data-lang="fr">Options d'installation</h3>
+                    <h3 data-lang="en">Installation Options</h3>
+
+                    <div class="code-block">
+                        <button class="copy-btn">Copy</button>
+                        <pre><code># Installer tous les composants (defaut)
+claude-tools install
+
+# Installer des composants specifiques
+claude-tools install --commands-only
+claude-tools install --agents-only
+claude-tools install --hooks-only
+
+# Installer dans le projet (au lieu de ~/.claude)
+claude-tools install --local
+
+# Forcer la reecriture des fichiers existants
+claude-tools install --force
+
+# Ignorer la creation du fichier config
+claude-tools install --no-config</code></pre>
+                    </div>
+                </section>
+            </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Mobile Menu Button -->
+    <button class="mobile-menu-btn">&#9776;</button>
+    <div class="overlay"></div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>

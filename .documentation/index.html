@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Claude Tools - Documentation</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Global Header (single unified element) -->
+        <header class="global-header">
+            <div class="logo">CT</div>
+            <span class="site-title">Claude Tools</span>
+            <span class="version-badge">v1.2.0</span>
+            <div class="header-divider"></div>
+            <span class="page-title">@atlashub/claude-tools</span>
+            <!-- Language Select -->
+            <select class="lang-select" id="lang-select" onchange="setLanguage(this.value); localStorage.setItem('doc-language', this.value);">
+                <option value="fr">🇫🇷 FR</option>
+                <option value="en">🇬🇧 EN</option>
+            </select>
+            <!-- Search -->
+            <div class="header-search">
+                <div class="search-input-wrapper">
+                    <span class="search-icon">&#128269;</span>
+                    <input type="text" id="search-input" class="search-input" placeholder="Rechercher..." data-placeholder-fr="Rechercher..." data-placeholder-en="Search..." autocomplete="off">
+                    <span class="search-shortcut">Ctrl+K</span>
+                </div>
+                <div id="search-results" class="search-results"></div>
+            </div>
+        </header>
+
+        <!-- App Body -->
+        <div class="app-body">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <button class="sidebar-toggle" title="Toggle sidebar">
+                    <span class="toggle-icon-collapse">«</span>
+                    <span class="toggle-icon-expand">»</span>
+                </button>
+
+                <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-section-title">
+                        <span data-lang="fr">Demarrage</span>
+                        <span data-lang="en">Getting Started</span>
+                    </div>
+                    <a href="index.html" class="nav-item active">
+                        <span class="icon">🏠</span>
+                        <span class="nav-text" data-lang="fr">Accueil</span>
+                        <span class="nav-text" data-lang="en">Home</span>
+                    </a>
+                    <a href="installation.html" class="nav-item">
+                        <span class="icon">📦</span>
+                        <span class="nav-text">Installation</span>
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Workflows</div>
+                    <a href="gitflow.html" class="nav-item">
+                        <span class="icon">🔀</span>
+                        <span class="nav-text">GitFlow</span>
+                    </a>
+                    <a href="efcore.html" class="nav-item">
+                        <span class="icon">🗄️</span>
+                        <span class="nav-text">EF Core</span>
+                    </a>
+                    <a href="apex.html" class="nav-item">
+                        <span class="icon">🎯</span>
+                        <span class="nav-text">APEX</span>
+                    </a>
+                    <a href="ba.html" class="nav-item">
+                        <span class="icon">📊</span>
+                        <span class="nav-text">BA</span>
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">
+                        <span data-lang="fr">Outils</span>
+                        <span data-lang="en">Tools</span>
+                    </div>
+                    <a href="agents.html" class="nav-item">
+                        <span class="icon">🤖</span>
+                        <span class="nav-text">Agents</span>
+                    </a>
+                    <a href="commands.html" class="nav-item">
+                        <span class="icon">⚡</span>
+                        <span class="nav-text" data-lang="fr">Commandes</span>
+                        <span class="nav-text" data-lang="en">Commands</span>
+                    </a>
+                    <a href="hooks.html" class="nav-item">
+                        <span class="icon">🔗</span>
+                        <span class="nav-text">Hooks</span>
+                    </a>
+                    <a href="test-web.html" class="nav-item">
+                        <span class="icon">🌐</span>
+                        <span class="nav-text">Test Web</span>
+                    </a>
+                </div>
+            </nav>
+
+            </aside>
+
+            <!-- Main Content -->
+            <main class="main-content">
+                <div class="content content-wide">
+                <!-- Quick Install -->
+                <div class="alert alert-info">
+                    <span class="alert-icon">💡</span>
+                    <div class="alert-content">
+                        <h5 data-lang="fr">Installation rapide</h5>
+                        <h5 data-lang="en">Quick Install</h5>
+                        <p><code>npm install -g @atlashub/claude-tools && claude-tools install</code></p>
+                    </div>
+                </div>
+
+                <!-- Features Grid -->
+                <h2 data-lang="fr">Fonctionnalites</h2>
+                <h2 data-lang="en">Features</h2>
+
+                <div class="card-grid">
+                    <a href="gitflow.html" class="card">
+                        <div class="card-header">
+                            <div class="card-icon">🔀</div>
+                            <div>
+                                <div class="card-title">GitFlow Workflow</div>
+                                <div class="card-subtitle" data-lang="fr">Automatisation complete</div>
+                                <div class="card-subtitle" data-lang="en">Complete automation</div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <p data-lang="fr">Workflow GitFlow complet avec gestion des versions SemVer, branches feature/release/hotfix, et integration des migrations EF Core.</p>
+                            <p data-lang="en">Complete GitFlow workflow with SemVer versioning, feature/release/hotfix branches, and EF Core migrations integration.</p>
+                            <span class="tag tag-workflow">12 commands</span>
+                        </div>
+                    </a>
+
+                    <a href="efcore.html" class="card">
+                        <div class="card-header">
+                            <div class="card-icon">🗄️</div>
+                            <div>
+                                <div class="card-title">EF Core Migrations</div>
+                                <div class="card-subtitle" data-lang="fr">Gestion avancee</div>
+                                <div class="card-subtitle" data-lang="en">Advanced management</div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <p data-lang="fr">Gestion des migrations Entity Framework Core : multi-context, resolution de conflits ModelSnapshot, scripts idempotents.</p>
+                            <p data-lang="en">Entity Framework Core migrations management: multi-context, ModelSnapshot conflict resolution, idempotent scripts.</p>
+                            <span class="tag tag-command">3 commands</span>
+                        </div>
+                    </a>
+
+                    <a href="apex.html" class="card">
+                        <div class="card-header">
+                            <div class="card-icon">🎯</div>
+                            <div>
+                                <div class="card-title">APEX Methodology</div>
+                                <div class="card-subtitle">Analyze-Plan-Execute-eXamine</div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <p data-lang="fr">Methodologie systematique pour l'implementation de features. Analyse, planification, execution et validation en etapes claires.</p>
+                            <p data-lang="en">Systematic methodology for feature implementation. Analysis, planning, execution and validation in clear steps.</p>
+                            <span class="tag tag-workflow">6 commands</span>
+                        </div>
+                    </a>
+
+                    <a href="agents.html" class="card">
+                        <div class="card-header">
+                            <div class="card-icon">🤖</div>
+                            <div>
+                                <div class="card-title" data-lang="fr">Agents Specialises</div>
+                                <div class="card-title" data-lang="en">Specialized Agents</div>
+                                <div class="card-subtitle" data-lang="fr">Automatisation intelligente</div>
+                                <div class="card-subtitle" data-lang="en">Intelligent automation</div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <p data-lang="fr">Agents autonomes pour l'exploration de code, la recherche de documentation, le debugging et la correction de grammaire.</p>
+                            <p data-lang="en">Autonomous agents for code exploration, documentation search, debugging and grammar correction.</p>
+                            <span class="tag tag-agent">6 agents</span>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Quick Reference -->
+                <h2 data-lang="fr">Reference rapide</h2>
+                <h2 data-lang="en">Quick Reference</h2>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th data-lang="fr">Besoin</th>
+                                <th data-lang="en">Need</th>
+                                <th data-lang="fr">Commande</th>
+                                <th data-lang="en">Command</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td data-lang="fr">Demarrer une feature</td>
+                                <td data-lang="en">Start a feature</td>
+                                <td><code>/gitflow:10-start feature nom</code></td>
+                            </tr>
+                            <tr>
+                                <td data-lang="fr">Creer une release</td>
+                                <td data-lang="en">Create a release</td>
+                                <td><code>/gitflow:10-start release</code></td>
+                            </tr>
+                            <tr>
+                                <td data-lang="fr">Commit intelligent</td>
+                                <td data-lang="en">Smart commit</td>
+                                <td><code>/gitflow:3-commit</code></td>
+                            </tr>
+                            <tr>
+                                <td data-lang="fr">Implementer une feature</td>
+                                <td data-lang="en">Implement a feature</td>
+                                <td><code>/apex Description</code></td>
+                            </tr>
+                            <tr>
+                                <td data-lang="fr">Debugger une erreur</td>
+                                <td data-lang="en">Debug an error</td>
+                                <td><code>/debug Message d'erreur</code></td>
+                            </tr>
+                            <tr>
+                                <td data-lang="fr">Comprendre du code</td>
+                                <td data-lang="en">Understand code</td>
+                                <td><code>/explain fichier.ts</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Getting Started Steps -->
+                <h2 data-lang="fr">Premiers pas</h2>
+                <h2 data-lang="en">Getting Started</h2>
+
+                <ol class="steps-list">
+                    <li>
+                        <div class="step-content">
+                            <h5 data-lang="fr">Installer le package</h5>
+                            <h5 data-lang="en">Install the package</h5>
+                            <p><code>npm install -g @atlashub/claude-tools</code></p>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="step-content">
+                            <h5 data-lang="fr">Installer les commandes</h5>
+                            <h5 data-lang="en">Install commands</h5>
+                            <p data-lang="fr"><code>claude-tools install</code> (global) ou <code>claude-tools install --local</code> (projet)</p>
+                            <p data-lang="en"><code>claude-tools install</code> (global) or <code>claude-tools install --local</code> (project)</p>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="step-content">
+                            <h5 data-lang="fr">Initialiser GitFlow (optionnel)</h5>
+                            <h5 data-lang="en">Initialize GitFlow (optional)</h5>
+                            <p data-lang="fr">Dans votre projet : <code>/gitflow:1-init</code></p>
+                            <p data-lang="en">In your project: <code>/gitflow:1-init</code></p>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="step-content">
+                            <h5 data-lang="fr">Commencer a travailler</h5>
+                            <h5 data-lang="en">Start working</h5>
+                            <p data-lang="fr"><code>/gitflow:10-start feature ma-feature</code></p>
+                            <p data-lang="en"><code>/gitflow:10-start feature my-feature</code></p>
+                        </div>
+                    </li>
+                </ol>
+            </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Mobile Menu Button -->
+    <button class="mobile-menu-btn">☰</button>
+    <div class="overlay"></div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>

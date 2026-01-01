@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BA Workflow - Claude Tools</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Global Header (single unified element) -->
+        <header class="global-header">
+            <div class="logo">CT</div>
+            <span class="site-title">Claude Tools</span>
+            <span class="version-badge">v1.2.0</span>
+            <div class="header-divider"></div>
+            <span class="page-title">BA - Business Analysis</span>
+            <nav class="breadcrumb">
+                <a href="index.html">
+                    <span data-lang="fr">Accueil</span>
+                    <span data-lang="en">Home</span>
+                </a>
+                <span class="breadcrumb-separator">&#8250;</span>
+                <span data-lang="fr">Workflows</span>
+                <span data-lang="en">Workflows</span>
+                <span class="breadcrumb-separator">&#8250;</span>
+                <span class="breadcrumb-current">BA</span>
+            </nav>
+            <!-- Language Select -->
+            <select class="lang-select" id="lang-select" onchange="setLanguage(this.value); localStorage.setItem('doc-language', this.value);">
+                <option value="fr">🇫🇷 FR</option>
+                <option value="en">🇬🇧 EN</option>
+            </select>
+            <!-- Search -->
+            <div class="header-search">
+                <div class="search-input-wrapper">
+                    <span class="search-icon">&#128269;</span>
+                    <input type="text" id="search-input" class="search-input" placeholder="Rechercher..." data-placeholder-fr="Rechercher..." data-placeholder-en="Search..." autocomplete="off">
+                    <span class="search-shortcut">Ctrl+K</span>
+                </div>
+                <div id="search-results" class="search-results"></div>
+            </div>
+        </header>
+
+        <!-- App Body -->
+        <div class="app-body">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <button class="sidebar-toggle" title="Toggle sidebar">
+                    <span class="toggle-icon-collapse">&#171;</span>
+                    <span class="toggle-icon-expand">&#187;</span>
+                </button>
+
+                <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-section-title">
+                        <span data-lang="fr">Demarrage</span>
+                        <span data-lang="en">Getting Started</span>
+                    </div>
+                    <a href="index.html" class="nav-item">
+                        <span class="icon">&#127968;</span>
+                        <span class="nav-text" data-lang="fr">Accueil</span>
+                        <span class="nav-text" data-lang="en">Home</span>
+                    </a>
+                    <a href="installation.html" class="nav-item">
+                        <span class="icon">&#128230;</span>
+                        <span class="nav-text">Installation</span>
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Workflows</div>
+                    <a href="gitflow.html" class="nav-item">
+                        <span class="icon">&#128256;</span>
+                        <span class="nav-text">GitFlow</span>
+                    </a>
+                    <a href="efcore.html" class="nav-item">
+                        <span class="icon">&#128452;</span>
+                        <span class="nav-text">EF Core</span>
+                    </a>
+                    <a href="apex.html" class="nav-item">
+                        <span class="icon">&#127919;</span>
+                        <span class="nav-text">APEX</span>
+                    </a>
+                    <div class="nav-item-with-toc">
+                        <a href="ba.html" class="active">
+                            <span class="icon">&#128202;</span>
+                            <span class="nav-text">BA</span>
+                            <button class="toc-toggle">&#9654;</button>
+                        </a>
+                        <nav class="sidebar-toc">
+                            <a href="#introduction" class="sidebar-toc-link">Introduction</a>
+                            <a href="#workflow" class="sidebar-toc-link">Workflow</a>
+                            <a href="#phase-1" class="sidebar-toc-link">1. Init</a>
+                            <a href="#phase-2" class="sidebar-toc-link">2. Analyse</a>
+                            <a href="#phase-3" class="sidebar-toc-link">3. Validate</a>
+                            <a href="#phase-4" class="sidebar-toc-link">4. Implement</a>
+                            <a href="#phase-5" class="sidebar-toc-link">5. Verify</a>
+                            <a href="#agents" class="sidebar-toc-link">Agents BA</a>
+                        </nav>
+                    </div>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">
+                        <span data-lang="fr">Outils</span>
+                        <span data-lang="en">Tools</span>
+                    </div>
+                    <a href="agents.html" class="nav-item">
+                        <span class="icon">&#129302;</span>
+                        <span class="nav-text">Agents</span>
+                    </a>
+                    <a href="commands.html" class="nav-item">
+                        <span class="icon">&#9889;</span>
+                        <span class="nav-text" data-lang="fr">Commandes</span>
+                        <span class="nav-text" data-lang="en">Commands</span>
+                    </a>
+                    <a href="hooks.html" class="nav-item">
+                        <span class="icon">&#128279;</span>
+                        <span class="nav-text">Hooks</span>
+                    </a>
+                    <a href="test-web.html" class="nav-item">
+                        <span class="icon">&#127760;</span>
+                        <span class="nav-text">Test Web</span>
+                    </a>
+                </div>
+            </nav>
+
+            </aside>
+
+            <!-- Main Content -->
+            <main class="main-content">
+                <div class="content-full">
+                    <!-- Introduction -->
+                    <section id="introduction">
+                        <h2>Introduction</h2>
+                        <p data-lang="fr">
+                            Le workflow BA (Business Analysis) est specialise pour les applications Microsoft stack (.NET, Blazor, EF Core). Il combine l'approche EPCT (Explore-Plan-Code-Test) avec une analyse fonctionnelle rigoureuse et un challenge agressif du besoin metier.
+                        </p>
+                        <p data-lang="en">
+                            The BA (Business Analysis) workflow is specialized for Microsoft stack applications (.NET, Blazor, EF Core). It combines the EPCT approach (Explore-Plan-Code-Test) with rigorous functional analysis and aggressive business requirement challenging.
+                        </p>
+
+                        <div class="alert alert-info">
+                            <span class="alert-icon">&#128202;</span>
+                            <div class="alert-content">
+                                <h5 data-lang="fr">Stack Microsoft supporte</h5>
+                                <h5 data-lang="en">Supported Microsoft Stack</h5>
+                                <p data-lang="fr">
+                                    .NET 6/7/8, ASP.NET Core Web API, Blazor Server/WASM, Entity Framework Core 6+, SQL Server, Identity
+                                </p>
+                                <p data-lang="en">
+                                    .NET 6/7/8, ASP.NET Core Web API, Blazor Server/WASM, Entity Framework Core 6+, SQL Server, Identity
+                                </p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Workflow Diagram -->
+                    <section id="workflow">
+                        <h2>Workflow</h2>
+
+                        <div class="svg-diagram">
+                            <svg viewBox="0 0 800 280" xmlns="http://www.w3.org/2000/svg" style="font-family: 'Inter', system-ui, sans-serif;">
+                                <defs>
+                                    <linearGradient id="baInitGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" style="stop-color:#3b82f6"/>
+                                        <stop offset="100%" style="stop-color:#1d4ed8"/>
+                                    </linearGradient>
+                                    <linearGradient id="baAnalyseGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" style="stop-color:#8b5cf6"/>
+                                        <stop offset="100%" style="stop-color:#6d28d9"/>
+                                    </linearGradient>
+                                    <linearGradient id="baValidateGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" style="stop-color:#f97316"/>
+                                        <stop offset="100%" style="stop-color:#c2410c"/>
+                                    </linearGradient>
+                                    <linearGradient id="baImplementGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" style="stop-color:#22c55e"/>
+                                        <stop offset="100%" style="stop-color:#15803d"/>
+                                    </linearGradient>
+                                    <linearGradient id="baVerifyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" style="stop-color:#06b6d4"/>
+                                        <stop offset="100%" style="stop-color:#0891b2"/>
+                                    </linearGradient>
+                                    <filter id="baGlow" x="-20%" y="-20%" width="140%" height="140%">
+                                        <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+                                        <feMerge>
+                                            <feMergeNode in="coloredBlur"/>
+                                            <feMergeNode in="SourceGraphic"/>
+                                        </feMerge>
+                                    </filter>
+                                </defs>
+
+                                <!-- Background boxes -->
+                                <rect x="20" y="150" width="760" height="110" rx="8" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+                                <text x="40" y="175" fill="#94a3b8" font-size="11" font-weight="600">EPCT Mapping</text>
+
+                                <!-- Phase 1: INIT -->
+                                <g transform="translate(40, 40)" filter="url(#baGlow)">
+                                    <rect x="0" y="0" width="120" height="80" rx="10" fill="url(#baInitGrad)"/>
+                                    <text x="60" y="30" text-anchor="middle" fill="white" font-size="12" font-weight="600">1. INIT</text>
+                                    <text x="60" y="50" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="9">Scan projet</text>
+                                    <text x="60" y="65" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="9">.NET / EF Core</text>
+                                </g>
+                                <text x="100" y="190" text-anchor="middle" fill="#3b82f6" font-size="10" font-weight="500">[E]xplore</text>
+                                <text x="100" y="205" text-anchor="middle" fill="#94a3b8" font-size="9">config.json</text>
+
+                                <!-- Arrow 1 -->
+                                <path d="M 165 80 L 195 80" stroke="#94a3b8" stroke-width="2"/>
+                                <polygon points="193,75 203,80 193,85" fill="#94a3b8"/>
+
+                                <!-- Phase 2: ANALYSE -->
+                                <g transform="translate(200, 40)" filter="url(#baGlow)">
+                                    <rect x="0" y="0" width="120" height="80" rx="10" fill="url(#baAnalyseGrad)"/>
+                                    <text x="60" y="30" text-anchor="middle" fill="white" font-size="12" font-weight="600">2. ANALYSE</text>
+                                    <text x="60" y="50" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="9">Challenge</text>
+                                    <text x="60" y="65" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="9">Besoin metier</text>
+                                </g>
+                                <text x="260" y="190" text-anchor="middle" fill="#8b5cf6" font-size="10" font-weight="500">[E]xplore</text>
+                                <text x="260" y="205" text-anchor="middle" fill="#94a3b8" font-size="9">analyses/*.md</text>
+
+                                <!-- Arrow 2 -->
+                                <path d="M 325 80 L 355 80" stroke="#94a3b8" stroke-width="2"/>
+                                <polygon points="353,75 363,80 353,85" fill="#94a3b8"/>
+
+                                <!-- Phase 3: VALIDATE -->
+                                <g transform="translate(360, 40)" filter="url(#baGlow)">
+                                    <rect x="0" y="0" width="120" height="80" rx="10" fill="url(#baValidateGrad)"/>
+                                    <text x="60" y="30" text-anchor="middle" fill="white" font-size="12" font-weight="600">3. VALIDATE</text>
+                                    <text x="60" y="50" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="9">Specs 85%</text>
+                                    <text x="60" y="65" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="9">Validation</text>
+                                </g>
+                                <text x="420" y="190" text-anchor="middle" fill="#f97316" font-size="10" font-weight="500">[P]lan</text>
+                                <text x="420" y="205" text-anchor="middle" fill="#94a3b8" font-size="9">specs/*.md</text>
+
+                                <!-- Arrow 3 -->
+                                <path d="M 485 80 L 515 80" stroke="#94a3b8" stroke-width="2"/>
+                                <polygon points="513,75 523,80 513,85" fill="#94a3b8"/>
+
+                                <!-- Phase 4: IMPLEMENT -->
+                                <g transform="translate(520, 40)" filter="url(#baGlow)">
+                                    <rect x="0" y="0" width="120" height="80" rx="10" fill="url(#baImplementGrad)"/>
+                                    <text x="60" y="30" text-anchor="middle" fill="white" font-size="12" font-weight="600">4. IMPLEMENT</text>
+                                    <text x="60" y="50" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="9">Code .NET</text>
+                                    <text x="60" y="65" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="9">Blazor</text>
+                                </g>
+                                <text x="580" y="190" text-anchor="middle" fill="#22c55e" font-size="10" font-weight="500">[C]ode</text>
+                                <text x="580" y="205" text-anchor="middle" fill="#94a3b8" font-size="9">Entities, API, UI</text>
+
+                                <!-- Arrow 4 -->
+                                <path d="M 645 80 L 675 80" stroke="#94a3b8" stroke-width="2"/>
+                                <polygon points="673,75 683,80 673,85" fill="#94a3b8"/>
+
+                                <!-- Phase 5: VERIFY -->
+                                <g transform="translate(680, 40)" filter="url(#baGlow)">
+                                    <rect x="0" y="0" width="100" height="80" rx="10" fill="url(#baVerifyGrad)"/>
+                                    <text x="50" y="30" text-anchor="middle" fill="white" font-size="12" font-weight="600">5. VERIFY</text>
+                                    <text x="50" y="50" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="9">Build & Test</text>
+                                    <text x="50" y="65" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="9">dotnet</text>
+                                </g>
+                                <text x="730" y="190" text-anchor="middle" fill="#06b6d4" font-size="10" font-weight="500">[T]est</text>
+                                <text x="730" y="205" text-anchor="middle" fill="#94a3b8" font-size="9">Rapport</text>
+
+                                <!-- 85% threshold indicator -->
+                                <rect x="360" y="225" width="120" height="25" rx="4" fill="rgba(249, 115, 22, 0.2)" stroke="#f97316" stroke-width="1"/>
+                                <text x="420" y="242" text-anchor="middle" fill="#f97316" font-size="10" font-weight="600">Seuil: 85%</text>
+                            </svg>
+                        </div>
+
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Phase</th>
+                                        <th data-lang="fr">Commande</th>
+                                        <th data-lang="en">Command</th>
+                                        <th>Output</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>1. Init</strong></td>
+                                        <td><code>/ba:1-init</code></td>
+                                        <td><code>config.json</code></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>2. Analyse</strong></td>
+                                        <td><code>/ba:2-analyse</code></td>
+                                        <td><code>analyses/*.md</code></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>3. Validate</strong></td>
+                                        <td><code>/ba:3-validate</code></td>
+                                        <td><code>specs/*.md</code></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>4. Implement</strong></td>
+                                        <td><code>/ba:4-implement</code></td>
+                                        <td>Entities, Controllers, Pages</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>5. Verify</strong></td>
+                                        <td><code>/ba:5-verify</code></td>
+                                        <td>Rapport validation</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+
+                    <!-- Phase 1: Init -->
+                    <section id="phase-1">
+                        <h2>
+                            <span style="color: #3b82f6;">1.</span> Init
+                        </h2>
+
+                        <p data-lang="fr">
+                            Scan le projet .NET pour detecter l'architecture, les entites EF Core, les patterns et la configuration de securite.
+                        </p>
+                        <p data-lang="en">
+                            Scans the .NET project to detect architecture, EF Core entities, patterns and security configuration.
+                        </p>
+
+                        <div class="command-card">
+                            <div class="command-header">
+                                <code class="command-name">/ba:1-init</code>
+                                <span class="tag tag-command">Setup</span>
+                            </div>
+                            <div class="command-body">
+                                <p data-lang="fr">Lance un agent explore-codebase (Haiku) pour scanner le projet :</p>
+                                <p data-lang="en">Launches an explore-codebase agent (Haiku) to scan the project:</p>
+
+                                <div class="feature-grid">
+                                    <div class="feature-item">
+                                        <span class="feature-icon">&#128194;</span>
+                                        <span class="feature-text" data-lang="fr">Architecture .sln/.csproj</span>
+                                        <span class="feature-text" data-lang="en">Architecture .sln/.csproj</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <span class="feature-icon">&#128451;</span>
+                                        <span class="feature-text" data-lang="fr">DbContext et entites</span>
+                                        <span class="feature-text" data-lang="en">DbContext and entities</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <span class="feature-icon">&#128274;</span>
+                                        <span class="feature-text" data-lang="fr">Securite et roles</span>
+                                        <span class="feature-text" data-lang="en">Security and roles</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <span class="feature-icon">&#128640;</span>
+                                        <span class="feature-text" data-lang="fr">API et UI Blazor</span>
+                                        <span class="feature-text" data-lang="en">API and Blazor UI</span>
+                                    </div>
+                                </div>
+
+                                <div class="code-block">
+                                    <button class="copy-btn">Copy</button>
+                                    <pre><code>/ba:1-init
+
+# Output structure:
+.claude/ba/
+├── config.json      # Configuration projet
+├── analyses/        # Documents d'analyse
+├── specs/           # Specs techniques
+└── validations/     # Specs validees</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Phase 2: Analyse -->
+                    <section id="phase-2">
+                        <h2>
+                            <span style="color: #8b5cf6;">2.</span> Analyse
+                        </h2>
+
+                        <p data-lang="fr">
+                            Challenge AGRESSIF du besoin metier. L'objectif est de valider et raffiner les specifications avant implementation.
+                        </p>
+                        <p data-lang="en">
+                            AGGRESSIVE business requirement challenging. The goal is to validate and refine specifications before implementation.
+                        </p>
+
+                        <div class="command-card">
+                            <div class="command-header">
+                                <code class="command-name">/ba:2-analyse</code>
+                                <span class="tag tag-workflow">Analysis</span>
+                            </div>
+                            <div class="command-body">
+                                <div class="code-block">
+                                    <button class="copy-btn">Copy</button>
+                                    <pre><code>/ba:2-analyse "Ajouter la gestion des abonnements utilisateurs"</code></pre>
+                                </div>
+
+                                <div class="alert alert-warning">
+                                    <span class="alert-icon">&#9888;</span>
+                                    <div class="alert-content">
+                                        <h5 data-lang="fr">Challenge agressif</h5>
+                                        <h5 data-lang="en">Aggressive challenge</h5>
+                                        <p data-lang="fr">
+                                            Cette phase pose des questions difficiles : cas limites, securite, performance, alternatives. Ne pas accepter de reponses vagues.
+                                        </p>
+                                        <p data-lang="en">
+                                            This phase asks difficult questions: edge cases, security, performance, alternatives. Don't accept vague answers.
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <h4 data-lang="fr">Output de l'analyse</h4>
+                                <h4 data-lang="en">Analysis output</h4>
+                                <ul>
+                                    <li data-lang="fr">Schema Mermaid erDiagram des entites</li>
+                                    <li data-lang="en">Mermaid erDiagram schema of entities</li>
+                                    <li data-lang="fr">Matrice des endpoints API</li>
+                                    <li data-lang="en">API endpoints matrix</li>
+                                    <li data-lang="fr">Matrice permissions/roles</li>
+                                    <li data-lang="en">Permissions/roles matrix</li>
+                                    <li data-lang="fr">Wireframes ASCII des ecrans Blazor</li>
+                                    <li data-lang="en">ASCII wireframes of Blazor screens</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Phase 3: Validate -->
+                    <section id="phase-3">
+                        <h2>
+                            <span style="color: #f97316;">3.</span> Validate
+                        </h2>
+
+                        <p data-lang="fr">
+                            Validation des specifications avec un seuil de 85%. Les specs doivent etre validees avant de passer a l'implementation.
+                        </p>
+                        <p data-lang="en">
+                            Specification validation with 85% threshold. Specs must be validated before proceeding to implementation.
+                        </p>
+
+                        <div class="command-card">
+                            <div class="command-header">
+                                <code class="command-name">/ba:3-validate</code>
+                                <span class="tag tag-workflow">Validation</span>
+                            </div>
+                            <div class="command-body">
+                                <div class="code-block">
+                                    <button class="copy-btn">Copy</button>
+                                    <pre><code>/ba:3-validate</code></pre>
+                                </div>
+
+                                <div class="best-practice">
+                                    <h4>
+                                        <span class="bp-icon">&#127919;</span>
+                                        <span data-lang="fr">Seuil de validation : 85%</span>
+                                        <span data-lang="en">Validation threshold: 85%</span>
+                                    </h4>
+                                    <p data-lang="fr">
+                                        Les specifications techniques doivent atteindre un score de completude de 85% avant de pouvoir passer a la phase d'implementation.
+                                    </p>
+                                    <p data-lang="en">
+                                        Technical specifications must reach a completeness score of 85% before proceeding to the implementation phase.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Phase 4: Implement -->
+                    <section id="phase-4">
+                        <h2>
+                            <span style="color: #22c55e;">4.</span> Implement
+                        </h2>
+
+                        <p data-lang="fr">
+                            Generation du code .NET/Blazor base sur les specs validees. Utilise l'agent Snipper (Opus) pour une qualite maximale.
+                        </p>
+                        <p data-lang="en">
+                            .NET/Blazor code generation based on validated specs. Uses Snipper agent (Opus) for maximum quality.
+                        </p>
+
+                        <div class="command-card">
+                            <div class="command-header">
+                                <code class="command-name">/ba:4-implement</code>
+                                <span class="tag tag-command">Code</span>
+                            </div>
+                            <div class="command-body">
+                                <div class="code-block">
+                                    <button class="copy-btn">Copy</button>
+                                    <pre><code>/ba:4-implement</code></pre>
+                                </div>
+
+                                <h4 data-lang="fr">Artefacts generes</h4>
+                                <h4 data-lang="en">Generated artifacts</h4>
+
+                                <div class="table-container">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>Type</th>
+                                                <th data-lang="fr">Description</th>
+                                                <th data-lang="en">Description</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><strong>Entities</strong></td>
+                                                <td data-lang="fr">Entites EF Core avec relations</td>
+                                                <td data-lang="en">EF Core entities with relations</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Controllers</strong></td>
+                                                <td data-lang="fr">Endpoints API REST</td>
+                                                <td data-lang="en">REST API endpoints</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Pages</strong></td>
+                                                <td data-lang="fr">Composants Blazor</td>
+                                                <td data-lang="en">Blazor components</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Migrations</strong></td>
+                                                <td data-lang="fr">Migrations EF Core</td>
+                                                <td data-lang="en">EF Core migrations</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Phase 5: Verify -->
+                    <section id="phase-5">
+                        <h2>
+                            <span style="color: #06b6d4;">5.</span> Verify
+                        </h2>
+
+                        <p data-lang="fr">
+                            Verification finale : build, tests, formatting. Le build DOIT passer pour valider l'implementation.
+                        </p>
+                        <p data-lang="en">
+                            Final verification: build, tests, formatting. The build MUST pass to validate the implementation.
+                        </p>
+
+                        <div class="command-card">
+                            <div class="command-header">
+                                <code class="command-name">/ba:5-verify</code>
+                                <span class="tag tag-workflow">Test</span>
+                            </div>
+                            <div class="command-body">
+                                <div class="code-block">
+                                    <button class="copy-btn">Copy</button>
+                                    <pre><code>/ba:5-verify
+
+# Execute automatiquement :
+dotnet build
+dotnet test
+dotnet format --verify-no-changes</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Agents BA -->
+                    <section id="agents">
+                        <h2>
+                            <span data-lang="fr">Agents BA</span>
+                            <span data-lang="en">BA Agents</span>
+                        </h2>
+
+                        <p data-lang="fr">Le workflow BA utilise des agents specialises pour optimiser les couts et la qualite :</p>
+                        <p data-lang="en">The BA workflow uses specialized agents to optimize costs and quality:</p>
+
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Agent</th>
+                                        <th>Model</th>
+                                        <th data-lang="fr">Usage</th>
+                                        <th data-lang="en">Usage</th>
+                                        <th data-lang="fr">Cout</th>
+                                        <th data-lang="en">Cost</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><code>explore-codebase</code></td>
+                                        <td>Haiku</td>
+                                        <td data-lang="fr">Scan projet, lecture entites</td>
+                                        <td data-lang="en">Project scan, entity reading</td>
+                                        <td><span class="tag tag-workflow">Low</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>ba/entity-analyzer</code></td>
+                                        <td>Haiku</td>
+                                        <td data-lang="fr">Analyse relations EF Core</td>
+                                        <td data-lang="en">EF Core relations analysis</td>
+                                        <td><span class="tag tag-workflow">Low</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>ba/doc-generator</code></td>
+                                        <td>Sonnet</td>
+                                        <td data-lang="fr">Generation documents</td>
+                                        <td data-lang="en">Document generation</td>
+                                        <td><span class="tag tag-warning">Medium</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>snipper</code></td>
+                                        <td>Opus</td>
+                                        <td data-lang="fr">Generation code qualite</td>
+                                        <td data-lang="en">Quality code generation</td>
+                                        <td><span class="tag tag-danger">High</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="alert alert-info">
+                            <span class="alert-icon">&#128161;</span>
+                            <div class="alert-content">
+                                <h5 data-lang="fr">Strategie de couts</h5>
+                                <h5 data-lang="en">Cost strategy</h5>
+                                <p data-lang="fr">
+                                    Les phases de lecture utilisent Haiku (low cost), tandis que la generation de code utilise Opus (high cost) pour garantir la qualite.
+                                </p>
+                                <p data-lang="en">
+                                    Reading phases use Haiku (low cost), while code generation uses Opus (high cost) to ensure quality.
+                                </p>
+                            </div>
+                        </div>
+                    </section>
+            </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Mobile Menu Button -->
+    <button class="mobile-menu-btn">&#9776;</button>
+    <div class="overlay"></div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>

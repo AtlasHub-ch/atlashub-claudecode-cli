@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>APEX Methodology - Claude Tools</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Global Header (single unified element) -->
+        <header class="global-header">
+            <div class="logo">CT</div>
+            <span class="site-title">Claude Tools</span>
+            <span class="version-badge">v1.2.0</span>
+            <div class="header-divider"></div>
+            <span class="page-title">APEX Methodology</span>
+            <nav class="breadcrumb">
+                <a href="index.html">
+                    <span data-lang="fr">Accueil</span>
+                    <span data-lang="en">Home</span>
+                </a>
+                <span class="breadcrumb-separator">&#8250;</span>
+                <span data-lang="fr">Workflows</span>
+                <span data-lang="en">Workflows</span>
+                <span class="breadcrumb-separator">&#8250;</span>
+                <span class="breadcrumb-current">APEX</span>
+            </nav>
+            <!-- Language Select -->
+            <select class="lang-select" id="lang-select" onchange="setLanguage(this.value); localStorage.setItem('doc-language', this.value);">
+                <option value="fr">🇫🇷 FR</option>
+                <option value="en">🇬🇧 EN</option>
+            </select>
+            <!-- Search -->
+            <div class="header-search">
+                <div class="search-input-wrapper">
+                    <span class="search-icon">&#128269;</span>
+                    <input type="text" id="search-input" class="search-input" placeholder="Rechercher..." data-placeholder-fr="Rechercher..." data-placeholder-en="Search..." autocomplete="off">
+                    <span class="search-shortcut">Ctrl+K</span>
+                </div>
+                <div id="search-results" class="search-results"></div>
+            </div>
+        </header>
+
+        <!-- App Body -->
+        <div class="app-body">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <button class="sidebar-toggle" title="Toggle sidebar">
+                    <span class="toggle-icon-collapse">&#171;</span>
+                    <span class="toggle-icon-expand">&#187;</span>
+                </button>
+
+                <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-section-title">
+                        <span data-lang="fr">Demarrage</span>
+                        <span data-lang="en">Getting Started</span>
+                    </div>
+                    <a href="index.html" class="nav-item">
+                        <span class="icon">&#127968;</span>
+                        <span class="nav-text" data-lang="fr">Accueil</span>
+                        <span class="nav-text" data-lang="en">Home</span>
+                    </a>
+                    <a href="installation.html" class="nav-item">
+                        <span class="icon">&#128230;</span>
+                        <span class="nav-text">Installation</span>
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Workflows</div>
+                    <a href="gitflow.html" class="nav-item">
+                        <span class="icon">&#128256;</span>
+                        <span class="nav-text">GitFlow</span>
+                    </a>
+                    <a href="efcore.html" class="nav-item">
+                        <span class="icon">&#128452;</span>
+                        <span class="nav-text">EF Core</span>
+                    </a>
+                    <div class="nav-item-with-toc">
+                        <a href="apex.html" class="active">
+                            <span class="icon">&#127919;</span>
+                            <span class="nav-text">APEX</span>
+                            <button class="toc-toggle">&#9654;</button>
+                        </a>
+                        <nav class="sidebar-toc">
+                            <a href="#introduction" class="sidebar-toc-link">Introduction</a>
+                            <a href="#workflow" class="sidebar-toc-link">Workflow</a>
+                            <a href="#analyze" class="sidebar-toc-link">1. Analyze</a>
+                            <a href="#plan" class="sidebar-toc-link">2. Plan</a>
+                            <a href="#execute" class="sidebar-toc-link">3. Execute</a>
+                            <a href="#examine" class="sidebar-toc-link">4. eXamine</a>
+                            <a href="#tasks" class="sidebar-toc-link">5. Tasks</a>
+                            <a href="#best-practices" class="sidebar-toc-link">
+                                <span data-lang="fr">Bonnes pratiques</span>
+                                <span data-lang="en">Best Practices</span>
+                            </a>
+                        </nav>
+                    </div>
+                    <a href="ba.html" class="nav-item">
+                        <span class="icon">&#128202;</span>
+                        <span class="nav-text">BA</span>
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">
+                        <span data-lang="fr">Outils</span>
+                        <span data-lang="en">Tools</span>
+                    </div>
+                    <a href="agents.html" class="nav-item">
+                        <span class="icon">&#129302;</span>
+                        <span class="nav-text">Agents</span>
+                    </a>
+                    <a href="commands.html" class="nav-item">
+                        <span class="icon">&#9889;</span>
+                        <span class="nav-text" data-lang="fr">Commandes</span>
+                        <span class="nav-text" data-lang="en">Commands</span>
+                    </a>
+                    <a href="hooks.html" class="nav-item">
+                        <span class="icon">&#128279;</span>
+                        <span class="nav-text">Hooks</span>
+                    </a>
+                    <a href="test-web.html" class="nav-item">
+                        <span class="icon">&#127760;</span>
+                        <span class="nav-text">Test Web</span>
+                    </a>
+                </div>
+            </nav>
+
+            </aside>
+
+            <!-- Main Content -->
+            <main class="main-content">
+                <div class="content-full">
+                    <!-- Introduction -->
+                    <section id="introduction">
+                        <h2>Introduction</h2>
+                        <p data-lang="fr">
+                            APEX (Analyze-Plan-Execute-eXamine) est une methodologie systematique pour l'implementation de features complexes. Elle garantit une approche structuree avec une comprehension complete du contexte avant d'ecrire du code.
+                        </p>
+                        <p data-lang="en">
+                            APEX (Analyze-Plan-Execute-eXamine) is a systematic methodology for implementing complex features. It ensures a structured approach with complete context understanding before writing code.
+                        </p>
+
+                        <div class="alert alert-info">
+                            <span class="alert-icon">&#127919;</span>
+                            <div class="alert-content">
+                                <h5 data-lang="fr">Principe fondamental</h5>
+                                <h5 data-lang="en">Core Principle</h5>
+                                <p data-lang="fr">
+                                    <strong>Context depth > Speed</strong>. Une analyse incomplete mene a des implementations defaillantes.
+                                </p>
+                                <p data-lang="en">
+                                    <strong>Context depth > Speed</strong>. Incomplete analysis leads to failed implementations.
+                                </p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Workflow Diagram -->
+                    <section id="workflow">
+                        <h2>Workflow</h2>
+
+                        <div class="svg-diagram">
+                            <svg viewBox="0 0 500 400" xmlns="http://www.w3.org/2000/svg" style="font-family: 'Inter', system-ui, sans-serif;">
+                                <defs>
+                                    <!-- Gradients for each phase -->
+                                    <linearGradient id="analyzeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" style="stop-color:#3b82f6"/>
+                                        <stop offset="100%" style="stop-color:#1d4ed8"/>
+                                    </linearGradient>
+                                    <linearGradient id="planGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" style="stop-color:#8b5cf6"/>
+                                        <stop offset="100%" style="stop-color:#6d28d9"/>
+                                    </linearGradient>
+                                    <linearGradient id="executeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" style="stop-color:#22c55e"/>
+                                        <stop offset="100%" style="stop-color:#15803d"/>
+                                    </linearGradient>
+                                    <linearGradient id="examineGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" style="stop-color:#f97316"/>
+                                        <stop offset="100%" style="stop-color:#c2410c"/>
+                                    </linearGradient>
+                                    <!-- Glow filter -->
+                                    <filter id="glow2" x="-20%" y="-20%" width="140%" height="140%">
+                                        <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                                        <feMerge>
+                                            <feMergeNode in="coloredBlur"/>
+                                            <feMergeNode in="SourceGraphic"/>
+                                        </feMerge>
+                                    </filter>
+                                    <!-- Arrow marker -->
+                                    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                                        <polygon points="0 0, 10 3.5, 0 7" fill="#94a3b8"/>
+                                    </marker>
+                                </defs>
+
+                                <!-- Center circle with APEX text -->
+                                <circle cx="250" cy="200" r="50" fill="#1e293b" stroke="#334155" stroke-width="2"/>
+                                <text x="250" y="195" text-anchor="middle" fill="#e2e8f0" font-size="20" font-weight="700">APEX</text>
+                                <text x="250" y="215" text-anchor="middle" fill="#94a3b8" font-size="10">Methodology</text>
+
+                                <!-- Connecting arrows (circular path) -->
+                                <path d="M 170 120 Q 80 200 170 280" fill="none" stroke="#94a3b8" stroke-width="2" stroke-dasharray="5,5"/>
+                                <path d="M 170 280 Q 250 360 330 280" fill="none" stroke="#94a3b8" stroke-width="2" stroke-dasharray="5,5"/>
+                                <path d="M 330 280 Q 420 200 330 120" fill="none" stroke="#94a3b8" stroke-width="2" stroke-dasharray="5,5"/>
+                                <path d="M 330 120 Q 250 40 170 120" fill="none" stroke="#94a3b8" stroke-width="2" stroke-dasharray="5,5"/>
+
+                                <!-- Phase 1: ANALYZE (top-left) -->
+                                <g transform="translate(100, 80)" filter="url(#glow2)">
+                                    <rect x="0" y="0" width="140" height="70" rx="12" fill="url(#analyzeGrad)"/>
+                                    <text x="70" y="30" text-anchor="middle" fill="white" font-size="11" font-weight="500">1. ANALYZE</text>
+                                    <text x="70" y="50" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="9">Gather context</text>
+                                    <circle cx="12" cy="12" r="14" fill="#1d4ed8" stroke="white" stroke-width="2"/>
+                                    <text x="12" y="17" text-anchor="middle" fill="white" font-size="12" font-weight="700">A</text>
+                                </g>
+
+                                <!-- Phase 2: PLAN (top-right) -->
+                                <g transform="translate(260, 80)" filter="url(#glow2)">
+                                    <rect x="0" y="0" width="140" height="70" rx="12" fill="url(#planGrad)"/>
+                                    <text x="70" y="30" text-anchor="middle" fill="white" font-size="11" font-weight="500">2. PLAN</text>
+                                    <text x="70" y="50" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="9">Design strategy</text>
+                                    <circle cx="12" cy="12" r="14" fill="#6d28d9" stroke="white" stroke-width="2"/>
+                                    <text x="12" y="17" text-anchor="middle" fill="white" font-size="12" font-weight="700">P</text>
+                                </g>
+
+                                <!-- Phase 3: EXECUTE (bottom-right) -->
+                                <g transform="translate(260, 250)" filter="url(#glow2)">
+                                    <rect x="0" y="0" width="140" height="70" rx="12" fill="url(#executeGrad)"/>
+                                    <text x="70" y="30" text-anchor="middle" fill="white" font-size="11" font-weight="500">3. EXECUTE</text>
+                                    <text x="70" y="50" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="9">Implement code</text>
+                                    <circle cx="12" cy="12" r="14" fill="#15803d" stroke="white" stroke-width="2"/>
+                                    <text x="12" y="17" text-anchor="middle" fill="white" font-size="12" font-weight="700">E</text>
+                                </g>
+
+                                <!-- Phase 4: eXAMINE (bottom-left) -->
+                                <g transform="translate(100, 250)" filter="url(#glow2)">
+                                    <rect x="0" y="0" width="140" height="70" rx="12" fill="url(#examineGrad)"/>
+                                    <text x="70" y="30" text-anchor="middle" fill="white" font-size="11" font-weight="500">4. eXAMINE</text>
+                                    <text x="70" y="50" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="9">Validate & test</text>
+                                    <circle cx="12" cy="12" r="14" fill="#c2410c" stroke="white" stroke-width="2"/>
+                                    <text x="12" y="17" text-anchor="middle" fill="white" font-size="12" font-weight="700">X</text>
+                                </g>
+
+                                <!-- Directional arrows between phases -->
+                                <polygon points="240,115 250,100 260,115" fill="#94a3b8"/>
+                                <polygon points="385,185 400,200 385,215" fill="#94a3b8"/>
+                                <polygon points="260,285 250,300 240,285" fill="#94a3b8"/>
+                                <polygon points="115,215 100,200 115,185" fill="#94a3b8"/>
+                            </svg>
+                        </div>
+
+                        <p data-lang="fr">Chaque phase produit un artefact qui sert d'input a la phase suivante :</p>
+                        <p data-lang="en">Each phase produces an artifact that serves as input for the next phase:</p>
+
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Phase</th>
+                                        <th data-lang="fr">Commande</th>
+                                        <th data-lang="en">Command</th>
+                                        <th data-lang="fr">Artefact</th>
+                                        <th data-lang="en">Artifact</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Analyze</strong></td>
+                                        <td><code>/apex:1-analyze</code></td>
+                                        <td><code>analyze.md</code></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Plan</strong></td>
+                                        <td><code>/apex:2-plan</code></td>
+                                        <td><code>plan.md</code></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Execute</strong></td>
+                                        <td><code>/apex:3-execute</code></td>
+                                        <td><code>implementation.md</code></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>eXamine</strong></td>
+                                        <td><code>/apex:4-examine</code></td>
+                                        <td><code>validation.md</code></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Tasks</strong></td>
+                                        <td><code>/apex:5-tasks</code></td>
+                                        <td><code>task-*.md</code></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+
+                    <!-- Phase 1: Analyze -->
+                    <section id="analyze">
+                        <h2>
+                            <span style="color: var(--info);">1.</span> Analyze
+                        </h2>
+
+                        <p data-lang="fr">
+                            La phase d'analyse collecte tout le contexte necessaire avant l'implementation. Elle utilise des agents paralleles pour explorer le codebase, la documentation et le web.
+                        </p>
+                        <p data-lang="en">
+                            The analysis phase collects all necessary context before implementation. It uses parallel agents to explore the codebase, documentation, and web.
+                        </p>
+
+                        <div class="command-card">
+                            <div class="command-header">
+                                <code class="command-name">/apex:1-analyze</code>
+                                <span class="tag tag-command">Analysis</span>
+                            </div>
+                            <div class="command-body">
+                                <div class="code-block">
+                                    <button class="copy-btn">Copy</button>
+                                    <pre><code>/apex:1-analyze Add user authentication with JWT tokens</code></pre>
+                                </div>
+
+                                <details class="prompt-details">
+                                    <summary>
+                                        <span data-lang="fr">Voir le prompt complet</span>
+                                        <span data-lang="en">View complete prompt</span>
+                                    </summary>
+                                    <div class="prompt-content">
+                                        <pre><code>You are an analysis specialist. Your mission is to gather ALL relevant context before implementation.
+
+**You need to ULTRA THINK before launching agents.**
+
+## Workflow
+
+1. **SETUP TASK FOLDER**: Create organized workspace in .claude/tasks
+   - Find next task number: Check `.claude/tasks/` for existing folders
+   - Parse task description to create kebab-case name
+   - Create `.claude/tasks/nn-task-name/` folder structure
+   - **EXAMPLE**: "Add user authentication" → `.claude/tasks/01-add-user-authentication/`
+
+2. **ULTRA THINK**: Plan analysis strategy
+   - **CRITICAL**: Know EXACTLY what to search for before launching agents
+   - Identify key concepts, files, patterns to find
+   - Determine which sources need analysis (codebase/docs/web)
+
+3. **LAUNCH PARALLEL ANALYSIS**: Gather context from all sources
+   - **Codebase exploration** (`explore-codebase` agent)
+   - **Documentation exploration** (`explore-docs` agent)
+   - **Web research** (`websearch` agent)
+   - **CRITICAL**: Launch ALL agents in parallel
+
+4. **SYNTHESIZE FINDINGS**: Create comprehensive analysis report
+
+5. **SAVE ANALYSIS**: Write to `analyze.md`
+   ```markdown
+   # Task: [Description]
+
+   ## Codebase Context
+   [Findings from codebase exploration]
+
+   ## Documentation Insights
+   [Key information from docs]
+
+   ## Key Files
+   - `path/to/file.ts:line` - Purpose
+
+   ## Patterns to Follow
+   [Existing conventions]
+   ```
+
+## Priority
+Context depth > Speed. Missing context causes failed implementations.</code></pre>
+                                    </div>
+                                </details>
+                            </div>
+                        </div>
+
+                        <h3 data-lang="fr">Agents utilises</h3>
+                        <h3 data-lang="en">Agents used</h3>
+
+                        <div class="card-grid">
+                            <div class="card">
+                                <div class="card-header">
+                                    <div class="card-icon">&#128269;</div>
+                                    <div>
+                                        <div class="card-title">explore-codebase</div>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <p data-lang="fr">Explore le codebase pour trouver des implementations similaires, patterns et conventions.</p>
+                                    <p data-lang="en">Explores codebase to find similar implementations, patterns and conventions.</p>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-header">
+                                    <div class="card-icon">&#128214;</div>
+                                    <div>
+                                        <div class="card-title">explore-docs</div>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <p data-lang="fr">Recherche dans la documentation des librairies pour les APIs et best practices.</p>
+                                    <p data-lang="en">Searches library documentation for APIs and best practices.</p>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-header">
+                                    <div class="card-icon">&#127760;</div>
+                                    <div>
+                                        <div class="card-title">websearch</div>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <p data-lang="fr">Recherche sur le web les dernieres approches et solutions.</p>
+                                    <p data-lang="en">Searches the web for latest approaches and solutions.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Phase 2: Plan -->
+                    <section id="plan">
+                        <h2>
+                            <span style="color: #8b5cf6;">2.</span> Plan
+                        </h2>
+
+                        <p data-lang="fr">
+                            La phase de planification transforme l'analyse en un plan d'implementation detaille, organise par fichier.
+                        </p>
+                        <p data-lang="en">
+                            The planning phase transforms the analysis into a detailed implementation plan, organized by file.
+                        </p>
+
+                        <div class="command-card">
+                            <div class="command-header">
+                                <code class="command-name">/apex:2-plan</code>
+                                <span class="tag tag-workflow">Planning</span>
+                            </div>
+                            <div class="command-body">
+                                <div class="code-block">
+                                    <button class="copy-btn">Copy</button>
+                                    <pre><code>/apex:2-plan 01-add-user-authentication</code></pre>
+                                </div>
+
+                                <details class="prompt-details">
+                                    <summary>
+                                        <span data-lang="fr">Voir le prompt complet</span>
+                                        <span data-lang="en">View complete prompt</span>
+                                    </summary>
+                                    <div class="prompt-content">
+                                        <pre><code>You are a strategic planning specialist. Transform analysis findings into executable plans.
+
+**You need to ULTRA THINK about the complete implementation strategy.**
+
+## Workflow
+
+1. **VALIDATE INPUT**: Verify task folder exists
+   - Check that `.claude/tasks/&lt;task-folder&gt;/` exists
+   - Verify `analyze.md` file is present
+
+2. **READ ANALYSIS**: Load all context
+
+3. **ULTRA THINK PLANNING**: Design comprehensive strategy
+   - **CRITICAL**: Think through ENTIRE implementation before writing
+   - Consider all edge cases and dependencies
+   - Plan file changes in logical dependency order
+
+4. **ASK FOR CLARITY**: Resolve ambiguities
+   - **STOP**: If anything is unclear about requirements
+   - **NEVER ASSUME**: Always clarify before planning
+
+5. **CREATE DETAILED PLAN**: Write file-by-file implementation guide
+   - **Structure**: Group by file, NOT by feature
+   - **Format**: Action-oriented, no code snippets
+
+## Plan Quality Guidelines
+
+### Good Plan Entry
+```markdown
+### `src/auth/middleware.ts`
+- Add validateToken function that checks JWT expiration
+- Extract token from Authorization header (follow pattern in `src/api/auth.ts:45`)
+- Return 401 if token invalid or expired
+```
+
+### Bad Plan Entry
+```markdown
+### `src/auth/middleware.ts`
+- Add authentication
+- Fix security issues
+```
+
+## Priority
+Clarity > Completeness. Every step must be unambiguous and executable.</code></pre>
+                                    </div>
+                                </details>
+                            </div>
+                        </div>
+
+                        <div class="alert alert-warning">
+                            <span class="alert-icon">&#9888;</span>
+                            <div class="alert-content">
+                                <h5 data-lang="fr">Pas de code dans le plan</h5>
+                                <h5 data-lang="en">No code in the plan</h5>
+                                <p data-lang="fr">
+                                    Le plan decrit les <strong>actions</strong>, pas les implementations. Chaque item doit etre clair et executable sans montrer de code.
+                                </p>
+                                <p data-lang="en">
+                                    The plan describes <strong>actions</strong>, not implementations. Each item must be clear and executable without showing code.
+                                </p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Phase 3: Execute -->
+                    <section id="execute">
+                        <h2>
+                            <span style="color: var(--success);">3.</span> Execute
+                        </h2>
+
+                        <p data-lang="fr">
+                            La phase d'execution implemente le plan etape par etape, en suivant les patterns identifies lors de l'analyse.
+                        </p>
+                        <p data-lang="en">
+                            The execution phase implements the plan step by step, following patterns identified during analysis.
+                        </p>
+
+                        <div class="command-card">
+                            <div class="command-header">
+                                <code class="command-name">/apex:3-execute</code>
+                                <span class="tag tag-command">Implementation</span>
+                            </div>
+                            <div class="command-body">
+                                <div class="code-block">
+                                    <button class="copy-btn">Copy</button>
+                                    <pre><code>/apex:3-execute 01-add-user-authentication</code></pre>
+                                </div>
+
+                                <details class="prompt-details">
+                                    <summary>
+                                        <span data-lang="fr">Voir le prompt complet</span>
+                                        <span data-lang="en">View complete prompt</span>
+                                    </summary>
+                                    <div class="prompt-content">
+                                        <pre><code>You are an implementation specialist. Execute plans precisely while maintaining code quality.
+
+**You need to ULTRA THINK at every step.**
+
+## Workflow
+
+1. **VALIDATE INPUT**: Verify task folder is ready
+2. **LOAD CONTEXT**: Read analyze.md and plan.md
+
+3. **CREATE TODO LIST**: Track implementation progress
+   - **CRITICAL**: Use TodoWrite to create todos from plan
+   - Break down each file change into separate todo items
+
+4. **ULTRA THINK BEFORE EACH CHANGE**: Plan every modification
+   - **BEFORE** editing any file:
+     - Think through the exact changes needed
+     - Review analysis findings for patterns to follow
+   - **NEVER** make changes without thinking first
+
+5. **IMPLEMENT STEP BY STEP**: Execute plan methodically
+   - **ONE TODO AT A TIME**: Mark in_progress, complete, then move to next
+   - **Follow existing patterns**
+   - **Stay strictly in scope**
+
+6. **FORMAT AND LINT**: Clean up code
+7. **TEST PHASE**: Verify implementation works
+
+## Implementation Quality Rules
+
+### Code Style
+- **NO COMMENTS**: Use clear names instead
+- **MATCH PATTERNS**: Follow existing codebase conventions exactly
+- **MINIMAL CHANGES**: Only touch what's needed
+
+### Scope Management
+- **STRICTLY IN SCOPE**: Implement only what's in the plan
+- **NO REFACTORING**: Don't improve unrelated code
+- **NO EXTRAS**: Don't add unrequested features
+
+## Priority
+Correctness > Completeness > Speed</code></pre>
+                                    </div>
+                                </details>
+                            </div>
+                        </div>
+
+                        <h3 data-lang="fr">Regles d'implementation</h3>
+                        <h3 data-lang="en">Implementation Rules</h3>
+
+                        <div class="best-practice">
+                            <h4>
+                                <span class="bp-icon">&#9989;</span>
+                                <span data-lang="fr">Ultra Think avant chaque modification</span>
+                                <span data-lang="en">Ultra Think before each modification</span>
+                            </h4>
+                            <p data-lang="fr">
+                                Avant d'editer un fichier, reflechir aux changements exacts necessaires, revoir les patterns de l'analyse, et considerer l'impact sur les autres fichiers.
+                            </p>
+                            <p data-lang="en">
+                                Before editing a file, think through the exact changes needed, review patterns from analysis, and consider impact on other files.
+                            </p>
+                        </div>
+
+                        <div class="best-practice">
+                            <h4>
+                                <span class="bp-icon">&#9989;</span>
+                                <span data-lang="fr">Un todo a la fois</span>
+                                <span data-lang="en">One todo at a time</span>
+                            </h4>
+                            <p data-lang="fr">
+                                Marquer le todo comme <code>in_progress</code>, completer la tache, puis marquer comme <code>completed</code> avant de passer au suivant.
+                            </p>
+                            <p data-lang="en">
+                                Mark the todo as <code>in_progress</code>, complete the task, then mark as <code>completed</code> before moving to the next.
+                            </p>
+                        </div>
+
+                        <div class="best-practice">
+                            <h4>
+                                <span class="bp-icon">&#9989;</span>
+                                <span data-lang="fr">Rester dans le scope</span>
+                                <span data-lang="en">Stay in scope</span>
+                            </h4>
+                            <p data-lang="fr">
+                                Implementer uniquement ce qui est dans le plan. Pas de refactoring non demande, pas de features supplementaires.
+                            </p>
+                            <p data-lang="en">
+                                Implement only what's in the plan. No unrequested refactoring, no extra features.
+                            </p>
+                        </div>
+                    </section>
+
+                    <!-- Phase 4: eXamine -->
+                    <section id="examine">
+                        <h2>
+                            <span style="color: var(--secondary);">4.</span> eXamine
+                        </h2>
+
+                        <p data-lang="fr">
+                            La phase d'examination valide l'implementation et s'assure que tout fonctionne correctement.
+                        </p>
+                        <p data-lang="en">
+                            The examination phase validates the implementation and ensures everything works correctly.
+                        </p>
+
+                        <div class="command-card">
+                            <div class="command-header">
+                                <code class="command-name">/apex:4-examine</code>
+                                <span class="tag tag-workflow">Validation</span>
+                            </div>
+                            <div class="command-body">
+                                <div class="code-block">
+                                    <button class="copy-btn">Copy</button>
+                                    <pre><code>/apex:4-examine 01-add-user-authentication</code></pre>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h3 data-lang="fr">Checklist de validation</h3>
+                        <h3 data-lang="en">Validation Checklist</h3>
+
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th data-lang="fr">Verification</th>
+                                        <th data-lang="en">Check</th>
+                                        <th data-lang="fr">Commande</th>
+                                        <th data-lang="en">Command</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td data-lang="fr">Type checking</td>
+                                        <td data-lang="en">Type checking</td>
+                                        <td><code>npm run typecheck</code></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Linting</td>
+                                        <td><code>npm run lint</code></td>
+                                    </tr>
+                                    <tr>
+                                        <td data-lang="fr">Tests unitaires</td>
+                                        <td data-lang="en">Unit tests</td>
+                                        <td><code>npm run test</code></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Build</td>
+                                        <td><code>npm run build</code></td>
+                                    </tr>
+                                    <tr>
+                                        <td data-lang="fr">Tests E2E</td>
+                                        <td data-lang="en">E2E tests</td>
+                                        <td><code>npm run test:e2e</code></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+
+                    <!-- Phase 5: Tasks -->
+                    <section id="tasks">
+                        <h2>
+                            <span style="color: var(--accent);">5.</span> Tasks
+                        </h2>
+
+                        <p data-lang="fr">
+                            La phase Tasks divise le plan en fichiers de taches individuels, utiles pour les grandes implementations ou le travail en equipe.
+                        </p>
+                        <p data-lang="en">
+                            The Tasks phase divides the plan into individual task files, useful for large implementations or team work.
+                        </p>
+
+                        <div class="command-card">
+                            <div class="command-header">
+                                <code class="command-name">/apex:5-tasks</code>
+                                <span class="tag tag-command">Division</span>
+                            </div>
+                            <div class="command-body">
+                                <div class="code-block">
+                                    <button class="copy-btn">Copy</button>
+                                    <pre><code>/apex:5-tasks 01-add-user-authentication</code></pre>
+                                </div>
+
+                                <p data-lang="fr">Genere des fichiers de taches individuels :</p>
+                                <p data-lang="en">Generates individual task files:</p>
+
+                                <div class="code-block">
+                                    <pre><code>.claude/tasks/01-add-user-authentication/
+├── analyze.md
+├── plan.md
+├── task-01-setup-jwt-config.md
+├── task-02-create-auth-middleware.md
+├── task-03-implement-login-endpoint.md
+├── task-04-add-token-refresh.md
+└── task-05-write-tests.md</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Best Practices -->
+                    <section id="best-practices">
+                        <h2>
+                            <span data-lang="fr">Bonnes pratiques</span>
+                            <span data-lang="en">Best Practices</span>
+                        </h2>
+
+                        <div class="best-practice">
+                            <h4>
+                                <span class="bp-icon">&#9989;</span>
+                                <span data-lang="fr">Toujours commencer par /apex:1-analyze</span>
+                                <span data-lang="en">Always start with /apex:1-analyze</span>
+                            </h4>
+                            <p data-lang="fr">
+                                Ne jamais sauter l'analyse. Une comprehension incomplete du contexte mene a des implementations defaillantes.
+                            </p>
+                            <p data-lang="en">
+                                Never skip analysis. Incomplete context understanding leads to failed implementations.
+                            </p>
+                        </div>
+
+                        <div class="best-practice">
+                            <h4>
+                                <span class="bp-icon">&#9989;</span>
+                                <span data-lang="fr">Utiliser /apex pour les taches complexes</span>
+                                <span data-lang="en">Use /apex for complex tasks</span>
+                            </h4>
+                            <p data-lang="fr">
+                                Pour les taches simples (renommer une variable, corriger un bug evident), utilisez directement la commande appropriee sans passer par APEX.
+                            </p>
+                            <p data-lang="en">
+                                For simple tasks (renaming a variable, fixing an obvious bug), use the appropriate command directly without going through APEX.
+                            </p>
+                        </div>
+
+                        <div class="best-practice">
+                            <h4>
+                                <span class="bp-icon">&#9989;</span>
+                                <span data-lang="fr">Verifier les artefacts entre chaque phase</span>
+                                <span data-lang="en">Review artifacts between each phase</span>
+                            </h4>
+                            <p data-lang="fr">
+                                Avant de passer a la phase suivante, lire l'artefact genere pour s'assurer qu'il est complet et correct.
+                            </p>
+                            <p data-lang="en">
+                                Before moving to the next phase, read the generated artifact to ensure it's complete and correct.
+                            </p>
+                        </div>
+
+                        <div class="alert alert-info">
+                            <span class="alert-icon">&#128161;</span>
+                            <div class="alert-content">
+                                <h5 data-lang="fr">Raccourci</h5>
+                                <h5 data-lang="en">Shortcut</h5>
+                                <p data-lang="fr">
+                                    Utilisez <code>/apex &lt;description&gt;</code> pour lancer le workflow complet en une seule commande. Claude executera automatiquement toutes les phases.
+                                </p>
+                                <p data-lang="en">
+                                    Use <code>/apex &lt;description&gt;</code> to launch the complete workflow in a single command. Claude will automatically execute all phases.
+                                </p>
+                            </div>
+                        </div>
+                    </section>
+            </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Mobile Menu Button -->
+    <button class="mobile-menu-btn">&#9776;</button>
+    <div class="overlay"></div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Web - Claude Tools</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Global Header (single unified element) -->
+        <header class="global-header">
+            <div class="logo">CT</div>
+            <span class="site-title">Claude Tools</span>
+            <span class="version-badge">v1.2.0</span>
+            <div class="header-divider"></div>
+            <span class="page-title">Test Web</span>
+            <nav class="breadcrumb">
+                <a href="index.html">
+                    <span data-lang="fr">Accueil</span>
+                    <span data-lang="en">Home</span>
+                </a>
+                <span class="breadcrumb-separator">&#8250;</span>
+                <span data-lang="fr">Outils</span>
+                <span data-lang="en">Tools</span>
+                <span class="breadcrumb-separator">&#8250;</span>
+                <span class="breadcrumb-current">Test Web</span>
+            </nav>
+            <!-- Language Select -->
+            <select class="lang-select" id="lang-select" onchange="setLanguage(this.value); localStorage.setItem('doc-language', this.value);">
+                <option value="fr">🇫🇷 FR</option>
+                <option value="en">🇬🇧 EN</option>
+            </select>
+            <!-- Search -->
+            <div class="header-search">
+                <div class="search-input-wrapper">
+                    <span class="search-icon">&#128269;</span>
+                    <input type="text" id="search-input" class="search-input" placeholder="Rechercher..." data-placeholder-fr="Rechercher..." data-placeholder-en="Search..." autocomplete="off">
+                    <span class="search-shortcut">Ctrl+K</span>
+                </div>
+                <div id="search-results" class="search-results"></div>
+            </div>
+        </header>
+
+        <!-- App Body -->
+        <div class="app-body">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <button class="sidebar-toggle" title="Toggle sidebar">
+                    <span class="toggle-icon-collapse">&#171;</span>
+                    <span class="toggle-icon-expand">&#187;</span>
+                </button>
+
+                <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-section-title">
+                        <span data-lang="fr">Demarrage</span>
+                        <span data-lang="en">Getting Started</span>
+                    </div>
+                    <a href="index.html" class="nav-item">
+                        <span class="icon">&#127968;</span>
+                        <span class="nav-text" data-lang="fr">Accueil</span>
+                        <span class="nav-text" data-lang="en">Home</span>
+                    </a>
+                    <a href="installation.html" class="nav-item">
+                        <span class="icon">&#128230;</span>
+                        <span class="nav-text">Installation</span>
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Workflows</div>
+                    <a href="gitflow.html" class="nav-item">
+                        <span class="icon">&#128256;</span>
+                        <span class="nav-text">GitFlow</span>
+                    </a>
+                    <a href="efcore.html" class="nav-item">
+                        <span class="icon">&#128452;</span>
+                        <span class="nav-text">EF Core</span>
+                    </a>
+                    <a href="apex.html" class="nav-item">
+                        <span class="icon">&#127919;</span>
+                        <span class="nav-text">APEX</span>
+                    </a>
+                    <a href="ba.html" class="nav-item">
+                        <span class="icon">&#128202;</span>
+                        <span class="nav-text">BA</span>
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">
+                        <span data-lang="fr">Outils</span>
+                        <span data-lang="en">Tools</span>
+                    </div>
+                    <a href="agents.html" class="nav-item">
+                        <span class="icon">&#129302;</span>
+                        <span class="nav-text">Agents</span>
+                    </a>
+                    <a href="commands.html" class="nav-item">
+                        <span class="icon">&#9889;</span>
+                        <span class="nav-text" data-lang="fr">Commandes</span>
+                        <span class="nav-text" data-lang="en">Commands</span>
+                    </a>
+                    <a href="hooks.html" class="nav-item">
+                        <span class="icon">&#128279;</span>
+                        <span class="nav-text">Hooks</span>
+                    </a>
+                    <a href="test-web.html" class="nav-item active">
+                        <span class="icon">&#127760;</span>
+                        <span class="nav-text">Test Web</span>
+                    </a>
+                </div>
+            </nav>
+
+            </aside>
+
+            <!-- Main Content -->
+            <main class="main-content">
+                <div class="content content-wide">
+                <!-- Introduction -->
+                <section id="introduction">
+                    <h2>Introduction</h2>
+                    <p data-lang="fr">
+                        La commande <code>/test-web</code> permet de tester l'accessibilite et le contenu des ressources web de votre projet. Elle supporte plusieurs modes : fetch rapide, tests E2E avec Chrome, et generation de rapports.
+                    </p>
+                    <p data-lang="en">
+                        The <code>/test-web</code> command tests the accessibility and content of your project's web resources. It supports multiple modes: quick fetch, E2E tests with Chrome, and report generation.
+                    </p>
+                </section>
+
+                <!-- Modes -->
+                <section id="modes">
+                    <h2>
+                        <span data-lang="fr">Modes d'execution</span>
+                        <span data-lang="en">Execution Modes</span>
+                    </h2>
+
+                    <div class="card-grid">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-icon" style="background: var(--success);">&#9889;</div>
+                                <div>
+                                    <div class="card-title">--quick</div>
+                                    <div class="card-subtitle">WebFetch</div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <p data-lang="fr">Test rapide HTTP 200 + verification du contenu texte.</p>
+                                <p data-lang="en">Quick HTTP 200 test + text content verification.</p>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-icon" style="background: var(--primary);">&#128187;</div>
+                                <div>
+                                    <div class="card-title">--chrome</div>
+                                    <div class="card-subtitle">E2E</div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <p data-lang="fr">Tests E2E complets avec Claude for Chrome.</p>
+                                <p data-lang="en">Full E2E tests with Claude for Chrome.</p>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-icon" style="background: var(--warning);">&#128196;</div>
+                                <div>
+                                    <div class="card-title">--report</div>
+                                    <div class="card-subtitle">Markdown</div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <p data-lang="fr">Genere un rapport detaille dans reports/.</p>
+                                <p data-lang="en">Generates a detailed report in reports/.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Usage -->
+                <section id="usage">
+                    <h2>
+                        <span data-lang="fr">Utilisation</span>
+                        <span data-lang="en">Usage</span>
+                    </h2>
+
+                    <div class="command-card">
+                        <div class="command-header">
+                            <code class="command-name">/test-web</code>
+                            <span class="tag tag-command">Test</span>
+                        </div>
+                        <div class="command-body">
+                            <div class="code-block">
+                                <button class="copy-btn">Copy</button>
+                                <pre><code># Test rapide de toutes les URLs configurees
+/test-web --quick
+
+# Test E2E avec navigateur (requires claude --chrome)
+/test-web --chrome
+
+# Test d'une URL specifique
+/test-web https://github.com/org/repo
+
+# Generer rapport detaille
+/test-web --report</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Configuration -->
+                <section id="configuration">
+                    <h2>Configuration</h2>
+
+                    <p data-lang="fr">Creez un fichier de configuration dans <code>.claude/test-web/config.json</code> :</p>
+                    <p data-lang="en">Create a configuration file in <code>.claude/test-web/config.json</code>:</p>
+
+                    <div class="code-block">
+                        <button class="copy-btn">Copy</button>
+                        <pre><code>{
+  "version": "1.0.0",
+  "targets": [
+    {
+      "name": "npm Package Page",
+      "url": "https://www.npmjs.com/package/@scope/package-name",
+      "type": "fetch",
+      "expects": {
+        "status": 200,
+        "contains": ["package-name", "Install"]
+      }
+    },
+    {
+      "name": "npm Search",
+      "query": "@scope/package-name npm",
+      "type": "search",
+      "expects": {
+        "hasResults": true
+      }
+    },
+    {
+      "name": "GitHub Repository",
+      "url": "https://github.com/org/repo",
+      "type": "fetch",
+      "expects": {
+        "status": 200,
+        "contains": ["README", "package.json"]
+      }
+    }
+  ],
+  "settings": {
+    "timeout": 30000,
+    "retries": 2,
+    "reportPath": ".claude/test-web/reports"
+  }
+}</code></pre>
+                    </div>
+
+                    <h3 data-lang="fr">Types de targets</h3>
+                    <h3 data-lang="en">Target Types</h3>
+
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Type</th>
+                                    <th data-lang="fr">Description</th>
+                                    <th data-lang="en">Description</th>
+                                    <th data-lang="fr">Validation</th>
+                                    <th data-lang="en">Validation</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code>fetch</code></td>
+                                    <td data-lang="fr">Requete HTTP simple</td>
+                                    <td data-lang="en">Simple HTTP request</td>
+                                    <td>status, contains</td>
+                                </tr>
+                                <tr>
+                                    <td><code>search</code></td>
+                                    <td data-lang="fr">Recherche web</td>
+                                    <td data-lang="en">Web search</td>
+                                    <td>hasResults</td>
+                                </tr>
+                                <tr>
+                                    <td><code>chrome</code></td>
+                                    <td data-lang="fr">Test E2E navigateur</td>
+                                    <td data-lang="en">Browser E2E test</td>
+                                    <td>actions, screenshots</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Templates -->
+                <section id="templates">
+                    <h2>
+                        <span data-lang="fr">Templates pre-configures</span>
+                        <span data-lang="en">Pre-configured Templates</span>
+                    </h2>
+
+                    <p data-lang="fr">Claude Tools inclut des templates de configuration pour les cas d'usage courants :</p>
+                    <p data-lang="en">Claude Tools includes configuration templates for common use cases:</p>
+
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Template</th>
+                                    <th data-lang="fr">Description</th>
+                                    <th data-lang="en">Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code>minimal.json</code></td>
+                                    <td data-lang="fr">Configuration minimale de base</td>
+                                    <td data-lang="en">Basic minimal configuration</td>
+                                </tr>
+                                <tr>
+                                    <td><code>npm-package.json</code></td>
+                                    <td data-lang="fr">Tests pour package npm (npm, GitHub, releases)</td>
+                                    <td data-lang="en">Tests for npm package (npm, GitHub, releases)</td>
+                                </tr>
+                                <tr>
+                                    <td><code>api-health.json</code></td>
+                                    <td data-lang="fr">Tests de sante API REST</td>
+                                    <td data-lang="en">REST API health tests</td>
+                                </tr>
+                                <tr>
+                                    <td><code>seo-check.json</code></td>
+                                    <td data-lang="fr">Verification SEO et indexation</td>
+                                    <td data-lang="en">SEO and indexation check</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="code-block">
+                        <button class="copy-btn">Copy</button>
+                        <pre><code># Utiliser un template
+/test-web-config npm-package
+
+# Cela copie le template dans .claude/test-web/config.json</code></pre>
+                    </div>
+                </section>
+
+                <!-- Output -->
+                <section id="output">
+                    <h2>
+                        <span data-lang="fr">Format de sortie</span>
+                        <span data-lang="en">Output Format</span>
+                    </h2>
+
+                    <h3 data-lang="fr">Succes</h3>
+                    <h3 data-lang="en">Success</h3>
+
+                    <div class="code-block">
+                        <pre><code>TEST WEB RESULTS
+────────────────────────────────
+GitHub Repository     200 OK    "README" found
+npm Package           200 OK    "claude-tools" found
+Google Indexation     Results   Found in search
+
+Status: 3/3 PASS
+────────────────────────────────</code></pre>
+                    </div>
+
+                    <h3 data-lang="fr">Echec</h3>
+                    <h3 data-lang="en">Failure</h3>
+
+                    <div class="code-block">
+                        <pre><code>TEST WEB RESULTS
+────────────────────────────────
+GitHub Repository     200 OK    "README" found
+npm Package           404       Package not found
+Google Indexation     Results   No relevant results
+
+Status: 1/3 PASS, 1 FAIL, 1 WARNING
+────────────────────────────────</code></pre>
+                    </div>
+                </section>
+
+                <!-- Chrome Mode -->
+                <section id="chrome">
+                    <h2>
+                        <span data-lang="fr">Mode Chrome (E2E)</span>
+                        <span data-lang="en">Chrome Mode (E2E)</span>
+                    </h2>
+
+                    <div class="alert alert-info">
+                        <span class="alert-icon">&#128161;</span>
+                        <div class="alert-content">
+                            <h5 data-lang="fr">Prerequis</h5>
+                            <h5 data-lang="en">Prerequisites</h5>
+                            <ul>
+                                <li data-lang="fr">Extension "Claude for Chrome" installee</li>
+                                <li data-lang="en">Extension "Claude for Chrome" installed</li>
+                                <li data-lang="fr">Plan Max/Pro/Team/Enterprise</li>
+                                <li data-lang="en">Max/Pro/Team/Enterprise plan</li>
+                                <li data-lang="fr">Claude Code lance avec : <code>claude --chrome</code></li>
+                                <li data-lang="en">Claude Code launched with: <code>claude --chrome</code></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="code-block">
+                        <button class="copy-btn">Copy</button>
+                        <pre><code># 1. Lancer Claude Code avec Chrome
+claude --chrome
+
+# 2. Executer les tests E2E
+/test-web --chrome</code></pre>
+                    </div>
+                </section>
+
+                <!-- Integration -->
+                <section id="integration">
+                    <h2>
+                        <span data-lang="fr">Integration workflows</span>
+                        <span data-lang="en">Workflow Integration</span>
+                    </h2>
+
+                    <p data-lang="fr">
+                        <code>/test-web</code> peut etre appele automatiquement dans d'autres workflows :
+                    </p>
+                    <p data-lang="en">
+                        <code>/test-web</code> can be called automatically in other workflows:
+                    </p>
+
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Workflow</th>
+                                    <th>Phase</th>
+                                    <th data-lang="fr">Usage</th>
+                                    <th data-lang="en">Usage</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>BA</strong></td>
+                                    <td>/ba:5-verify</td>
+                                    <td data-lang="fr">Verification des endpoints deployes</td>
+                                    <td data-lang="en">Deployed endpoints verification</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>EPCT</strong></td>
+                                    <td>Phase T (Test)</td>
+                                    <td data-lang="fr">Tests d'integration web</td>
+                                    <td data-lang="en">Web integration tests</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Mobile Menu Button -->
+    <button class="mobile-menu-btn">&#9776;</button>
+    <div class="overlay"></div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>

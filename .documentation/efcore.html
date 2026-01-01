@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EF Core Migrations - Claude Tools</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Global Header (single unified element) -->
+        <header class="global-header">
+            <div class="logo">CT</div>
+            <span class="site-title">Claude Tools</span>
+            <span class="version-badge">v1.2.0</span>
+            <div class="header-divider"></div>
+            <span class="page-title">EF Core Migrations</span>
+            <nav class="breadcrumb">
+                <a href="index.html">
+                    <span data-lang="fr">Accueil</span>
+                    <span data-lang="en">Home</span>
+                </a>
+                <span class="breadcrumb-separator">&#8250;</span>
+                <span data-lang="fr">Workflows</span>
+                <span data-lang="en">Workflows</span>
+                <span class="breadcrumb-separator">&#8250;</span>
+                <span class="breadcrumb-current">EF Core</span>
+            </nav>
+            <!-- Language Select -->
+            <select class="lang-select" id="lang-select" onchange="setLanguage(this.value); localStorage.setItem('doc-language', this.value);">
+                <option value="fr">🇫🇷 FR</option>
+                <option value="en">🇬🇧 EN</option>
+            </select>
+            <!-- Search -->
+            <div class="header-search">
+                <div class="search-input-wrapper">
+                    <span class="search-icon">&#128269;</span>
+                    <input type="text" id="search-input" class="search-input" placeholder="Rechercher..." data-placeholder-fr="Rechercher..." data-placeholder-en="Search..." autocomplete="off">
+                    <span class="search-shortcut">Ctrl+K</span>
+                </div>
+                <div id="search-results" class="search-results"></div>
+            </div>
+        </header>
+
+        <!-- App Body -->
+        <div class="app-body">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <button class="sidebar-toggle" title="Toggle sidebar">
+                    <span class="toggle-icon-collapse">&#171;</span>
+                    <span class="toggle-icon-expand">&#187;</span>
+                </button>
+
+                <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-section-title">
+                        <span data-lang="fr">Demarrage</span>
+                        <span data-lang="en">Getting Started</span>
+                    </div>
+                    <a href="index.html" class="nav-item">
+                        <span class="icon">&#127968;</span>
+                        <span class="nav-text" data-lang="fr">Accueil</span>
+                        <span class="nav-text" data-lang="en">Home</span>
+                    </a>
+                    <a href="installation.html" class="nav-item">
+                        <span class="icon">&#128230;</span>
+                        <span class="nav-text">Installation</span>
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Workflows</div>
+                    <a href="gitflow.html" class="nav-item">
+                        <span class="icon">&#128256;</span>
+                        <span class="nav-text">GitFlow</span>
+                    </a>
+                    <div class="nav-item-with-toc">
+                        <a href="efcore.html" class="active">
+                            <span class="icon">&#128452;</span>
+                            <span class="nav-text">EF Core</span>
+                            <button class="toc-toggle">&#9654;</button>
+                        </a>
+                        <nav class="sidebar-toc">
+                            <a href="#introduction" class="sidebar-toc-link">Introduction</a>
+                            <a href="#structure" class="sidebar-toc-link">
+                                <span data-lang="fr">Structure</span>
+                                <span data-lang="en">Structure</span>
+                            </a>
+                            <a href="#conflicts" class="sidebar-toc-link">
+                                <span data-lang="fr">Conflits</span>
+                                <span data-lang="en">Conflicts</span>
+                            </a>
+                            <a href="#best-practices" class="sidebar-toc-link">
+                                <span data-lang="fr">Bonnes pratiques</span>
+                                <span data-lang="en">Best Practices</span>
+                            </a>
+                            <a href="#integration" class="sidebar-toc-link">
+                                <span data-lang="fr">Integration</span>
+                                <span data-lang="en">Integration</span>
+                            </a>
+                            <a href="#commands" class="sidebar-toc-link">
+                                <span data-lang="fr">Commandes</span>
+                                <span data-lang="en">Commands</span>
+                            </a>
+                        </nav>
+                    </div>
+                    <a href="apex.html" class="nav-item">
+                        <span class="icon">&#127919;</span>
+                        <span class="nav-text">APEX</span>
+                    </a>
+                    <a href="ba.html" class="nav-item">
+                        <span class="icon">&#128202;</span>
+                        <span class="nav-text">BA</span>
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">
+                        <span data-lang="fr">Outils</span>
+                        <span data-lang="en">Tools</span>
+                    </div>
+                    <a href="agents.html" class="nav-item">
+                        <span class="icon">&#129302;</span>
+                        <span class="nav-text">Agents</span>
+                    </a>
+                    <a href="commands.html" class="nav-item">
+                        <span class="icon">&#9889;</span>
+                        <span class="nav-text" data-lang="fr">Commandes</span>
+                        <span class="nav-text" data-lang="en">Commands</span>
+                    </a>
+                    <a href="hooks.html" class="nav-item">
+                        <span class="icon">&#128279;</span>
+                        <span class="nav-text">Hooks</span>
+                    </a>
+                    <a href="test-web.html" class="nav-item">
+                        <span class="icon">&#127760;</span>
+                        <span class="nav-text">Test Web</span>
+                    </a>
+                </div>
+            </nav>
+
+            </aside>
+
+            <!-- Main Content -->
+            <main class="main-content">
+                <div class="content-full">
+                    <!-- Introduction -->
+                    <section id="introduction">
+                        <h2>Introduction</h2>
+                        <p data-lang="fr">
+                            Entity Framework Core (EF Core) est l'ORM officiel de Microsoft pour .NET. Claude Tools integre une gestion avancee des migrations EF Core dans le workflow GitFlow, incluant la detection de conflits, la validation des migrations et la generation de scripts SQL idempotents.
+                        </p>
+                        <p data-lang="en">
+                            Entity Framework Core (EF Core) is Microsoft's official ORM for .NET. Claude Tools integrates advanced EF Core migration management into the GitFlow workflow, including conflict detection, migration validation, and idempotent SQL script generation.
+                        </p>
+
+                        <div class="alert alert-info">
+                            <span class="alert-icon">&#128161;</span>
+                            <div class="alert-content">
+                                <h5 data-lang="fr">Integration automatique</h5>
+                                <h5 data-lang="en">Automatic Integration</h5>
+                                <p data-lang="fr">
+                                    Claude Tools detecte automatiquement les projets .NET utilisant EF Core lors de l'initialisation avec <code>/gitflow:1-init</code>.
+                                </p>
+                                <p data-lang="en">
+                                    Claude Tools automatically detects .NET projects using EF Core during initialization with <code>/gitflow:1-init</code>.
+                                </p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Migration Structure -->
+                    <section id="structure">
+                        <h2>
+                            <span data-lang="fr">Structure des migrations</span>
+                            <span data-lang="en">Migration Structure</span>
+                        </h2>
+
+                        <p data-lang="fr">Une migration EF Core valide comprend <strong>3 fichiers</strong> :</p>
+                        <p data-lang="en">A valid EF Core migration includes <strong>3 files</strong>:</p>
+
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Fichier / File</th>
+                                        <th data-lang="fr">Description</th>
+                                        <th data-lang="en">Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><code>{Timestamp}_{Name}.cs</code></td>
+                                        <td data-lang="fr">Migration principale avec Up() et Down()</td>
+                                        <td data-lang="en">Main migration with Up() and Down()</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>{Timestamp}_{Name}.Designer.cs</code></td>
+                                        <td data-lang="fr">Metadonnees et snapshot du modele au moment de la creation</td>
+                                        <td data-lang="en">Metadata and model snapshot at creation time</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>{Context}ModelSnapshot.cs</code></td>
+                                        <td data-lang="fr">Etat actuel du modele complet (source de conflits)</td>
+                                        <td data-lang="en">Current state of full model (conflict source)</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="svg-diagram">
+                            <svg viewBox="0 0 700 320" xmlns="http://www.w3.org/2000/svg" style="font-family: 'Inter', system-ui, sans-serif;">
+                                <defs>
+                                    <linearGradient id="migrationGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" style="stop-color:#22c55e"/>
+                                        <stop offset="100%" style="stop-color:#15803d"/>
+                                    </linearGradient>
+                                    <linearGradient id="designerGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" style="stop-color:#3b82f6"/>
+                                        <stop offset="100%" style="stop-color:#1d4ed8"/>
+                                    </linearGradient>
+                                    <linearGradient id="snapshotGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" style="stop-color:#f97316"/>
+                                        <stop offset="100%" style="stop-color:#c2410c"/>
+                                    </linearGradient>
+                                    <filter id="efGlow" x="-20%" y="-20%" width="140%" height="140%">
+                                        <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                                        <feMerge>
+                                            <feMergeNode in="coloredBlur"/>
+                                            <feMergeNode in="SourceGraphic"/>
+                                        </feMerge>
+                                    </filter>
+                                </defs>
+
+                                <!-- Title -->
+                                <text x="350" y="30" text-anchor="middle" fill="#e2e8f0" font-size="16" font-weight="600">Migration Structure (3 Files)</text>
+
+                                <!-- Migration.cs file -->
+                                <g transform="translate(50, 60)" filter="url(#efGlow)">
+                                    <rect x="0" y="0" width="180" height="100" rx="8" fill="url(#migrationGrad)"/>
+                                    <rect x="0" y="0" width="180" height="30" rx="8" fill="rgba(0,0,0,0.2)"/>
+                                    <text x="90" y="20" text-anchor="middle" fill="white" font-size="11" font-weight="600">{Name}.cs</text>
+                                    <text x="15" y="52" fill="rgba(255,255,255,0.9)" font-size="10">Up()</text>
+                                    <text x="15" y="68" fill="rgba(255,255,255,0.7)" font-size="9">→ Apply changes</text>
+                                    <text x="15" y="85" fill="rgba(255,255,255,0.9)" font-size="10">Down()</text>
+                                    <text x="15" y="98" fill="rgba(255,255,255,0.7)" font-size="9">→ Rollback changes</text>
+                                </g>
+
+                                <!-- Designer.cs file -->
+                                <g transform="translate(260, 60)" filter="url(#efGlow)">
+                                    <rect x="0" y="0" width="180" height="100" rx="8" fill="url(#designerGrad)"/>
+                                    <rect x="0" y="0" width="180" height="30" rx="8" fill="rgba(0,0,0,0.2)"/>
+                                    <text x="90" y="20" text-anchor="middle" fill="white" font-size="11" font-weight="600">{Name}.Designer.cs</text>
+                                    <text x="15" y="52" fill="rgba(255,255,255,0.9)" font-size="10">Metadata</text>
+                                    <text x="15" y="68" fill="rgba(255,255,255,0.7)" font-size="9">→ MigrationId</text>
+                                    <text x="15" y="82" fill="rgba(255,255,255,0.7)" font-size="9">→ ProductVersion</text>
+                                    <text x="15" y="98" fill="rgba(255,255,255,0.7)" font-size="9">→ Model snapshot at time</text>
+                                </g>
+
+                                <!-- ModelSnapshot.cs file -->
+                                <g transform="translate(470, 60)" filter="url(#efGlow)">
+                                    <rect x="0" y="0" width="180" height="100" rx="8" fill="url(#snapshotGrad)"/>
+                                    <rect x="0" y="0" width="180" height="30" rx="8" fill="rgba(0,0,0,0.2)"/>
+                                    <text x="90" y="20" text-anchor="middle" fill="white" font-size="11" font-weight="600">ModelSnapshot.cs</text>
+                                    <text x="15" y="52" fill="rgba(255,255,255,0.9)" font-size="10">Current State</text>
+                                    <text x="15" y="68" fill="rgba(255,255,255,0.7)" font-size="9">→ Full model definition</text>
+                                    <text x="15" y="82" fill="rgba(255,255,255,0.7)" font-size="9">→ All entities & relations</text>
+                                    <text x="15" y="98" fill="rgba(255,255,255,0.7)" font-size="9">→ ⚠️ Conflict source</text>
+                                </g>
+
+                                <!-- Connection arrows -->
+                                <path d="M 230 110 L 260 110" stroke="#94a3b8" stroke-width="2" fill="none"/>
+                                <polygon points="258,105 268,110 258,115" fill="#94a3b8"/>
+
+                                <path d="M 440 110 L 470 110" stroke="#94a3b8" stroke-width="2" fill="none"/>
+                                <polygon points="468,105 478,110 468,115" fill="#94a3b8"/>
+
+                                <!-- Flow explanation -->
+                                <g transform="translate(50, 190)">
+                                    <rect x="0" y="0" width="600" height="110" rx="8" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+
+                                    <!-- Step 1 -->
+                                    <circle cx="50" cy="35" r="18" fill="#22c55e"/>
+                                    <text x="50" y="40" text-anchor="middle" fill="white" font-size="12" font-weight="700">1</text>
+                                    <text x="85" y="30" fill="#e2e8f0" font-size="11" font-weight="500">Model Change</text>
+                                    <text x="85" y="45" fill="#94a3b8" font-size="9">Edit your DbContext entities</text>
+
+                                    <!-- Arrow -->
+                                    <path d="M 180 35 L 210 35" stroke="#94a3b8" stroke-width="1.5"/>
+                                    <polygon points="208,31 218,35 208,39" fill="#94a3b8"/>
+
+                                    <!-- Step 2 -->
+                                    <circle cx="240" cy="35" r="18" fill="#3b82f6"/>
+                                    <text x="240" y="40" text-anchor="middle" fill="white" font-size="12" font-weight="700">2</text>
+                                    <text x="275" y="30" fill="#e2e8f0" font-size="11" font-weight="500">Add Migration</text>
+                                    <text x="275" y="45" fill="#94a3b8" font-size="9">dotnet ef migrations add</text>
+
+                                    <!-- Arrow -->
+                                    <path d="M 380 35 L 410 35" stroke="#94a3b8" stroke-width="1.5"/>
+                                    <polygon points="408,31 418,35 408,39" fill="#94a3b8"/>
+
+                                    <!-- Step 3 -->
+                                    <circle cx="440" cy="35" r="18" fill="#f97316"/>
+                                    <text x="440" y="40" text-anchor="middle" fill="white" font-size="12" font-weight="700">3</text>
+                                    <text x="475" y="30" fill="#e2e8f0" font-size="11" font-weight="500">3 Files Generated</text>
+                                    <text x="475" y="45" fill="#94a3b8" font-size="9">Commit all together!</text>
+
+                                    <!-- Warning box -->
+                                    <rect x="20" y="65" width="560" height="35" rx="4" fill="rgba(249, 115, 22, 0.1)" stroke="#f97316" stroke-width="1"/>
+                                    <text x="40" y="85" fill="#f97316" font-size="10">⚠️</text>
+                                    <text x="60" y="85" fill="#f97316" font-size="10" font-weight="500">ModelSnapshot.cs is regenerated on EVERY migration — source of merge conflicts!</text>
+                                </g>
+                            </svg>
+                        </div>
+
+                        <div class="code-block">
+                            <pre><code>Migrations/
+├── 20240101120000_InitialCreate.cs
+├── 20240101120000_InitialCreate.Designer.cs
+├── 20240115150000_AddUserTable.cs
+├── 20240115150000_AddUserTable.Designer.cs
+└── ApplicationDbContextModelSnapshot.cs  ← Fichier critique</code></pre>
+                        </div>
+
+                        <div class="alert alert-warning">
+                            <span class="alert-icon">&#9888;</span>
+                            <div class="alert-content">
+                                <h5>ModelSnapshot</h5>
+                                <p data-lang="fr">
+                                    Le fichier <code>ModelSnapshot.cs</code> represente l'etat actuel du modele. C'est la source principale de conflits lors des merges entre branches.
+                                </p>
+                                <p data-lang="en">
+                                    The <code>ModelSnapshot.cs</code> file represents the current model state. It's the main source of conflicts when merging branches.
+                                </p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Conflict Management -->
+                    <section id="conflicts">
+                        <h2>
+                            <span data-lang="fr">Gestion des conflits ModelSnapshot</span>
+                            <span data-lang="en">ModelSnapshot Conflict Management</span>
+                        </h2>
+
+                        <p data-lang="fr">
+                            Quand deux branches modifient le modele de donnees, un conflit sur <code>ModelSnapshot.cs</code> est inevitable. Claude Tools gere automatiquement ces conflits.
+                        </p>
+                        <p data-lang="en">
+                            When two branches modify the data model, a conflict on <code>ModelSnapshot.cs</code> is inevitable. Claude Tools automatically handles these conflicts.
+                        </p>
+
+                        <h3 data-lang="fr">Strategie de resolution</h3>
+                        <h3 data-lang="en">Resolution Strategy</h3>
+
+                        <div class="code-block">
+                            <button class="copy-btn">Copy</button>
+                            <pre><code># 1. Accepter la version de develop (base)
+git checkout --theirs */Migrations/*ModelSnapshot.cs
+
+# 2. Supprimer la migration locale (temporairement)
+dotnet ef migrations remove
+
+# 3. Continuer le rebase
+git rebase --continue
+
+# 4. Re-generer la migration avec le bon ModelSnapshot
+dotnet ef migrations add NomMigration
+
+# 5. La nouvelle migration inclut tous les changements</code></pre>
+                        </div>
+
+                        <div class="alert alert-info">
+                            <span class="alert-icon">&#128161;</span>
+                            <div class="alert-content">
+                                <h5 data-lang="fr">Automatisation</h5>
+                                <h5 data-lang="en">Automation</h5>
+                                <p data-lang="fr">
+                                    <code>/gitflow:5-exec</code> detecte et resout automatiquement les conflits ModelSnapshot pendant l'execution du plan d'integration.
+                                </p>
+                                <p data-lang="en">
+                                    <code>/gitflow:5-exec</code> automatically detects and resolves ModelSnapshot conflicts during integration plan execution.
+                                </p>
+                            </div>
+                        </div>
+
+                        <h3 data-lang="fr">Scenarios de conflit</h3>
+                        <h3 data-lang="en">Conflict Scenarios</h3>
+
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Scenario</th>
+                                        <th data-lang="fr">Resolution</th>
+                                        <th data-lang="en">Resolution</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td data-lang="fr">Feature A et Feature B modifient des tables differentes</td>
+                                        <td data-lang="en">Feature A and Feature B modify different tables</td>
+                                        <td data-lang="fr">Accept theirs + re-add migration</td>
+                                        <td data-lang="en">Accept theirs + re-add migration</td>
+                                    </tr>
+                                    <tr>
+                                        <td data-lang="fr">Meme table modifiee des deux cotes</td>
+                                        <td data-lang="en">Same table modified on both sides</td>
+                                        <td data-lang="fr">Merge manuel puis <code>dotnet ef migrations add MergeSnapshot</code></td>
+                                        <td data-lang="en">Manual merge then <code>dotnet ef migrations add MergeSnapshot</code></td>
+                                    </tr>
+                                    <tr>
+                                        <td data-lang="fr">Hotfix avec migration urgente</td>
+                                        <td data-lang="en">Hotfix with urgent migration</td>
+                                        <td data-lang="fr">Prefix <code>Hotfix_</code> + script SQL idempotent</td>
+                                        <td data-lang="en">Prefix <code>Hotfix_</code> + idempotent SQL script</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+
+                    <!-- Best Practices -->
+                    <section id="best-practices">
+                        <h2>
+                            <span data-lang="fr">Bonnes pratiques</span>
+                            <span data-lang="en">Best Practices</span>
+                        </h2>
+
+                        <div class="best-practice">
+                            <h4>
+                                <span class="bp-icon">&#9989;</span>
+                                <span data-lang="fr">Toujours commiter les 3 fichiers ensemble</span>
+                                <span data-lang="en">Always commit all 3 files together</span>
+                            </h4>
+                            <p data-lang="fr">Ne jamais commiter une migration incomplete. <code>/gitflow:3-commit</code> valide automatiquement la presence des 3 fichiers.</p>
+                            <p data-lang="en">Never commit an incomplete migration. <code>/gitflow:3-commit</code> automatically validates the presence of all 3 files.</p>
+                        </div>
+
+                        <div class="best-practice">
+                            <h4>
+                                <span class="bp-icon">&#9989;</span>
+                                <span data-lang="fr">Nommer les migrations de maniere descriptive</span>
+                                <span data-lang="en">Name migrations descriptively</span>
+                            </h4>
+                            <div class="code-block">
+                                <pre><code># Bon
+dotnet ef migrations add AddUserEmailIndex
+dotnet ef migrations add CreateOrdersTable
+dotnet ef migrations add AddPaymentStatusToOrders
+
+# Mauvais
+dotnet ef migrations add Migration1
+dotnet ef migrations add Fix
+dotnet ef migrations add Update</code></pre>
+                            </div>
+                        </div>
+
+                        <div class="best-practice">
+                            <h4>
+                                <span class="bp-icon">&#9989;</span>
+                                <span data-lang="fr">Verifier les operations destructives</span>
+                                <span data-lang="en">Check destructive operations</span>
+                            </h4>
+                            <p data-lang="fr"><code>/gitflow:3-commit</code> detecte automatiquement et alerte sur les operations suivantes :</p>
+                            <p data-lang="en"><code>/gitflow:3-commit</code> automatically detects and alerts on the following operations:</p>
+
+                            <div class="table-container">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Operation</th>
+                                            <th data-lang="fr">Risque</th>
+                                            <th data-lang="en">Risk</th>
+                                            <th data-lang="fr">Niveau</th>
+                                            <th data-lang="en">Level</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><code>DropTable</code></td>
+                                            <td data-lang="fr">Suppression de table entiere</td>
+                                            <td data-lang="en">Entire table deletion</td>
+                                            <td><span class="tag tag-danger">CRITICAL</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td><code>DropColumn</code></td>
+                                            <td data-lang="fr">Perte de donnees de colonne</td>
+                                            <td data-lang="en">Column data loss</td>
+                                            <td><span class="tag tag-danger">CRITICAL</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td><code>DeleteData</code></td>
+                                            <td data-lang="fr">Suppression de lignes</td>
+                                            <td data-lang="en">Row deletion</td>
+                                            <td><span class="tag tag-danger">CRITICAL</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td><code>DropForeignKey</code></td>
+                                            <td data-lang="fr">Casse l'integrite referentielle</td>
+                                            <td data-lang="en">Breaks referential integrity</td>
+                                            <td><span class="tag tag-warning">HIGH</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td><code>DropIndex</code></td>
+                                            <td data-lang="fr">Impact sur les performances</td>
+                                            <td data-lang="en">Performance impact</td>
+                                            <td><span class="tag tag-workflow">MEDIUM</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="best-practice">
+                            <h4>
+                                <span class="bp-icon">&#9989;</span>
+                                <span data-lang="fr">Generer des scripts SQL idempotents pour la production</span>
+                                <span data-lang="en">Generate idempotent SQL scripts for production</span>
+                            </h4>
+                            <div class="code-block">
+                                <button class="copy-btn">Copy</button>
+                                <pre><code># Generer un script SQL idempotent
+dotnet ef migrations script --idempotent -o ./scripts/migrations/v1.2.0.sql
+
+# Le script verifie si chaque migration a deja ete appliquee
+# avant de l'executer, ce qui le rend sur pour une re-execution</code></pre>
+                            </div>
+                        </div>
+
+                        <div class="best-practice">
+                            <h4>
+                                <span class="bp-icon">&#9989;</span>
+                                <span data-lang="fr">Une migration par feature</span>
+                                <span data-lang="en">One migration per feature</span>
+                            </h4>
+                            <p data-lang="fr">
+                                Evitez les migrations multiples dans une meme feature. Si vous devez modifier le modele plusieurs fois, utilisez <code>dotnet ef migrations remove</code> et recreez une migration unique.
+                            </p>
+                            <p data-lang="en">
+                                Avoid multiple migrations in the same feature. If you need to modify the model multiple times, use <code>dotnet ef migrations remove</code> and recreate a single migration.
+                            </p>
+                        </div>
+
+                        <div class="alert alert-warning">
+                            <span class="alert-icon">&#9888;</span>
+                            <div class="alert-content">
+                                <h5 data-lang="fr">Anti-patterns a eviter</h5>
+                                <h5 data-lang="en">Anti-patterns to avoid</h5>
+                                <ul>
+                                    <li data-lang="fr">Ne jamais modifier manuellement le ModelSnapshot</li>
+                                    <li data-lang="en">Never manually modify the ModelSnapshot</li>
+                                    <li data-lang="fr">Ne pas supprimer des migrations deja appliquees en production</li>
+                                    <li data-lang="en">Don't delete migrations already applied in production</li>
+                                    <li data-lang="fr">Eviter les migrations qui dependent de donnees specifiques</li>
+                                    <li data-lang="en">Avoid migrations that depend on specific data</li>
+                                    <li data-lang="fr">Ne pas utiliser SQL brut sans tester sur une copie</li>
+                                    <li data-lang="en">Don't use raw SQL without testing on a copy</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- GitFlow Integration -->
+                    <section id="integration">
+                        <h2>
+                            <span data-lang="fr">Integration avec GitFlow</span>
+                            <span data-lang="en">GitFlow Integration</span>
+                        </h2>
+
+                        <p data-lang="fr">
+                            Claude Tools integre la gestion des migrations EF Core directement dans le workflow GitFlow :
+                        </p>
+                        <p data-lang="en">
+                            Claude Tools integrates EF Core migration management directly into the GitFlow workflow:
+                        </p>
+
+                        <div class="card-grid">
+                            <div class="card">
+                                <div class="card-header">
+                                    <div class="card-icon" style="background: var(--primary);">1</div>
+                                    <div>
+                                        <div class="card-title">/gitflow:1-init</div>
+                                        <div class="card-subtitle" data-lang="fr">Detection automatique</div>
+                                        <div class="card-subtitle" data-lang="en">Automatic detection</div>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <p data-lang="fr">Detecte EF Core et configure les DbContext dans le fichier de configuration.</p>
+                                    <p data-lang="en">Detects EF Core and configures DbContexts in the config file.</p>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-header">
+                                    <div class="card-icon" style="background: var(--success);">3</div>
+                                    <div>
+                                        <div class="card-title">/gitflow:3-commit</div>
+                                        <div class="card-subtitle" data-lang="fr">Validation des migrations</div>
+                                        <div class="card-subtitle" data-lang="en">Migration validation</div>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <p data-lang="fr">Valide que les 3 fichiers sont presents et detecte les operations destructives.</p>
+                                    <p data-lang="en">Validates that all 3 files are present and detects destructive operations.</p>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-header">
+                                    <div class="card-icon" style="background: var(--warning);">4</div>
+                                    <div>
+                                        <div class="card-title">/gitflow:4-plan</div>
+                                        <div class="card-subtitle" data-lang="fr">Analyse des conflits</div>
+                                        <div class="card-subtitle" data-lang="en">Conflict analysis</div>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <p data-lang="fr">Detecte les conflits potentiels de ModelSnapshot entre branches.</p>
+                                    <p data-lang="en">Detects potential ModelSnapshot conflicts between branches.</p>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-header">
+                                    <div class="card-icon" style="background: var(--secondary);">5</div>
+                                    <div>
+                                        <div class="card-title">/gitflow:5-exec</div>
+                                        <div class="card-subtitle" data-lang="fr">Resolution automatique</div>
+                                        <div class="card-subtitle" data-lang="en">Automatic resolution</div>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <p data-lang="fr">Resout les conflits ModelSnapshot automatiquement pendant le rebase.</p>
+                                    <p data-lang="en">Resolves ModelSnapshot conflicts automatically during rebase.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h3 data-lang="fr">Configuration EF Core</h3>
+                        <h3 data-lang="en">EF Core Configuration</h3>
+
+                        <p data-lang="fr">La configuration EF Core est stockee dans <code>.claude/gitflow/config.json</code> :</p>
+                        <p data-lang="en">EF Core configuration is stored in <code>.claude/gitflow/config.json</code>:</p>
+
+                        <div class="code-block">
+                            <button class="copy-btn">Copy</button>
+                            <pre><code>{
+  "efcore": {
+    "enabled": true,
+    "contexts": [
+      {
+        "name": "ApplicationDbContext",
+        "projectPath": "./src/Data",
+        "migrationsFolder": "Migrations",
+        "startupProject": "./src/Api"
+      },
+      {
+        "name": "IdentityDbContext",
+        "projectPath": "./src/Identity",
+        "migrationsFolder": "Migrations",
+        "startupProject": "./src/Api"
+      }
+    ],
+    "scripts": {
+      "generateOnRelease": true,
+      "outputPath": "./scripts/migrations",
+      "idempotent": true
+    },
+    "validation": {
+      "checkModelSnapshotConflicts": true,
+      "validateMigrationOrder": true,
+      "requireThreeFiles": true
+    }
+  }
+}</code></pre>
+                        </div>
+                    </section>
+
+                    <!-- Commands -->
+                    <section id="commands">
+                        <h2>
+                            <span data-lang="fr">Commandes EF Core</span>
+                            <span data-lang="en">EF Core Commands</span>
+                        </h2>
+
+                        <p data-lang="fr">
+                            La gestion des migrations EF Core est integree dans les commandes GitFlow principales. Voici les operations les plus courantes :
+                        </p>
+                        <p data-lang="en">
+                            EF Core migration management is integrated into the main GitFlow commands. Here are the most common operations:
+                        </p>
+
+                        <div class="command-card">
+                            <div class="command-header">
+                                <code class="command-name">dotnet ef migrations add</code>
+                                <span class="tag tag-command">Create</span>
+                            </div>
+                            <div class="command-body">
+                                <p data-lang="fr">Cree une nouvelle migration basee sur les changements du modele.</p>
+                                <p data-lang="en">Creates a new migration based on model changes.</p>
+                                <div class="code-block">
+                                    <button class="copy-btn">Copy</button>
+                                    <pre><code># Migration simple
+dotnet ef migrations add AddUserTable
+
+# Multi-context : specifier le context
+dotnet ef migrations add AddUserTable --context ApplicationDbContext
+
+# Specifier le projet de migration
+dotnet ef migrations add AddUserTable --project ./src/Data --startup-project ./src/Api</code></pre>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="command-card">
+                            <div class="command-header">
+                                <code class="command-name">dotnet ef migrations remove</code>
+                                <span class="tag tag-warning">Remove</span>
+                            </div>
+                            <div class="command-body">
+                                <p data-lang="fr">Supprime la derniere migration (non appliquee).</p>
+                                <p data-lang="en">Removes the last migration (unapplied).</p>
+                                <div class="code-block">
+                                    <button class="copy-btn">Copy</button>
+                                    <pre><code># Supprimer la derniere migration
+dotnet ef migrations remove
+
+# Forcer la suppression (meme si appliquee - DANGEREUX)
+dotnet ef migrations remove --force</code></pre>
+                                </div>
+                                <div class="alert alert-warning">
+                                    <span class="alert-icon">&#9888;</span>
+                                    <div class="alert-content">
+                                        <p data-lang="fr">Ne jamais utiliser <code>--force</code> sur une migration deja appliquee en production.</p>
+                                        <p data-lang="en">Never use <code>--force</code> on a migration already applied in production.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="command-card">
+                            <div class="command-header">
+                                <code class="command-name">dotnet ef migrations script</code>
+                                <span class="tag tag-workflow">Script</span>
+                            </div>
+                            <div class="command-body">
+                                <p data-lang="fr">Genere un script SQL pour appliquer les migrations.</p>
+                                <p data-lang="en">Generates a SQL script to apply migrations.</p>
+                                <div class="code-block">
+                                    <button class="copy-btn">Copy</button>
+                                    <pre><code># Script idempotent (recommande pour la production)
+dotnet ef migrations script --idempotent -o ./scripts/migrations.sql
+
+# Script depuis une migration specifique
+dotnet ef migrations script FromMigration ToMigration -o ./scripts/upgrade.sql
+
+# Script pour un context specifique
+dotnet ef migrations script --context ApplicationDbContext --idempotent</code></pre>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="command-card">
+                            <div class="command-header">
+                                <code class="command-name">dotnet ef database update</code>
+                                <span class="tag tag-command">Apply</span>
+                            </div>
+                            <div class="command-body">
+                                <p data-lang="fr">Applique les migrations en attente sur la base de donnees.</p>
+                                <p data-lang="en">Applies pending migrations to the database.</p>
+                                <div class="code-block">
+                                    <button class="copy-btn">Copy</button>
+                                    <pre><code># Appliquer toutes les migrations en attente
+dotnet ef database update
+
+# Appliquer jusqu'a une migration specifique
+dotnet ef database update AddUserTable
+
+# Rollback a une migration precedente
+dotnet ef database update PreviousMigration</code></pre>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="command-card">
+                            <div class="command-header">
+                                <code class="command-name">dotnet ef migrations list</code>
+                                <span class="tag tag-command">List</span>
+                            </div>
+                            <div class="command-body">
+                                <p data-lang="fr">Liste toutes les migrations et leur statut.</p>
+                                <p data-lang="en">Lists all migrations and their status.</p>
+                                <div class="code-block">
+                                    <button class="copy-btn">Copy</button>
+                                    <pre><code># Lister les migrations
+dotnet ef migrations list
+
+# Output:
+# 20240101120000_InitialCreate (Applied)
+# 20240115150000_AddUserTable (Applied)
+# 20240120100000_AddOrdersTable (Pending)</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+            </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Mobile Menu Button -->
+    <button class="mobile-menu-btn">&#9776;</button>
+    <div class="overlay"></div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>

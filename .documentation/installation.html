@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Installation - Claude Tools</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Global Header (single unified element) -->
+        <header class="global-header">
+            <div class="logo">CT</div>
+            <span class="site-title">Claude Tools</span>
+            <span class="version-badge">v1.2.0</span>
+            <div class="header-divider"></div>
+            <span class="page-title">Installation</span>
+            <nav class="breadcrumb">
+                <a href="index.html">
+                    <span data-lang="fr">Accueil</span>
+                    <span data-lang="en">Home</span>
+                </a>
+                <span class="breadcrumb-separator">&#8250;</span>
+                <span class="breadcrumb-current">Installation</span>
+            </nav>
+            <!-- Language Select -->
+            <select class="lang-select" id="lang-select" onchange="setLanguage(this.value); localStorage.setItem('doc-language', this.value);">
+                <option value="fr">🇫🇷 FR</option>
+                <option value="en">🇬🇧 EN</option>
+            </select>
+            <!-- Search -->
+            <div class="header-search">
+                <div class="search-input-wrapper">
+                    <span class="search-icon">&#128269;</span>
+                    <input type="text" id="search-input" class="search-input" placeholder="Rechercher..." data-placeholder-fr="Rechercher..." data-placeholder-en="Search..." autocomplete="off">
+                    <span class="search-shortcut">Ctrl+K</span>
+                </div>
+                <div id="search-results" class="search-results"></div>
+            </div>
+        </header>
+
+        <!-- App Body -->
+        <div class="app-body">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <button class="sidebar-toggle" title="Toggle sidebar">
+                    <span class="toggle-icon-collapse">&#171;</span>
+                    <span class="toggle-icon-expand">&#187;</span>
+                </button>
+
+                <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-section-title">
+                        <span data-lang="fr">Demarrage</span>
+                        <span data-lang="en">Getting Started</span>
+                    </div>
+                    <a href="index.html" class="nav-item">
+                        <span class="icon">&#127968;</span>
+                        <span class="nav-text" data-lang="fr">Accueil</span>
+                        <span class="nav-text" data-lang="en">Home</span>
+                    </a>
+                    <a href="installation.html" class="nav-item active">
+                        <span class="icon">&#128230;</span>
+                        <span class="nav-text">Installation</span>
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Workflows</div>
+                    <a href="gitflow.html" class="nav-item">
+                        <span class="icon">&#128256;</span>
+                        <span class="nav-text">GitFlow</span>
+                    </a>
+                    <a href="efcore.html" class="nav-item">
+                        <span class="icon">&#128452;</span>
+                        <span class="nav-text">EF Core</span>
+                    </a>
+                    <a href="apex.html" class="nav-item">
+                        <span class="icon">&#127919;</span>
+                        <span class="nav-text">APEX</span>
+                    </a>
+                    <a href="ba.html" class="nav-item">
+                        <span class="icon">&#128202;</span>
+                        <span class="nav-text">BA</span>
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">
+                        <span data-lang="fr">Outils</span>
+                        <span data-lang="en">Tools</span>
+                    </div>
+                    <a href="agents.html" class="nav-item">
+                        <span class="icon">&#129302;</span>
+                        <span class="nav-text">Agents</span>
+                    </a>
+                    <a href="commands.html" class="nav-item">
+                        <span class="icon">&#9889;</span>
+                        <span class="nav-text" data-lang="fr">Commandes</span>
+                        <span class="nav-text" data-lang="en">Commands</span>
+                    </a>
+                    <a href="hooks.html" class="nav-item">
+                        <span class="icon">&#128279;</span>
+                        <span class="nav-text">Hooks</span>
+                    </a>
+                    <a href="test-web.html" class="nav-item">
+                        <span class="icon">&#127760;</span>
+                        <span class="nav-text">Test Web</span>
+                    </a>
+                </div>
+            </nav>
+
+            </aside>
+
+            <!-- Main Content -->
+            <main class="main-content">
+                <div class="content content-wide">
+                <!-- Prerequisites -->
+                <section id="prerequisites">
+                    <h2>
+                        <span data-lang="fr">Prerequis</span>
+                        <span data-lang="en">Prerequisites</span>
+                    </h2>
+
+                    <ul>
+                        <li><strong>Node.js</strong> &gt;= 18.0.0</li>
+                        <li><strong>npm</strong> &gt;= 8.0.0</li>
+                        <li><strong>Claude Code</strong> (CLI d'Anthropic)</li>
+                    </ul>
+
+                    <div class="code-block">
+                        <button class="copy-btn">Copy</button>
+                        <pre><code># Verifier les versions
+node --version  # v18.x.x ou superieur
+npm --version   # v8.x.x ou superieur</code></pre>
+                    </div>
+                </section>
+
+                <!-- Quick Install -->
+                <section id="quick-install">
+                    <h2>
+                        <span data-lang="fr">Installation rapide</span>
+                        <span data-lang="en">Quick Install</span>
+                    </h2>
+
+                    <div class="alert alert-info">
+                        <span class="alert-icon">&#128161;</span>
+                        <div class="alert-content">
+                            <p><code>npm install -g @atlashub/claude-tools && claude-tools install</code></p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Global Installation -->
+                <section id="global">
+                    <h2>
+                        <span data-lang="fr">Installation globale (recommandee)</span>
+                        <span data-lang="en">Global Installation (recommended)</span>
+                    </h2>
+
+                    <p data-lang="fr">
+                        L'installation globale installe les commandes dans <code>~/.claude</code>, les rendant disponibles dans tous vos projets.
+                    </p>
+                    <p data-lang="en">
+                        Global installation installs commands to <code>~/.claude</code>, making them available in all your projects.
+                    </p>
+
+                    <ol class="steps-list">
+                        <li>
+                            <div class="step-content">
+                                <h5 data-lang="fr">Installer le package npm</h5>
+                                <h5 data-lang="en">Install npm package</h5>
+                                <div class="code-block">
+                                    <button class="copy-btn">Copy</button>
+                                    <pre><code>npm install -g @atlashub/claude-tools</code></pre>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="step-content">
+                                <h5 data-lang="fr">Activer votre licence</h5>
+                                <h5 data-lang="en">Activate your license</h5>
+                                <div class="code-block">
+                                    <button class="copy-btn">Copy</button>
+                                    <pre><code>claude-tools activate YOUR-LICENSE-KEY</code></pre>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="step-content">
+                                <h5 data-lang="fr">Installer les commandes</h5>
+                                <h5 data-lang="en">Install commands</h5>
+                                <div class="code-block">
+                                    <button class="copy-btn">Copy</button>
+                                    <pre><code>claude-tools install</code></pre>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="step-content">
+                                <h5 data-lang="fr">Verifier l'installation</h5>
+                                <h5 data-lang="en">Verify installation</h5>
+                                <div class="code-block">
+                                    <button class="copy-btn">Copy</button>
+                                    <pre><code>claude-tools status</code></pre>
+                                </div>
+                            </div>
+                        </li>
+                    </ol>
+                </section>
+
+                <!-- Local Installation -->
+                <section id="local">
+                    <h2>
+                        <span data-lang="fr">Installation locale (projet)</span>
+                        <span data-lang="en">Local Installation (project)</span>
+                    </h2>
+
+                    <p data-lang="fr">
+                        L'installation locale installe les commandes dans <code>./.claude</code> du projet courant. Utile pour personnaliser les commandes par projet.
+                    </p>
+                    <p data-lang="en">
+                        Local installation installs commands to <code>./.claude</code> in the current project. Useful for customizing commands per project.
+                    </p>
+
+                    <div class="code-block">
+                        <button class="copy-btn">Copy</button>
+                        <pre><code># Dans votre projet
+npm install -D @atlashub/claude-tools
+
+# Installer localement
+npx claude-tools install --local</code></pre>
+                    </div>
+
+                    <div class="alert alert-warning">
+                        <span class="alert-icon">&#9888;</span>
+                        <div class="alert-content">
+                            <h5 data-lang="fr">Ajoutez .claude au .gitignore</h5>
+                            <h5 data-lang="en">Add .claude to .gitignore</h5>
+                            <p data-lang="fr">
+                                Si vous installez localement, pensez a ajouter <code>.claude/</code> a votre <code>.gitignore</code> pour eviter de commiter les fichiers de configuration.
+                            </p>
+                            <p data-lang="en">
+                                If you install locally, consider adding <code>.claude/</code> to your <code>.gitignore</code> to avoid committing configuration files.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Installation Options -->
+                <section id="options">
+                    <h2>
+                        <span data-lang="fr">Options d'installation</span>
+                        <span data-lang="en">Installation Options</span>
+                    </h2>
+
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Option</th>
+                                    <th data-lang="fr">Description</th>
+                                    <th data-lang="en">Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code>--local</code></td>
+                                    <td data-lang="fr">Installer dans le projet courant (./.claude)</td>
+                                    <td data-lang="en">Install in current project (./.claude)</td>
+                                </tr>
+                                <tr>
+                                    <td><code>--commands-only</code></td>
+                                    <td data-lang="fr">Installer uniquement les commandes</td>
+                                    <td data-lang="en">Install commands only</td>
+                                </tr>
+                                <tr>
+                                    <td><code>--agents-only</code></td>
+                                    <td data-lang="fr">Installer uniquement les agents</td>
+                                    <td data-lang="en">Install agents only</td>
+                                </tr>
+                                <tr>
+                                    <td><code>--hooks-only</code></td>
+                                    <td data-lang="fr">Installer uniquement les hooks</td>
+                                    <td data-lang="en">Install hooks only</td>
+                                </tr>
+                                <tr>
+                                    <td><code>--force</code></td>
+                                    <td data-lang="fr">Forcer la reecriture des fichiers existants</td>
+                                    <td data-lang="en">Force overwrite existing files</td>
+                                </tr>
+                                <tr>
+                                    <td><code>--no-config</code></td>
+                                    <td data-lang="fr">Ne pas creer le fichier de configuration</td>
+                                    <td data-lang="en">Skip config file creation</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Directory Structure -->
+                <section id="structure">
+                    <h2>
+                        <span data-lang="fr">Structure des fichiers</span>
+                        <span data-lang="en">File Structure</span>
+                    </h2>
+
+                    <p data-lang="fr">Apres installation, la structure suivante est creee :</p>
+                    <p data-lang="en">After installation, the following structure is created:</p>
+
+                    <div class="code-block">
+                        <pre><code>~/.claude/                    # Installation globale
+├── commands/                 # Commandes slash
+│   ├── gitflow.md           # Orchestrateur GitFlow
+│   ├── gitflow/             # Phases GitFlow
+│   │   ├── 1-init.md
+│   │   ├── 2-status.md
+│   │   ├── 3-commit.md
+│   │   ├── 4-plan.md
+│   │   ├── 5-exec.md
+│   │   ├── 6-abort.md
+│   │   ├── 10-start.md
+│   │   └── 11-finish.md
+│   ├── apex.md              # Orchestrateur APEX
+│   ├── apex/                # Phases APEX
+│   ├── git/                 # Commandes Git
+│   └── prompts/             # Generateurs de prompts
+├── agents/                   # Agents specialises
+│   ├── explore-codebase.md
+│   ├── explore-docs.md
+│   ├── websearch.md
+│   ├── snipper.md
+│   ├── fix-grammar.md
+│   └── action.md
+├── hooks/                    # Hooks Claude Code
+│   └── hooks.json
+└── gitflow/                  # Donnees GitFlow
+    ├── config.json          # Configuration
+    ├── plans/               # Plans d'integration
+    ├── logs/                # Logs d'operations
+    └── migrations/          # Suivi des migrations
+        └── history.json</code></pre>
+                    </div>
+                </section>
+
+                <!-- Uninstall -->
+                <section id="uninstall">
+                    <h2>
+                        <span data-lang="fr">Desinstallation</span>
+                        <span data-lang="en">Uninstallation</span>
+                    </h2>
+
+                    <div class="code-block">
+                        <button class="copy-btn">Copy</button>
+                        <pre><code># Desinstaller tous les composants
+claude-tools uninstall
+
+# Desinstaller des composants specifiques
+claude-tools uninstall --commands-only
+claude-tools uninstall --agents-only
+claude-tools uninstall --hooks-only
+
+# Garder le fichier de configuration
+claude-tools uninstall --keep-config
+
+# Sans confirmation
+claude-tools uninstall --yes</code></pre>
+                    </div>
+                </section>
+
+                <!-- Update -->
+                <section id="update">
+                    <h2>
+                        <span data-lang="fr">Mise a jour</span>
+                        <span data-lang="en">Update</span>
+                    </h2>
+
+                    <div class="code-block">
+                        <button class="copy-btn">Copy</button>
+                        <pre><code># Mettre a jour le package npm
+npm update -g @atlashub/claude-tools
+
+# Mettre a jour les commandes installees
+claude-tools update</code></pre>
+                    </div>
+                </section>
+
+                <!-- Troubleshooting -->
+                <section id="troubleshooting">
+                    <h2>
+                        <span data-lang="fr">Resolution de problemes</span>
+                        <span data-lang="en">Troubleshooting</span>
+                    </h2>
+
+                    <div class="alert alert-warning">
+                        <span class="alert-icon">&#9888;</span>
+                        <div class="alert-content">
+                            <h5 data-lang="fr">Erreur de permission</h5>
+                            <h5 data-lang="en">Permission error</h5>
+                            <p data-lang="fr">
+                                Si vous obtenez une erreur de permission lors de l'installation globale, utilisez <code>sudo</code> ou configurez npm pour utiliser un repertoire utilisateur.
+                            </p>
+                            <p data-lang="en">
+                                If you get a permission error during global installation, use <code>sudo</code> or configure npm to use a user directory.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-info">
+                        <span class="alert-icon">&#128161;</span>
+                        <div class="alert-content">
+                            <h5 data-lang="fr">Commandes non reconnues</h5>
+                            <h5 data-lang="en">Commands not recognized</h5>
+                            <p data-lang="fr">
+                                Assurez-vous que le repertoire npm global est dans votre PATH. Verifiez avec <code>npm bin -g</code>.
+                            </p>
+                            <p data-lang="en">
+                                Make sure the npm global directory is in your PATH. Check with <code>npm bin -g</code>.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Mobile Menu Button -->
+    <button class="mobile-menu-btn">&#9776;</button>
+    <div class="overlay"></div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
