@@ -1,5 +1,7 @@
 ---
 description: Phase 7 - Create Pull Request with auto-generated description and checks
+agent: gitflow-pr
+model: haiku
 ---
 
 # Phase 7: PULL-REQUEST - Creation PR avec checks

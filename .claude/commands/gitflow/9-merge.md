@@ -1,5 +1,7 @@
 ---
 description: Phase 9 - Merge Pull Request with all checks validated
+agent: gitflow-merge
+model: sonnet
 ---
 
 # Phase 9: MERGE - Merge PR avec validation complete

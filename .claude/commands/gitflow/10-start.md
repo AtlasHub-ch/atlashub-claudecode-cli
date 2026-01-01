@@ -1,5 +1,7 @@
 ---
 description: Phase 10 - Start a new feature, release or hotfix branch with worktree
+agent: gitflow-start
+model: haiku
 ---
 
 # Phase 10: START - Demarrer une branche GitFlow (Worktree)

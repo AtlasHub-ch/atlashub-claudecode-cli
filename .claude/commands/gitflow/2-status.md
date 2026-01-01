@@ -1,5 +1,6 @@
 ---
 description: Phase 2 - Display GitFlow state with versioning and EF Core details
+agent: gitflow-status
 model: haiku
 ---
 

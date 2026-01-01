@@ -1,5 +1,6 @@
 ---
 description: Phase 6 - Abort with rollback including EF Core migrations
+agent: gitflow-abort
 model: sonnet
 args: [option]
 ---

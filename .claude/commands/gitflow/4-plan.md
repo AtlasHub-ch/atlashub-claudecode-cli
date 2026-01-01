@@ -1,5 +1,6 @@
 ---
 description: Phase 4 - Generate integration plan with versioning and EF Core analysis
+agent: gitflow-plan
 model: sonnet
 ---
 

@@ -1,5 +1,7 @@
 ---
 description: Phase 11 - Finish and finalize a GitFlow branch (tag + merge back)
+agent: gitflow-finish
+model: sonnet
 ---
 
 # Phase 11: FINISH - Finaliser une branche GitFlow

@@ -1,5 +1,7 @@
 ---
 description: Phase 8 - Review Pull Request with checklist and suggestions
+agent: gitflow-review
+model: haiku
 ---
 
 # Phase 8: REVIEW - Review PR avec checklist

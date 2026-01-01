@@ -1,5 +1,6 @@
 ---
 description: Phase 5 - Execute plan with versioning auto-increment
+agent: gitflow-exec
 model: sonnet
 args: [plan_file]
 ---

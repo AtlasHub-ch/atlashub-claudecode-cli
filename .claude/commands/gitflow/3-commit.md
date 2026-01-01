@@ -1,5 +1,6 @@
 ---
 description: Phase 3 - Smart commit with EF Core migration validation
+agent: gitflow-commit
 model: sonnet
 args: [message]
 ---

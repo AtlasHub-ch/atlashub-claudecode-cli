@@ -1,6 +1,7 @@
 ---
 description: Phase 1 - Initialize GitFlow structure with versioning and EF Core configuration
-model: sonnet
+agent: gitflow-init
+model: haiku
 ---
 
 # Phase 1: INIT - Project Initialization
