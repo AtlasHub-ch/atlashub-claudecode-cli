@@ -8,19 +8,52 @@
 </head>
 <body>
     <div class="app-container">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <div class="logo">CT</div>
-                <h2>Claude Tools</h2>
-                <span class="version-badge">v1.2.0</span>
+        <!-- Global Header (single unified element) -->
+        <header class="global-header">
+            <div class="logo">CT</div>
+            <span class="site-title">Claude Tools</span>
+            <span class="version-badge">v1.2.0</span>
+            <div class="header-divider"></div>
+            <span class="page-title" data-lang="fr">Référence des commandes</span>
+            <span class="page-title" data-lang="en">Command Reference</span>
+            <nav class="breadcrumb">
+                <a href="index.html">
+                    <span data-lang="fr">Accueil</span>
+                    <span data-lang="en">Home</span>
+                </a>
+                <span class="breadcrumb-separator">&#8250;</span>
+                <span data-lang="fr">Outils</span>
+                <span data-lang="en">Tools</span>
+                <span class="breadcrumb-separator">&#8250;</span>
+                <span class="breadcrumb-current" data-lang="fr">Commandes</span>
+                <span class="breadcrumb-current" data-lang="en">Commands</span>
+            </nav>
+            <!-- Language Select -->
+            <select class="lang-select" id="lang-select" onchange="setLanguage(this.value); localStorage.setItem('doc-language', this.value);">
+                <option value="fr">🇫🇷 FR</option>
+                <option value="en">🇬🇧 EN</option>
+            </select>
+            <!-- Search -->
+            <div class="header-search">
+                <div class="search-input-wrapper">
+                    <span class="search-icon">&#128269;</span>
+                    <input type="text" id="search-input" class="search-input" placeholder="Rechercher..." data-placeholder-fr="Rechercher..." data-placeholder-en="Search..." autocomplete="off">
+                    <span class="search-shortcut">Ctrl+K</span>
+                </div>
+                <div id="search-results" class="search-results"></div>
             </div>
-            <button class="sidebar-toggle" title="Toggle sidebar">
-                <span class="toggle-icon-collapse">&#171;</span>
-                <span class="toggle-icon-expand">&#187;</span>
-            </button>
+        </header>
 
-            <nav class="sidebar-nav">
+        <!-- App Body -->
+        <div class="app-body">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <button class="sidebar-toggle" title="Toggle sidebar">
+                    <span class="toggle-icon-collapse">&#171;</span>
+                    <span class="toggle-icon-expand">&#187;</span>
+                </button>
+
+                <nav class="sidebar-nav">
                 <div class="nav-section">
                     <div class="nav-section-title">
                         <span data-lang="fr">Demarrage</span>
@@ -82,42 +115,11 @@
                 </div>
             </nav>
 
-            <div class="sidebar-footer">
-                <div class="lang-switch">
-                    <button class="lang-btn active" data-lang="fr">FR</button>
-                    <button class="lang-btn" data-lang="en">EN</button>
-                </div>
-            </div>
-        </aside>
+            </aside>
 
-        <!-- Main Content -->
-        <main class="main-content">
-            <header class="page-header">
-                <nav class="breadcrumb">
-                    <a href="index.html">
-                        <span data-lang="fr">Accueil</span>
-                        <span data-lang="en">Home</span>
-                    </a>
-                    <span class="breadcrumb-separator">&#8250;</span>
-                    <span data-lang="fr">Outils</span>
-                    <span data-lang="en">Tools</span>
-                    <span class="breadcrumb-separator">&#8250;</span>
-                    <span class="breadcrumb-current">
-                        <span data-lang="fr">Commandes</span>
-                        <span data-lang="en">Commands</span>
-                    </span>
-                </nav>
-                <h1>
-                    <span data-lang="fr">Reference des commandes</span>
-                    <span data-lang="en">Command Reference</span>
-                </h1>
-                <p class="subtitle">
-                    <span data-lang="fr">Liste complete de toutes les commandes Claude Tools</span>
-                    <span data-lang="en">Complete list of all Claude Tools commands</span>
-                </p>
-            </header>
-
-            <div class="content content-wide">
+            <!-- Main Content -->
+            <main class="main-content">
+                <div class="content content-wide">
                 <!-- GitFlow Commands -->
                 <section id="gitflow">
                     <h2>GitFlow Workflow</h2>
@@ -470,7 +472,8 @@ claude-tools install --no-config</code></pre>
                     </div>
                 </section>
             </div>
-        </main>
+            </main>
+        </div>
     </div>
 
     <!-- Mobile Menu Button -->

@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initSidebarToc();
     initScrollSpy();
     initInteractiveDiagram();
+    initSearch();
 });
 
 /* ============================================
@@ -47,17 +48,27 @@ function initSidebar() {
    ============================================ */
 
 function initLanguageSwitch() {
-    const langBtns = document.querySelectorAll('.lang-btn');
+    const langSelect = document.getElementById('lang-select');
 
     // Load saved language
     const savedLang = localStorage.getItem('doc-language') || 'fr';
     setLanguage(savedLang);
 
-    langBtns.forEach(btn => {
+    // Set dropdown to saved value
+    if (langSelect) {
+        langSelect.value = savedLang;
+    }
+
+    // Setup language button handlers (sidebar footer)
+    document.querySelectorAll('.lang-btn').forEach(btn => {
         btn.addEventListener('click', function() {
             const lang = this.dataset.lang;
             setLanguage(lang);
             localStorage.setItem('doc-language', lang);
+
+            // Update active state
+            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
         });
     });
 }
@@ -67,13 +78,23 @@ function setLanguage(lang) {
     document.body.classList.remove('lang-fr', 'lang-en');
     document.body.classList.add('lang-' + lang);
 
-    // Update active button
-    document.querySelectorAll('.lang-btn').forEach(btn => {
-        btn.classList.toggle('active', btn.dataset.lang === lang);
-    });
+    // Update dropdown value (if exists)
+    const langSelect = document.getElementById('lang-select');
+    if (langSelect) {
+        langSelect.value = lang;
+    }
 
     // Update HTML lang attribute
     document.documentElement.lang = lang;
+
+    // Update search placeholder
+    const searchInput = document.getElementById('search-input');
+    if (searchInput) {
+        const placeholder = lang === 'en' ? searchInput.dataset.placeholderEn : searchInput.dataset.placeholderFr;
+        if (placeholder) {
+            searchInput.placeholder = placeholder;
+        }
+    }
 }
 
 /* ============================================
@@ -341,8 +362,9 @@ function initInteractiveDiagram() {
     });
 
     // Update tooltip language when language changes
-    document.querySelectorAll('.lang-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
+    const langSelect = document.getElementById('lang-select');
+    if (langSelect) {
+        langSelect.addEventListener('change', function() {
             if (activeElement && tooltip.classList.contains('visible')) {
                 // Re-show tooltip with new language
                 const event = { clientX: parseFloat(tooltip.style.left) + diagram.getBoundingClientRect().left,
@@ -350,5 +372,313 @@ function initInteractiveDiagram() {
                 setTimeout(() => showTooltip(activeElement, event), 50);
             }
         });
+    }
+}
+
+/* ============================================
+   SEARCH (Full-Text with Static Fallback)
+   ============================================ */
+
+function initSearch() {
+    const searchInput = document.getElementById('search-input');
+    const searchResults = document.getElementById('search-results');
+
+    if (!searchInput || !searchResults) return;
+
+    // Static search index (works without server, file:// protocol)
+    const staticIndex = [
+        // Index - Accueil
+        { page: 'index.html', icon: '🏠', title: { fr: 'Accueil', en: 'Home' }, section: '', anchor: '',
+          keywords: 'accueil home documentation claude tools atlashub cli automatisation gitflow apex ef core migration hooks agents commandes installation npm' },
+
+        // Installation
+        { page: 'installation.html', icon: '📦', title: { fr: 'Installation', en: 'Installation' }, section: '', anchor: '',
+          keywords: 'installation install npm registry nodejs node prérequis requirements setup configuration package global' },
+        { page: 'installation.html', icon: '📦', title: { fr: 'Installation', en: 'Installation' }, section: { fr: 'Prérequis', en: 'Prerequisites' }, anchor: 'prerequisites',
+          keywords: 'prérequis prerequisites nodejs node version 18 npm git' },
+        { page: 'installation.html', icon: '📦', title: { fr: 'Installation', en: 'Installation' }, section: { fr: 'Installation globale', en: 'Global Installation' }, anchor: 'global-install',
+          keywords: 'npm install global atlashub claude-tools registry package' },
+
+        // GitFlow
+        { page: 'gitflow.html', icon: '🔀', title: { fr: 'GitFlow', en: 'GitFlow' }, section: '', anchor: '',
+          keywords: 'gitflow git workflow branch branche feature release hotfix develop main master merge fusion version semver' },
+        { page: 'gitflow.html', icon: '🔀', title: { fr: 'GitFlow', en: 'GitFlow' }, section: { fr: 'Branches principales', en: 'Main Branches' }, anchor: 'main-branches',
+          keywords: 'main master develop development production branches principales' },
+        { page: 'gitflow.html', icon: '🔀', title: { fr: 'GitFlow', en: 'GitFlow' }, section: { fr: 'Feature branches', en: 'Feature branches' }, anchor: 'feature',
+          keywords: 'feature branch nouvelle fonctionnalité develop merge création git checkout' },
+        { page: 'gitflow.html', icon: '🔀', title: { fr: 'GitFlow', en: 'GitFlow' }, section: { fr: 'Release branches', en: 'Release branches' }, anchor: 'release',
+          keywords: 'release branch version livraison production tag semver minor major patch' },
+        { page: 'gitflow.html', icon: '🔀', title: { fr: 'GitFlow', en: 'GitFlow' }, section: { fr: 'Hotfix branches', en: 'Hotfix branches' }, anchor: 'hotfix',
+          keywords: 'hotfix branch correction bug urgent production patch fix' },
+        { page: 'gitflow.html', icon: '🔀', title: { fr: 'GitFlow', en: 'GitFlow' }, section: { fr: 'Commandes', en: 'Commands' }, anchor: 'commands',
+          keywords: 'commandes commands gitflow init start finish status plan exec commit abort' },
+        { page: 'gitflow.html', icon: '🔀', title: { fr: 'GitFlow', en: 'GitFlow' }, section: { fr: 'Versioning SemVer', en: 'SemVer Versioning' }, anchor: 'semver',
+          keywords: 'semver semantic versioning version major minor patch auto increment package.json' },
+
+        // EF Core
+        { page: 'efcore.html', icon: '📄', title: { fr: 'EF Core', en: 'EF Core' }, section: '', anchor: '',
+          keywords: 'ef core entity framework migration database dotnet .net sql model orm microsoft' },
+        { page: 'efcore.html', icon: '📄', title: { fr: 'EF Core', en: 'EF Core' }, section: { fr: 'Structure des migrations', en: 'Migration Structure' }, anchor: 'structure',
+          keywords: 'migration structure fichier file timestamp designer snapshot model context dbcontext' },
+        { page: 'efcore.html', icon: '📄', title: { fr: 'EF Core', en: 'EF Core' }, section: { fr: 'Conflits', en: 'Conflicts' }, anchor: 'conflicts',
+          keywords: 'conflit conflict merge migration snapshot résolution resolution gitflow' },
+        { page: 'efcore.html', icon: '📄', title: { fr: 'EF Core', en: 'EF Core' }, section: { fr: 'Bonnes pratiques', en: 'Best Practices' }, anchor: 'best-practices',
+          keywords: 'bonnes pratiques best practices migration naming convention idempotent script sql' },
+        { page: 'efcore.html', icon: '📄', title: { fr: 'EF Core', en: 'EF Core' }, section: { fr: 'Commandes', en: 'Commands' }, anchor: 'commands',
+          keywords: 'commandes commands dotnet ef migrations add remove update database script' },
+
+        // APEX
+        { page: 'apex.html', icon: '🎯', title: { fr: 'APEX', en: 'APEX' }, section: '', anchor: '',
+          keywords: 'apex methodology méthodologie analyze plan execute examine implementation implémentation workflow' },
+        { page: 'apex.html', icon: '🎯', title: { fr: 'APEX', en: 'APEX' }, section: { fr: 'Analyze', en: 'Analyze' }, anchor: 'analyze',
+          keywords: 'analyze analyse context contexte codebase exploration recherche understanding' },
+        { page: 'apex.html', icon: '🎯', title: { fr: 'APEX', en: 'APEX' }, section: { fr: 'Plan', en: 'Plan' }, anchor: 'plan',
+          keywords: 'plan planning planification strategy stratégie architecture design conception' },
+        { page: 'apex.html', icon: '🎯', title: { fr: 'APEX', en: 'APEX' }, section: { fr: 'Execute', en: 'Execute' }, anchor: 'execute',
+          keywords: 'execute exécution implementation implémentation code coding développement development' },
+        { page: 'apex.html', icon: '🎯', title: { fr: 'APEX', en: 'APEX' }, section: { fr: 'Examine', en: 'Examine' }, anchor: 'examine',
+          keywords: 'examine test testing validation vérification review revue quality qualité' },
+
+        // BA - Best Practices
+        { page: 'ba.html', icon: '📊', title: { fr: 'Bonnes Pratiques', en: 'Best Practices' }, section: '', anchor: '',
+          keywords: 'bonnes pratiques best practices ba business analysis guidelines standards quality qualité' },
+
+        // Agents
+        { page: 'agents.html', icon: '🤖', title: { fr: 'Agents', en: 'Agents' }, section: '', anchor: '',
+          keywords: 'agents subagent task tool automation automatisation ai ia claude specialized spécialisé' },
+        { page: 'agents.html', icon: '🤖', title: { fr: 'Agents', en: 'Agents' }, section: { fr: 'GitFlow Agents', en: 'GitFlow Agents' }, anchor: 'gitflow-agents',
+          keywords: 'gitflow agents plan exec commit status abort rollback recovery' },
+        { page: 'agents.html', icon: '🤖', title: { fr: 'Agents', en: 'Agents' }, section: { fr: 'Explore Agent', en: 'Explore Agent' }, anchor: 'explore',
+          keywords: 'explore agent codebase search recherche exploration quick thorough' },
+
+        // Commands
+        { page: 'commands.html', icon: '⚡', title: { fr: 'Commandes', en: 'Commands' }, section: '', anchor: '',
+          keywords: 'commandes commands slash cli terminal prompt gitflow apex commit review deploy' },
+        { page: 'commands.html', icon: '⚡', title: { fr: 'Commandes', en: 'Commands' }, section: { fr: 'GitFlow Commands', en: 'GitFlow Commands' }, anchor: 'gitflow-commands',
+          keywords: 'gitflow commands init start finish status commit plan exec' },
+        { page: 'commands.html', icon: '⚡', title: { fr: 'Commandes', en: 'Commands' }, section: { fr: 'APEX Commands', en: 'APEX Commands' }, anchor: 'apex-commands',
+          keywords: 'apex commands analyze plan execute examine quick' },
+        { page: 'commands.html', icon: '⚡', title: { fr: 'Commandes', en: 'Commands' }, section: { fr: 'Commit', en: 'Commit' }, anchor: 'commit',
+          keywords: 'commit git message conventional commits push' },
+        { page: 'commands.html', icon: '⚡', title: { fr: 'Commandes', en: 'Commands' }, section: { fr: 'Deploy', en: 'Deploy' }, anchor: 'deploy',
+          keywords: 'deploy deployment déploiement build test lint push production' },
+
+        // Hooks
+        { page: 'hooks.html', icon: '🔗', title: { fr: 'Hooks', en: 'Hooks' }, section: '', anchor: '',
+          keywords: 'hooks pre-commit post-commit validation automation automatisation script event événement' },
+        { page: 'hooks.html', icon: '🔗', title: { fr: 'Hooks', en: 'Hooks' }, section: { fr: 'Types de hooks', en: 'Hook Types' }, anchor: 'types',
+          keywords: 'types hooks PreToolUse PostToolUse Stop SessionStart UserPromptSubmit' },
+        { page: 'hooks.html', icon: '🔗', title: { fr: 'Hooks', en: 'Hooks' }, section: { fr: 'Configuration', en: 'Configuration' }, anchor: 'configuration',
+          keywords: 'configuration hooks settings.json matcher command timeout' }
+    ];
+
+    let searchIndex = null;
+    let activeIndex = -1;
+
+    function getLang() {
+        return document.body.classList.contains('lang-en') ? 'en' : 'fr';
+    }
+
+    // Build search index from static data
+    function buildIndex() {
+        const lang = getLang();
+
+        return staticIndex.map(item => {
+            const pageTitle = typeof item.title === 'object' ? item.title[lang] : item.title;
+            const sectionTitle = typeof item.section === 'object' ? item.section[lang] : item.section;
+
+            return {
+                page: item.page,
+                pageTitle: pageTitle,
+                icon: item.icon,
+                sectionTitle: sectionTitle || '',
+                content: (pageTitle + ' ' + sectionTitle + ' ' + item.keywords).toLowerCase(),
+                contentRaw: item.keywords,
+                anchor: item.anchor,
+                url: item.anchor ? `${item.page}#${item.anchor}` : item.page
+            };
+        });
+    }
+
+    // Search through index
+    function search(query) {
+        if (!query || query.length < 2) return [];
+
+        // Build index if not ready
+        if (!searchIndex) {
+            searchIndex = buildIndex();
+        }
+
+        const normalizedQuery = query.toLowerCase().trim();
+        const words = normalizedQuery.split(/\s+/).filter(w => w.length >= 2);
+        const results = [];
+        const seenPages = new Set();
+
+        searchIndex.forEach(item => {
+            // Check if any word matches
+            const anyWordMatch = words.some(word => item.content.includes(word));
+            if (!anyWordMatch) return;
+
+            // Calculate relevance score
+            let score = 0;
+            words.forEach(word => {
+                if (item.content.includes(word)) {
+                    // Title match is worth more
+                    if (item.pageTitle.toLowerCase().includes(word)) score += 10;
+                    if (item.sectionTitle.toLowerCase().includes(word)) score += 5;
+                    // Count occurrences in content
+                    const matches = (item.content.match(new RegExp(word, 'g')) || []).length;
+                    score += matches;
+                }
+            });
+
+            // Generate excerpt from keywords
+            let excerpt = item.contentRaw;
+            if (excerpt.length > 80) {
+                // Find first matching word position
+                const firstWord = words.find(w => item.contentRaw.toLowerCase().includes(w));
+                if (firstWord) {
+                    const idx = item.contentRaw.toLowerCase().indexOf(firstWord);
+                    const start = Math.max(0, idx - 20);
+                    const end = Math.min(item.contentRaw.length, idx + 60);
+                    excerpt = (start > 0 ? '...' : '') + item.contentRaw.substring(start, end) + (end < item.contentRaw.length ? '...' : '');
+                } else {
+                    excerpt = item.contentRaw.substring(0, 80) + '...';
+                }
+            }
+
+            // Avoid duplicate pages for same section
+            const key = item.page + '#' + item.anchor;
+            if (!seenPages.has(key)) {
+                seenPages.add(key);
+                results.push({
+                    ...item,
+                    score,
+                    excerpt
+                });
+            }
+        });
+
+        // Sort by score and limit results
+        return results
+            .sort((a, b) => b.score - a.score)
+            .slice(0, 10);
+    }
+
+    // Escape regex special chars
+    function escapeRegex(str) {
+        return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
+
+    // Highlight matches in text
+    function highlightMatch(text, query) {
+        const words = query.toLowerCase().split(/\s+/).filter(w => w.length >= 2);
+        let result = text;
+        words.forEach(word => {
+            const regex = new RegExp(`(${escapeRegex(word)})`, 'gi');
+            result = result.replace(regex, '<mark>$1</mark>');
+        });
+        return result;
+    }
+
+    function renderResults(results, query) {
+        const lang = getLang();
+
+        if (results.length === 0) {
+            const emptyMsg = lang === 'fr' ? 'Aucun résultat trouvé' : 'No results found';
+            searchResults.innerHTML = `<div class="search-results-empty">${emptyMsg}</div>`;
+        } else {
+            searchResults.innerHTML = results.map((item, index) => `
+                <a href="${item.url}" class="search-result-item${index === activeIndex ? ' active' : ''}" data-index="${index}">
+                    <div class="search-result-icon">${item.icon}</div>
+                    <div class="search-result-content">
+                        <div class="search-result-title">${highlightMatch(item.pageTitle, query)}${item.sectionTitle ? ' <span class="search-result-section">› ' + highlightMatch(item.sectionTitle, query) + '</span>' : ''}</div>
+                        <div class="search-result-excerpt">${highlightMatch(item.excerpt, query)}</div>
+                        <div class="search-result-path">${item.url}</div>
+                    </div>
+                </a>
+            `).join('');
+        }
+
+        searchResults.classList.add('visible');
+    }
+
+    function hideResults() {
+        searchResults.classList.remove('visible');
+        activeIndex = -1;
+    }
+
+    // Input handler with debounce
+    let debounceTimer;
+    searchInput.addEventListener('input', function() {
+        clearTimeout(debounceTimer);
+        const query = this.value.trim();
+
+        if (query.length >= 2) {
+            debounceTimer = setTimeout(() => {
+                const results = search(query);
+                activeIndex = -1;
+                renderResults(results, query);
+            }, 150);
+        } else {
+            hideResults();
+        }
+    });
+
+    // Keyboard navigation
+    searchInput.addEventListener('keydown', function(e) {
+        const items = searchResults.querySelectorAll('.search-result-item');
+
+        if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            activeIndex = Math.min(activeIndex + 1, items.length - 1);
+            updateActiveItem(items);
+        } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            activeIndex = Math.max(activeIndex - 1, 0);
+            updateActiveItem(items);
+        } else if (e.key === 'Enter') {
+            e.preventDefault();
+            if (activeIndex >= 0 && items[activeIndex]) {
+                window.location.href = items[activeIndex].getAttribute('href');
+            }
+        } else if (e.key === 'Escape') {
+            hideResults();
+            searchInput.blur();
+        }
+    });
+
+    function updateActiveItem(items) {
+        items.forEach((item, index) => {
+            item.classList.toggle('active', index === activeIndex);
+        });
+
+        if (items[activeIndex]) {
+            items[activeIndex].scrollIntoView({ block: 'nearest' });
+        }
+    }
+
+    // Focus handler
+    searchInput.addEventListener('focus', function() {
+        if (this.value.length >= 2) {
+            const results = search(this.value);
+            renderResults(results, this.value);
+        }
+    });
+
+    // Click outside to close
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.header-search')) {
+            hideResults();
+        }
+    });
+
+    // Keyboard shortcut (Ctrl/Cmd + K)
+    document.addEventListener('keydown', function(e) {
+        if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+            e.preventDefault();
+            searchInput.focus();
+            searchInput.select();
+        }
     });
 }
