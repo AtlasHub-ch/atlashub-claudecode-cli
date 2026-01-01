@@ -16,38 +16,30 @@ Claude Code automation toolkit - GitFlow, APEX, EF Core migrations, prompts and 
 
 ## Installation
 
-### Depuis GitHub (Recommande)
+### Installation globale (recommandé)
 
 ```bash
-# Installation globale directe depuis GitHub
-npm install -g github:atlashub/claude-tools
-
-# Ou depuis une branche specifique
-npm install -g github:atlashub/claude-tools#develop
-
-# Ou depuis un tag
-npm install -g github:atlashub/claude-tools#v1.0.0
-```
-
-### Depuis GitHub Packages (npm)
-
-```bash
-# Configure npm for GitHub Packages
-npm config set @atlashub:registry https://npm.pkg.github.com
-npm config set //npm.pkg.github.com/:_authToken YOUR_GITHUB_TOKEN
-
-# Install globally
 npm install -g @atlashub/claude-tools
 ```
 
-### Comme dependance de projet
+Puis utilisez les commandes `claude-tools` ou `ct` :
 
 ```bash
-# Ajouter au projet
-npm install -D github:atlashub/claude-tools
+claude-tools --help
+ct --help
+```
 
-# Utiliser via npx
-npx claude-tools install --local --skip-license
+### Installation dans un projet
+
+```bash
+npm install -D @atlashub/claude-tools
+npx claude-tools install --local
+```
+
+### Exécution directe (sans installation)
+
+```bash
+npx @atlashub/claude-tools install --local
 ```
 
 ## Quick Start
