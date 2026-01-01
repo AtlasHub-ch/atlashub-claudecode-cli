@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agents - Claude Tools</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">CT</div>
+                <h2>Claude Tools</h2>
+            </div>
+            <button class="sidebar-toggle" title="Toggle sidebar">
+                <span class="toggle-icon-collapse">&#171;</span>
+                <span class="toggle-icon-expand">&#187;</span>
+            </button>
+
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-section-title">
+                        <span data-lang="fr">Demarrage</span>
+                        <span data-lang="en">Getting Started</span>
+                    </div>
+                    <a href="index.html" class="nav-item">
+                        <span class="icon">&#127968;</span>
+                        <span class="nav-text" data-lang="fr">Accueil</span>
+                        <span class="nav-text" data-lang="en">Home</span>
+                    </a>
+                    <a href="installation.html" class="nav-item">
+                        <span class="icon">&#128230;</span>
+                        <span class="nav-text">Installation</span>
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Workflows</div>
+                    <a href="gitflow.html" class="nav-item">
+                        <span class="icon">&#128256;</span>
+                        <span class="nav-text">GitFlow</span>
+                    </a>
+                    <a href="efcore.html" class="nav-item">
+                        <span class="icon">&#128452;</span>
+                        <span class="nav-text">EF Core</span>
+                    </a>
+                    <a href="apex.html" class="nav-item">
+                        <span class="icon">&#127919;</span>
+                        <span class="nav-text">APEX</span>
+                    </a>
+                    <a href="ba.html" class="nav-item">
+                        <span class="icon">&#128202;</span>
+                        <span class="nav-text">BA</span>
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">
+                        <span data-lang="fr">Outils</span>
+                        <span data-lang="en">Tools</span>
+                    </div>
+                    <a href="agents.html" class="nav-item active">
+                        <span class="icon">&#129302;</span>
+                        <span class="nav-text">Agents</span>
+                    </a>
+                    <a href="commands.html" class="nav-item">
+                        <span class="icon">&#9889;</span>
+                        <span class="nav-text" data-lang="fr">Commandes</span>
+                        <span class="nav-text" data-lang="en">Commands</span>
+                    </a>
+                    <a href="hooks.html" class="nav-item">
+                        <span class="icon">&#128279;</span>
+                        <span class="nav-text">Hooks</span>
+                    </a>
+                    <a href="test-web.html" class="nav-item">
+                        <span class="icon">&#127760;</span>
+                        <span class="nav-text">Test Web</span>
+                    </a>
+                </div>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="lang-switch">
+                    <button class="lang-btn active" data-lang="fr">FR</button>
+                    <button class="lang-btn" data-lang="en">EN</button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="page-header">
+                <nav class="breadcrumb">
+                    <a href="index.html">
+                        <span data-lang="fr">Accueil</span>
+                        <span data-lang="en">Home</span>
+                    </a>
+                    <span class="breadcrumb-separator">&#8250;</span>
+                    <span data-lang="fr">Outils</span>
+                    <span data-lang="en">Tools</span>
+                    <span class="breadcrumb-separator">&#8250;</span>
+                    <span class="breadcrumb-current">Agents</span>
+                </nav>
+                <h1>
+                    <span data-lang="fr">Agents Specialises</span>
+                    <span data-lang="en">Specialized Agents</span>
+                </h1>
+                <p class="subtitle">
+                    <span data-lang="fr">Agents autonomes pour l'exploration et la modification de code</span>
+                    <span data-lang="en">Autonomous agents for code exploration and modification</span>
+                </p>
+            </header>
+
+            <div class="content content-wide">
+                <!-- Introduction -->
+                <section id="introduction">
+                    <p data-lang="fr">
+                        Claude Tools fournit des agents specialises qui peuvent etre lances en parallele pour accelerer le developpement. Ces agents sont optimises pour des taches specifiques et utilisent le modele Haiku pour une execution rapide et economique.
+                    </p>
+                    <p data-lang="en">
+                        Claude Tools provides specialized agents that can be launched in parallel to accelerate development. These agents are optimized for specific tasks and use the Haiku model for fast and cost-effective execution.
+                    </p>
+
+                    <div class="alert alert-info">
+                        <span class="alert-icon">&#128161;</span>
+                        <div class="alert-content">
+                            <h5 data-lang="fr">Execution parallele</h5>
+                            <h5 data-lang="en">Parallel Execution</h5>
+                            <p data-lang="fr">
+                                Les agents peuvent etre lances simultanement pour collecter des informations de plusieurs sources en meme temps.
+                            </p>
+                            <p data-lang="en">
+                                Agents can be launched simultaneously to collect information from multiple sources at the same time.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Agent: explore-codebase -->
+                <section id="explore-codebase">
+                    <h2>explore-codebase</h2>
+
+                    <div class="command-card">
+                        <div class="command-header">
+                            <code class="command-name">explore-codebase</code>
+                            <span class="tag tag-agent">Agent</span>
+                            <span class="tag" style="background: #eab308; color: #000;">Haiku</span>
+                        </div>
+                        <div class="command-body">
+                            <p data-lang="fr">
+                                Agent d'exploration du codebase. Trouve les implementations similaires, patterns et conventions existants dans votre projet.
+                            </p>
+                            <p data-lang="en">
+                                Codebase exploration agent. Finds similar implementations, patterns and existing conventions in your project.
+                            </p>
+
+                            <h4 data-lang="fr">Cas d'utilisation</h4>
+                            <h4 data-lang="en">Use Cases</h4>
+                            <ul>
+                                <li data-lang="fr">Trouver des implementations similaires a suivre comme exemple</li>
+                                <li data-lang="en">Find similar implementations to follow as examples</li>
+                                <li data-lang="fr">Localiser les fichiers a modifier</li>
+                                <li data-lang="en">Locate files to modify</li>
+                                <li data-lang="fr">Identifier les patterns et conventions existants</li>
+                                <li data-lang="en">Identify existing patterns and conventions</li>
+                                <li data-lang="fr">Decouvrir les utilitaires et helpers reutilisables</li>
+                                <li data-lang="en">Discover reusable utilities and helpers</li>
+                            </ul>
+
+                            <details class="prompt-details">
+                                <summary>
+                                    <span data-lang="fr">Voir le prompt complet</span>
+                                    <span data-lang="en">View complete prompt</span>
+                                </summary>
+                                <div class="prompt-content">
+                                    <pre><code>You are a codebase exploration specialist. Your only job is to find and present ALL relevant code and logic for the requested feature.
+
+## Search Strategy
+
+1. Start with broad searches using `Grep` to find entry points
+2. Use parallel searches for multiple related keywords
+3. Read files completely with `Read` to understand context
+4. Follow import chains to discover dependencies
+
+## What to Find
+
+- Existing similar features or patterns
+- Related functions, classes, components
+- Configuration and setup files
+- Database schemas and models
+- API endpoints and routes
+- Tests showing usage examples
+- Utility functions that might be reused
+
+## Output Format
+
+**CRITICAL**: Output all findings directly in your response. NEVER create markdown files.
+
+### Relevant Files Found
+
+For each file:
+
+```
+Path: /full/path/to/file.ext
+Purpose: [One line description]
+Key Code:
+  - Lines X-Y: [Actual code or logic description]
+  - Line Z: [Function/class definition]
+Related to: [How it connects to the feature]
+```
+
+### Code Patterns & Conventions
+
+- List discovered patterns (naming, structure, frameworks)
+- Note existing approaches that should be followed
+
+### Dependencies & Connections
+
+- Import relationships between files
+- External libraries used
+- API integrations found
+
+## Priority
+
+Thoroughness > Speed. Find everything relevant.</code></pre>
+                                </div>
+                            </details>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Agent: explore-docs -->
+                <section id="explore-docs">
+                    <h2>explore-docs</h2>
+
+                    <div class="command-card">
+                        <div class="command-header">
+                            <code class="command-name">explore-docs</code>
+                            <span class="tag tag-agent">Agent</span>
+                            <span class="tag" style="background: #eab308; color: #000;">Haiku</span>
+                        </div>
+                        <div class="command-body">
+                            <p data-lang="fr">
+                                Agent d'exploration de documentation. Recherche dans la documentation des librairies pour les APIs, best practices et exemples de code.
+                            </p>
+                            <p data-lang="en">
+                                Documentation exploration agent. Searches library documentation for APIs, best practices and code examples.
+                            </p>
+
+                            <h4 data-lang="fr">Cas d'utilisation</h4>
+                            <h4 data-lang="en">Use Cases</h4>
+                            <ul>
+                                <li data-lang="fr">Rechercher les APIs et patterns d'une librairie</li>
+                                <li data-lang="en">Search library APIs and patterns</li>
+                                <li data-lang="fr">Trouver les best practices officielles</li>
+                                <li data-lang="en">Find official best practices</li>
+                                <li data-lang="fr">Obtenir des exemples de code de la documentation</li>
+                                <li data-lang="en">Get code examples from documentation</li>
+                            </ul>
+
+                            <details class="prompt-details">
+                                <summary>
+                                    <span data-lang="fr">Voir le prompt complet</span>
+                                    <span data-lang="en">View complete prompt</span>
+                                </summary>
+                                <div class="prompt-content">
+                                    <pre><code>You are a documentation exploration specialist. Your mission is to retrieve precise, actionable documentation with code examples.
+
+## Search Strategy
+
+**Primary**: Use Context7 for library-specific documentation
+
+- Resolve library ID first with `mcp__context7__resolve-library-id`
+- Fetch targeted docs with `mcp__context7__get-library-docs`
+- Focus on specific topics when provided
+
+**Fallback**: Use WebSearch + WebFetch for official documentation
+
+- Search for official docs, API references, guides
+- Target authoritative sources (official websites, GitHub repos)
+
+## Data Processing
+
+**Filter for essentials**:
+
+- Code examples and usage patterns
+- API specifications and method signatures
+- Configuration options and parameters
+- Error handling patterns
+- Best practices and common pitfalls
+
+**Eliminate noise**:
+
+- Marketing content and introductions
+- Redundant explanations
+- Outdated or deprecated information
+
+## Output Format
+
+**CRITICAL**: Output all findings directly in your response. NEVER create markdown files.
+
+### Library: [Name/Version]
+
+### Key Concepts
+- [Essential concept]: [Brief explanation with context]
+
+### Code Examples
+```language
+// [Real-world example with full context]
+// Include imports, setup, and actual usage
+```
+
+### API Reference
+- `method(params: Type)`: [Purpose, parameters, return type, example]
+
+## Priority
+
+Actionable code examples > API specs > Configuration > Theory.</code></pre>
+                                </div>
+                            </details>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Agent: websearch -->
+                <section id="websearch">
+                    <h2>websearch</h2>
+
+                    <div class="command-card">
+                        <div class="command-header">
+                            <code class="command-name">websearch</code>
+                            <span class="tag tag-agent">Agent</span>
+                            <span class="tag" style="background: #eab308; color: #000;">Haiku</span>
+                        </div>
+                        <div class="command-body">
+                            <p data-lang="fr">
+                                Agent de recherche web rapide. Trouve des informations sur le web de maniere precise et rapide.
+                            </p>
+                            <p data-lang="en">
+                                Quick web search agent. Finds information on the web quickly and accurately.
+                            </p>
+
+                            <h4 data-lang="fr">Cas d'utilisation</h4>
+                            <h4 data-lang="en">Use Cases</h4>
+                            <ul>
+                                <li data-lang="fr">Rechercher les dernieres approches et solutions</li>
+                                <li data-lang="en">Research latest approaches and solutions</li>
+                                <li data-lang="fr">Trouver des exemples de la communaute</li>
+                                <li data-lang="en">Find community examples</li>
+                                <li data-lang="fr">Obtenir des informations architecturales</li>
+                                <li data-lang="en">Get architectural guidance</li>
+                            </ul>
+
+                            <details class="prompt-details">
+                                <summary>
+                                    <span data-lang="fr">Voir le prompt complet</span>
+                                    <span data-lang="en">View complete prompt</span>
+                                </summary>
+                                <div class="prompt-content">
+                                    <pre><code>You are a rapid web search specialist. Find accurate information fast.
+
+## Workflow
+
+1. **Search**: Use `WebSearch` with precise keywords
+2. **Fetch**: Use `WebFetch` for most relevant results
+3. **Summarize**: Extract key information concisely
+
+## Search Best Practices
+
+- Focus on authoritative sources (official docs, trusted sites)
+- Skip redundant information
+- Use specific keywords rather than vague terms
+- Prioritize recent information when relevant
+
+## Output Format
+
+**CRITICAL**: Output all findings directly in your response. NEVER create markdown files.
+
+&lt;summary&gt;
+[Clear, concise answer to the query]
+&lt;/summary&gt;
+
+&lt;key-points&gt;
+• [Most important fact]
+• [Second important fact]
+• [Additional relevant info]
+&lt;/key-points&gt;
+
+&lt;sources&gt;
+1. [Title](URL) - Brief description
+2. [Title](URL) - What it contains
+&lt;/sources&gt;
+
+## Priority
+
+Accuracy > Speed. Get the right answer quickly.</code></pre>
+                                </div>
+                            </details>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Agent: Snipper -->
+                <section id="snipper">
+                    <h2>Snipper</h2>
+
+                    <div class="command-card">
+                        <div class="command-header">
+                            <code class="command-name">Snipper</code>
+                            <span class="tag tag-agent">Agent</span>
+                            <span class="tag" style="background: #3b82f6; color: #fff;">Fast</span>
+                        </div>
+                        <div class="command-body">
+                            <p data-lang="fr">
+                                Agent de modification de code ultra-rapide. Execute les modifications sans explications, optimise pour la vitesse.
+                            </p>
+                            <p data-lang="en">
+                                Ultra-fast code modification agent. Executes modifications without explanations, optimized for speed.
+                            </p>
+
+                            <h4 data-lang="fr">Cas d'utilisation</h4>
+                            <h4 data-lang="en">Use Cases</h4>
+                            <ul>
+                                <li data-lang="fr">Modifications rapides de code</li>
+                                <li data-lang="en">Quick code modifications</li>
+                                <li data-lang="fr">Refactoring simple</li>
+                                <li data-lang="en">Simple refactoring</li>
+                                <li data-lang="fr">Renommage de variables/fonctions</li>
+                                <li data-lang="en">Variable/function renaming</li>
+                            </ul>
+
+                            <details class="prompt-details">
+                                <summary>
+                                    <span data-lang="fr">Voir le prompt complet</span>
+                                    <span data-lang="en">View complete prompt</span>
+                                </summary>
+                                <div class="prompt-content">
+                                    <pre><code>You are a rapid code modification specialist. No explanations, just execute.
+
+## Workflow
+
+1. **Read**: Load all specified files with `Read` tool
+2. **Edit**: Apply requested changes using `Edit` or `MultiEdit`
+3. **Report**: List what was modified
+
+## Execution Rules
+
+- Follow existing code style exactly
+- Preserve all formatting and indentation
+- Make minimal changes to achieve the goal
+- Use `MultiEdit` for multiple changes in same file
+- Never add comments unless requested
+- DO NEVER RUN LINT CHECK. YOU CAN'T USE BASH.
+
+## Output Format
+
+Simply list each file and the change made:
+
+```
+- path/to/file.ext: [One line description of change]
+- path/to/other.ext: [What was modified]
+```
+
+## Priority
+
+Speed > Explanation. Just get it done.</code></pre>
+                                </div>
+                            </details>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Agent: fix-grammar -->
+                <section id="fix-grammar">
+                    <h2>fix-grammar</h2>
+
+                    <div class="command-card">
+                        <div class="command-header">
+                            <code class="command-name">fix-grammar</code>
+                            <span class="tag tag-agent">Agent</span>
+                            <span class="tag" style="background: #3b82f6; color: #fff;">Fast</span>
+                        </div>
+                        <div class="command-body">
+                            <p data-lang="fr">
+                                Agent de correction grammaticale. Corrige les erreurs d'orthographe et de grammaire tout en preservant le formatage.
+                            </p>
+                            <p data-lang="en">
+                                Grammar correction agent. Fixes spelling and grammar errors while preserving formatting.
+                            </p>
+
+                            <h4 data-lang="fr">Cas d'utilisation</h4>
+                            <h4 data-lang="en">Use Cases</h4>
+                            <ul>
+                                <li data-lang="fr">Correction de documentation</li>
+                                <li data-lang="en">Documentation correction</li>
+                                <li data-lang="fr">Correction de commentaires</li>
+                                <li data-lang="en">Comment correction</li>
+                                <li data-lang="fr">Correction de fichiers README</li>
+                                <li data-lang="en">README file correction</li>
+                            </ul>
+
+                            <details class="prompt-details">
+                                <summary>
+                                    <span data-lang="fr">Voir le prompt complet</span>
+                                    <span data-lang="en">View complete prompt</span>
+                                </summary>
+                                <div class="prompt-content">
+                                    <pre><code>You are DevProfCorrectorGPT, a professional text corrector. Fix grammar and spelling errors while preserving all formatting and meaning.
+
+## File Processing
+
+- Read the target file completely
+- Apply grammar and spelling corrections only
+- Preserve all formatting, tags, and technical terms
+- Do not translate or change word order
+- Do not modify special tags (MDX, custom syntax, code blocks)
+
+## Correction Rules
+
+- Fix only spelling and grammar errors
+- Keep the same language used in each sentence
+- Preserve all document structure and formatting
+- Do not change meaning or technical terms
+- Handle multilingual content (keep anglicisms, technical terms)
+
+## Output Format
+
+```
+✓ Fixed grammar in [filename]
+- [number] corrections made
+```
+
+## Priority
+
+Accuracy > Speed. Preserve meaning and formatting while fixing obvious errors.</code></pre>
+                                </div>
+                            </details>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Agent: action -->
+                <section id="action">
+                    <h2>action</h2>
+
+                    <div class="command-card">
+                        <div class="command-header">
+                            <code class="command-name">action</code>
+                            <span class="tag tag-agent">Agent</span>
+                            <span class="tag" style="background: #8b5cf6; color: #fff;">Conditional</span>
+                        </div>
+                        <div class="command-body">
+                            <p data-lang="fr">
+                                Agent d'execution conditionnelle. Execute des actions uniquement lorsque des conditions specifiques sont remplies. Utile pour le nettoyage de code.
+                            </p>
+                            <p data-lang="en">
+                                Conditional action executor. Performs actions only when specific conditions are met. Useful for code cleanup.
+                            </p>
+
+                            <h4 data-lang="fr">Cas d'utilisation</h4>
+                            <h4 data-lang="en">Use Cases</h4>
+                            <ul>
+                                <li data-lang="fr">Supprimer des dependances non utilisees</li>
+                                <li data-lang="en">Remove unused dependencies</li>
+                                <li data-lang="fr">Supprimer des exports non utilises</li>
+                                <li data-lang="en">Remove unused exports</li>
+                                <li data-lang="fr">Nettoyage conditionnel de code</li>
+                                <li data-lang="en">Conditional code cleanup</li>
+                            </ul>
+
+                            <details class="prompt-details">
+                                <summary>
+                                    <span data-lang="fr">Voir le prompt complet</span>
+                                    <span data-lang="en">View complete prompt</span>
+                                </summary>
+                                <div class="prompt-content">
+                                    <pre><code>Batch conditional executor. Handle ≤5 tasks. VERIFY INDEPENDENTLY before each action.
+
+## Workflow
+
+1. **VERIFY each item yourself** (never trust input):
+   - **Exports/Types**: Grep for `import.*{name}` in codebase
+   - **Files**: Check framework patterns via explore-docs, then Grep for imports
+   - **Dependencies**: Grep for `from 'pkg'` or `require('pkg')`
+
+2. **Execute ONLY if verified unused**:
+   - If used → Skip with reason, continue next
+   - If unused → Execute action, confirm success
+
+3. **Report**: Count executed, count skipped with reasons
+
+## Rules
+
+- **MANDATORY**: Verify each item independently using Grep/explore-docs
+- **Skip if used**: Continue to next task
+- **Max 5 tasks**: Process all in batch
+
+## Example
+
+"Verify and remove: lodash, axios, moment"
+
+1. Grep `lodash` → Found in utils.ts → Skip
+2. Grep `axios` → Not found → `pnpm remove axios` → Done
+3. Grep `moment` → Not found → `pnpm remove moment` → Done
+   Report: "Removed 2/3: axios, moment. Skipped: lodash (used in utils.ts)"</code></pre>
+                                </div>
+                            </details>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Mobile Menu Button -->
+    <button class="mobile-menu-btn">&#9776;</button>
+    <div class="overlay"></div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
