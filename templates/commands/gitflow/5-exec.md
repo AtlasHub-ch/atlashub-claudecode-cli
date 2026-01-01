@@ -13,6 +13,30 @@ Tu es expert GitFlow et EF Core. Execute le plan d'integration de maniere securi
 
 ---
 
+## Pre-validation (OBLIGATOIRE)
+
+**Verifier la branche courante AVANT toute action:**
+
+```bash
+BRANCH=$(git rev-parse --abbrev-ref HEAD)
+
+# Branches autorisees: feature/*, release/*, hotfix/*
+if [[ ! $BRANCH =~ ^(feature|release|hotfix)/ ]]; then
+  echo "ERREUR: Cette commande ne peut etre executee que depuis une branche GitFlow"
+  echo ""
+  echo "Branche actuelle: $BRANCH"
+  echo "Branches autorisees: feature/*, release/*, hotfix/*"
+  echo ""
+  echo "Vous devez etre sur la branche source du plan pour l'executer."
+  echo "Utilisez: git checkout {branche-source}"
+  exit 1
+fi
+```
+
+**Si branche invalide:** Afficher l'erreur et STOPPER. Ne pas continuer le workflow.
+
+---
+
 ## Workflow
 
 ### 1. Charger plan
