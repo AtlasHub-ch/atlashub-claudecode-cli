@@ -12,7 +12,7 @@
         <header class="global-header">
             <div class="logo">CT</div>
             <span class="site-title">Claude Tools</span>
-            <span class="version-badge">v1.2.0</span>
+            <span class="version-badge">v1.5.1</span>
             <div class="header-divider"></div>
             <span class="page-title">EF Core Migrations</span>
             <nav class="breadcrumb">
@@ -184,25 +184,33 @@
                                 <thead>
                                     <tr>
                                         <th>Fichier / File</th>
-                                        <th data-lang="fr">Description</th>
-                                        <th data-lang="en">Description</th>
+                                        <th>
+                                        <span data-lang="fr">Description</span>
+                                        <span data-lang="en">Description</span>
+                                    </th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
                                         <td><code>{Timestamp}_{Name}.cs</code></td>
-                                        <td data-lang="fr">Migration principale avec Up() et Down()</td>
-                                        <td data-lang="en">Main migration with Up() and Down()</td>
+                                        <td>
+                                        <span data-lang="fr">Migration principale avec Up() et Down()</span>
+                                        <span data-lang="en">Main migration with Up() and Down()</span>
+                                    </td>
                                     </tr>
                                     <tr>
                                         <td><code>{Timestamp}_{Name}.Designer.cs</code></td>
-                                        <td data-lang="fr">Metadonnees et snapshot du modele au moment de la creation</td>
-                                        <td data-lang="en">Metadata and model snapshot at creation time</td>
+                                        <td>
+                                        <span data-lang="fr">Metadonnees et snapshot du modele au moment de la creation</span>
+                                        <span data-lang="en">Metadata and model snapshot at creation time</span>
+                                    </td>
                                     </tr>
                                     <tr>
                                         <td><code>{Context}ModelSnapshot.cs</code></td>
-                                        <td data-lang="fr">Etat actuel du modele complet (source de conflits)</td>
-                                        <td data-lang="en">Current state of full model (conflict source)</td>
+                                        <td>
+                                        <span data-lang="fr">Etat actuel du modele complet (source de conflits)</span>
+                                        <span data-lang="en">Current state of full model (conflict source)</span>
+                                    </td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -392,28 +400,42 @@ dotnet ef migrations add NomMigration
                                 <thead>
                                     <tr>
                                         <th>Scenario</th>
-                                        <th data-lang="fr">Resolution</th>
-                                        <th data-lang="en">Resolution</th>
+                                        <th>
+                                        <span data-lang="fr">Resolution</span>
+                                        <span data-lang="en">Resolution</span>
+                                    </th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td data-lang="fr">Feature A et Feature B modifient des tables differentes</td>
-                                        <td data-lang="en">Feature A and Feature B modify different tables</td>
-                                        <td data-lang="fr">Accept theirs + re-add migration</td>
-                                        <td data-lang="en">Accept theirs + re-add migration</td>
+                                        <td>
+                                        <span data-lang="fr">Feature A et Feature B modifient des tables differentes</span>
+                                        <span data-lang="en">Feature A and Feature B modify different tables</span>
+                                    </td>
+                                        <td>
+                                        <span data-lang="fr">Accept theirs + re-add migration</span>
+                                        <span data-lang="en">Accept theirs + re-add migration</span>
+                                    </td>
                                     </tr>
                                     <tr>
-                                        <td data-lang="fr">Meme table modifiee des deux cotes</td>
-                                        <td data-lang="en">Same table modified on both sides</td>
-                                        <td data-lang="fr">Merge manuel puis <code>dotnet ef migrations add MergeSnapshot</code></td>
-                                        <td data-lang="en">Manual merge then <code>dotnet ef migrations add MergeSnapshot</code></td>
+                                        <td>
+                                        <span data-lang="fr">Meme table modifiee des deux cotes</span>
+                                        <span data-lang="en">Same table modified on both sides</span>
+                                    </td>
+                                        <td>
+                                        <span data-lang="fr">Merge manuel puis <code>dotnet ef migrations add MergeSnapshot</code></span>
+                                        <span data-lang="en">Manual merge then <code>dotnet ef migrations add MergeSnapshot</code></span>
+                                    </td>
                                     </tr>
                                     <tr>
-                                        <td data-lang="fr">Hotfix avec migration urgente</td>
-                                        <td data-lang="en">Hotfix with urgent migration</td>
-                                        <td data-lang="fr">Prefix <code>Hotfix_</code> + script SQL idempotent</td>
-                                        <td data-lang="en">Prefix <code>Hotfix_</code> + idempotent SQL script</td>
+                                        <td>
+                                        <span data-lang="fr">Hotfix avec migration urgente</span>
+                                        <span data-lang="en">Hotfix with urgent migration</span>
+                                    </td>
+                                        <td>
+                                        <span data-lang="fr">Prefix <code>Hotfix_</code> + script SQL idempotent</span>
+                                        <span data-lang="en">Prefix <code>Hotfix_</code> + idempotent SQL script</span>
+                                    </td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -470,41 +492,55 @@ dotnet ef migrations add Update</code></pre>
                                     <thead>
                                         <tr>
                                             <th>Operation</th>
-                                            <th data-lang="fr">Risque</th>
-                                            <th data-lang="en">Risk</th>
-                                            <th data-lang="fr">Niveau</th>
-                                            <th data-lang="en">Level</th>
+                                            <th>
+                                        <span data-lang="fr">Risque</span>
+                                        <span data-lang="en">Risk</span>
+                                    </th>
+                                            <th>
+                                        <span data-lang="fr">Niveau</span>
+                                        <span data-lang="en">Level</span>
+                                    </th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
                                             <td><code>DropTable</code></td>
-                                            <td data-lang="fr">Suppression de table entiere</td>
-                                            <td data-lang="en">Entire table deletion</td>
+                                            <td>
+                                        <span data-lang="fr">Suppression de table entiere</span>
+                                        <span data-lang="en">Entire table deletion</span>
+                                    </td>
                                             <td><span class="tag tag-danger">CRITICAL</span></td>
                                         </tr>
                                         <tr>
                                             <td><code>DropColumn</code></td>
-                                            <td data-lang="fr">Perte de donnees de colonne</td>
-                                            <td data-lang="en">Column data loss</td>
+                                            <td>
+                                        <span data-lang="fr">Perte de donnees de colonne</span>
+                                        <span data-lang="en">Column data loss</span>
+                                    </td>
                                             <td><span class="tag tag-danger">CRITICAL</span></td>
                                         </tr>
                                         <tr>
                                             <td><code>DeleteData</code></td>
-                                            <td data-lang="fr">Suppression de lignes</td>
-                                            <td data-lang="en">Row deletion</td>
+                                            <td>
+                                        <span data-lang="fr">Suppression de lignes</span>
+                                        <span data-lang="en">Row deletion</span>
+                                    </td>
                                             <td><span class="tag tag-danger">CRITICAL</span></td>
                                         </tr>
                                         <tr>
                                             <td><code>DropForeignKey</code></td>
-                                            <td data-lang="fr">Casse l'integrite referentielle</td>
-                                            <td data-lang="en">Breaks referential integrity</td>
+                                            <td>
+                                        <span data-lang="fr">Casse l'integrite referentielle</span>
+                                        <span data-lang="en">Breaks referential integrity</span>
+                                    </td>
                                             <td><span class="tag tag-warning">HIGH</span></td>
                                         </tr>
                                         <tr>
                                             <td><code>DropIndex</code></td>
-                                            <td data-lang="fr">Impact sur les performances</td>
-                                            <td data-lang="en">Performance impact</td>
+                                            <td>
+                                        <span data-lang="fr">Impact sur les performances</span>
+                                        <span data-lang="en">Performance impact</span>
+                                    </td>
                                             <td><span class="tag tag-workflow">MEDIUM</span></td>
                                         </tr>
                                     </tbody>

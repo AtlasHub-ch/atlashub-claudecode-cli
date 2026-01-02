@@ -1107,12 +1107,11 @@ tr:hover td {
     animation: fadeIn 0.3s ease forwards;
 }
 
-/* Bilingual content */
-[data-lang="en"] { display: none; }
-[data-lang="fr"] { display: block; }
+/* Bilingual content - hide inactive language, show active with original display */
+[data-lang="en"] { display: none !important; }
 
-body.lang-en [data-lang="en"] { display: block; }
-body.lang-en [data-lang="fr"] { display: none; }
+body.lang-en [data-lang="en"] { display: revert !important; }
+body.lang-en [data-lang="fr"] { display: none !important; }
 
 /* ============================================
    COMMAND CARDS & PROMPTS
