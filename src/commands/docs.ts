@@ -54,8 +54,9 @@ export const docsCommand = new Command('docs')
     }
 
     // Open in default browser
+    // Windows: start "" "path" - first "" is window title, second is the file
     const openCommand = process.platform === 'win32'
-      ? 'start'
+      ? `start ""`
       : process.platform === 'darwin'
         ? 'open'
         : 'xdg-open';
