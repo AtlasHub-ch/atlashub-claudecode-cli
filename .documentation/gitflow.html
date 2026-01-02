@@ -1513,14 +1513,17 @@ Cree `.claude/gitflow/plans/init_&lt;YYYYMMDD&gt;.md` contenant :
                             </div>
                             <div class="command-body">
                                 <p data-lang="fr">
-                                    Affiche l'etat detaille du projet : branche actuelle, version, branches actives, migrations EF Core en attente.
+                                    Affiche l'etat detaille du projet : branche actuelle, version, branches actives, migrations EF Core en attente. <strong>Nouveau :</strong> Vue globale des migrations par branche avec detection des conflits ModelSnapshot et ordre de merge recommande.
                                 </p>
                                 <p data-lang="en">
-                                    Shows detailed project status: current branch, version, active branches, pending EF Core migrations.
+                                    Shows detailed project status: current branch, version, active branches, pending EF Core migrations. <strong>New:</strong> Global migrations view per branch with ModelSnapshot conflict detection and recommended merge order.
                                 </p>
                                 <div class="code-block">
                                     <button class="copy-btn">Copy</button>
-                                    <pre><code>/gitflow:2-status</code></pre>
+                                    <pre><code>/gitflow:2-status
+
+# Voir toutes les branches avec migrations
+/gitflow:2-status --all-branches</code></pre>
                                 </div>
 
                                 <details class="prompt-details">
@@ -2067,21 +2070,42 @@ Si conflit pendant rebase:
                             </div>
                             <div class="command-body">
                                 <p data-lang="fr">
-                                    Demarre une nouvelle branche (feature, release, hotfix) avec un questionnaire dynamique base sur le contexte du projet. Supporte les worktrees.
+                                    Demarre une nouvelle branche (feature, release, hotfix) avec un questionnaire dynamique base sur le contexte du projet. Supporte les worktrees organises (<code>../project-worktrees/{type}s/{name}/</code>). <strong>Pour les releases :</strong> detection de main divergent avec option reset, et consolidation des migrations EF Core en une seule.
                                 </p>
                                 <p data-lang="en">
-                                    Starts a new branch (feature, release, hotfix) with a dynamic questionnaire based on project context. Supports worktrees.
+                                    Starts a new branch (feature, release, hotfix) with a dynamic questionnaire based on project context. Supports organized worktrees (<code>../project-worktrees/{type}s/{name}/</code>). <strong>For releases:</strong> divergent main detection with reset option, and EF Core migrations consolidation into one.
                                 </p>
                                 <div class="code-block">
                                     <button class="copy-btn">Copy</button>
                                     <pre><code># Demarrer une feature
 /gitflow:10-start feature authentication
 
-# Demarrer une release
+# Demarrer une release (avec options avancees EF Core)
 /gitflow:10-start release
 
 # Demarrer un hotfix
-/gitflow:10-start hotfix critical-bug</code></pre>
+/gitflow:10-start hotfix critical-bug
+
+# Sans worktree (meme repertoire)
+/gitflow:10-start feature test --no-worktree</code></pre>
+                                </div>
+
+                                <div class="alert alert-info" style="margin-top: 1rem;">
+                                    <span class="alert-icon">&#128161;</span>
+                                    <div class="alert-content">
+                                        <h5 data-lang="fr">Fonctionnalites avancees pour releases</h5>
+                                        <h5 data-lang="en">Advanced features for releases</h5>
+                                        <p data-lang="fr">
+                                            Lors de la creation d'une release, l'assistant detecte automatiquement :
+                                            <br/>• <strong>Main divergent</strong> : Si main contient des commits absents de develop, propose de reset main via cette release
+                                            <br/>• <strong>Migrations multiples</strong> : Si plus de 3 migrations existent, propose de les consolider en une seule migration propre
+                                        </p>
+                                        <p data-lang="en">
+                                            When creating a release, the assistant automatically detects:
+                                            <br/>• <strong>Divergent main</strong>: If main contains commits missing from develop, offers to reset main via this release
+                                            <br/>• <strong>Multiple migrations</strong>: If more than 3 migrations exist, offers to consolidate them into a single clean migration
+                                        </p>
+                                    </div>
                                 </div>
 
                                 <details class="prompt-details">
