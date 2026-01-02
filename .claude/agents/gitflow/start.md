@@ -21,8 +21,13 @@ Creation rapide de branche GitFlow avec worktree.
 ## Commandes
 
 ```bash
-# Worktree (defaut)
-git worktree add -b {type}/{name} "../{project}-{type}-{name}" origin/{base}
+# Worktree (defaut) - Structure organisee par type
+PROJECT_NAME=$(basename $(pwd))
+WORKTREE_BASE="../${PROJECT_NAME}-worktrees"
+mkdir -p "${WORKTREE_BASE}/${TYPE}s"
+WORKTREE_PATH="${WORKTREE_BASE}/${TYPE}s/${NAME}"
+
+git worktree add -b {type}/{name} "$WORKTREE_PATH" origin/{base}
 
 # Checkout (--no-worktree)
 git checkout -b {type}/{name} origin/{base}
@@ -42,11 +47,11 @@ BRANCH CREATED
   Type: {feature|release|hotfix}
   Name: {branch}
   Base: {develop|main}
-  Worktree: {path}
+  Worktree: ../{project}-worktrees/{type}s/{name}
   Config: {appsettings.Local.json created|skipped}
 
 NEXT STEPS:
-  cd {path}
+  cd ../{project}-worktrees/{type}s/{name}
   /efcore:db-deploy
 ```
 

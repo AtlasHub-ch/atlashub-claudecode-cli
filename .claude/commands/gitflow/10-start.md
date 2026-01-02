@@ -29,6 +29,7 @@ STATUS=$(git status --porcelain)
 
 # 4. Commits develop vs main
 DEVELOP_AHEAD=$(git rev-list --count origin/main..origin/develop 2>/dev/null || echo "0")
+MAIN_AHEAD=$(git rev-list --count origin/develop..origin/main 2>/dev/null || echo "0")
 
 # 5. Dernier tag
 LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "none")
@@ -37,6 +38,9 @@ LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "none")
 EXISTING_FEATURES=$(git branch -r | grep 'feature/' | wc -l)
 EXISTING_RELEASES=$(git branch -r | grep 'release/' | wc -l)
 EXISTING_HOTFIXES=$(git branch -r | grep 'hotfix/' | wc -l)
+
+# 7. Compter les migrations sur develop (pour releases)
+MIGRATIONS_ON_DEVELOP=$(find . -path "*/Migrations/*.cs" -not -name "*Designer*" -not -name "*ModelSnapshot*" 2>/dev/null | wc -l)
 ```
 
 ---
@@ -54,10 +58,15 @@ REPOSITORY
 
 SYNCHRONISATION
   develop → main: {DEVELOP_AHEAD} commits en avance
-  {Si > 0: "Une release est recommandee"}
+  main → develop: {MAIN_AHEAD} commits en avance
+  {Si DEVELOP_AHEAD > 0: "Une release est recommandee"}
+  {Si MAIN_AHEAD > 0: "⚠️ ATTENTION: main contient des commits absents de develop!"}
 
 BRANCHES ACTIVES
   Features: {N} | Releases: {N} | Hotfixes: {N}
+
+EF CORE (si projet .NET)
+  Migrations sur develop: {MIGRATIONS_ON_DEVELOP}
 
 ================================================================================
 ```
@@ -155,8 +164,59 @@ AskUserQuestion({
 
 ### Si RELEASE selectionne:
 
+**Etape A: Verifier l'etat de main**
+
 ```javascript
-// Version deja dans le label, confirmer
+// Si main contient des commits absents de develop (main corrompu/divergent)
+if (MAIN_AHEAD > 0) {
+  AskUserQuestion({
+    questions: [{
+      question: `⚠️ ATTENTION: main contient ${MAIN_AHEAD} commits absents de develop. Comment proceder ?`,
+      header: "Main",
+      options: [
+        { label: "Reset main", description: "Cette release remettra main en sync avec develop (Recommande)" },
+        { label: "Analyser d'abord", description: "Voir les commits divergents avant de decider" },
+        { label: "Continuer normalement", description: "Ignorer la divergence (non recommande)" }
+      ],
+      multiSelect: false
+    }]
+  })
+}
+
+// Si "Analyser d'abord" → Afficher les commits divergents:
+// git log origin/develop..origin/main --oneline
+```
+
+**Etape B: Gestion des migrations EF Core**
+
+```javascript
+// Si projet .NET avec plusieurs migrations
+if (MIGRATIONS_ON_DEVELOP > 3) {
+  AskUserQuestion({
+    questions: [{
+      question: `Il y a ${MIGRATIONS_ON_DEVELOP} migrations sur develop. Voulez-vous les consolider ?`,
+      header: "Migrations",
+      options: [
+        { label: "Consolider", description: "Squash en 1 migration propre (Recommande pour releases)" },
+        { label: "Garder separees", description: "Conserver l'historique des migrations" }
+      ],
+      multiSelect: false
+    }]
+  })
+}
+
+// Si "Consolider" → Executer le processus de squash:
+// 1. Backup de la branche actuelle
+// 2. dotnet ef migrations list → sauvegarder la liste
+// 3. dotnet ef database drop (si DB locale de dev)
+// 4. Supprimer tous les fichiers Migrations/
+// 5. dotnet ef migrations add InitialCreate_v{version}
+// 6. Commit avec message descriptif
+```
+
+**Etape C: Confirmer la version**
+
+```javascript
 const [major, minor, patch] = VERSION.split('.').map(Number)
 
 AskUserQuestion({
@@ -224,19 +284,29 @@ AskUserQuestion({
 
 ### Mode Worktree (defaut)
 
+**Structure organisee:** `../{project}-worktrees/{type}s/{name}/`
+
 ```bash
 PROJECT_NAME=$(basename $(pwd))
-WORKTREE_PATH="../${PROJECT_NAME}-${TYPE}-${NAME}"
+WORKTREE_BASE="../${PROJECT_NAME}-worktrees"
+
+# Creer le repertoire parent et le sous-repertoire du type
+mkdir -p "${WORKTREE_BASE}/features"
+mkdir -p "${WORKTREE_BASE}/releases"
+mkdir -p "${WORKTREE_BASE}/hotfixes"
 
 git fetch origin
 
 # Feature (depuis develop)
+WORKTREE_PATH="${WORKTREE_BASE}/features/{name}"
 git worktree add -b feature/{name} "$WORKTREE_PATH" origin/develop
 
 # Release (depuis develop)
+WORKTREE_PATH="${WORKTREE_BASE}/releases/v{version}"
 git worktree add -b release/v{version} "$WORKTREE_PATH" origin/develop
 
 # Hotfix (depuis main)
+WORKTREE_PATH="${WORKTREE_BASE}/hotfixes/{name}"
 git worktree add -b hotfix/{name} "$WORKTREE_PATH" origin/main
 ```
 
@@ -391,13 +461,13 @@ BASE:     {develop|main}
 CIBLE:    {develop|main+develop}
 VERSION:  {version} (si release)
 
-WORKTREE: {path} (ou "meme repertoire" si --no-worktree)
+WORKTREE: ../{project}-worktrees/{type}s/{name} (ou "meme repertoire" si --no-worktree)
 
 ================================================================================
 PROCHAINES ETAPES
 ================================================================================
 
-1. {Si worktree: "cd {path}" ou "code {path}"}
+1. {Si worktree: "cd ../{project}-worktrees/{type}s/{name}" ou "code ../{project}-worktrees/{type}s/{name}"}
 2. Faire vos modifications
 3. /gitflow:3-commit
 4. /gitflow:7-pull-request
@@ -452,3 +522,72 @@ Si hotfix selectionne depuis une branche != main:
 → Creer hotfix
 → Message: "Vos changements ont ete stash. Recuperez-les avec 'git stash pop' apres le hotfix."
 ```
+
+### Main divergent (commits absents de develop)
+
+**Situation:** main contient des commits qui ne sont pas sur develop (ex: hotfix mal merge, commit direct sur main)
+
+**Detection:**
+```bash
+MAIN_AHEAD=$(git rev-list --count origin/develop..origin/main 2>/dev/null || echo "0")
+```
+
+**Si utilisateur choisit "Reset main":**
+```bash
+# Pendant la release, au moment du finish:
+# 1. Merge develop → release (normal)
+# 2. Au lieu de merge release → main, faire un reset:
+git checkout main
+git reset --hard release/v{version}
+git push --force-with-lease origin main
+# 3. Puis merge release → develop (normal)
+```
+
+**Note:** Cette operation est enregistree dans `.claude/gitflow/logs/main-resets.json`
+
+### Consolidation des migrations EF Core
+
+**Situation:** Plusieurs migrations accumulees sur develop (> 3)
+
+**Avantages de consolider:**
+- 1 seule migration = schema propre
+- Pas de conflits ModelSnapshot lors des merges
+- Deploy plus rapide en production
+
+**Processus si utilisateur choisit "Consolider":**
+
+```bash
+# 1. S'assurer d'etre sur la branche release
+cd "${WORKTREE_PATH}"
+
+# 2. Sauvegarder la liste des migrations
+dotnet ef migrations list > migrations-backup.txt
+
+# 3. Identifier le DbContext
+CONTEXT=$(grep -l "DbContext" **/*.cs | head -1)
+
+# 4. Supprimer toutes les migrations
+rm -rf Migrations/
+
+# 5. Creer une migration consolidee
+dotnet ef migrations add InitialCreate_v{version} --context {DbContext}
+
+# 6. Verifier que le build passe
+dotnet build
+
+# 7. Commit la consolidation
+git add -A
+git commit -m "db(migrations): consolidate migrations for v{version}
+
+Merged migrations:
+$(cat migrations-backup.txt)
+
+Single migration: InitialCreate_v{version}"
+
+rm migrations-backup.txt
+```
+
+**⚠️ IMPORTANT:**
+- Ceci est uniquement pour les releases (pas features/hotfixes)
+- La DB de production doit etre synchronisee avec les migrations AVANT la consolidation
+- Apres consolidation, les environnements de dev doivent recreer leur DB locale

@@ -1,0 +1,31 @@
+{
+  "timestamp": "2026-01-02T13:49:11Z",
+  "completed_at": "2026-01-02T13:50:30Z",
+  "type": "integration",
+  "status": "completed",
+  "branch": {
+    "source": "feature/add-amelioration-gitflow",
+    "target": "develop",
+    "commit_source": "22b9f6f16c6700b6e6f3bb94ae869a84023cedb8",
+    "commit_merged": "a4846e641bc41efc7ee10b54dfe0f77cc82c45f8"
+  },
+  "plan": {
+    "file": ".claude/gitflow/plans/feature-add-amelioration-gitflow_20260102_DONE.md",
+    "strategy": "Rebase + Merge --no-ff"
+  },
+  "version": {
+    "before": "1.5.3",
+    "after": "1.6.0"
+  },
+  "efcore": {
+    "applicable": false,
+    "reason": "Node.js project - no EF Core migrations"
+  },
+  "result": {
+    "success": true,
+    "conflicts": false,
+    "files_changed": 13,
+    "insertions": 761,
+    "deletions": 31
+  }
+}

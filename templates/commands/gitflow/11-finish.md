@@ -59,6 +59,20 @@ fi
 ### Feature (simple cleanup)
 
 ```bash
+# Detecter si on est dans un worktree et trouver le repo principal
+CURRENT_DIR=$(pwd)
+MAIN_WORKTREE=$(git worktree list --porcelain | grep -m1 "^worktree " | sed 's/worktree //')
+PROJECT_NAME=$(basename "$MAIN_WORKTREE")
+
+# Revenir au repo principal AVANT de supprimer le worktree
+cd "$MAIN_WORKTREE"
+
+# Supprimer worktree si existe
+WORKTREE_PATH="../${PROJECT_NAME}-worktrees/features/{name}"
+if [ -d "$WORKTREE_PATH" ]; then
+  git worktree remove "$WORKTREE_PATH" --force 2>/dev/null || true
+fi
+
 # Supprimer branche locale
 git checkout develop
 git pull origin develop
@@ -84,6 +98,14 @@ Cleanup:  ✓ Branche supprimee
 ### Release (tag + merge back)
 
 ```bash
+# 0. Detecter si on est dans un worktree et trouver le repo principal
+CURRENT_DIR=$(pwd)
+MAIN_WORKTREE=$(git worktree list --porcelain | grep -m1 "^worktree " | sed 's/worktree //')
+PROJECT_NAME=$(basename "$MAIN_WORKTREE")
+
+# Revenir au repo principal AVANT toute operation
+cd "$MAIN_WORKTREE"
+
 # 1. Checkout main et pull
 git checkout main
 git pull origin main
@@ -99,7 +121,11 @@ git pull origin develop
 git merge main --no-ff -m "chore: merge release v$VERSION back to develop"
 git push origin develop
 
-# 4. Cleanup
+# 4. Cleanup worktree + branche
+WORKTREE_PATH="../${PROJECT_NAME}-worktrees/releases/v$VERSION"
+if [ -d "$WORKTREE_PATH" ]; then
+  git worktree remove "$WORKTREE_PATH" --force 2>/dev/null || true
+fi
 git branch -d release/v$VERSION
 git push origin --delete release/v$VERSION 2>/dev/null || true
 ```
@@ -126,6 +152,14 @@ Actions effectuees:
 ### Hotfix (tag + merge back)
 
 ```bash
+# 0. Detecter si on est dans un worktree et trouver le repo principal
+CURRENT_DIR=$(pwd)
+MAIN_WORKTREE=$(git worktree list --porcelain | grep -m1 "^worktree " | sed 's/worktree //')
+PROJECT_NAME=$(basename "$MAIN_WORKTREE")
+
+# Revenir au repo principal AVANT toute operation
+cd "$MAIN_WORKTREE"
+
 # 1. Checkout main et pull
 git checkout main
 git pull origin main
@@ -141,7 +175,11 @@ git pull origin develop
 git merge main --no-ff -m "chore: merge hotfix v$VERSION back to develop"
 git push origin develop
 
-# 4. Cleanup
+# 4. Cleanup worktree + branche
+WORKTREE_PATH="../${PROJECT_NAME}-worktrees/hotfixes/{name}"
+if [ -d "$WORKTREE_PATH" ]; then
+  git worktree remove "$WORKTREE_PATH" --force 2>/dev/null || true
+fi
 git branch -d hotfix/{name}
 git push origin --delete hotfix/{name} 2>/dev/null || true
 ```
