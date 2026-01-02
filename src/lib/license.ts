@@ -117,6 +117,7 @@ export async function deleteLicense(): Promise<void> {
 
 /**
  * Check if license is valid (with local cache)
+ * LICENSE DISABLED - Always returns valid
  */
 export async function checkLicense(): Promise<{
   valid: boolean;
@@ -124,40 +125,6 @@ export async function checkLicense(): Promise<{
   error?: string;
   offline?: boolean;
 }> {
-  const local = await loadLicense();
-
-  if (!local) {
-    return { valid: false, error: 'No license found' };
-  }
-
-  // Check local expiration first
-  if (new Date(local.expiresAt) < new Date()) {
-    return { valid: false, error: 'License expired' };
-  }
-
-  // Check machine ID
-  if (local.machineId !== getMachineId()) {
-    return { valid: false, error: 'License registered to a different machine' };
-  }
-
-  // Re-validate online every 7 days
-  const validatedAt = new Date(local.validatedAt);
-  const daysSinceValidation = (Date.now() - validatedAt.getTime()) / (1000 * 60 * 60 * 24);
-
-  if (daysSinceValidation > 7) {
-    try {
-      const result = await validateLicenseOnline(local.key);
-      if (result.valid && result.plan && result.expiresAt) {
-        await saveLicense(local.key, result.plan, result.expiresAt);
-        return { valid: true, plan: result.plan };
-      }
-      return { valid: false, error: result.error };
-    } catch {
-      // Offline: accept local license if not expired
-      logger.warning('Could not validate online, using cached license');
-      return { valid: true, plan: local.plan, offline: true };
-    }
-  }
-
-  return { valid: true, plan: local.plan };
+  // License validation disabled - always return valid
+  return { valid: true, plan: 'enterprise' };
 }
