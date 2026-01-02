@@ -5,6 +5,7 @@ import { uninstallCommand } from './commands/uninstall.js';
 import { activateCommand } from './commands/activate.js';
 import { statusCommand } from './commands/status.js';
 import { updateCommand } from './commands/update.js';
+import { docsCommand } from './commands/docs.js';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
@@ -24,6 +25,7 @@ program.addCommand(uninstallCommand);
 program.addCommand(activateCommand);
 program.addCommand(statusCommand);
 program.addCommand(updateCommand);
+program.addCommand(docsCommand);
 
 // Default action (no command)
 program.action(() => {

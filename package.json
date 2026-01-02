@@ -19,7 +19,8 @@
   "files": [
     "dist",
     "templates",
-    "config"
+    "config",
+    ".documentation"
   ],
   "engines": {
     "node": ">=18.0.0"
