@@ -854,8 +854,8 @@
                                 </text>
 
                                 <g class="cmd-copyable" data-cmd="/gitflow:3-commit" style="cursor:pointer;">
-                                    <rect x="148" y="295" width="85" height="30" rx="4" fill="#0f172a" stroke="#64748b" stroke-width="1.5"/>
-                                    <text x="190" y="314" text-anchor="middle" fill="#94a3b8" font-size="9" font-family="monospace">/gitflow:3-commit</text>
+                                    <rect x="148" y="295" width="85" height="30" rx="4" fill="#0f172a" stroke="#8b5cf6" stroke-width="1.5"/>
+                                    <text x="190" y="314" text-anchor="middle" fill="#8b5cf6" font-size="9" font-family="monospace">/gitflow:3-commit</text>
                                 </g>
 
                                 <!-- Loop back from commit to coder -->
@@ -921,37 +921,92 @@
                                 <line x1="350" y1="180" x2="350" y2="200" stroke="#eab308" stroke-width="2"/>
                                 <polygon points="350,200 345,190 355,190" fill="#eab308"/>
 
-                                <rect x="280" y="205" width="140" height="50" rx="6" fill="#eab308" fill-opacity="0.15" stroke="#eab308" stroke-width="2"/>
-                                <text x="350" y="225" text-anchor="middle" fill="#eab308" font-size="11" font-weight="600">
-                                    <tspan data-lang="fr">Deployer en</tspan>
-                                    <tspan data-lang="en">Deploy to</tspan>
+                                <rect x="280" y="205" width="140" height="40" rx="6" fill="#eab308" fill-opacity="0.15" stroke="#eab308" stroke-width="2"/>
+                                <text x="350" y="230" text-anchor="middle" fill="#eab308" font-size="10" font-weight="600">
+                                    <tspan data-lang="fr">Deployer en prod</tspan>
+                                    <tspan data-lang="en">Deploy to prod</tspan>
                                 </text>
-                                <text x="350" y="240" text-anchor="middle" fill="#eab308" font-size="11" font-weight="600">production</text>
 
-                                <line x1="350" y1="255" x2="350" y2="295" stroke="#eab308" stroke-width="2"/>
-                                <polygon points="350,295 345,285 355,285" fill="#eab308"/>
+                                <line x1="350" y1="245" x2="350" y2="258" stroke="#eab308" stroke-width="2"/>
+                                <polygon points="350,258 345,248 355,248" fill="#eab308"/>
 
                                 <g class="cmd-copyable" data-cmd="/gitflow:10-start release" style="cursor:pointer;">
-                                    <rect x="280" y="300" width="140" height="35" rx="4" fill="#0f172a" stroke="#eab308" stroke-width="1.5"/>
-                                    <text x="350" y="322" text-anchor="middle" fill="#eab308" font-size="10" font-family="monospace">/gitflow:10-start</text>
-                                    <text x="350" y="330" text-anchor="middle" fill="#94a3b8" font-size="8">release</text>
+                                    <rect x="285" y="263" width="130" height="26" rx="4" fill="#0f172a" stroke="#eab308" stroke-width="1.5"/>
+                                    <text x="350" y="280" text-anchor="middle" fill="#eab308" font-size="8" font-family="monospace">/gitflow:10-start release</text>
                                 </g>
 
-                                <line x1="350" y1="335" x2="350" y2="363" stroke="#eab308" stroke-width="2"/>
-                                <polygon points="350,363 345,353 355,353" fill="#eab308"/>
+                                <!-- Release: tests... -->
+                                <line x1="350" y1="289" x2="350" y2="305" stroke="#eab308" stroke-width="2" stroke-dasharray="4,2"/>
+                                <text x="350" y="318" text-anchor="middle" fill="#64748b" font-size="9" font-style="italic">
+                                    <tspan data-lang="fr">tests...</tspan>
+                                    <tspan data-lang="en">tests...</tspan>
+                                </text>
+
+                                <!-- Release: Fini? diamond -->
+                                <line x1="350" y1="323" x2="350" y2="335" stroke="#eab308" stroke-width="2"/>
+                                <polygon points="350,368 378,351 350,335 322,351" fill="#1e293b" stroke="#eab308" stroke-width="1.5"/>
+                                <text x="350" y="355" text-anchor="middle" fill="#f8fafc" font-size="8" font-weight="500">
+                                    <tspan data-lang="fr">Fini?</tspan>
+                                    <tspan data-lang="en">Done?</tspan>
+                                </text>
+
+                                <!-- Release NON -> commit (shared) -->
+                                <line x1="378" y1="351" x2="430" y2="351" stroke="#64748b" stroke-width="2"/>
+                                <text x="404" y="344" text-anchor="middle" fill="#64748b" font-size="6" font-weight="600">
+                                    <tspan data-lang="fr">NON</tspan>
+                                    <tspan data-lang="en">NO</tspan>
+                                </text>
+
+                                <!-- Shared commit box between Release and Hotfix -->
+                                <g class="cmd-copyable" data-cmd="/gitflow:3-commit" style="cursor:pointer;">
+                                    <rect x="433" y="338" width="84" height="26" rx="4" fill="#0f172a" stroke="#8b5cf6" stroke-width="1.5"/>
+                                    <text x="475" y="355" text-anchor="middle" fill="#8b5cf6" font-size="8" font-family="monospace">/gitflow:3-commit</text>
+                                </g>
+
+                                <!-- Hotfix NON -> commit (shared) -->
+                                <line x1="572" y1="351" x2="520" y2="351" stroke="#64748b" stroke-width="2"/>
+                                <text x="546" y="344" text-anchor="middle" fill="#64748b" font-size="6" font-weight="600">
+                                    <tspan data-lang="fr">NON</tspan>
+                                    <tspan data-lang="en">NO</tspan>
+                                </text>
+
+                                <!-- Release: loop back from commit -->
+                                <path d="M 450 338 L 450 305 L 378 305" stroke="#64748b" stroke-width="2" fill="none" stroke-dasharray="4,2"/>
+                                <polygon points="378,305 388,300 388,310" fill="#64748b"/>
+
+                                <!-- Hotfix: loop back from commit -->
+                                <path d="M 500 338 L 500 305 L 572 305" stroke="#64748b" stroke-width="2" fill="none" stroke-dasharray="4,2"/>
+                                <polygon points="572,305 562,300 562,310" fill="#64748b"/>
+
+                                <!-- Release OUI -> PR -> finish -->
+                                <line x1="350" y1="368" x2="350" y2="383" stroke="#eab308" stroke-width="2"/>
+                                <polygon points="350,383 345,373 355,373" fill="#eab308"/>
+                                <text x="335" y="378" text-anchor="end" fill="#eab308" font-size="6" font-weight="600">
+                                    <tspan data-lang="fr">OUI</tspan>
+                                    <tspan data-lang="en">YES</tspan>
+                                </text>
+
+                                <!-- Release: PR step -->
+                                <g class="cmd-copyable" data-cmd="/gitflow:7-pull-request" style="cursor:pointer;">
+                                    <rect x="285" y="388" width="130" height="24" rx="4" fill="#0f172a" stroke="#06b6d4" stroke-width="1.5"/>
+                                    <text x="350" y="404" text-anchor="middle" fill="#06b6d4" font-size="7" font-family="monospace">/gitflow:7-pull-request</text>
+                                </g>
+
+                                <line x1="350" y1="412" x2="350" y2="427" stroke="#eab308" stroke-width="2"/>
+                                <polygon points="350,427 345,417 355,417" fill="#eab308"/>
 
                                 <g class="cmd-copyable" data-cmd="/gitflow:11-finish" style="cursor:pointer;">
-                                    <rect x="280" y="370" width="140" height="30" rx="4" fill="#0f172a" stroke="#eab308" stroke-width="1.5"/>
-                                    <text x="350" y="390" text-anchor="middle" fill="#eab308" font-size="10" font-family="monospace">/gitflow:11-finish</text>
+                                    <rect x="285" y="432" width="130" height="24" rx="4" fill="#0f172a" stroke="#eab308" stroke-width="1.5"/>
+                                    <text x="350" y="448" text-anchor="middle" fill="#eab308" font-size="7" font-family="monospace">/gitflow:11-finish</text>
                                 </g>
 
-                                <line x1="350" y1="400" x2="350" y2="430" stroke="#eab308" stroke-width="2"/>
-                                <polygon points="350,430 345,420 355,420" fill="#eab308"/>
+                                <line x1="350" y1="456" x2="350" y2="475" stroke="#eab308" stroke-width="2"/>
+                                <polygon points="350,475 345,465 355,465" fill="#eab308"/>
 
-                                <rect x="290" y="435" width="120" height="30" rx="6" fill="#eab308" fill-opacity="0.2" stroke="#eab308" stroke-width="2"/>
-                                <text x="350" y="455" text-anchor="middle" fill="#eab308" font-size="10" font-weight="600">
-                                    <tspan data-lang="fr">Tag + Production</tspan>
-                                    <tspan data-lang="en">Tag + Production</tspan>
+                                <rect x="295" y="480" width="110" height="24" rx="6" fill="#eab308" fill-opacity="0.2" stroke="#eab308" stroke-width="2"/>
+                                <text x="350" y="496" text-anchor="middle" fill="#eab308" font-size="8" font-weight="600">
+                                    <tspan data-lang="fr">Tag + Prod</tspan>
+                                    <tspan data-lang="en">Tag + Prod</tspan>
                                 </text>
 
                                 <!-- HOTFIX PATH (Center-Right) -->
@@ -960,38 +1015,62 @@
                                 <line x1="600" y1="180" x2="600" y2="200" stroke="#ec4899" stroke-width="2"/>
                                 <polygon points="600,200 595,190 605,190" fill="#ec4899"/>
 
-                                <rect x="530" y="205" width="140" height="50" rx="6" fill="#ec4899" fill-opacity="0.15" stroke="#ec4899" stroke-width="2"/>
-                                <text x="600" y="225" text-anchor="middle" fill="#ec4899" font-size="11" font-weight="600">
-                                    <tspan data-lang="fr">Bug urgent</tspan>
-                                    <tspan data-lang="en">Urgent bug</tspan>
-                                </text>
-                                <text x="600" y="240" text-anchor="middle" fill="#ec4899" font-size="11" font-weight="600">
-                                    <tspan data-lang="fr">en production</tspan>
-                                    <tspan data-lang="en">in production</tspan>
+                                <rect x="530" y="205" width="140" height="40" rx="6" fill="#ec4899" fill-opacity="0.15" stroke="#ec4899" stroke-width="2"/>
+                                <text x="600" y="230" text-anchor="middle" fill="#ec4899" font-size="10" font-weight="600">
+                                    <tspan data-lang="fr">Bug urgent prod</tspan>
+                                    <tspan data-lang="en">Urgent prod bug</tspan>
                                 </text>
 
-                                <line x1="600" y1="255" x2="600" y2="295" stroke="#ec4899" stroke-width="2"/>
-                                <polygon points="600,295 595,285 605,285" fill="#ec4899"/>
+                                <line x1="600" y1="245" x2="600" y2="258" stroke="#ec4899" stroke-width="2"/>
+                                <polygon points="600,258 595,248 605,248" fill="#ec4899"/>
 
                                 <g class="cmd-copyable" data-cmd="/gitflow:10-start hotfix {nom}" style="cursor:pointer;">
-                                    <rect x="530" y="300" width="140" height="35" rx="4" fill="#0f172a" stroke="#ec4899" stroke-width="1.5"/>
-                                    <text x="600" y="322" text-anchor="middle" fill="#ec4899" font-size="10" font-family="monospace">/gitflow:10-start</text>
-                                    <text x="600" y="330" text-anchor="middle" fill="#94a3b8" font-size="8">hotfix {nom}</text>
+                                    <rect x="535" y="263" width="130" height="26" rx="4" fill="#0f172a" stroke="#ec4899" stroke-width="1.5"/>
+                                    <text x="600" y="280" text-anchor="middle" fill="#ec4899" font-size="8" font-family="monospace">/gitflow:10-start hotfix</text>
                                 </g>
 
-                                <line x1="600" y1="335" x2="600" y2="363" stroke="#ec4899" stroke-width="2"/>
-                                <polygon points="600,363 595,353 605,353" fill="#ec4899"/>
+                                <!-- Hotfix: fix... -->
+                                <line x1="600" y1="289" x2="600" y2="305" stroke="#ec4899" stroke-width="2" stroke-dasharray="4,2"/>
+                                <text x="600" y="318" text-anchor="middle" fill="#64748b" font-size="9" font-style="italic">
+                                    <tspan data-lang="fr">fix...</tspan>
+                                    <tspan data-lang="en">fix...</tspan>
+                                </text>
+
+                                <!-- Hotfix: Fini? diamond -->
+                                <line x1="600" y1="323" x2="600" y2="335" stroke="#ec4899" stroke-width="2"/>
+                                <polygon points="600,368 628,351 600,335 572,351" fill="#1e293b" stroke="#ec4899" stroke-width="1.5"/>
+                                <text x="600" y="355" text-anchor="middle" fill="#f8fafc" font-size="8" font-weight="500">
+                                    <tspan data-lang="fr">Fini?</tspan>
+                                    <tspan data-lang="en">Done?</tspan>
+                                </text>
+
+                                <!-- Hotfix OUI -> PR -> finish -->
+                                <line x1="600" y1="368" x2="600" y2="383" stroke="#ec4899" stroke-width="2"/>
+                                <polygon points="600,383 595,373 605,373" fill="#ec4899"/>
+                                <text x="615" y="378" text-anchor="start" fill="#ec4899" font-size="6" font-weight="600">
+                                    <tspan data-lang="fr">OUI</tspan>
+                                    <tspan data-lang="en">YES</tspan>
+                                </text>
+
+                                <!-- Hotfix: PR step -->
+                                <g class="cmd-copyable" data-cmd="/gitflow:7-pull-request" style="cursor:pointer;">
+                                    <rect x="535" y="388" width="130" height="24" rx="4" fill="#0f172a" stroke="#06b6d4" stroke-width="1.5"/>
+                                    <text x="600" y="404" text-anchor="middle" fill="#06b6d4" font-size="7" font-family="monospace">/gitflow:7-pull-request</text>
+                                </g>
+
+                                <line x1="600" y1="412" x2="600" y2="427" stroke="#ec4899" stroke-width="2"/>
+                                <polygon points="600,427 595,417 605,417" fill="#ec4899"/>
 
                                 <g class="cmd-copyable" data-cmd="/gitflow:11-finish" style="cursor:pointer;">
-                                    <rect x="530" y="370" width="140" height="30" rx="4" fill="#0f172a" stroke="#ec4899" stroke-width="1.5"/>
-                                    <text x="600" y="390" text-anchor="middle" fill="#ec4899" font-size="10" font-family="monospace">/gitflow:11-finish</text>
+                                    <rect x="535" y="432" width="130" height="24" rx="4" fill="#0f172a" stroke="#ec4899" stroke-width="1.5"/>
+                                    <text x="600" y="448" text-anchor="middle" fill="#ec4899" font-size="7" font-family="monospace">/gitflow:11-finish</text>
                                 </g>
 
-                                <line x1="600" y1="400" x2="600" y2="430" stroke="#ec4899" stroke-width="2"/>
-                                <polygon points="600,430 595,420 605,420" fill="#ec4899"/>
+                                <line x1="600" y1="456" x2="600" y2="475" stroke="#ec4899" stroke-width="2"/>
+                                <polygon points="600,475 595,465 605,465" fill="#ec4899"/>
 
-                                <rect x="540" y="435" width="120" height="30" rx="6" fill="#ec4899" fill-opacity="0.2" stroke="#ec4899" stroke-width="2"/>
-                                <text x="600" y="455" text-anchor="middle" fill="#ec4899" font-size="10" font-weight="600">
+                                <rect x="545" y="480" width="110" height="24" rx="6" fill="#ec4899" fill-opacity="0.2" stroke="#ec4899" stroke-width="2"/>
+                                <text x="600" y="496" text-anchor="middle" fill="#ec4899" font-size="8" font-weight="600">
                                     <tspan data-lang="fr">Fix deploye</tspan>
                                     <tspan data-lang="en">Fix deployed</tspan>
                                 </text>
