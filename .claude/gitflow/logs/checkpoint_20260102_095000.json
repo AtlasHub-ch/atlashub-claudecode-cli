@@ -1,0 +1,34 @@
+{
+  "checkpoint_id": "checkpoint_20260102_095000",
+  "timestamp": "2026-01-02T09:50:00.000Z",
+  "plan": "feature-DisableLicening_20260102",
+  "branch": {
+    "source": "feature/DisableLicening",
+    "target": "develop",
+    "type": "feature"
+  },
+  "commit": {
+    "hash": "edacd73",
+    "message": "feat(license): disable license validation and add docs command"
+  },
+  "version": {
+    "current": "1.4.0",
+    "target": "1.5.0"
+  },
+  "status": "created",
+  "pre_merge_validations": {
+    "working_dir_clean": false,
+    "build_success": true,
+    "tests_run": false,
+    "lint_passed": false
+  },
+  "efcore": {
+    "migrations_count": 0,
+    "has_conflicts": false,
+    "backup_created": false
+  },
+  "rollback": {
+    "backup_branch": "backup-DisableLicening-20260102",
+    "restore_command": "git reset --hard edacd73"
+  }
+}
