@@ -9,6 +9,8 @@ Supprime et recree la base de donnees, puis applique toutes les migrations.
 
 **⚠️ ATTENTION: Cette commande SUPPRIME toutes les donnees !**
 
+> **INSTRUCTION CLAUDE:** Les blocs `AskUserQuestion({...})` sont des instructions pour utiliser le tool `AskUserQuestion` de maniere **interactive**. Tu DOIS executer le tool avec ces parametres pour obtenir la reponse de l'utilisateur AVANT de continuer.
+
 ---
 
 ## ETAPE 1: Confirmation obligatoire

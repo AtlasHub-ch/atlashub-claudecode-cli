@@ -6,6 +6,8 @@ description: Documentation et spécification de résolution de bug
 
 Expert BA senior. Documentation et spécification de résolution de bug.
 
+> **INSTRUCTION CLAUDE:** Les blocs `AskUserQuestion({...})` sont des instructions pour utiliser le tool `AskUserQuestion` de maniere **interactive**. Tu DOIS executer le tool avec ces parametres pour obtenir la reponse de l'utilisateur AVANT de continuer.
+
 ## Arguments
 
 ```

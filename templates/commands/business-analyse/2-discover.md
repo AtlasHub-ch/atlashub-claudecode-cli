@@ -6,6 +6,8 @@ description: Phase 2 - Découverte et élicitation des besoins (ULTRATHINK)
 
 Expert BA senior en élicitation. Mode ULTRATHINK obligatoire.
 
+> **INSTRUCTION CLAUDE:** Les blocs `AskUserQuestion({...})` sont des instructions pour utiliser le tool `AskUserQuestion` de maniere **interactive**. Tu DOIS executer le tool avec ces parametres pour obtenir la reponse de l'utilisateur AVANT de continuer.
+
 ## Arguments
 
 ```

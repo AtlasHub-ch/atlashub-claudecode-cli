@@ -7,6 +7,8 @@ agent: efcore-db-seed
 
 Insere des donnees de test ou initiales dans la base de donnees.
 
+> **INSTRUCTION CLAUDE:** Les blocs `AskUserQuestion({...})` sont des instructions pour utiliser le tool `AskUserQuestion` de maniere **interactive**. Tu DOIS executer le tool avec ces parametres pour obtenir la reponse de l'utilisateur AVANT de continuer.
+
 ---
 
 ## ETAPE 1: Detecter les methodes de seeding disponibles

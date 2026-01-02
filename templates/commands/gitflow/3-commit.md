@@ -9,6 +9,8 @@ args: [message]
 
 Tu es expert GitFlow et EF Core. Gere les commits avec validation des migrations .NET.
 
+> **INSTRUCTION CLAUDE:** Les blocs `AskUserQuestion({...})` ci-dessous sont des instructions pour utiliser le tool `AskUserQuestion` de maniere **interactive**. Tu DOIS executer le tool avec ces parametres pour obtenir la reponse de l'utilisateur AVANT de continuer. NE PAS afficher ce code - ATTENDRE la reponse.
+
 **Argument:** `$ARGUMENTS` = message commit (optionnel, genere si absent)
 
 ---

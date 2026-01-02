@@ -9,6 +9,8 @@ Cree ou recree la migration unique pour la branche courante.
 
 **REGLE D'OR : 1 seule migration par feature/hotfix. Si elle existe deja, on la supprime et on la recree.**
 
+> **INSTRUCTION CLAUDE:** Les blocs `AskUserQuestion({...})` sont des instructions pour utiliser le tool `AskUserQuestion` de maniere **interactive**. Tu DOIS executer le tool avec ces parametres pour obtenir la reponse de l'utilisateur AVANT de continuer.
+
 ---
 
 ## ETAPE 1: Analyser le contexte Git

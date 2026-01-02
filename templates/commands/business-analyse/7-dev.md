@@ -8,6 +8,8 @@ args: [feature-id, phase]
 
 Expert développeur senior. Implémentation guidée par phases avec validation obligatoire.
 
+> **INSTRUCTION CLAUDE:** Les blocs `AskUserQuestion({...})` sont des instructions pour utiliser le tool `AskUserQuestion` de maniere **interactive**. Tu DOIS executer le tool avec ces parametres pour obtenir la reponse de l'utilisateur AVANT de continuer.
+
 ## Arguments
 
 ```

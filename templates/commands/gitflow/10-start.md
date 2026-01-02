@@ -8,6 +8,8 @@ model: haiku
 
 Tu es expert GitFlow. Cree une branche dans un **worktree separe** (par defaut).
 
+> **INSTRUCTION CLAUDE:** Les blocs `AskUserQuestion({...})` ci-dessous sont des instructions pour utiliser le tool `AskUserQuestion` de maniere **interactive**. Tu DOIS executer le tool avec ces parametres pour obtenir la reponse de l'utilisateur AVANT de continuer. NE PAS afficher ce code - ATTENDRE la reponse.
+
 **Argument:** `$ARGUMENTS` = `{type} {name} [--no-worktree]`
 
 ---
@@ -284,11 +286,10 @@ AskUserQuestion({
 
 ### Mode Worktree (defaut)
 
-**Structure organisee:** `../{project}-worktrees/{type}s/{name}/`
+**Structure organisee:** `../worktrees/{type}s/{name}/`
 
 ```bash
-PROJECT_NAME=$(basename $(pwd))
-WORKTREE_BASE="../${PROJECT_NAME}-worktrees"
+WORKTREE_BASE="../worktrees"
 
 # Creer le repertoire parent et le sous-repertoire du type
 mkdir -p "${WORKTREE_BASE}/features"
@@ -461,13 +462,13 @@ BASE:     {develop|main}
 CIBLE:    {develop|main+develop}
 VERSION:  {version} (si release)
 
-WORKTREE: ../{project}-worktrees/{type}s/{name} (ou "meme repertoire" si --no-worktree)
+WORKTREE: ../worktrees/{type}s/{name} (ou "meme repertoire" si --no-worktree)
 
 ================================================================================
 PROCHAINES ETAPES
 ================================================================================
 
-1. {Si worktree: "cd ../{project}-worktrees/{type}s/{name}" ou "code ../{project}-worktrees/{type}s/{name}"}
+1. {Si worktree: "cd ../worktrees/{type}s/{name}" ou "code ../worktrees/{type}s/{name}"}
 2. Faire vos modifications
 3. /gitflow:3-commit
 4. /gitflow:7-pull-request

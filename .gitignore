@@ -7,3 +7,6 @@ node_modules/
 
 # Build output
 dist/
+
+# Claude Code deployed files (use templates/ as source)
+.claude/

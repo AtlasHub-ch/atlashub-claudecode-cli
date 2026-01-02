@@ -6,6 +6,8 @@ description: Phase 1 - Initialisation structure Business Analyse
 
 Expert BA senior. Initialise la structure d'analyse métier.
 
+> **INSTRUCTION CLAUDE:** Les blocs `AskUserQuestion({...})` sont des instructions pour utiliser le tool `AskUserQuestion` de maniere **interactive**. Tu DOIS executer le tool avec ces parametres pour obtenir la reponse de l'utilisateur AVANT de continuer.
+
 ## Arguments
 
 ```

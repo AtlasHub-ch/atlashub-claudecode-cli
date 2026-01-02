@@ -10,6 +10,8 @@ tools: Bash, Glob, Read
 
 **ATTENTION: Operation destructive - supprime toutes les donnees!**
 
+> **INSTRUCTION CLAUDE:** Les blocs `AskUserQuestion({...})` sont des instructions pour utiliser le tool `AskUserQuestion` de maniere **interactive**. Tu DOIS executer le tool avec ces parametres pour obtenir la reponse de l'utilisateur AVANT de continuer.
+
 ## Workflow
 
 1. **CONFIRMER** avec l'utilisateur (obligatoire)

@@ -10,6 +10,8 @@ tools: Bash, Glob, Read, Edit
 
 Gere la creation de migrations avec la regle "1 migration par feature".
 
+> **INSTRUCTION CLAUDE:** Les blocs `AskUserQuestion({...})` sont des instructions pour utiliser le tool `AskUserQuestion` de maniere **interactive**. Tu DOIS executer le tool avec ces parametres pour obtenir la reponse de l'utilisateur AVANT de continuer.
+
 ## Workflow
 
 1. **Analyser** branche courante (feature/hotfix/release)

@@ -9,6 +9,8 @@ model: haiku
 
 Met à jour la configuration des tests web depuis un fichier externe.
 
+> **INSTRUCTION CLAUDE:** Les blocs `AskUserQuestion({...})` sont des instructions pour utiliser le tool `AskUserQuestion` de maniere **interactive**. Tu DOIS executer le tool avec ces parametres pour obtenir la reponse de l'utilisateur AVANT de continuer.
+
 ## Usage
 
 ```

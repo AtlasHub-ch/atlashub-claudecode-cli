@@ -2202,11 +2202,10 @@ options.push({
 
 ### Mode Worktree (defaut)
 
-**Structure organisee:** `../{project}-worktrees/{type}s/{name}/`
+**Structure organisee:** `../worktrees/{type}s/{name}/`
 
 ```bash
-PROJECT_NAME=$(basename $(pwd))
-WORKTREE_BASE="../${PROJECT_NAME}-worktrees"
+WORKTREE_BASE="../worktrees"
 
 # Creer le repertoire parent et le sous-repertoire du type
 mkdir -p "${WORKTREE_BASE}/features"

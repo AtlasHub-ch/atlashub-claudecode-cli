@@ -32,7 +32,6 @@ Finalisation complete de branche GitFlow.
 ```bash
 # IMPORTANT: Detecter et revenir au repo principal si dans un worktree
 MAIN_WORKTREE=$(git worktree list --porcelain | grep -m1 "^worktree " | sed 's/worktree //')
-PROJECT_NAME=$(basename "$MAIN_WORKTREE")
 cd "$MAIN_WORKTREE"
 
 # Tag annote
@@ -46,10 +45,10 @@ git checkout main && git merge --no-ff release/{version}
 git checkout develop && git merge --no-ff release/{version}
 
 # Cleanup worktree (nouvelle structure organisee)
-WORKTREE_BASE="../${PROJECT_NAME}-worktrees"
-# Feature: ../{project}-worktrees/features/{name}
-# Release: ../{project}-worktrees/releases/v{version}
-# Hotfix:  ../{project}-worktrees/hotfixes/{name}
+WORKTREE_BASE="../worktrees"
+# Feature: ../worktrees/features/{name}
+# Release: ../worktrees/releases/v{version}
+# Hotfix:  ../worktrees/hotfixes/{name}
 git worktree remove "${WORKTREE_BASE}/{type}s/{name}" --force
 git branch -d {branch}
 ```
@@ -70,7 +69,7 @@ BRANCH FINISHED
   Script: ./scripts/migrations/{file}.sql
   Merged: main, develop
   Deleted: {branch}
-  Worktree: ../{project}-worktrees/{type}s/{name} (supprime)
+  Worktree: ../worktrees/{type}s/{name} (supprime)
 
 DEPLOYED TO: (manual steps)
   1. Push tags: git push --tags

@@ -62,13 +62,12 @@ fi
 # Detecter si on est dans un worktree et trouver le repo principal
 CURRENT_DIR=$(pwd)
 MAIN_WORKTREE=$(git worktree list --porcelain | grep -m1 "^worktree " | sed 's/worktree //')
-PROJECT_NAME=$(basename "$MAIN_WORKTREE")
 
 # Revenir au repo principal AVANT de supprimer le worktree
 cd "$MAIN_WORKTREE"
 
 # Supprimer worktree si existe
-WORKTREE_PATH="../${PROJECT_NAME}-worktrees/features/{name}"
+WORKTREE_PATH="../worktrees/features/{name}"
 if [ -d "$WORKTREE_PATH" ]; then
   git worktree remove "$WORKTREE_PATH" --force 2>/dev/null || true
 fi
@@ -101,7 +100,6 @@ Cleanup:  ✓ Branche supprimee
 # 0. Detecter si on est dans un worktree et trouver le repo principal
 CURRENT_DIR=$(pwd)
 MAIN_WORKTREE=$(git worktree list --porcelain | grep -m1 "^worktree " | sed 's/worktree //')
-PROJECT_NAME=$(basename "$MAIN_WORKTREE")
 
 # Revenir au repo principal AVANT toute operation
 cd "$MAIN_WORKTREE"
@@ -122,7 +120,7 @@ git merge main --no-ff -m "chore: merge release v$VERSION back to develop"
 git push origin develop
 
 # 4. Cleanup worktree + branche
-WORKTREE_PATH="../${PROJECT_NAME}-worktrees/releases/v$VERSION"
+WORKTREE_PATH="../worktrees/releases/v$VERSION"
 if [ -d "$WORKTREE_PATH" ]; then
   git worktree remove "$WORKTREE_PATH" --force 2>/dev/null || true
 fi
@@ -155,7 +153,6 @@ Actions effectuees:
 # 0. Detecter si on est dans un worktree et trouver le repo principal
 CURRENT_DIR=$(pwd)
 MAIN_WORKTREE=$(git worktree list --porcelain | grep -m1 "^worktree " | sed 's/worktree //')
-PROJECT_NAME=$(basename "$MAIN_WORKTREE")
 
 # Revenir au repo principal AVANT toute operation
 cd "$MAIN_WORKTREE"
@@ -176,7 +173,7 @@ git merge main --no-ff -m "chore: merge hotfix v$VERSION back to develop"
 git push origin develop
 
 # 4. Cleanup worktree + branche
-WORKTREE_PATH="../${PROJECT_NAME}-worktrees/hotfixes/{name}"
+WORKTREE_PATH="../worktrees/hotfixes/{name}"
 if [ -d "$WORKTREE_PATH" ]; then
   git worktree remove "$WORKTREE_PATH" --force 2>/dev/null || true
 fi
