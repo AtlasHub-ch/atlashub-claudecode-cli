@@ -1,6 +1,6 @@
 {
   "name": "@atlashub/claude-tools",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "description": "Claude Code automation toolkit - GitFlow, APEX, EF Core migrations, prompts and more",
   "author": {
     "name": "David Truninger",
@@ -54,7 +54,8 @@
     "build": "npx tsup",
     "lint": "eslint src --ext .ts",
     "format": "prettier --write src/**/*.ts",
-    "prepublishOnly": "npm run build",
+    "sync-doc-version": "node scripts/sync-doc-version.js",
+    "prepublishOnly": "npm run sync-doc-version && npm run build",
     "test": "node --test",
     "link": "npm run build && npm link",
     "install:local": "npm run build && node dist/index.js install --local --force --skip-license",
