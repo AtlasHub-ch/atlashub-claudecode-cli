@@ -1,6 +1,6 @@
 {
   "name": "@atlashub/claude-tools",
-  "version": "1.5.2",
+  "version": "1.5.3",
   "description": "Claude Code automation toolkit - GitFlow, APEX, EF Core migrations, prompts and more",
   "author": {
     "name": "David Truninger",
