@@ -28,6 +28,21 @@ Lire depuis la source configuree dans `.claude/gitflow/config.json`:
 - Lister les migrations (total et pending)
 - Lister les DbContext detectes
 
+### EF Core - Vue globale (toutes branches)
+Si `--all-branches` ou si plusieurs branches GitFlow actives:
+```bash
+# Scanner les branches actives
+FEATURES=$(git branch -r | grep 'feature/' | wc -l)
+RELEASES=$(git branch -r | grep 'release/' | wc -l)
+HOTFIXES=$(git branch -r | grep 'hotfix/' | wc -l)
+
+# Pour chaque branche, detecter migrations ajoutees
+for BRANCH in $(git branch -r | grep -E 'feature/|release/|hotfix/'); do
+  MIGRATIONS=$(git diff origin/develop..$BRANCH --name-only | grep -E "Migrations/.*\.cs$" | grep -v Designer | grep -v ModelSnapshot)
+  CONFLICT=$(git diff origin/develop..$BRANCH --name-only | grep "ModelSnapshot" | wc -l)
+done
+```
+
 ### Plans GitFlow
 - Plans actifs (non termines)
 - Plans termines recemment (7 jours)
@@ -56,9 +71,23 @@ VERSION: {version} ({source})
 SYNC
   vs develop: +{ahead}/-{behind} | vs main: +{ahead}/-{behind} | Tag: {tag}
 
-EF CORE
+EF CORE (branche courante)
   Migrations: {total} total, {pending} pending
   [Pending] {liste}
+
+--------------------------------------------------------------------------------
+BRANCHES ACTIVES ({features} features, {releases} releases, {hotfixes} hotfixes)
+--------------------------------------------------------------------------------
+{Si branches actives avec migrations:}
+  feature/add-users        +1 migration  (AddUsersTable)      Conflit: NON
+  feature/add-orders       +1 migration  (AddOrdersTable)     Conflit: NON
+  feature/add-products     +2 migrations (AddProducts, AddFK) Conflit: OUI
+
+  ORDRE DE MERGE RECOMMANDE:
+  1. feature/add-users (independant)
+  2. feature/add-orders (independant)
+  3. feature/add-products (conflit ModelSnapshot - rebase requis)
+--------------------------------------------------------------------------------
 
 PLANS: {n} active | OPERATIONS: {none|rebase|merge} | RISKS: {liste}
 
