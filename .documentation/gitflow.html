@@ -790,9 +790,9 @@
 
                         <!-- Decision Flowchart SVG -->
                         <div class="decision-diagram" style="margin: 2rem 0; overflow-x: auto;">
-                            <svg viewBox="0 0 900 600" style="width: 100%; max-width: 900px; height: auto; display: block; margin: 0 auto;">
+                            <svg viewBox="0 0 900 570" style="width: 100%; max-width: 900px; height: auto; display: block; margin: 0 auto;">
                                 <!-- Background -->
-                                <rect width="900" height="600" fill="#0f172a" rx="8"/>
+                                <rect width="900" height="570" fill="#0f172a" rx="8"/>
 
                                 <!-- Title -->
                                 <text x="450" y="35" text-anchor="middle" fill="#f8fafc" font-size="18" font-weight="600">
@@ -1000,63 +1000,85 @@
                                 <line x1="550" y1="110" x2="720" y2="110" stroke="#6366f1" stroke-width="2"/>
                                 <polygon points="720,110 710,105 710,115" fill="#6366f1"/>
 
-                                <rect x="730" y="70" width="150" height="190" rx="8" fill="#1e293b" stroke="#475569" stroke-width="1"/>
+                                <rect x="730" y="70" width="150" height="395" rx="8" fill="#1e293b" stroke="#475569" stroke-width="1"/>
                                 <text x="805" y="95" text-anchor="middle" fill="#94a3b8" font-size="11" font-weight="600">
                                     <tspan data-lang="fr">Utilitaires</tspan>
                                     <tspan data-lang="en">Utilities</tspan>
                                 </text>
 
+                                <!-- Init (first - setup) -->
+                                <g class="cmd-copyable" data-cmd="/gitflow:1-init" style="cursor:pointer;">
+                                    <rect x="745" y="108" width="120" height="26" rx="4" fill="#0f172a" stroke="#475569" stroke-width="1.5" stroke-dasharray="3,2"/>
+                                    <text x="805" y="125" text-anchor="middle" fill="#64748b" font-size="9" font-family="monospace">/gitflow:1-init</text>
+                                </g>
+
                                 <!-- Status -->
                                 <g class="cmd-copyable" data-cmd="/gitflow:2-status" style="cursor:pointer;">
-                                    <rect x="745" y="110" width="120" height="30" rx="4" fill="#0f172a" stroke="#3b82f6" stroke-width="1.5"/>
-                                    <text x="805" y="130" text-anchor="middle" fill="#3b82f6" font-size="9" font-family="monospace">/gitflow:2-status</text>
+                                    <rect x="745" y="142" width="120" height="26" rx="4" fill="#0f172a" stroke="#3b82f6" stroke-width="1.5"/>
+                                    <text x="805" y="159" text-anchor="middle" fill="#3b82f6" font-size="9" font-family="monospace">/gitflow:2-status</text>
                                 </g>
 
                                 <!-- Commit -->
                                 <g class="cmd-copyable" data-cmd="/gitflow:3-commit" style="cursor:pointer;">
-                                    <rect x="745" y="150" width="120" height="30" rx="4" fill="#0f172a" stroke="#8b5cf6" stroke-width="1.5"/>
-                                    <text x="805" y="170" text-anchor="middle" fill="#8b5cf6" font-size="9" font-family="monospace">/gitflow:3-commit</text>
+                                    <rect x="745" y="176" width="120" height="26" rx="4" fill="#0f172a" stroke="#8b5cf6" stroke-width="1.5"/>
+                                    <text x="805" y="193" text-anchor="middle" fill="#8b5cf6" font-size="9" font-family="monospace">/gitflow:3-commit</text>
                                 </g>
 
                                 <!-- Abort -->
                                 <g class="cmd-copyable" data-cmd="/gitflow:6-abort" style="cursor:pointer;">
-                                    <rect x="745" y="190" width="120" height="30" rx="4" fill="#0f172a" stroke="#ef4444" stroke-width="1.5"/>
-                                    <text x="805" y="210" text-anchor="middle" fill="#ef4444" font-size="9" font-family="monospace">/gitflow:6-abort</text>
+                                    <rect x="745" y="210" width="120" height="26" rx="4" fill="#0f172a" stroke="#ef4444" stroke-width="1.5"/>
+                                    <text x="805" y="227" text-anchor="middle" fill="#ef4444" font-size="9" font-family="monospace">/gitflow:6-abort</text>
                                 </g>
 
-                                <!-- Init (special) -->
-                                <g class="cmd-copyable" data-cmd="/gitflow:1-init" style="cursor:pointer;">
-                                    <rect x="745" y="230" width="120" height="25" rx="4" fill="#0f172a" stroke="#475569" stroke-width="1" stroke-dasharray="3,2"/>
-                                    <text x="805" y="247" text-anchor="middle" fill="#64748b" font-size="8" font-family="monospace">/gitflow:1-init</text>
+                                <!-- PR Commands Section -->
+                                <text x="805" y="254" text-anchor="middle" fill="#64748b" font-size="8" font-weight="500">
+                                    <tspan data-lang="fr">─── Pull Request ───</tspan>
+                                    <tspan data-lang="en">─── Pull Request ───</tspan>
+                                </text>
+
+                                <!-- Pull Request -->
+                                <g class="cmd-copyable" data-cmd="/gitflow:7-pull-request" style="cursor:pointer;">
+                                    <rect x="745" y="264" width="120" height="26" rx="4" fill="#0f172a" stroke="#06b6d4" stroke-width="1.5"/>
+                                    <text x="805" y="281" text-anchor="middle" fill="#06b6d4" font-size="9" font-family="monospace">/gitflow:7-pull-request</text>
                                 </g>
 
-                                <!-- Legend at bottom -->
-                                <rect x="730" y="290" width="150" height="85" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1"/>
-                                <text x="805" y="310" text-anchor="middle" fill="#64748b" font-size="9" font-weight="600">
-                                    <tspan data-lang="fr">Couleurs</tspan>
-                                    <tspan data-lang="en">Colors</tspan>
+                                <!-- Review -->
+                                <g class="cmd-copyable" data-cmd="/gitflow:8-review" style="cursor:pointer;">
+                                    <rect x="745" y="298" width="120" height="26" rx="4" fill="#0f172a" stroke="#10b981" stroke-width="1.5"/>
+                                    <text x="805" y="315" text-anchor="middle" fill="#10b981" font-size="9" font-family="monospace">/gitflow:8-review</text>
+                                </g>
+
+                                <!-- Merge -->
+                                <g class="cmd-copyable" data-cmd="/gitflow:9-merge" style="cursor:pointer;">
+                                    <rect x="745" y="332" width="120" height="26" rx="4" fill="#0f172a" stroke="#6366f1" stroke-width="1.5"/>
+                                    <text x="805" y="349" text-anchor="middle" fill="#6366f1" font-size="9" font-family="monospace">/gitflow:9-merge</text>
+                                </g>
+
+                                <!-- Legend inside box -->
+                                <text x="805" y="378" text-anchor="middle" fill="#64748b" font-size="8" font-weight="500">
+                                    <tspan data-lang="fr">─── Couleurs ───</tspan>
+                                    <tspan data-lang="en">─── Colors ───</tspan>
                                 </text>
 
-                                <circle cx="750" cy="330" r="5" fill="#22c55e"/>
-                                <text x="760" y="334" fill="#94a3b8" font-size="8">Feature</text>
+                                <circle cx="750" cy="395" r="4" fill="#22c55e"/>
+                                <text x="760" y="398" fill="#94a3b8" font-size="7">Feature</text>
+                                <circle cx="820" cy="395" r="4" fill="#eab308"/>
+                                <text x="830" y="398" fill="#94a3b8" font-size="7">Release</text>
 
-                                <circle cx="820" cy="330" r="5" fill="#eab308"/>
-                                <text x="830" y="334" fill="#94a3b8" font-size="8">Release</text>
+                                <circle cx="750" cy="412" r="4" fill="#ec4899"/>
+                                <text x="760" y="415" fill="#94a3b8" font-size="7">Hotfix</text>
+                                <circle cx="820" cy="412" r="4" fill="#06b6d4"/>
+                                <text x="830" y="415" fill="#94a3b8" font-size="7">PR</text>
 
-                                <circle cx="750" cy="350" r="5" fill="#ec4899"/>
-                                <text x="760" y="354" fill="#94a3b8" font-size="8">Hotfix</text>
+                                <circle cx="750" cy="429" r="4" fill="#f97316"/>
+                                <text x="760" y="432" fill="#94a3b8" font-size="7">Integr.</text>
+                                <circle cx="820" cy="429" r="4" fill="#6366f1"/>
+                                <text x="830" y="432" fill="#94a3b8" font-size="7">Decision</text>
 
-                                <circle cx="820" cy="350" r="5" fill="#f97316"/>
-                                <text x="830" y="354" fill="#94a3b8" font-size="8">
-                                    <tspan data-lang="fr">Integr.</tspan>
-                                    <tspan data-lang="en">Integr.</tspan>
-                                </text>
-
-                                <circle cx="750" cy="370" r="5" fill="#6366f1"/>
-                                <text x="760" y="374" fill="#94a3b8" font-size="8">
-                                    <tspan data-lang="fr">Decision</tspan>
-                                    <tspan data-lang="en">Decision</tspan>
-                                </text>
+                                <circle cx="750" cy="446" r="4" fill="#3b82f6"/>
+                                <text x="760" y="449" fill="#94a3b8" font-size="7">Status</text>
+                                <circle cx="820" cy="446" r="4" fill="#8b5cf6"/>
+                                <text x="830" y="449" fill="#94a3b8" font-size="7">Commit</text>
                             </svg>
                         </div>
 
@@ -1155,6 +1177,51 @@
                                 <p style="color: #94a3b8; font-size: 0.85rem; margin: 0; line-height: 1.5;">
                                     <span data-lang="fr">Annule le merge/rebase en cours et restaure l'etat precedent via le checkpoint automatique.</span>
                                     <span data-lang="en">Aborts ongoing merge/rebase and restores previous state via automatic checkpoint.</span>
+                                </p>
+                            </div>
+
+                            <!-- gitflow:7-pull-request -->
+                            <div class="command-card" style="background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 1.25rem; border-left: 4px solid #06b6d4;">
+                                <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem;">
+                                    <code style="background: #06b6d4; color: #0f172a; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.85rem;">/gitflow:7-pull-request</code>
+                                </div>
+                                <h5 style="color: #f8fafc; margin: 0 0 0.5rem 0; font-size: 0.95rem;">
+                                    <span data-lang="fr">Creer une Pull Request</span>
+                                    <span data-lang="en">Create Pull Request</span>
+                                </h5>
+                                <p style="color: #94a3b8; font-size: 0.85rem; margin: 0; line-height: 1.5;">
+                                    <span data-lang="fr">Cree une PR avec titre et description auto-generes. Execute les checks (build, tests, EF Core) avant creation. Ajoute les labels automatiquement.</span>
+                                    <span data-lang="en">Creates a PR with auto-generated title and description. Runs checks (build, tests, EF Core) before creation. Adds labels automatically.</span>
+                                </p>
+                            </div>
+
+                            <!-- gitflow:8-review -->
+                            <div class="command-card" style="background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 1.25rem; border-left: 4px solid #10b981;">
+                                <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem;">
+                                    <code style="background: #10b981; color: #0f172a; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.85rem;">/gitflow:8-review</code>
+                                </div>
+                                <h5 style="color: #f8fafc; margin: 0 0 0.5rem 0; font-size: 0.95rem;">
+                                    <span data-lang="fr">Review de Pull Request</span>
+                                    <span data-lang="en">Pull Request Review</span>
+                                </h5>
+                                <p style="color: #94a3b8; font-size: 0.85rem; margin: 0; line-height: 1.5;">
+                                    <span data-lang="fr">Analyse la PR avec checklist complete : qualite code, patterns .NET, migrations EF Core, tests et securite. Fournit feedback structure.</span>
+                                    <span data-lang="en">Analyzes PR with complete checklist: code quality, .NET patterns, EF Core migrations, tests and security. Provides structured feedback.</span>
+                                </p>
+                            </div>
+
+                            <!-- gitflow:9-merge -->
+                            <div class="command-card" style="background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 1.25rem; border-left: 4px solid #6366f1;">
+                                <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem;">
+                                    <code style="background: #6366f1; color: #f8fafc; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.85rem;">/gitflow:9-merge</code>
+                                </div>
+                                <h5 style="color: #f8fafc; margin: 0 0 0.5rem 0; font-size: 0.95rem;">
+                                    <span data-lang="fr">Merger la Pull Request</span>
+                                    <span data-lang="en">Merge Pull Request</span>
+                                </h5>
+                                <p style="color: #94a3b8; font-size: 0.85rem; margin: 0; line-height: 1.5;">
+                                    <span data-lang="fr">Merge la PR apres validation des reviews et CI. Strategie automatique : squash (feature) ou merge commit (release/hotfix). Cleanup automatique.</span>
+                                    <span data-lang="en">Merges PR after review and CI validation. Auto strategy: squash (feature) or merge commit (release/hotfix). Automatic cleanup.</span>
                                 </p>
                             </div>
 
@@ -1869,6 +1936,129 @@ Si conflit pendant rebase:
                             </div>
                         </div>
 
+                        <!-- Command: /gitflow:7-pull-request -->
+                        <div class="command-card">
+                            <div class="command-header">
+                                <code class="command-name">/gitflow:7-pull-request</code>
+                                <span class="tag tag-info">PR</span>
+                            </div>
+                            <div class="command-body">
+                                <p data-lang="fr">
+                                    Cree une Pull Request avec titre et description auto-generes. Execute les pre-checks (build, tests, EF Core) avant creation. Ajoute automatiquement les labels appropries.
+                                </p>
+                                <p data-lang="en">
+                                    Creates a Pull Request with auto-generated title and description. Runs pre-checks (build, tests, EF Core) before creation. Automatically adds appropriate labels.
+                                </p>
+                                <div class="code-block">
+                                    <button class="copy-btn">Copy</button>
+                                    <pre><code># PR vers develop (default)
+/gitflow:7-pull-request
+
+# PR vers main (release/hotfix)
+/gitflow:7-pull-request main
+
+# PR en draft
+/gitflow:7-pull-request --draft</code></pre>
+                                </div>
+                                <details>
+                                    <summary>
+                                        <span data-lang="fr">Modes disponibles</span>
+                                        <span data-lang="en">Available modes</span>
+                                    </summary>
+                                    <div class="code-block">
+                                        <pre><code>| Commande | Action |
+|----------|--------|
+| `/gitflow:7-pull-request` | PR vers develop |
+| `/gitflow:7-pull-request main` | PR vers main |
+| `/gitflow:7-pull-request --draft` | PR en draft |
+| `/gitflow:7-pull-request --dry-run` | Simulation |</code></pre>
+                                    </div>
+                                </details>
+                            </div>
+                        </div>
+
+                        <!-- Command: /gitflow:8-review -->
+                        <div class="command-card">
+                            <div class="command-header">
+                                <code class="command-name">/gitflow:8-review</code>
+                                <span class="tag tag-success">Review</span>
+                            </div>
+                            <div class="command-body">
+                                <p data-lang="fr">
+                                    Analyse une Pull Request avec une checklist complete : qualite code, patterns .NET, migrations EF Core, tests et securite. Fournit un feedback structure avec recommandation (APPROVE/CHANGES_REQUESTED).
+                                </p>
+                                <p data-lang="en">
+                                    Analyzes a Pull Request with complete checklist: code quality, .NET patterns, EF Core migrations, tests and security. Provides structured feedback with recommendation (APPROVE/CHANGES_REQUESTED).
+                                </p>
+                                <div class="code-block">
+                                    <button class="copy-btn">Copy</button>
+                                    <pre><code># Review PR #123
+/gitflow:8-review 123
+
+# Focus securite
+/gitflow:8-review 123 --security
+
+# Focus migrations EF Core
+/gitflow:8-review 123 --ef-core</code></pre>
+                                </div>
+                                <details>
+                                    <summary>
+                                        <span data-lang="fr">Modes disponibles</span>
+                                        <span data-lang="en">Available modes</span>
+                                    </summary>
+                                    <div class="code-block">
+                                        <pre><code>| Commande | Action |
+|----------|--------|
+| `/gitflow:8-review 123` | Review PR #123 |
+| `/gitflow:8-review --security` | Focus securite |
+| `/gitflow:8-review --ef-core` | Focus migrations |
+| `/gitflow:8-review --quick` | Checklist rapide |</code></pre>
+                                    </div>
+                                </details>
+                            </div>
+                        </div>
+
+                        <!-- Command: /gitflow:9-merge -->
+                        <div class="command-card">
+                            <div class="command-header">
+                                <code class="command-name">/gitflow:9-merge</code>
+                                <span class="tag tag-primary">Merge</span>
+                            </div>
+                            <div class="command-body">
+                                <p data-lang="fr">
+                                    Merge une Pull Request apres validation des reviews et CI. Strategie automatique : squash (feature) ou merge commit (release/hotfix). Cleanup automatique des branches.
+                                </p>
+                                <p data-lang="en">
+                                    Merges a Pull Request after review and CI validation. Auto strategy: squash (feature) or merge commit (release/hotfix). Automatic branch cleanup.
+                                </p>
+                                <div class="code-block">
+                                    <button class="copy-btn">Copy</button>
+                                    <pre><code># Merge PR #123
+/gitflow:9-merge 123
+
+# Auto-merge quand CI vert
+/gitflow:9-merge 123 --auto
+
+# Simulation
+/gitflow:9-merge 123 --dry-run</code></pre>
+                                </div>
+                                <details>
+                                    <summary>
+                                        <span data-lang="fr">Modes disponibles</span>
+                                        <span data-lang="en">Available modes</span>
+                                    </summary>
+                                    <div class="code-block">
+                                        <pre><code>| Commande | Action |
+|----------|--------|
+| `/gitflow:9-merge 123` | Merge PR #123 |
+| `/gitflow:9-merge 123 --auto` | Merge auto quand CI vert |
+| `/gitflow:9-merge 123 --dry-run` | Simulation |
+| `/gitflow:9-merge 123 --admin` | Override protections (danger) |</code></pre>
+                                    </div>
+                                </details>
+                            </div>
+                        </div>
+
                         <!-- Command: /gitflow:10-start -->
                         <div class="command-card">
                             <div class="command-header">
@@ -2161,19 +2351,26 @@ git push origin --delete hotfix/{name}
 # 5. Commits reguliers
 /gitflow:3-commit
 
-# 6. Quand la feature est prete, creer un plan
-/gitflow:4-plan
+# 6. Creer une Pull Request vers develop
+/gitflow:7-pull-request
 
-# 7. Executer l'integration
-/gitflow:5-exec
+# 7. Review de la PR (optionnel, peut etre fait par un collegue)
+/gitflow:8-review 123
 
-# 8. Preparer une release
+# 8. Merger la PR apres approbation
+/gitflow:9-merge 123
+
+# 9. Preparer une release
 /gitflow:10-start release
 
-# 9. Tests finaux et corrections mineures...
+# 10. Tests finaux et corrections mineures...
 /gitflow:3-commit
 
-# 10. Publier la release
+# 11. Creer PR vers main et merger
+/gitflow:7-pull-request main
+/gitflow:9-merge 456
+
+# 12. Finaliser la release (tag + merge back)
 /gitflow:11-finish
 
 # La release est maintenant sur main avec un tag!</code></pre>

@@ -4,7 +4,7 @@ Claude Code automation toolkit - GitFlow, APEX, EF Core migrations, prompts and 
 
 ## Features
 
-- GitFlow workflow automation with 6 phases
+- GitFlow workflow automation with 11 phases
 - Advanced EF Core migration management (multi-context, validation, rollback)
 - APEX methodology (Analyze-Plan-Execute-eXamine)
 - Git workflow commands (commit, PR creation, merge)
@@ -120,6 +120,11 @@ claude-tools uninstall --yes
 | `/gitflow:4-plan` | Create integration plan |
 | `/gitflow:5-exec` | Execute integration plan |
 | `/gitflow:6-abort` | Rollback operations |
+| `/gitflow:7-pull-request` | Create PR with auto-generated description and checks |
+| `/gitflow:8-review` | Review PR with checklist and suggestions |
+| `/gitflow:9-merge` | Merge PR with all validations |
+| `/gitflow:10-start` | Start new feature/release/hotfix branch (with worktree) |
+| `/gitflow:11-finish` | Finalize branch (tag + merge back + cleanup) |
 
 ### APEX Methodology
 
@@ -193,8 +198,8 @@ After installation, configuration is stored in `~/.claude/gitflow/config.json`:
 
 ```json
 {
-  "$schema": "https://atlashub.ch/schemas/claude-tools-config.json",
-  "version": "1.0.0",
+  "$schema": "https://atlashub.ch/schemas/claude-gitflow-config.json",
+  "version": "1.1.0",
   "git": {
     "branches": {
       "main": "main",
@@ -206,33 +211,57 @@ After installation, configuration is stored in `~/.claude/gitflow/config.json`:
     "remote": "origin",
     "mergeStrategy": "--no-ff",
     "tagPrefix": "v",
-    "protectedBranches": ["main", "develop"]
+    "protectedBranches": ["main", "develop"],
+    "requireLinearHistory": false
   },
   "efcore": {
     "enabled": true,
+    "autoDetect": true,
     "contexts": [
       {
         "name": "ApplicationDbContext",
-        "projectPath": "./src/Data",
-        "migrationsFolder": "Migrations",
-        "startupProject": "./src/Api"
+        "projectPath": "auto-detect",
+        "startupProject": "auto-detect",
+        "migrationsFolder": "Migrations"
       }
     ],
+    "database": {
+      "configFile": "appsettings.Local.json",
+      "connectionStringName": "DefaultConnection",
+      "provider": "SqlServer"
+    },
     "scripts": {
       "generateOnRelease": true,
-      "outputPath": "./scripts/migrations",
-      "idempotent": true
+      "generateOnHotfix": true,
+      "idempotent": true,
+      "outputPath": "./scripts/migrations"
     },
     "validation": {
+      "validateBeforeCommit": true,
+      "validateBeforeMerge": true,
       "checkModelSnapshotConflicts": true,
-      "validateMigrationOrder": true,
-      "requireThreeFiles": true
+      "requireBuildSuccess": true
     }
   },
   "workflow": {
     "requireConfirmation": true,
     "autoDeleteBranch": false,
-    "createCheckpoints": true
+    "createCheckpoints": true,
+    "push": {
+      "afterCommit": "worktree"
+    },
+    "commitConventions": {
+      "enabled": true,
+      "feature": "feat: ",
+      "fix": "fix: ",
+      "release": "release: ",
+      "hotfix": "hotfix: "
+    }
+  },
+  "ui": {
+    "colors": true,
+    "showProgress": true,
+    "language": "fr"
   }
 }
 ```
@@ -245,19 +274,36 @@ After installation, the following structure is created:
 ~/.claude/                    # User-level (global)
 ├── commands/                 # Slash commands
 │   ├── gitflow.md           # GitFlow orchestrator
-│   ├── gitflow/             # GitFlow phases
+│   ├── gitflow/             # GitFlow phases (11)
 │   │   ├── 1-init.md
 │   │   ├── 2-status.md
 │   │   ├── 3-commit.md
 │   │   ├── 4-plan.md
 │   │   ├── 5-exec.md
-│   │   └── 6-abort.md
+│   │   ├── 6-abort.md
+│   │   ├── 7-pull-request.md
+│   │   ├── 8-review.md
+│   │   ├── 9-merge.md
+│   │   ├── 10-start.md
+│   │   └── 11-finish.md
 │   ├── apex.md              # APEX orchestrator
 │   ├── apex/                # APEX phases
 │   ├── ef-migrations/       # EF Core commands
 │   ├── git/                 # Git workflow commands
 │   └── prompts/             # Prompt generators
 ├── agents/                   # Specialized agents
+│   ├── gitflow/             # GitFlow agents (11)
+│   │   ├── init.md
+│   │   ├── status.md
+│   │   ├── commit.md
+│   │   ├── plan.md
+│   │   ├── exec.md
+│   │   ├── abort.md
+│   │   ├── pr.md
+│   │   ├── review.md
+│   │   ├── merge.md
+│   │   ├── start.md
+│   │   └── finish.md
 │   ├── explore-codebase.md
 │   ├── explore-docs.md
 │   ├── action.md
