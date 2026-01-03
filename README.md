@@ -157,9 +157,20 @@ claude-tools uninstall --yes
 
 | Command | Description |
 |---------|-------------|
-| `/db-migration` | Database migration management |
-| `/ef-migration-sync` | Sync migrations between branches |
-| `/ef-migration-squash` | Squash migrations |
+| `/efcore:migration` | Create/recreate the migration (1 per feature) |
+| `/efcore:db-status` | Show migration status |
+| `/efcore:db-deploy` | Apply migrations |
+| `/efcore:db-seed` | Populate with test data |
+| `/efcore:db-reset` | Drop + Recreate database |
+
+### EF Core Cross-Branch (v1.2)
+
+| Command | Description |
+|---------|-------------|
+| `/efcore:scan` | Scan migrations on all active branches |
+| `/efcore:conflicts` | Analyze potential conflicts (BLOCKING) |
+| `/efcore:rebase-snapshot` | Rebase ModelSnapshot on develop |
+| `/efcore:squash` | Merge multiple migrations into one |
 
 ### Git Commands
 

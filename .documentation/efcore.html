@@ -12,7 +12,7 @@
         <header class="global-header">
             <div class="logo">CT</div>
             <span class="site-title">Claude Tools</span>
-            <span class="version-badge">v1.6.1</span>
+            <span class="version-badge">v1.7.0</span>
             <div class="header-divider"></div>
             <span class="page-title">EF Core Migrations</span>
             <nav class="breadcrumb">
@@ -89,6 +89,10 @@
                             <a href="#conflicts" class="sidebar-toc-link">
                                 <span data-lang="fr">Conflits</span>
                                 <span data-lang="en">Conflicts</span>
+                            </a>
+                            <a href="#cross-branch" class="sidebar-toc-link">
+                                <span data-lang="fr">Cross-Branch (v1.2)</span>
+                                <span data-lang="en">Cross-Branch (v1.2)</span>
                             </a>
                             <a href="#best-practices" class="sidebar-toc-link">
                                 <span data-lang="fr">Bonnes pratiques</span>
@@ -436,6 +440,189 @@ dotnet ef migrations add NomMigration
                                         <span data-lang="fr">Prefix <code>Hotfix_</code> + script SQL idempotent</span>
                                         <span data-lang="en">Prefix <code>Hotfix_</code> + idempotent SQL script</span>
                                     </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+
+                    <!-- Cross-Branch (v1.2) -->
+                    <section id="cross-branch">
+                        <h2>
+                            <span data-lang="fr">Cross-Branch (v1.2)</span>
+                            <span data-lang="en">Cross-Branch (v1.2)</span>
+                        </h2>
+
+                        <div class="alert alert-info">
+                            <span class="alert-icon">&#127775;</span>
+                            <div class="alert-content">
+                                <h5>New in v1.2</h5>
+                                <p data-lang="fr">
+                                    Nouvelles commandes pour gerer les migrations entre plusieurs branches en parallele avec les worktrees GitFlow.
+                                </p>
+                                <p data-lang="en">
+                                    New commands to manage migrations across multiple branches in parallel with GitFlow worktrees.
+                                </p>
+                            </div>
+                        </div>
+
+                        <p data-lang="fr">
+                            Avec les worktrees GitFlow, plusieurs features peuvent etre developpees simultanement. Le systeme cross-branch previent les conflits de ModelSnapshot avant qu'ils ne se produisent.
+                        </p>
+                        <p data-lang="en">
+                            With GitFlow worktrees, multiple features can be developed simultaneously. The cross-branch system prevents ModelSnapshot conflicts before they occur.
+                        </p>
+
+                        <h3 data-lang="fr">Nouvelles commandes</h3>
+                        <h3 data-lang="en">New Commands</h3>
+
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <span data-lang="fr">Commande</span>
+                                            <span data-lang="en">Command</span>
+                                        </th>
+                                        <th>Description</th>
+                                        <th>
+                                            <span data-lang="fr">Risque</span>
+                                            <span data-lang="en">Risk</span>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><code>/efcore:scan</code></td>
+                                        <td>
+                                            <span data-lang="fr">Scanner les migrations sur toutes les branches actives</span>
+                                            <span data-lang="en">Scan migrations on all active branches</span>
+                                        </td>
+                                        <td><span class="tag tag-command">READ</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>/efcore:conflicts</code></td>
+                                        <td>
+                                            <span data-lang="fr">Analyser les conflits potentiels (BLOQUANT)</span>
+                                            <span data-lang="en">Analyze potential conflicts (BLOCKING)</span>
+                                        </td>
+                                        <td><span class="tag tag-command">READ</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>/efcore:rebase-snapshot</code></td>
+                                        <td>
+                                            <span data-lang="fr">Rebaser ModelSnapshot sur develop</span>
+                                            <span data-lang="en">Rebase ModelSnapshot on develop</span>
+                                        </td>
+                                        <td><span class="tag tag-warning">MEDIUM</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>/efcore:squash</code></td>
+                                        <td>
+                                            <span data-lang="fr">Fusionner plusieurs migrations en une seule</span>
+                                            <span data-lang="en">Merge multiple migrations into one</span>
+                                        </td>
+                                        <td><span class="tag tag-danger">HIGH</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <h3 data-lang="fr">Workflow Cross-Branch</h3>
+                        <h3 data-lang="en">Cross-Branch Workflow</h3>
+
+                        <div class="code-block">
+                            <button class="copy-btn">Copy</button>
+                            <pre><code># 1. Scanner toutes les branches actives
+/efcore:scan
+
+# 2. Verifier les conflits avant de creer une migration
+/efcore:conflicts
+
+# 3. Si conflit detecte, rebaser sur develop
+/efcore:rebase-snapshot
+
+# 4. Creer la migration (validation cross-branch automatique)
+/efcore:migration</code></pre>
+                        </div>
+
+                        <h3 data-lang="fr">Exemple de scan</h3>
+                        <h3 data-lang="en">Scan Example</h3>
+
+                        <div class="code-block">
+                            <pre><code>BRANCHES ACTIVES (3)
+--------------------
+feature/user-roles    +1 migration    Conflit: NONE
+feature/add-products  +1 migration    Conflit: POTENTIAL
+feature/orders        +2 migrations   Conflit: HIGH
+
+ORDRE DE MERGE RECOMMANDE:
+1. feature/user-roles (independant)
+2. feature/add-products (avant orders)
+3. feature/orders (rebase requis)</code></pre>
+                        </div>
+
+                        <h3 data-lang="fr">Configuration</h3>
+                        <h3 data-lang="en">Configuration</h3>
+
+                        <div class="code-block">
+                            <button class="copy-btn">Copy</button>
+                            <pre><code>{
+  "efcore": {
+    "crossBranch": {
+      "enabled": true,
+      "scanOnMigrationCreate": true,
+      "blockOnConflict": true,
+      "cacheExpiry": 300
+    }
+  }
+}</code></pre>
+                        </div>
+
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Option</th>
+                                        <th>Description</th>
+                                        <th>
+                                            <span data-lang="fr">Defaut</span>
+                                            <span data-lang="en">Default</span>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><code>enabled</code></td>
+                                        <td>
+                                            <span data-lang="fr">Activer la validation cross-branch</span>
+                                            <span data-lang="en">Enable cross-branch validation</span>
+                                        </td>
+                                        <td><code>true</code></td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>scanOnMigrationCreate</code></td>
+                                        <td>
+                                            <span data-lang="fr">Scanner avant /efcore:migration</span>
+                                            <span data-lang="en">Scan before /efcore:migration</span>
+                                        </td>
+                                        <td><code>true</code></td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>blockOnConflict</code></td>
+                                        <td>
+                                            <span data-lang="fr">Bloquer si conflit detecte</span>
+                                            <span data-lang="en">Block if conflict detected</span>
+                                        </td>
+                                        <td><code>true</code></td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>cacheExpiry</code></td>
+                                        <td>
+                                            <span data-lang="fr">Duree de cache du scan (secondes)</span>
+                                            <span data-lang="en">Scan cache duration (seconds)</span>
+                                        </td>
+                                        <td><code>300</code></td>
                                     </tr>
                                 </tbody>
                             </table>

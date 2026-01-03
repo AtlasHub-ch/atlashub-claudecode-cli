@@ -1,6 +1,20 @@
 {
   "$schema": "https://atlashub.ch/schemas/claude-gitflow-config.json",
-  "version": "1.1.0",
+  "version": "1.2.0",
+  "worktrees": {
+    "enabled": true,
+    "basePath": "../worktrees",
+    "permanent": {
+      "main": true,
+      "develop": true
+    },
+    "structure": {
+      "features": "features/{name}",
+      "releases": "releases/v{version}",
+      "hotfixes": "hotfixes/{name}"
+    },
+    "cleanupOnFinish": true
+  },
   "git": {
     "branches": {
       "main": "main",
@@ -18,6 +32,12 @@
   "efcore": {
     "enabled": true,
     "autoDetect": true,
+    "crossBranch": {
+      "enabled": true,
+      "scanOnMigrationCreate": true,
+      "blockOnConflict": true,
+      "cacheExpiry": 300
+    },
     "contexts": [
       {
         "name": "ApplicationDbContext",
@@ -46,14 +66,17 @@
       "validateBeforeCommit": true,
       "validateBeforeMerge": true,
       "checkModelSnapshotConflicts": true,
+      "crossBranchValidation": true,
       "requireBuildSuccess": true,
       "warnOnPendingMigrations": true
     },
     "backup": {
       "enabled": true,
       "beforeRebase": true,
+      "beforeSquash": true,
       "beforeMerge": true,
-      "retentionDays": 7
+      "retentionDays": 7,
+      "location": ".claude/gitflow/backup/migrations"
     },
     "naming": {
       "migrationPrefix": "",

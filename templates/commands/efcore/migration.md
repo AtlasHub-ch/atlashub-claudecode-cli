@@ -13,6 +13,64 @@ Cree ou recree la migration unique pour la branche courante.
 
 ---
 
+## ETAPE 0: Validation Cross-Branch (v1.2)
+
+**NOUVEAU:** Avant de creer une migration, verifier qu'il n'y a pas de conflits avec les autres branches.
+
+```bash
+# Verifier si validation cross-branch activee
+CROSS_BRANCH_ENABLED=$(git config --get efcore.crossBranch.enabled 2>/dev/null || echo "true")
+BLOCK_ON_CONFLICT=$(git config --get efcore.crossBranch.blockOnConflict 2>/dev/null || echo "true")
+
+if [ "$CROSS_BRANCH_ENABLED" = "true" ]; then
+  echo "Validation cross-branch..."
+
+  # Scanner les autres branches via worktrees
+  WORKTREE_BASE=$(git config --get gitflow.worktrees.basePath 2>/dev/null || echo "../worktrees")
+
+  if [ -d "$WORKTREE_BASE/develop" ]; then
+    # Comparer ModelSnapshot avec develop
+    LOCAL_SNAPSHOT=$(find . -name "*ModelSnapshot.cs" -not -path "*/node_modules/*" | head -1)
+    DEVELOP_SNAPSHOT=$(find "$WORKTREE_BASE/develop" -name "*ModelSnapshot.cs" | head -1)
+
+    if [ -n "$LOCAL_SNAPSHOT" ] && [ -n "$DEVELOP_SNAPSHOT" ]; then
+      if ! diff -q "$LOCAL_SNAPSHOT" "$DEVELOP_SNAPSHOT" > /dev/null 2>&1; then
+        # Differences detectees - analyser le niveau de risque
+        DIFF_LINES=$(diff "$DEVELOP_SNAPSHOT" "$LOCAL_SNAPSHOT" 2>/dev/null | wc -l)
+
+        if [ "$DIFF_LINES" -gt 100 ]; then
+          echo ""
+          echo "ATTENTION: CONFLIT CROSS-BRANCH DETECTE"
+          echo ""
+          echo "Votre ModelSnapshot differe significativement de develop."
+          echo "Differences: $DIFF_LINES lignes"
+          echo ""
+          echo "RESOLUTIONS:"
+          echo "  1. /efcore:rebase-snapshot    (recommande)"
+          echo "  2. /efcore:conflicts          (voir details)"
+          echo "  3. /efcore:migration --force  (non recommande)"
+          echo ""
+
+          if [ "$BLOCK_ON_CONFLICT" = "true" ]; then
+            echo "BLOQUE: Utilisez --force pour ignorer"
+            exit 1
+          fi
+        fi
+      fi
+    fi
+  fi
+
+  echo "Validation cross-branch: OK"
+fi
+```
+
+**Options pour ignorer:**
+- `--force` : Ignorer la validation cross-branch
+- `--no-cross-check` : Desactiver la validation pour cette execution
+- `--rebase-first` : Executer rebase-snapshot automatiquement si conflit
+
+---
+
 ## ETAPE 1: Analyser le contexte Git
 
 ```bash
