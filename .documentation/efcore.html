@@ -1092,18 +1092,33 @@ NEXT STEPS:
                                 <h4 data-lang="fr">Informations affichees</h4>
                                 <h4 data-lang="en">Displayed Information</h4>
 
-                                <ul>
-                                    <li data-lang="fr">Configuration utilisee (appsettings.Local.json, etc.)</li>
-                                    <li data-lang="en">Configuration used (appsettings.Local.json, etc.)</li>
-                                    <li data-lang="fr">Statut de connexion a la base</li>
-                                    <li data-lang="en">Database connection status</li>
-                                    <li data-lang="fr">Nombre de migrations (total, appliquees, en attente)</li>
-                                    <li data-lang="en">Migration count (total, applied, pending)</li>
-                                    <li data-lang="fr">Verification de la regle "1 migration par feature"</li>
-                                    <li data-lang="en">"1 migration per feature" rule verification</li>
-                                    <li data-lang="fr">Taille de la base et nombre de tables</li>
-                                    <li data-lang="en">Database size and table count</li>
-                                </ul>
+                                <div class="feature-grid">
+                                    <div class="feature-item">
+                                        <span class="feature-icon">&#9881;</span>
+                                        <span class="feature-text" data-lang="fr">Configuration utilisee (appsettings.Local.json, etc.)</span>
+                                        <span class="feature-text" data-lang="en">Configuration used (appsettings.Local.json, etc.)</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <span class="feature-icon">&#128279;</span>
+                                        <span class="feature-text" data-lang="fr">Statut de connexion a la base</span>
+                                        <span class="feature-text" data-lang="en">Database connection status</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <span class="feature-icon">&#128202;</span>
+                                        <span class="feature-text" data-lang="fr">Nombre de migrations (total, appliquees, en attente)</span>
+                                        <span class="feature-text" data-lang="en">Migration count (total, applied, pending)</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <span class="feature-icon">&#9989;</span>
+                                        <span class="feature-text" data-lang="fr">Verification de la regle "1 migration par feature"</span>
+                                        <span class="feature-text" data-lang="en">"1 migration per feature" rule verification</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <span class="feature-icon">&#128451;</span>
+                                        <span class="feature-text" data-lang="fr">Taille de la base et nombre de tables</span>
+                                        <span class="feature-text" data-lang="en">Database size and table count</span>
+                                    </div>
+                                </div>
 
                                 <div class="code-block">
                                     <pre><code>================================================================================
@@ -1272,13 +1287,22 @@ MIGRATIONS:    {TOTAL} total, {APPLIED} applied, {PENDING} pending
                                 <h4 data-lang="fr">Prerequis</h4>
                                 <h4 data-lang="en">Prerequisites</h4>
 
-                                <ul>
-                                    <li><code>appsettings.Local.json</code> configure</li>
-                                    <li data-lang="fr">SQL Server accessible</li>
-                                    <li data-lang="en">SQL Server accessible</li>
-                                    <li data-lang="fr">Migrations en attente</li>
-                                    <li data-lang="en">Pending migrations</li>
-                                </ul>
+                                <div class="feature-grid">
+                                    <div class="feature-item">
+                                        <span class="feature-icon">&#128196;</span>
+                                        <span class="feature-text"><code>appsettings.Local.json</code> configure</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <span class="feature-icon">&#128421;</span>
+                                        <span class="feature-text" data-lang="fr">SQL Server accessible</span>
+                                        <span class="feature-text" data-lang="en">SQL Server accessible</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <span class="feature-icon">&#128260;</span>
+                                        <span class="feature-text" data-lang="fr">Migrations en attente</span>
+                                        <span class="feature-text" data-lang="en">Pending migrations</span>
+                                    </div>
+                                </div>
 
                                 <div class="code-block">
                                     <button class="copy-btn">Copy</button>
@@ -1599,16 +1623,28 @@ RESULTS:
                                 <h4 data-lang="fr">Protections de securite</h4>
                                 <h4 data-lang="en">Safety Protections</h4>
 
-                                <ul>
-                                    <li data-lang="fr"><strong>Confirmation obligatoire</strong> - Dialogue bloquant</li>
-                                    <li data-lang="en"><strong>Mandatory confirmation</strong> - Blocking dialog</li>
-                                    <li data-lang="fr"><strong>Backup propose</strong> - Avant suppression</li>
-                                    <li data-lang="en"><strong>Backup offered</strong> - Before deletion</li>
-                                    <li data-lang="fr"><strong>Check environnement</strong> - Bloque si Production</li>
-                                    <li data-lang="en"><strong>Environment check</strong> - Blocks if Production</li>
-                                    <li data-lang="fr"><strong>Seed optionnel</strong> - Apres recreation</li>
-                                    <li data-lang="en"><strong>Optional seed</strong> - After recreation</li>
-                                </ul>
+                                <div class="feature-grid">
+                                    <div class="feature-item">
+                                        <span class="feature-icon">&#128274;</span>
+                                        <span class="feature-text" data-lang="fr"><strong>Confirmation obligatoire</strong> - Dialogue bloquant</span>
+                                        <span class="feature-text" data-lang="en"><strong>Mandatory confirmation</strong> - Blocking dialog</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <span class="feature-icon">&#128190;</span>
+                                        <span class="feature-text" data-lang="fr"><strong>Backup propose</strong> - Avant suppression</span>
+                                        <span class="feature-text" data-lang="en"><strong>Backup offered</strong> - Before deletion</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <span class="feature-icon">&#128683;</span>
+                                        <span class="feature-text" data-lang="fr"><strong>Check environnement</strong> - Bloque si Production</span>
+                                        <span class="feature-text" data-lang="en"><strong>Environment check</strong> - Blocks if Production</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <span class="feature-icon">&#127793;</span>
+                                        <span class="feature-text" data-lang="fr"><strong>Seed optionnel</strong> - Apres recreation</span>
+                                        <span class="feature-text" data-lang="en"><strong>Optional seed</strong> - After recreation</span>
+                                    </div>
+                                </div>
 
                                 <div class="code-block">
                                     <button class="copy-btn">Copy</button>
@@ -2920,16 +2956,28 @@ dotnet ef migrations script --idempotent -o ./scripts/migrations/v1.2.0.sql
                             <div class="alert-content">
                                 <h5 data-lang="fr">Anti-patterns a eviter</h5>
                                 <h5 data-lang="en">Anti-patterns to avoid</h5>
-                                <ul>
-                                    <li data-lang="fr">Ne jamais modifier manuellement le ModelSnapshot</li>
-                                    <li data-lang="en">Never manually modify the ModelSnapshot</li>
-                                    <li data-lang="fr">Ne pas supprimer des migrations deja appliquees en production</li>
-                                    <li data-lang="en">Don't delete migrations already applied in production</li>
-                                    <li data-lang="fr">Eviter les migrations qui dependent de donnees specifiques</li>
-                                    <li data-lang="en">Avoid migrations that depend on specific data</li>
-                                    <li data-lang="fr">Ne pas utiliser SQL brut sans tester sur une copie</li>
-                                    <li data-lang="en">Don't use raw SQL without testing on a copy</li>
-                                </ul>
+                                <div class="feature-grid">
+                                    <div class="feature-item">
+                                        <span class="feature-icon">&#10060;</span>
+                                        <span class="feature-text" data-lang="fr">Ne jamais modifier manuellement le ModelSnapshot</span>
+                                        <span class="feature-text" data-lang="en">Never manually modify the ModelSnapshot</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <span class="feature-icon">&#10060;</span>
+                                        <span class="feature-text" data-lang="fr">Ne pas supprimer des migrations deja appliquees en production</span>
+                                        <span class="feature-text" data-lang="en">Don't delete migrations already applied in production</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <span class="feature-icon">&#10060;</span>
+                                        <span class="feature-text" data-lang="fr">Eviter les migrations qui dependent de donnees specifiques</span>
+                                        <span class="feature-text" data-lang="en">Avoid migrations that depend on specific data</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <span class="feature-icon">&#10060;</span>
+                                        <span class="feature-text" data-lang="fr">Ne pas utiliser SQL brut sans tester sur une copie</span>
+                                        <span class="feature-text" data-lang="en">Don't use raw SQL without testing on a copy</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </section>

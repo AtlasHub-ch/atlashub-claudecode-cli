@@ -325,13 +325,26 @@
                                     <pre><code>/apex:1-analyze Add user authentication with JWT tokens</code></pre>
                                 </div>
 
-                                <details class="prompt-details">
+                                <details class="template-section">
                                     <summary>
-                                        <span data-lang="fr">Voir le prompt complet</span>
-                                        <span data-lang="en">View complete prompt</span>
+                                        <h4 style="display: inline; margin: 0;">
+                                            <span data-lang="fr">Template Prompt</span>
+                                            <span data-lang="en">Prompt Template</span>
+                                        </h4>
+                                        <span class="template-badge">1-analyze.md</span>
                                     </summary>
-                                    <div class="prompt-content">
-                                        <pre><code>You are an analysis specialist. Your mission is to gather ALL relevant context before implementation.
+                                    <div class="template-content">
+                                        <p class="template-path">
+                                            <code>templates/commands/apex/1-analyze.md</code>
+                                        </p>
+                                        <div class="code-block template-code">
+                                            <button class="copy-btn">Copy</button>
+                                            <pre><code>---
+description: Analyze phase - gather all context and create analysis report
+argument-hint: &lt;task-description&gt;
+---
+
+You are an analysis specialist. Your mission is to gather ALL relevant context before implementation.
 
 **You need to ULTRA THINK before launching agents.**
 
@@ -375,6 +388,7 @@
 
 ## Priority
 Context depth > Speed. Missing context causes failed implementations.</code></pre>
+                                        </div>
                                     </div>
                                 </details>
                             </div>
@@ -449,13 +463,26 @@ Context depth > Speed. Missing context causes failed implementations.</code></pr
                                     <pre><code>/apex:2-plan 01-add-user-authentication</code></pre>
                                 </div>
 
-                                <details class="prompt-details">
+                                <details class="template-section">
                                     <summary>
-                                        <span data-lang="fr">Voir le prompt complet</span>
-                                        <span data-lang="en">View complete prompt</span>
+                                        <h4 style="display: inline; margin: 0;">
+                                            <span data-lang="fr">Template Prompt</span>
+                                            <span data-lang="en">Prompt Template</span>
+                                        </h4>
+                                        <span class="template-badge">2-plan.md</span>
                                     </summary>
-                                    <div class="prompt-content">
-                                        <pre><code>You are a strategic planning specialist. Transform analysis findings into executable plans.
+                                    <div class="template-content">
+                                        <p class="template-path">
+                                            <code>templates/commands/apex/2-plan.md</code>
+                                        </p>
+                                        <div class="code-block template-code">
+                                            <button class="copy-btn">Copy</button>
+                                            <pre><code>---
+description: Planning phase - create detailed implementation strategy from analysis
+argument-hint: &lt;task-folder-path&gt;
+---
+
+You are a strategic planning specialist. Transform analysis findings into executable plans.
 
 **You need to ULTRA THINK about the complete implementation strategy.**
 
@@ -499,6 +526,7 @@ Context depth > Speed. Missing context causes failed implementations.</code></pr
 
 ## Priority
 Clarity > Completeness. Every step must be unambiguous and executable.</code></pre>
+                                        </div>
                                     </div>
                                 </details>
                             </div>
@@ -543,13 +571,26 @@ Clarity > Completeness. Every step must be unambiguous and executable.</code></p
                                     <pre><code>/apex:3-execute 01-add-user-authentication</code></pre>
                                 </div>
 
-                                <details class="prompt-details">
+                                <details class="template-section">
                                     <summary>
-                                        <span data-lang="fr">Voir le prompt complet</span>
-                                        <span data-lang="en">View complete prompt</span>
+                                        <h4 style="display: inline; margin: 0;">
+                                            <span data-lang="fr">Template Prompt</span>
+                                            <span data-lang="en">Prompt Template</span>
+                                        </h4>
+                                        <span class="template-badge">3-execute.md</span>
                                     </summary>
-                                    <div class="prompt-content">
-                                        <pre><code>You are an implementation specialist. Execute plans precisely while maintaining code quality.
+                                    <div class="template-content">
+                                        <p class="template-path">
+                                            <code>templates/commands/apex/3-execute.md</code>
+                                        </p>
+                                        <div class="code-block template-code">
+                                            <button class="copy-btn">Copy</button>
+                                            <pre><code>---
+description: Execution phase - implement the plan step by step with ultra thinking
+argument-hint: &lt;task-folder-path&gt;
+---
+
+You are an implementation specialist. Execute plans precisely while maintaining code quality.
 
 **You need to ULTRA THINK at every step.**
 
@@ -590,6 +631,7 @@ Clarity > Completeness. Every step must be unambiguous and executable.</code></p
 
 ## Priority
 Correctness > Completeness > Speed</code></pre>
+                                        </div>
                                     </div>
                                 </details>
                             </div>
@@ -664,6 +706,72 @@ Correctness > Completeness > Speed</code></pre>
                                     <button class="copy-btn">Copy</button>
                                     <pre><code>/apex:4-examine 01-add-user-authentication</code></pre>
                                 </div>
+
+                                <details class="template-section">
+                                    <summary>
+                                        <h4 style="display: inline; margin: 0;">
+                                            <span data-lang="fr">Template Prompt</span>
+                                            <span data-lang="en">Prompt Template</span>
+                                        </h4>
+                                        <span class="template-badge">4-examine.md</span>
+                                    </summary>
+                                    <div class="template-content">
+                                        <p class="template-path">
+                                            <code>templates/commands/apex/4-examine.md</code>
+                                        </p>
+                                        <div class="code-block template-code">
+                                            <button class="copy-btn">Copy</button>
+                                            <pre><code>---
+description: Examine phase - validate and test application for deployment readiness
+allowed-tools: Bash(npm :*), Bash(pnpm :*), Read, Task, Grep
+---
+
+You are a validation specialist. Ensure implementation is complete and correct.
+
+## Workflow
+
+1. **LOAD CONTEXT**: Read analyze.md, plan.md, and implementation.md
+
+2. **RUN VALIDATION SUITE**: Execute all checks
+   - Type checking: npm run typecheck
+   - Linting: npm run lint
+   - Unit tests: npm run test
+   - Build: npm run build
+   - E2E tests: npm run test:e2e (if applicable)
+
+3. **VERIFY IMPLEMENTATION**: Cross-check against plan
+   - Every plan item is implemented
+   - No extra changes outside scope
+   - Code follows identified patterns
+
+4. **CREATE VALIDATION REPORT**: Write to validation.md
+   ```markdown
+   # Validation Report
+
+   ## Checks Passed
+   - [x] Type checking
+   - [x] Linting
+   - [x] Unit tests
+   - [x] Build
+
+   ## Implementation Verification
+   - [x] All plan items implemented
+   - [x] No scope creep
+   - [x] Patterns followed
+
+   ## Issues Found
+   [List any issues or "None"]
+
+   ## Status: PASSED/FAILED
+   ```
+
+5. **FIX ISSUES**: If validation fails, fix and re-run
+
+## Priority
+Quality > Speed. Never approve a failing implementation.</code></pre>
+                                        </div>
+                                    </div>
+                                </details>
                             </div>
                         </div>
 
@@ -742,6 +850,75 @@ Correctness > Completeness > Speed</code></pre>
                                     <button class="copy-btn">Copy</button>
                                     <pre><code>/apex:5-tasks 01-add-user-authentication</code></pre>
                                 </div>
+
+                                <details class="template-section">
+                                    <summary>
+                                        <h4 style="display: inline; margin: 0;">
+                                            <span data-lang="fr">Template Prompt</span>
+                                            <span data-lang="en">Prompt Template</span>
+                                        </h4>
+                                        <span class="template-badge">5-tasks.md</span>
+                                    </summary>
+                                    <div class="template-content">
+                                        <p class="template-path">
+                                            <code>templates/commands/apex/5-tasks.md</code>
+                                        </p>
+                                        <div class="code-block template-code">
+                                            <button class="copy-btn">Copy</button>
+                                            <pre><code>---
+description: Task creation - divide plan into small, actionable task files
+argument-hint: &lt;task-folder-path&gt;
+---
+
+You are a task division specialist. Break down plans into executable task files.
+
+## Workflow
+
+1. **LOAD CONTEXT**: Read analyze.md and plan.md
+
+2. **IDENTIFY TASK BOUNDARIES**: Group related changes
+   - Each task should be independently testable
+   - Tasks should follow dependency order
+   - Target 15-30 minutes per task
+
+3. **CREATE TASK FILES**: For each logical unit
+   ```markdown
+   # Task: [Short Name]
+
+   ## Context
+   [Relevant context from analyze.md]
+
+   ## Objective
+   [Clear, single objective]
+
+   ## Files to Modify
+   - `path/to/file.ts` - [changes]
+
+   ## Steps
+   1. [Action 1]
+   2. [Action 2]
+
+   ## Acceptance Criteria
+   - [ ] [Criterion 1]
+   - [ ] [Criterion 2]
+
+   ## Dependencies
+   - Requires: [Previous tasks]
+   - Enables: [Next tasks]
+   ```
+
+4. **SAVE TASKS**: Write to task-NN-name.md files
+
+## Task Naming
+- task-01-setup-config.md
+- task-02-create-types.md
+- task-03-implement-service.md
+
+## Priority
+Clarity > Granularity. Each task must be self-contained.</code></pre>
+                                        </div>
+                                    </div>
+                                </details>
 
                                 <p data-lang="fr">Genere des fichiers de taches individuels :</p>
                                 <p data-lang="en">Generates individual task files:</p>

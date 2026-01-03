@@ -1,11 +1,21 @@
 ---
-description: Phase 6 - Development prompt generation
-model: opus
+description: Phase 6 - Development prompt generation (ULTRATHINK)
 ---
 
 # Business Analyse - Handoff
 
-Senior BA expert. Autonomous development prompt generation.
+Senior BA expert. Autonomous development prompt generation. ULTRATHINK mode mandatory.
+
+## ULTRATHINK Mode
+
+**IMPORTANT**: This phase uses deep thinking for generating a complete, autonomous development prompt.
+
+Approach to adopt:
+- Ensure EVERY piece of information needed is included
+- Validate prompt completeness for ONE-SHOT implementation
+- No ambiguity - developer should NEVER need to ask questions
+- Optimize for Claude Code best practices
+- Generate prompt that can be directly piped to Claude
 
 ## Arguments
 
@@ -18,10 +28,16 @@ Senior BA expert. Autonomous development prompt generation.
 ## Prerequisites
 
 ```bash
-# Verify that FRD exists and is validated
+# Verify that FRD exists
 test -f ".business-analyse/applications/*/modules/*/features/$ARGUMENTS/3-functional-specification.md" || \
   echo "Execute /business-analyse:specify first"
+
+# Verify that validation is complete (status must be APPROVED)
+grep -q "status: APPROVED" ".business-analyse/applications/*/modules/*/features/$ARGUMENTS/validation-status.json" || \
+  echo "Execute /business-analyse:validate first - FRD must be approved"
 ```
+
+**Important**: This phase can only be executed after user validation (phase 5). If the FRD was rejected, execute `/business-analyse:analyse` to revise based on feedback.
 
 ## Handoff Philosophy
 
@@ -41,6 +57,65 @@ test -f ".business-analyse/applications/*/modules/*/features/$ARGUMENTS/3-functi
 ║                                                                          ║
 ╚══════════════════════════════════════════════════════════════════════════╝
 ```
+
+## Language Requirements (CRITICAL)
+
+```
+╔══════════════════════════════════════════════════════════════════════════╗
+║  LANGUAGE RULES FOR BUSINESS ANALYSE                                     ║
+╠══════════════════════════════════════════════════════════════════════════╣
+║                                                                          ║
+║  ANALYSIS DOCUMENTS (Discovery, BRD, FRD):                               ║
+║  → Written in USER'S LANGUAGE (the language they use)                    ║
+║  → These are for stakeholder communication                               ║
+║                                                                          ║
+║  DEVELOPMENT PROMPT (DEV-PROMPT.md / 4-development-handoff.md):          ║
+║  → ALWAYS IN ENGLISH                                                     ║
+║  → Optimized for Claude Code consumption                                 ║
+║  → Reduces token count (~20-30% savings)                                 ║
+║  → Better compatibility with AI models                                   ║
+║                                                                          ║
+╚══════════════════════════════════════════════════════════════════════════╝
+```
+
+## One-Shot Implementation Optimization
+
+The generated DEV-PROMPT must enable **ONE-SHOT implementation**:
+
+```
+╔══════════════════════════════════════════════════════════════════════════╗
+║  ONE-SHOT REQUIREMENTS                                                   ║
+╠══════════════════════════════════════════════════════════════════════════╣
+║                                                                          ║
+║  The developer (human or AI) should be able to:                          ║
+║                                                                          ║
+║  1. READ the prompt once                                                 ║
+║  2. IMPLEMENT without asking questions                                   ║
+║  3. VALIDATE against included acceptance criteria                        ║
+║                                                                          ║
+║  CHECKLIST before generating:                                            ║
+║  ☐ All entities with EXACT attributes and types                          ║
+║  ☐ All API endpoints with request/response schemas                       ║
+║  ☐ All UI screens with wireframes                                        ║
+║  ☐ All business rules with conditions/actions                            ║
+║  ☐ All validation rules (front + back)                                   ║
+║  ☐ All error messages                                                    ║
+║  ☐ Gherkin acceptance criteria for testing                               ║
+║  ☐ Implementation order (phases if complex)                              ║
+║                                                                          ║
+╚══════════════════════════════════════════════════════════════════════════╝
+```
+
+## Claude Code Best Practices for DEV-PROMPT
+
+The generated prompt should follow Claude Code optimization patterns:
+
+1. **Clear objective statement** at the top
+2. **Structured sections** with headers
+3. **No code generation** - describe WHAT, not HOW
+4. **Explicit constraints** and boundaries
+5. **Testable acceptance criteria**
+6. **Definition of Done** checklist
 
 ## Workflow
 
@@ -453,6 +528,7 @@ Scenario: Unique name validation
 HANDOFF GENERATED
 ═══════════════════════════════════════════════════════════
 Feature:     {{FEAT-XXX}} - {{NAME}}
+Language:    ENGLISH (optimized for AI consumption)
 ═══════════════════════════════════════════════════════════
 Development prompt created:
   • Entities:     {{X}} specified
@@ -463,14 +539,20 @@ Development prompt created:
 ═══════════════════════════════════════════════════════════
 Document: .../{{FEAT-XXX}}/4-development-handoff.md
 
-USAGE:
-  1. Copy handoff content
-  2. Use it as a prompt for the developer
-  3. Or execute it with Claude Code
+USAGE (One-Shot Implementation):
+  1. Open new Claude Code session
+  2. Paste the DEV-PROMPT content directly
+  3. Let Claude implement autonomously
+
+  Or via CLI:
+  cat 4-development-handoff.md | claude
 
 ⚠️  THE BA HAS FINISHED THEIR WORK
     The developer takes over for implementation.
+    NO FURTHER QUESTIONS should be needed.
 ═══════════════════════════════════════════════════════════
+Optional: /business-analyse:document {{FEAT-XXX}}
+  (Generate user-readable documentation after implementation)
 ```
 
 ## Rules

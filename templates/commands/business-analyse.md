@@ -21,36 +21,39 @@ Senior Business Analyst expert. Complete business analysis without writing code.
 ╚══════════════════════════════════════════════════════════════════════════╝
 ```
 
-## 6-Phase Workflow
+## 7-Phase Workflow
 
 ```
-═══════════════════════════════════════════════════════════════════════════════
+════════════════════════════════════════════════════════════════════════════════════════════
 
-   INIT          DISCOVER        ANALYSE         SPECIFY        DOCUMENT       HANDOFF
-  ┌─────┐       ┌─────────┐     ┌─────────┐     ┌─────────┐    ┌─────────┐    ┌─────────┐
-  │Setup│──────►│Elicit   │────►│Model    │────►│Specify  │───►│Document │──►│Handoff  │
-  └─────┘       └─────────┘     └─────────┘     └─────────┘    └─────────┘    └─────────┘
-     │               │               │               │              │              │
-     ▼               ▼               ▼               ▼              ▼              ▼
- Structure      Discovery.md      BRD.md         FRD.md       Glossary       Dev Prompt
- Config         (40+ Q)          Process        Use Cases    Dictionary     Autonomous
-                                 Rules          Wireframes   Diagrams
+   INIT       DISCOVER      ANALYSE       SPECIFY      VALIDATE      HANDOFF      DOCUMENT
+  ┌─────┐    ┌─────────┐   ┌─────────┐   ┌─────────┐   ┌────────┐   ┌─────────┐  ┌─────────┐
+  │Setup│───►│Elicit   │──►│Model    │──►│Specify  │──►│Approve │──►│Prompt   │─►│User Doc │
+  └─────┘    └─────────┘   └─────────┘   └─────────┘   └────────┘   └─────────┘  └─────────┘
+     │            │             │             │             │             │            │
+     ▼            ▼             ▼             ▼             ▼             ▼            ▼
+ Structure   Discovery.md   BRD.md        FRD.md       Approval     Dev Prompt   Glossary
+ Config      (40+ Q)        Process       Use Cases     Gate        Autonomous   Dictionary
+ Code Scan                  Rules         Wireframes    ↓ NOK                    Diagrams
+                            Doc Scan                    → ANALYSE
+                                                        (revise)
 
-                [ULTRATHINK]    [ULTRATHINK]   [ULTRATHINK]
+             [ULTRATHINK]  [ULTRATHINK]  [ULTRATHINK]              [ULTRATHINK]
 
-═══════════════════════════════════════════════════════════════════════════════
+════════════════════════════════════════════════════════════════════════════════════════════
 ```
 
 ## Available Commands
 
 | Phase | Command | Description | Output |
 |-------|----------|-------------|--------|
-| 1 | `/business-analyse:init` | Initialize project structure | `config.json`, structure |
+| 1 | `/business-analyse:init` | Initialize project structure + code scan | `config.json`, structure |
 | 2 | `/business-analyse:discover` | Requirements elicitation (ultrathink) | `1-discovery.md` |
-| 3 | `/business-analyse:analyse` | Business analysis BRD (ultrathink) | `2-business-requirements.md` |
+| 3 | `/business-analyse:analyse` | Business analysis BRD + doc scan (ultrathink) | `2-business-requirements.md` |
 | 4 | `/business-analyse:specify` | Functional specifications FRD (ultrathink) | `3-functional-specification.md` |
-| 5 | `/business-analyse:document` | Cross-functional documentation | Glossary, Dictionary |
-| 6 | `/business-analyse:handoff` | Development prompt | `4-development-handoff.md` |
+| 5 | `/business-analyse:validate` | User validation gate | `validation-status.json` |
+| 6 | `/business-analyse:handoff` | Development prompt (ultrathink) | `4-development-handoff.md` |
+| 7 | `/business-analyse:document` | User-readable documentation (post-handoff) | Glossary, Dictionary, Diagrams |
 | + | `/business-analyse:bug` | Bug documentation | `tracking/bugs/BUG-XXX.md` |
 
 ## Artifact Structure
@@ -102,33 +105,38 @@ Senior Business Analyst expert. Complete business analysis without writing code.
 ## Golden Rules
 
 1. **NEVER code** - BA produces specs, not code
-2. **ULTRATHINK mandatory** - Phases 2, 3, 4 use deep thinking
+2. **ULTRATHINK mandatory** - Phases 2, 3, 4, 6 use deep thinking
 3. **Structure respected** - Application > Module > Feature
 4. **Traceability** - Each requirement has a unique ID
-5. **85% validation** - Completeness checklist before handoff
-6. **Maintained glossary** - Business terms documented
-7. **Optimized prompts** - Handoff ready for developer
+5. **User validation** - Phase 5 MUST be approved before handoff
+6. **NOK → Revise** - Rejected specs return to ANALYSE phase
+7. **Maintained glossary** - Business terms documented
+8. **Optimized prompts** - Handoff ready for one-shot implementation
 
 ## Quick Start
 
 ```bash
-# 1. Initialize project
+# 1. Initialize project (scans code structure)
 /business-analyse:init
 
-# 2. New feature
+# 2. New feature - Discovery
 /business-analyse:discover ModuleX "Need description"
 
-# 3. Analyze
+# 3. Analyze (scans existing docs for consistency)
 /business-analyse:analyse FEAT-001
 
-# 4. Specify
+# 4. Specify functional requirements
 /business-analyse:specify FEAT-001
 
-# 5. Document
-/business-analyse:document FEAT-001
+# 5. User validates (REQUIRED before handoff)
+/business-analyse:validate FEAT-001
+#    → If NOK: Return to /business-analyse:analyse with feedback
 
-# 6. Handoff to dev
+# 6. Generate dev prompt (after approval)
 /business-analyse:handoff FEAT-001
+
+# 7. Optional: User-readable documentation (after implementation)
+/business-analyse:document FEAT-001
 ```
 
 ## Next

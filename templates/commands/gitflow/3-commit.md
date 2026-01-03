@@ -66,7 +66,7 @@ grep -n "migrationBuilder.Sql" {migration}.cs | grep -i "DELETE\|DROP\|TRUNCATE"
 1. Display detailed alert (file, line, operation)
 2. Request explicit confirmation: "Do you confirm? (yes/no)"
 3. If "no" → Cancel commit
-4. If "yes" → Log in `.claude/gitflow/logs/dangerous-migrations.json`
+4. If "yes" → Log in [.claude/gitflow/logs/](.claude/gitflow/logs/)`dangerous-migrations.json`
 5. Continue commit
 
 **Dangerous patterns:**

@@ -39,10 +39,10 @@ fi
 
 ## Workflow
 
-### 1. Charger plan
+### 1. Load plan
 
-- Trouver le fichier plan (argument ou plus recent dans `.claude/gitflow/plans/`)
-- Extraire: branche source, cible, commit initial, version
+- Find plan file (argument or most recent in [.claude/gitflow/plans/](.claude/gitflow/plans/))
+- Extract: source branch, target, initial commit, version
 
 ### 2. Verifier pre-requis
 
@@ -51,12 +51,12 @@ fi
 - Build OK
 - Plan valide
 
-### 3. Creer checkpoint (sur source branch)
+### 3. Create checkpoint (on source branch)
 
-Sauvegarder dans `.claude/gitflow/logs/checkpoint_{timestamp}.json`:
-- Branche, commit, plan, status
-- Backup migrations si presentes
-- **IMPORTANT: Commit le checkpoint sur la branche source AVANT le merge**
+Save checkpoint in [.claude/gitflow/logs/](.claude/gitflow/logs/)`checkpoint_{timestamp}.json`:
+- Branch, commit, plan, status
+- Backup migrations if present
+- **IMPORTANT: Commit checkpoint on source branch BEFORE merge**
 
 ```bash
 git add .claude/gitflow/logs/checkpoint_{timestamp}.json

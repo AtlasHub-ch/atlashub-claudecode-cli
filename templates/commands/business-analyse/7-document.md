@@ -1,10 +1,24 @@
 ---
-description: Phase 5 - Cross-functional documentation and glossary
+description: Phase 7 - User-readable documentation (after handoff)
 ---
 
 # Business Analyse - Document
 
-Senior BA expert in documentation. Repository updates.
+Senior BA expert in documentation. Generate user-friendly documentation.
+
+> **Note**: This phase comes AFTER handoff. It generates documentation that
+> the business user can read and understand, not technical specifications.
+
+## ULTRATHINK Mode
+
+**IMPORTANT**: This phase uses deep thinking for comprehensive documentation.
+
+Approach to adopt:
+- Ensure consistency across all documents
+- Identify missing cross-references
+- Validate terminology alignment with glossary
+- Trace requirements to implementation
+- Anticipate documentation gaps
 
 ## Arguments
 
