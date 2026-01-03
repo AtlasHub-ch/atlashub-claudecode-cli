@@ -1,6 +1,6 @@
 {
   "name": "@atlashub/claude-tools",
-  "version": "1.7.1",
+  "version": "1.7.2",
   "description": "Claude Code automation toolkit - GitFlow, APEX, EF Core migrations, prompts and more",
   "author": {
     "name": "David Truninger",
@@ -31,8 +31,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/atlashub/claude-tools.git"
+    "url": "git+https://github.com/SIMON-Atlashub/atlashub-claudecode-cli.git"
   },
+  "bugs": {
+    "url": "https://github.com/SIMON-Atlashub/atlashub-claudecode-cli/issues"
+  },
+  "homepage": "https://github.com/SIMON-Atlashub/atlashub-claudecode-cli#readme",
   "keywords": [
     "claude",
     "claude-code",
