@@ -1637,3 +1637,139 @@ body.lang-en .diagram-tooltip::after {
         font-size: 0.8rem;
     }
 }
+
+/* ============================================
+   WORKFLOW STEPPER (Visual Steps)
+   ============================================ */
+
+.workflow-stepper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 1.5rem 0;
+    padding: 1.25rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+}
+
+.workflow-stepper-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.step-number {
+    width: 28px;
+    height: 28px;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.75rem;
+    color: white;
+    flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+}
+
+.step-label {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--text);
+    white-space: nowrap;
+}
+
+.step-arrow {
+    color: var(--text-muted);
+    font-size: 1rem;
+    margin: 0 0.25rem;
+    opacity: 0.5;
+}
+
+/* Workflow Stepper Vertical (for longer workflows) */
+.workflow-stepper-vertical {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0.75rem;
+    margin: 1.5rem 0;
+    padding: 1rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+}
+
+.workflow-stepper-vertical .step-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    background: var(--bg-dark);
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    transition: all var(--transition-fast);
+}
+
+.workflow-stepper-vertical .step-item:hover {
+    border-color: var(--primary);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.15);
+}
+
+.workflow-stepper-vertical .step-number {
+    width: 32px;
+    height: 32px;
+    font-size: 0.85rem;
+}
+
+.workflow-stepper-vertical .step-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.workflow-stepper-vertical .step-title {
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: var(--text-bright);
+    margin-bottom: 0.15rem;
+}
+
+.workflow-stepper-vertical .step-desc {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Workflow Colors by type */
+.step-number.step-validate { background: linear-gradient(135deg, var(--info) 0%, #1d4ed8 100%); }
+.step-number.step-analyze { background: linear-gradient(135deg, var(--accent) 0%, #0891b2 100%); }
+.step-number.step-detect { background: linear-gradient(135deg, var(--success) 0%, #15803d 100%); }
+.step-number.step-search { background: linear-gradient(135deg, var(--warning) 0%, #ca8a04 100%); }
+.step-number.step-decision { background: linear-gradient(135deg, var(--secondary) 0%, #c2410c 100%); }
+.step-number.step-input { background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%); }
+.step-number.step-generate { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); }
+.step-number.step-create { background: linear-gradient(135deg, var(--success) 0%, #15803d 100%); }
+.step-number.step-confirm { background: linear-gradient(135deg, var(--accent) 0%, #0891b2 100%); }
+
+/* Responsive */
+@media (max-width: 768px) {
+    .workflow-stepper {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .workflow-stepper-item {
+        width: 100%;
+    }
+
+    .step-arrow {
+        display: none;
+    }
+
+    .workflow-stepper-vertical {
+        grid-template-columns: 1fr;
+    }
+}
