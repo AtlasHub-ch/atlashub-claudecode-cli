@@ -8,6 +8,8 @@ Ensemble de commandes pour gerer Entity Framework Core : migrations, base de don
 
 ## Commandes disponibles
 
+### Migrations
+
 | Commande | Description | Risque |
 |----------|-------------|--------|
 | `/efcore:migration` | Creer/recreer la migration (1 par feature) | Faible |
@@ -15,6 +17,15 @@ Ensemble de commandes pour gerer Entity Framework Core : migrations, base de don
 | `/efcore:db-deploy` | Appliquer les migrations | Faible |
 | `/efcore:db-seed` | Peupler avec des donnees | Faible |
 | `/efcore:db-reset` | Drop + Recreate la base | **ELEVE** |
+
+### Cross-Branch (v1.2)
+
+| Commande | Description | Risque |
+|----------|-------------|--------|
+| `/efcore:scan` | Scanner les migrations sur toutes les branches | Aucun (lecture) |
+| `/efcore:conflicts` | Analyser les conflits potentiels (BLOQUANT) | Aucun (lecture) |
+| `/efcore:rebase-snapshot` | Rebaser ModelSnapshot sur develop | Moyen |
+| `/efcore:squash` | Fusionner plusieurs migrations en une | **ELEVE** |
 
 ## Regle d'or : 1 Migration par Feature
 
@@ -45,6 +56,34 @@ Pattern : `{BranchType}_{Version}_{BranchName}_{Description}`
 6. /gitflow:3-commit                → Committer
 ```
 
+## Workflow Cross-Branch (v1.2)
+
+Avec les worktrees GitFlow, plusieurs branches peuvent avoir des migrations en parallele. Pour eviter les conflits :
+
+```
+1. /efcore:scan                → Scanner toutes les branches actives
+2. /efcore:conflicts           → Verifier s'il y a des conflits (BLOQUANT)
+3. /efcore:rebase-snapshot     → Si conflit, rebaser sur develop
+4. /efcore:migration           → Creer/recreer la migration
+```
+
+### Ordre de merge recommande
+
+Le scan analyse les migrations et recommande un ordre de merge :
+
+```
+BRANCHES ACTIVES (3)
+--------------------
+feature/user-roles    +1 migration    Conflit: NONE
+feature/add-products  +1 migration    Conflit: POTENTIAL
+feature/orders        +2 migrations   Conflit: HIGH
+
+ORDRE DE MERGE RECOMMANDE:
+1. feature/user-roles (independant)
+2. feature/add-products (avant orders)
+3. feature/orders (rebase requis)
+```
+
 ## Configuration
 
 Les commandes utilisent la configuration dans `.claude/gitflow/config.json` :
@@ -56,10 +95,25 @@ Les commandes utilisent la configuration dans `.claude/gitflow/config.json` :
       "configFile": "appsettings.Local.json",
       "connectionStringName": "DefaultConnection",
       "provider": "SqlServer"
+    },
+    "crossBranch": {
+      "enabled": true,
+      "scanOnMigrationCreate": true,
+      "blockOnConflict": true,
+      "cacheExpiry": 300
     }
   }
 }
 ```
+
+### Options crossBranch
+
+| Option | Description | Defaut |
+|--------|-------------|--------|
+| `enabled` | Activer la validation cross-branch | `true` |
+| `scanOnMigrationCreate` | Scanner avant `/efcore:migration` | `true` |
+| `blockOnConflict` | Bloquer si conflit detecte | `true` |
+| `cacheExpiry` | Duree de cache du scan (secondes) | `300` |
 
 ## Fichier appsettings.Local.json
 

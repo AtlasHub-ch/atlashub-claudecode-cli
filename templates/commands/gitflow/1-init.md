@@ -93,19 +93,65 @@ Plan genere: .claude/gitflow/plans/init_<DATE>.md
 ### Actions
 1. **Branches**: Creer main et develop si absentes, checkout develop
 2. **Structure**: Creer `.claude/gitflow/{plans,logs,migrations}`
-3. **Config**: Creer `config.json` avec la configuration du plan
-4. **CLAUDE.md**: Ajouter section Repository si branches existaient
-5. **VERSION**: Creer fichier si aucune source detectee
-6. **Commit** (demander): `chore(gitflow): initialisation v{VERSION}`
+3. **Worktrees** (si `--with-worktrees`): Creer structure worktrees (voir ci-dessous)
+4. **Config**: Creer `config.json` avec la configuration du plan
+5. **CLAUDE.md**: Ajouter section Repository si branches existaient
+6. **VERSION**: Creer fichier si aucune source detectee
+7. **Commit** (demander): `chore(gitflow): initialisation v{VERSION}`
+
+### Creation Worktrees (v1.2)
+
+Si `--with-worktrees` est specifie (defaut: true), creer la structure :
+
+```bash
+# Base path (relatif au repo principal)
+WORKTREE_BASE="../worktrees"
+
+# Creer les repertoires
+mkdir -p "$WORKTREE_BASE/features"
+mkdir -p "$WORKTREE_BASE/releases"
+mkdir -p "$WORKTREE_BASE/hotfixes"
+
+# Creer worktrees permanents pour main et develop
+git worktree add "$WORKTREE_BASE/main" main
+git worktree add "$WORKTREE_BASE/develop" develop
+```
+
+**Structure resultante:**
+```
+parent/
+├── atlashub-project/          # Repo principal
+│   ├── .claude/gitflow/
+│   └── ...
+└── worktrees/
+    ├── main/                  # Worktree permanent
+    ├── develop/               # Worktree permanent
+    ├── features/              # Features en cours
+    │   └── {feature-name}/
+    ├── releases/              # Releases en cours
+    │   └── v{version}/
+    └── hotfixes/              # Hotfixes en cours
+        └── {hotfix-name}/
+```
 
 ### Config.json structure
 ```json
 {
-  "version": "1.0.0",
+  "version": "1.2.0",
   "repository": { "name", "defaultBranch", "remoteUrl" },
   "versioning": { "strategy", "current", "source", "sourceFile", "tagPrefix", "autoIncrement" },
   "git": { "branches", "mergeStrategy", "protectedBranches" },
-  "efcore": { "enabled", "contexts", "generateScript", "scriptOutputPath" },
+  "worktrees": {
+    "enabled": true,
+    "basePath": "../worktrees",
+    "permanent": { "main": true, "develop": true },
+    "structure": { "features", "releases", "hotfixes" },
+    "cleanupOnFinish": true
+  },
+  "efcore": {
+    "enabled", "contexts", "generateScript", "scriptOutputPath",
+    "crossBranch": { "enabled", "scanOnMigrationCreate", "blockOnConflict", "cacheExpiry" }
+  },
   "workflow": { "requireConfirmation", "createCheckpoints", "commitConventions" }
 }
 ```
@@ -122,3 +168,5 @@ Renommer en `init_<DATE>_DONE_<TIMESTAMP>.md`
 | `/gitflow:1-init` | Genere plan |
 | `/gitflow:1-init --exec` | Execute plan existant |
 | `/gitflow:1-init --yes` | Genere + execute sans fichier intermediaire |
+| `/gitflow:1-init --with-worktrees` | Genere plan avec structure worktrees (defaut) |
+| `/gitflow:1-init --no-worktrees` | Genere plan sans worktrees |
