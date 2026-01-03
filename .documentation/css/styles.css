@@ -1637,3 +1637,351 @@ body.lang-en .diagram-tooltip::after {
         font-size: 0.8rem;
     }
 }
+
+/* ============================================
+   WORKFLOW STEPPER (Visual Steps)
+   ============================================ */
+
+.workflow-stepper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 1.5rem 0;
+    padding: 1.25rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+}
+
+.workflow-stepper-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.step-number {
+    width: 28px;
+    height: 28px;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.75rem;
+    color: white;
+    flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+}
+
+.step-label {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--text);
+    white-space: nowrap;
+}
+
+.step-arrow {
+    color: var(--text-muted);
+    font-size: 1rem;
+    margin: 0 0.25rem;
+    opacity: 0.5;
+}
+
+/* Workflow Stepper Vertical (for longer workflows) */
+.workflow-stepper-vertical {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0.75rem;
+    margin: 1.5rem 0;
+    padding: 1rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+}
+
+.workflow-stepper-vertical .step-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    background: var(--bg-dark);
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    transition: all var(--transition-fast);
+}
+
+.workflow-stepper-vertical .step-item:hover {
+    border-color: var(--primary);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.15);
+}
+
+.workflow-stepper-vertical .step-number {
+    width: 32px;
+    height: 32px;
+    font-size: 0.85rem;
+}
+
+.workflow-stepper-vertical .step-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.workflow-stepper-vertical .step-title {
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: var(--text-bright);
+    margin-bottom: 0.15rem;
+}
+
+.workflow-stepper-vertical .step-desc {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Workflow Colors by type */
+.step-number.step-validate { background: linear-gradient(135deg, var(--info) 0%, #1d4ed8 100%); }
+.step-number.step-analyze { background: linear-gradient(135deg, var(--accent) 0%, #0891b2 100%); }
+.step-number.step-detect { background: linear-gradient(135deg, var(--success) 0%, #15803d 100%); }
+.step-number.step-search { background: linear-gradient(135deg, var(--warning) 0%, #ca8a04 100%); }
+.step-number.step-decision { background: linear-gradient(135deg, var(--secondary) 0%, #c2410c 100%); }
+.step-number.step-input { background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%); }
+.step-number.step-generate { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); }
+.step-number.step-create { background: linear-gradient(135deg, var(--success) 0%, #15803d 100%); }
+.step-number.step-confirm { background: linear-gradient(135deg, var(--accent) 0%, #0891b2 100%); }
+
+/* Responsive */
+@media (max-width: 768px) {
+    .workflow-stepper {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .workflow-stepper-item {
+        width: 100%;
+    }
+
+    .step-arrow {
+        display: none;
+    }
+
+    .workflow-stepper-vertical {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ============================================
+   TEMPLATE SECTIONS (Collapsible)
+   ============================================ */
+
+.template-section {
+    margin-top: 1.5rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--bg-dark);
+    overflow: hidden;
+}
+
+.template-section summary {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 1.25rem;
+    cursor: pointer;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(249, 115, 22, 0.1) 100%);
+    border-bottom: 1px solid transparent;
+    transition: all var(--transition-fast);
+}
+
+.template-section summary:hover {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(249, 115, 22, 0.15) 100%);
+}
+
+.template-section[open] summary {
+    border-bottom-color: var(--border);
+}
+
+.template-section summary::marker,
+.template-section summary::-webkit-details-marker {
+    display: none;
+}
+
+.template-section summary::before {
+    content: '\25B6';
+    font-size: 0.7rem;
+    color: var(--primary);
+    transition: transform var(--transition-fast);
+}
+
+.template-section[open] summary::before {
+    transform: rotate(90deg);
+}
+
+.template-section summary h4 {
+    font-size: 0.95rem;
+    color: var(--text-bright);
+    font-weight: 600;
+}
+
+.template-badge {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    color: white;
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    font-weight: 500;
+}
+
+.template-content {
+    padding: 1rem 1.25rem;
+}
+
+.template-path {
+    margin-bottom: 1rem;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.template-path code {
+    background: var(--bg-hover);
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+}
+
+.template-code {
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.template-code pre {
+    font-size: 0.8rem !important;
+    line-height: 1.5 !important;
+}
+
+.template-code code {
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+/* ============================================
+   COPYABLE COMMAND BLOCKS
+   ============================================ */
+
+.cmd-copy {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--bg-code);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.5rem 0.75rem;
+    margin: 0.25rem 0;
+    font-family: 'Fira Code', 'Cascadia Code', 'JetBrains Mono', monospace;
+    font-size: 0.875rem;
+    color: var(--secondary);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    position: relative;
+}
+
+.cmd-copy:hover {
+    border-color: var(--primary);
+    background: var(--bg-hover);
+}
+
+.cmd-copy::after {
+    content: '📋';
+    font-size: 0.75rem;
+    opacity: 0;
+    transition: opacity var(--transition-fast);
+    margin-left: 0.5rem;
+}
+
+.cmd-copy:hover::after {
+    opacity: 0.7;
+}
+
+.cmd-copy.copied {
+    border-color: var(--success);
+    background: rgba(34, 197, 94, 0.1);
+}
+
+.cmd-copy.copied::after {
+    content: '✓';
+    opacity: 1;
+    color: var(--success);
+}
+
+/* Block variant for standalone commands */
+.cmd-copy-block {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--bg-code);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    margin: 0.75rem 0;
+    font-family: 'Fira Code', 'Cascadia Code', 'JetBrains Mono', monospace;
+    font-size: 0.9rem;
+    color: var(--secondary);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.cmd-copy-block:hover {
+    border-color: var(--primary);
+    background: var(--bg-hover);
+    box-shadow: 0 2px 8px rgba(99, 102, 241, 0.15);
+}
+
+.cmd-copy-block .cmd-text {
+    flex: 1;
+    user-select: all;
+}
+
+.cmd-copy-block .cmd-copy-btn {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    padding: 0.35rem 0.75rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    white-space: nowrap;
+    margin-left: 1rem;
+}
+
+.cmd-copy-block .cmd-copy-btn:hover {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+.cmd-copy-block.copied {
+    border-color: var(--success);
+}
+
+.cmd-copy-block.copied .cmd-copy-btn {
+    background: var(--success);
+    color: white;
+    border-color: var(--success);
+}
+
+/* Table cell variant */
+td .cmd-copy {
+    display: flex;
+    margin: 0;
+}
+
+/* Step content variant */
+.step-content .cmd-copy-block {
+    margin-top: 0.5rem;
+}

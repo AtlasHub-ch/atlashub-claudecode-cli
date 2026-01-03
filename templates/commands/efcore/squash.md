@@ -1,57 +1,57 @@
 ---
-description: Fusionner plusieurs migrations en une seule (pour releases)
+description: Merge multiple migrations into one (for releases)
 agent: efcore-squash
 model: sonnet
 ---
 
 # EF Core Squash - Consolidate Migrations
 
-Fusionne plusieurs migrations en une seule migration consolidee. Typiquement utilise avant une release.
+Merges multiple migrations into a single consolidated migration. Typically used before a release.
 
-**UTILISATION:** Avant de creer une branche release pour nettoyer l'historique des migrations.
+**USAGE:** Before creating a release branch to clean up migration history.
 
-**ATTENTION:** Cette operation est **DESTRUCTIVE**. L'historique des migrations sera perdu.
+**WARNING:** This operation is **DESTRUCTIVE**. Migration history will be lost.
 
 ---
 
-## ETAPE 1: Verification des prerequis
+## STEP 1: Check prerequisites
 
 ```bash
-# Verifier branche
+# Check branch
 CURRENT_BRANCH=$(git branch --show-current)
-echo "Branche courante: $CURRENT_BRANCH"
+echo "Current branch: $CURRENT_BRANCH"
 
-# Verifier etat propre
+# Check clean state
 if [ -n "$(git status --porcelain)" ]; then
-  echo "ERREUR: Working directory non propre"
+  echo "ERROR: Working directory not clean"
   exit 1
 fi
 
-# Trouver le projet EF Core
+# Find EF Core project
 CSPROJ=$(find . -name "*.csproj" -exec grep -l "Microsoft.EntityFrameworkCore" {} \; | head -1)
 PROJECT_DIR=$(dirname "$CSPROJ")
 MIGRATIONS_DIR="$PROJECT_DIR/Migrations"
 
-# Lister les migrations
+# List migrations
 ALL_MIGRATIONS=$(find "$MIGRATIONS_DIR" -name "*.cs" | grep -v "Designer" | grep -v "Snapshot" | sort)
 MIGRATION_COUNT=$(echo "$ALL_MIGRATIONS" | grep -c "." || echo "0")
 
-echo "Migrations trouvees: $MIGRATION_COUNT"
+echo "Migrations found: $MIGRATION_COUNT"
 ```
 
 ---
 
-## ETAPE 2: Demander confirmation
+## STEP 2: Request confirmation
 
 ```javascript
 AskUserQuestion({
   questions: [{
-    question: "Vous allez fusionner " + MIGRATION_COUNT + " migrations en une seule. Cette operation est DESTRUCTIVE. Continuer ?",
+    question: "You are about to merge " + MIGRATION_COUNT + " migrations into one. This operation is DESTRUCTIVE. Continue?",
     header: "Squash",
     options: [
-      { label: "Oui, squash", description: "Fusionner toutes les migrations (recommande pour release)" },
-      { label: "Selectif", description: "Choisir les migrations a fusionner" },
-      { label: "Annuler", description: "Ne rien faire" }
+      { label: "Yes, squash", description: "Merge all migrations (recommended for release)" },
+      { label: "Selective", description: "Choose migrations to merge" },
+      { label: "Cancel", description: "Do nothing" }
     ],
     multiSelect: false
   }]
@@ -60,51 +60,51 @@ AskUserQuestion({
 
 ---
 
-## ETAPE 3: Backup complet
+## STEP 3: Full backup
 
 ```bash
-# Creer backup
+# Create backup
 BACKUP_DIR=".claude/gitflow/backup/migrations/squash_$(date +%Y%m%d_%H%M%S)"
 mkdir -p "$BACKUP_DIR"
 
-echo "Backup vers $BACKUP_DIR"
+echo "Backup to $BACKUP_DIR"
 cp "$MIGRATIONS_DIR"/*.cs "$BACKUP_DIR/"
-echo "  $(ls -1 "$BACKUP_DIR" | wc -l) fichiers sauvegardes"
+echo "  $(ls -1 "$BACKUP_DIR" | wc -l) files backed up"
 
-# Sauvegarder aussi le schema de la DB actuelle
+# Also backup current DB schema
 dotnet ef dbcontext script > "$BACKUP_DIR/schema_before_squash.sql" 2>/dev/null
 ```
 
 ---
 
-## ETAPE 4: Supprimer toutes les migrations
+## STEP 4: Delete all migrations
 
 ```bash
-echo "Suppression des migrations..."
+echo "Deleting migrations..."
 
-# Garder le ModelSnapshot pour reference
+# Keep ModelSnapshot for reference
 cp "$MIGRATIONS_DIR"/*ModelSnapshot.cs "$BACKUP_DIR/ModelSnapshot_backup.cs"
 
-# Supprimer tous les fichiers de migration
+# Delete all migration files
 for file in $(find "$MIGRATIONS_DIR" -name "*.cs" -not -name "*ModelSnapshot.cs"); do
   rm -f "$file"
   echo "  - $(basename "$file")"
 done
 
-# Reinitialiser le ModelSnapshot (optionnel - EF le regenerera)
+# Reset ModelSnapshot (optional - EF will regenerate it)
 # rm "$MIGRATIONS_DIR"/*ModelSnapshot.cs
 ```
 
 ---
 
-## ETAPE 5: Creer la migration consolidee
+## STEP 5: Create consolidated migration
 
 ```bash
 # Version
 VERSION=$(grep -oP '(?<=<Version>).*(?=</Version>)' "$CSPROJ" 2>/dev/null | head -1 || echo "1.0.0")
 VERSION_CLEAN=$(echo "$VERSION" | sed 's/\./_/g')
 
-# Nom de la migration
+# Migration name
 if [[ "$CURRENT_BRANCH" == release/* ]]; then
   MIGRATION_NAME="Release_${VERSION_CLEAN}_Initial"
 else
@@ -112,15 +112,15 @@ else
 fi
 
 echo ""
-echo "Creation de la migration consolidee: $MIGRATION_NAME"
+echo "Creating consolidated migration: $MIGRATION_NAME"
 
 cd "$PROJECT_DIR"
 dotnet ef migrations add "$MIGRATION_NAME" --verbose
 
 if [ $? -eq 0 ]; then
-  echo "  Migration creee"
+  echo "  Migration created"
 else
-  echo "  ERREUR - restauration du backup"
+  echo "  ERROR - restoring backup"
   cp "$BACKUP_DIR"/*.cs "$MIGRATIONS_DIR/"
   exit 1
 fi
@@ -128,10 +128,10 @@ fi
 
 ---
 
-## ETAPE 6: Generer script SQL idempotent
+## STEP 6: Generate idempotent SQL script
 
 ```bash
-# Generer le script SQL pour deploiement
+# Generate SQL script for deployment
 SCRIPTS_DIR="./scripts/migrations"
 mkdir -p "$SCRIPTS_DIR"
 
@@ -139,15 +139,15 @@ SCRIPT_NAME="${MIGRATION_NAME}.sql"
 dotnet ef migrations script --idempotent -o "$SCRIPTS_DIR/$SCRIPT_NAME"
 
 if [ $? -eq 0 ]; then
-  echo "  Script SQL genere: $SCRIPTS_DIR/$SCRIPT_NAME"
+  echo "  SQL script generated: $SCRIPTS_DIR/$SCRIPT_NAME"
 else
-  echo "  Impossible de generer le script SQL"
+  echo "  Unable to generate SQL script"
 fi
 ```
 
 ---
 
-## ETAPE 7: Validation
+## STEP 7: Validation
 
 ```bash
 echo ""
@@ -156,15 +156,15 @@ echo "Validation..."
 # Build
 dotnet build --no-restore
 if [ $? -ne 0 ]; then
-  echo "  ERREUR: Build echoue"
+  echo "  ERROR: Build failed"
   exit 1
 fi
 echo "  Build OK"
 
-# Verifier que la migration peut s'appliquer (dry run)
+# Check that migration can be applied (dry run)
 dotnet ef migrations script --no-build > /dev/null 2>&1
 if [ $? -ne 0 ]; then
-  echo "  ERREUR: Script generation echoue"
+  echo "  ERROR: Script generation failed"
   exit 1
 fi
 echo "  Script generation OK"
@@ -172,43 +172,43 @@ echo "  Script generation OK"
 
 ---
 
-## ETAPE 8: Resume
+## STEP 8: Summary
 
 ```
 ================================================================================
-                    SQUASH TERMINE
+                    SQUASH COMPLETE
 ================================================================================
 
-BRANCHE:          {current_branch}
-BACKUP:           {backup_dir}
+BRANCH:          {current_branch}
+BACKUP:          {backup_dir}
 
-AVANT:
+BEFORE:
   Migrations: {old_count}
 
-APRES:
+AFTER:
   Migration:  {migration_name}
-  Script SQL: scripts/migrations/{script_name}.sql
+  SQL Script: scripts/migrations/{script_name}.sql
 
 ================================================================================
 IMPORTANT - PRODUCTION
 ================================================================================
 
-Si votre base de production a deja des migrations appliquees:
-1. NE PAS appliquer cette migration consolidee directement
-2. Utiliser le script SQL idempotent
-3. Ou marquer la migration comme appliquee:
+If your production database already has applied migrations:
+1. DO NOT apply this consolidated migration directly
+2. Use the idempotent SQL script
+3. Or mark migration as applied:
    dotnet ef database update {migration_name} --connection "..." -- --skip-apply
 
 ================================================================================
-PROCHAINES ETAPES
+NEXT STEPS
 ================================================================================
 
-1. Verifier le contenu de la migration consolidee
-2. Tester sur une DB de dev: /efcore:db-reset && /efcore:db-deploy
-3. Committer: /gitflow:3-commit
+1. Check consolidated migration content
+2. Test on dev DB: /efcore:db-reset && /efcore:db-deploy
+3. Commit: /gitflow:3-commit
 
 ================================================================================
-RESTAURATION (si necessaire)
+RESTORE (if needed)
 ================================================================================
 
 cp {backup_dir}/*.cs {migrations_dir}/
@@ -222,19 +222,19 @@ cp {backup_dir}/*.cs {migrations_dir}/
 
 | Option | Description |
 |--------|-------------|
-| `--no-backup` | Ne pas creer de backup (dangereux) |
-| `--no-script` | Ne pas generer de script SQL |
-| `--name <name>` | Forcer un nom de migration |
-| `--keep-snapshot` | Garder le ModelSnapshot actuel |
-| `--dry-run` | Afficher sans executer |
+| `--no-backup` | Don't create backup (dangerous) |
+| `--no-script` | Don't generate SQL script |
+| `--name <name>` | Force a migration name |
+| `--keep-snapshot` | Keep current ModelSnapshot |
+| `--dry-run` | Show without executing |
 
 ---
 
-## Quand utiliser Squash
+## When to use Squash
 
-| Situation | Utiliser Squash ? |
-|-----------|-------------------|
-| Avant release | OUI - nettoyer l'historique |
-| Apres merge de plusieurs features | OUI - consolider |
-| En production | NON - utiliser scripts SQL |
-| Branche feature en cours | ATTENTION - preferer rebase-snapshot |
+| Situation | Use Squash? |
+|-----------|-------------|
+| Before release | YES - clean up history |
+| After merging multiple features | YES - consolidate |
+| In production | NO - use SQL scripts |
+| Feature branch in progress | CAUTION - prefer rebase-snapshot |

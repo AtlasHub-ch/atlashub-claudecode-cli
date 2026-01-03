@@ -1,11 +1,11 @@
 ---
-description: Phase 6 - Génération du prompt de développement
+description: Phase 6 - Development prompt generation
 model: opus
 ---
 
 # Business Analyse - Handoff
 
-Expert BA senior. Génération du prompt de développement autonome.
+Senior BA expert. Autonomous development prompt generation.
 
 ## Arguments
 
@@ -13,40 +13,40 @@ Expert BA senior. Génération du prompt de développement autonome.
 /business-analyse:handoff [feature-id]
 ```
 
-- `feature-id` : Identifiant de la feature (ex: FEAT-001)
+- `feature-id`: Feature identifier (e.g., FEAT-001)
 
-## Pré-requis
+## Prerequisites
 
 ```bash
-# Vérifier que le FRD existe et est validé
+# Verify that FRD exists and is validated
 test -f ".business-analyse/applications/*/modules/*/features/$ARGUMENTS/3-functional-specification.md" || \
-  echo "Exécuter /business-analyse:specify d'abord"
+  echo "Execute /business-analyse:specify first"
 ```
 
-## Philosophie du Handoff
+## Handoff Philosophy
 
 ```
 ╔══════════════════════════════════════════════════════════════════════════╗
-║  LE HANDOFF EST UN PROMPT AUTONOME                                       ║
+║  THE HANDOFF IS AN AUTONOMOUS PROMPT                                     ║
 ╠══════════════════════════════════════════════════════════════════════════╣
 ║                                                                          ║
-║  Ce document DOIT contenir TOUT ce dont un développeur a besoin          ║
-║  pour implémenter la fonctionnalité SANS avoir à consulter               ║
-║  d'autres documents.                                                     ║
+║  This document MUST contain EVERYTHING a developer needs                 ║
+║  to implement the functionality WITHOUT having to consult                ║
+║  other documents.                                                        ║
 ║                                                                          ║
-║  Il peut être utilisé directement comme prompt pour Claude Code          ║
-║  ou tout autre assistant de développement.                               ║
+║  It can be used directly as a prompt for Claude Code                    ║
+║  or any other development assistant.                                     ║
 ║                                                                          ║
-║  ⚠️  LE BA NE CODE JAMAIS - Il fournit les specs, pas le code           ║
+║  ⚠️  THE BA NEVER CODES - They provide specs, not code                  ║
 ║                                                                          ║
 ╚══════════════════════════════════════════════════════════════════════════╝
 ```
 
 ## Workflow
 
-### Étape 1 : Compilation des informations
+### Step 1: Information compilation
 
-Charger tous les documents de la feature :
+Load all feature documents:
 
 ```bash
 cat ".business-analyse/applications/*/modules/*/features/$FEATURE_ID/1-discovery.md"
@@ -56,82 +56,82 @@ cat .business-analyse/config.json
 cat .business-analyse/glossary.md
 ```
 
-### Étape 2 : Analyse de la stack technique
+### Step 2: Technical stack analysis
 
-Identifier la stack du projet pour adapter le prompt :
+Identify the project stack to adapt the prompt:
 
 | Stack | Adaptations |
 |-------|-------------|
 | .NET/C# | Entity, DbContext, Controller, Blazor |
 | Node.js | Model, Service, Route, React/Vue |
 | Python | Model, Service, API, Template |
-| Autre | Adapter selon conventions |
+| Other | Adapt according to conventions |
 
-### Étape 3 : Génération du prompt de développement
+### Step 3: Development prompt generation
 
-Créer `4-development-handoff.md` :
+Create `4-development-handoff.md`:
 
 ```markdown
 # Development Handoff - {{FEATURE_NAME}}
 
-> **Ce document est un prompt de développement autonome.**
-> Il contient toutes les informations nécessaires pour implémenter cette fonctionnalité.
+> **This document is an autonomous development prompt.**
+> It contains all the information necessary to implement this functionality.
 
 ---
 
-## Métadonnées
+## Metadata
 
-| Propriété | Valeur |
-|-----------|--------|
+| Property | Value |
+|----------|-------|
 | **Feature ID** | {{FEAT-XXX}} |
 | **Module** | {{MODULE}} |
-| **Priorité** | {{PRIORITE}} |
-| **Complexité estimée** | {{FAIBLE/MOYENNE/HAUTE}} |
-| **Date création** | {{DATE}} |
-| **Specs validées** | {{OUI/NON}} ({{SCORE}}%) |
+| **Priority** | {{PRIORITY}} |
+| **Estimated complexity** | {{LOW/MEDIUM/HIGH}} |
+| **Creation date** | {{DATE}} |
+| **Specs validated** | {{YES/NO}} ({{SCORE}}%) |
 
 ---
 
-## 1. Contexte
+## 1. Context
 
-### 1.1 Objectif Business
-{{OBJECTIF_1_2_PHRASES}}
+### 1.1 Business objective
+{{OBJECTIVE_1_2_SENTENCES}}
 
-### 1.2 Utilisateurs cibles
+### 1.2 Target users
 {{USERS_ROLES}}
 
-### 1.3 Valeur apportée
-{{VALEUR_BUSINESS}}
+### 1.3 Value delivered
+{{BUSINESS_VALUE}}
 
 ---
 
-## 2. Scope de l'implémentation
+## 2. Implementation scope
 
-### 2.1 Inclus (à implémenter)
+### 2.1 Included (to implement)
 - [ ] {{ITEM_1}}
 - [ ] {{ITEM_2}}
 - [ ] {{ITEM_3}}
 
-### 2.2 Exclus (hors scope)
+### 2.2 Excluded (out of scope)
 - {{EXCLUSION_1}}
 - {{EXCLUSION_2}}
 
-### 2.3 Dépendances
-| Dépendance | Type | Status |
+### 2.3 Dependencies
+| Dependency | Type | Status |
 |------------|------|--------|
-| {{DEP}} | Technique/Données | Résolu/En attente |
+| {{DEP}} | Technical/Data | Resolved/Pending |
 
 ---
 
-## 3. Modèle de données
+## 3. Data model
 
-### 3.1 Entités à créer/modifier
+### 3.1 Entities to create/modify
 
 #### {{ENTITY_NAME}}
 
 ```
-Attributs:
-  - id: UUID (PK, auto-généré)
+Attributes:
+  - id: UUID (PK, auto-generated)
   - name: string (2-100 chars, required, unique)
   - description: string? (max 500 chars, optional)
   - status: enum [active, inactive, archived] (default: active)
@@ -143,11 +143,11 @@ Relations:
   - belongs_to: User (created_by)
   - has_many: {{RELATED_ENTITY}}
 
-Index suggérés:
+Suggested indexes:
   - (name) UNIQUE
   - (status, created_at)
 
-Contraintes:
+Constraints:
   - name NOT NULL
   - status IN ('active', 'inactive', 'archived')
 ```
@@ -155,43 +155,43 @@ Contraintes:
 #### {{ENTITY_NAME_2}}
 ...
 
-### 3.2 Diagramme ER
+### 3.2 ER Diagram
 
 ```mermaid
 erDiagram
     {{ER_DIAGRAM}}
 ```
 
-### 3.3 Migration suggérée
-- Nom: `Add{{FeatureName}}`
+### 3.3 Suggested migration
+- Name: `Add{{FeatureName}}`
 - Tables: {{LIST}}
-- Ordre: {{ORDER}}
+- Order: {{ORDER}}
 
 ---
 
 ## 4. API Endpoints
 
-### 4.1 Vue d'ensemble
+### 4.1 Overview
 
 | Method | Route | Description | Auth | Roles |
 |--------|-------|-------------|------|-------|
-| GET | /api/v2/{{resource}} | Liste paginée | Oui | User, Admin |
-| GET | /api/v2/{{resource}}/:id | Détail | Oui | User, Admin |
-| POST | /api/v2/{{resource}} | Création | Oui | Admin |
-| PUT | /api/v2/{{resource}}/:id | Modification | Oui | Admin |
-| DELETE | /api/v2/{{resource}}/:id | Suppression | Oui | Admin |
+| GET | /api/v2/{{resource}} | Paginated list | Yes | User, Admin |
+| GET | /api/v2/{{resource}}/:id | Detail | Yes | User, Admin |
+| POST | /api/v2/{{resource}} | Creation | Yes | Admin |
+| PUT | /api/v2/{{resource}}/:id | Modification | Yes | Admin |
+| DELETE | /api/v2/{{resource}}/:id | Deletion | Yes | Admin |
 
-### 4.2 Détails des endpoints
+### 4.2 Endpoint details
 
 #### GET /api/v2/{{resource}}
 
-**Description**: Retourne la liste paginée des {{resource}}
+**Description**: Returns paginated list of {{resource}}
 
 **Query Parameters**:
-- `page` (int, default: 1): Numéro de page
-- `limit` (int, default: 20, max: 100): Items par page
-- `status` (string, optional): Filtrer par statut
-- `search` (string, optional): Recherche sur name
+- `page` (int, default: 1): Page number
+- `limit` (int, default: 20, max: 100): Items per page
+- `status` (string, optional): Filter by status
+- `search` (string, optional): Search on name
 
 **Response 200**:
 ```json
@@ -213,13 +213,13 @@ erDiagram
 }
 ```
 
-**Règles métier**:
-- BR-001: Seuls les items avec status != 'archived' sont retournés par défaut
-- BR-002: La recherche est case-insensitive
+**Business rules**:
+- BR-001: Only items with status != 'archived' are returned by default
+- BR-002: Search is case-insensitive
 
 #### POST /api/v2/{{resource}}
 
-**Description**: Crée un nouveau {{resource}}
+**Description**: Creates a new {{resource}}
 
 **Request Body**:
 ```json
@@ -243,113 +243,113 @@ erDiagram
 }
 ```
 
-**Erreurs**:
+**Errors**:
 - 400: Validation failed
 - 409: Name already exists
 
 ---
 
-## 5. Interface utilisateur
+## 5. User interface
 
-### 5.1 Pages à créer
+### 5.1 Pages to create
 
-| Page | URL | Description | Rôles |
+| Page | URL | Description | Roles |
 |------|-----|-------------|-------|
-| Liste | /{{module}}/{{resource}} | Liste avec filtres | User, Admin |
-| Formulaire | /{{module}}/{{resource}}/new | Création | Admin |
-| Détail | /{{module}}/{{resource}}/:id | Vue détaillée | User, Admin |
-| Édition | /{{module}}/{{resource}}/:id/edit | Modification | Admin |
+| List | /{{module}}/{{resource}} | List with filters | User, Admin |
+| Form | /{{module}}/{{resource}}/new | Creation | Admin |
+| Detail | /{{module}}/{{resource}}/:id | Detailed view | User, Admin |
+| Edit | /{{module}}/{{resource}}/:id/edit | Modification | Admin |
 
 ### 5.2 Wireframes
 
-#### Page Liste
+#### List Page
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │ {{APP_NAME}}                                    [User ▼] [Exit] │
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                 │
-│  {{RESOURCE_PLURAL}}                           [+ Nouveau]      │
+│  {{RESOURCE_PLURAL}}                           [+ New]          │
 │  ───────────────────────────────────────────────────────────    │
 │                                                                 │
-│  Recherche: [________________________] [🔍]                     │
-│  Filtres:   [Status ▼]                                          │
+│  Search: [________________________] [🔍]                        │
+│  Filters:   [Status ▼]                                          │
 │                                                                 │
 │  ┌─────┬─────────────┬──────────┬──────────┬─────────────┐      │
-│  │ ☐   │ Nom         │ Status   │ Créé le  │ Actions     │      │
+│  │ ☐   │ Name        │ Status   │ Created  │ Actions     │      │
 │  ├─────┼─────────────┼──────────┼──────────┼─────────────┤      │
-│  │ ☐   │ Item 1      │ ● Actif  │ 15/01/24 │ [✎] [🗑]   │      │
-│  │ ☐   │ Item 2      │ ○ Inactif│ 16/01/24 │ [✎] [🗑]   │      │
+│  │ ☐   │ Item 1      │ ● Active │ 01/15/24 │ [✎] [🗑]   │      │
+│  │ ☐   │ Item 2      │ ○ Inactive│ 01/16/24│ [✎] [🗑]   │      │
 │  └─────┴─────────────┴──────────┴──────────┴─────────────┘      │
 │                                                                 │
-│  [◀ Précédent]  Page 1/5  [Suivant ▶]                          │
+│  [◀ Previous]  Page 1/5  [Next ▶]                              │
 │                                                                 │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-**Comportements**:
-- Recherche: Filtre en temps réel après 300ms debounce
-- [+ Nouveau]: Visible seulement si rôle Admin
-- [✎][🗑]: Visible seulement si rôle Admin
-- [🗑]: Confirmation avant suppression
+**Behaviors**:
+- Search: Real-time filter after 300ms debounce
+- [+ New]: Visible only if Admin role
+- [✎][🗑]: Visible only if Admin role
+- [🗑]: Confirmation before deletion
 
-#### Page Formulaire
+#### Form Page
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │ {{APP_NAME}}                                    [User ▼] [Exit] │
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                 │
-│  ◀ Retour à la liste                                            │
+│  ◀ Back to list                                                 │
 │                                                                 │
-│  Nouveau {{RESOURCE}}                                           │
+│  New {{RESOURCE}}                                               │
 │  ───────────────────────────────────────────────────────────    │
 │                                                                 │
 │  ┌─────────────────────────────────────────────────────────┐    │
 │  │                                                         │    │
-│  │  Nom *                                                  │    │
+│  │  Name *                                                 │    │
 │  │  [_____________________________________________]        │    │
-│  │  ⚠️ 2 à 100 caractères                                  │    │
+│  │  ⚠️ 2 to 100 characters                                 │    │
 │  │                                                         │    │
 │  │  Description                                            │    │
 │  │  [                                                 ]    │    │
 │  │  [                                                 ]    │    │
 │  │  [_________________________________________________]    │    │
-│  │  0/500 caractères                                       │    │
+│  │  0/500 characters                                       │    │
 │  │                                                         │    │
-│  │                          [Annuler] [Créer]              │    │
+│  │                          [Cancel] [Create]              │    │
 │  │                                                         │    │
 │  └─────────────────────────────────────────────────────────┘    │
 │                                                                 │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-**Validations front-end**:
-- Nom: Required, 2-100 chars
+**Front-end validations**:
+- Name: Required, 2-100 chars
 - Description: Max 500 chars
-- Bouton Créer: Disabled si formulaire invalide
+- Create button: Disabled if form invalid
 
 ### 5.3 Messages
 
-| Contexte | Message |
-|----------|---------|
-| Création réussie | "{{Resource}} créé avec succès" |
-| Modification réussie | "{{Resource}} modifié avec succès" |
-| Suppression réussie | "{{Resource}} supprimé" |
-| Confirmation suppression | "Êtes-vous sûr de vouloir supprimer ce {{resource}} ?" |
-| Erreur validation | "Veuillez corriger les erreurs du formulaire" |
-| Erreur serveur | "Une erreur est survenue. Veuillez réessayer." |
-| Liste vide | "Aucun {{resource}} trouvé. Créez le premier !" |
+| Context | Message |
+|---------|---------|
+| Creation success | "{{Resource}} created successfully" |
+| Modification success | "{{Resource}} modified successfully" |
+| Deletion success | "{{Resource}} deleted" |
+| Deletion confirmation | "Are you sure you want to delete this {{resource}}?" |
+| Validation error | "Please correct form errors" |
+| Server error | "An error occurred. Please try again." |
+| Empty list | "No {{resource}} found. Create the first one!" |
 
 ---
 
-## 6. Règles métier
+## 6. Business rules
 
-| ID | Règle | Implémentation |
-|----|-------|----------------|
-| BR-001 | Le nom doit être unique | Contrainte DB + validation API |
-| BR-002 | Seul Admin peut créer/modifier | Middleware auth + [Authorize] |
-| BR-003 | Soft delete (archivage) | status = 'archived', pas de DELETE réel |
+| ID | Rule | Implementation |
+|----|------|----------------|
+| BR-001 | Name must be unique | DB constraint + API validation |
+| BR-002 | Only Admin can create/modify | Auth middleware + [Authorize] |
+| BR-003 | Soft delete (archiving) | status = 'archived', no real DELETE |
 | BR-004 | Audit trail | created_by, created_at, updated_at auto |
 
 ---
@@ -358,126 +358,126 @@ erDiagram
 
 | Action | Admin | User | Anonymous |
 |--------|-------|------|-----------|
-| Voir liste | ✓ | ✓ | ✗ |
-| Voir détail | ✓ | ✓ | ✗ |
-| Créer | ✓ | ✗ | ✗ |
-| Modifier | ✓ | ✗ | ✗ |
-| Supprimer | ✓ | ✗ | ✗ |
+| View list | ✓ | ✓ | ✗ |
+| View detail | ✓ | ✓ | ✗ |
+| Create | ✓ | ✗ | ✗ |
+| Modify | ✓ | ✗ | ✗ |
+| Delete | ✓ | ✗ | ✗ |
 
 ---
 
-## 8. Ordre d'implémentation suggéré
+## 8. Suggested implementation order
 
 ### Phase 1: Backend Core
-1. [ ] Créer entité {{Entity}}
-2. [ ] Configurer DbContext
-3. [ ] Créer migration `Add{{Feature}}`
-4. [ ] Créer DTOs (Request/Response)
-5. [ ] Implémenter {{Entity}}Controller
+1. [ ] Create entity {{Entity}}
+2. [ ] Configure DbContext
+3. [ ] Create migration `Add{{Feature}}`
+4. [ ] Create DTOs (Request/Response)
+5. [ ] Implement {{Entity}}Controller
 
 ### Phase 2: Backend Validation
-6. [ ] Ajouter validations FluentValidation
-7. [ ] Implémenter règles métier (BR-001 à BR-004)
-8. [ ] Ajouter gestion d'erreurs
+6. [ ] Add FluentValidation validations
+7. [ ] Implement business rules (BR-001 to BR-004)
+8. [ ] Add error handling
 
 ### Phase 3: Frontend
-9. [ ] Créer page Liste
-10. [ ] Créer page Formulaire (Create/Edit)
-11. [ ] Implémenter validations front-end
-12. [ ] Ajouter messages toast
+9. [ ] Create List page
+10. [ ] Create Form page (Create/Edit)
+11. [ ] Implement front-end validations
+12. [ ] Add toast messages
 
-### Phase 4: Finalisation
-13. [ ] Écrire tests unitaires (Controller)
-14. [ ] Écrire tests d'intégration
-15. [ ] Vérifier permissions
-16. [ ] Review code
+### Phase 4: Finalization
+13. [ ] Write unit tests (Controller)
+14. [ ] Write integration tests
+15. [ ] Verify permissions
+16. [ ] Code review
 
 ---
 
-## 9. Critères d'acceptation
+## 9. Acceptance criteria
 
 ### Happy Path
 ```gherkin
-Scenario: Création d'un {{resource}}
-  Given je suis connecté en tant qu'Admin
-  And je suis sur la page de liste des {{resource}}
-  When je clique sur "Nouveau"
-  And je remplis le nom avec "Test {{Resource}}"
-  And je clique sur "Créer"
-  Then je vois le message "{{Resource}} créé avec succès"
-  And le {{resource}} "Test {{Resource}}" apparaît dans la liste
+Scenario: Creating a {{resource}}
+  Given I am logged in as Admin
+  And I am on the {{resource}} list page
+  When I click on "New"
+  And I fill the name with "Test {{Resource}}"
+  And I click on "Create"
+  Then I see the message "{{Resource}} created successfully"
+  And the {{resource}} "Test {{Resource}}" appears in the list
 ```
 
-### Cas d'erreur
+### Error cases
 ```gherkin
-Scenario: Validation nom unique
-  Given un {{resource}} "Existant" existe déjà
-  When je crée un {{resource}} avec le nom "Existant"
-  Then je vois l'erreur "Ce nom est déjà utilisé"
+Scenario: Unique name validation
+  Given a {{resource}} "Existing" already exists
+  When I create a {{resource}} with name "Existing"
+  Then I see the error "This name is already in use"
 ```
 
 ---
 
-## 10. Références
+## 10. References
 
 | Document | Description |
 |----------|-------------|
-| [Discovery](./1-discovery.md) | Élicitation du besoin |
-| [BRD](./2-business-requirements.md) | Exigences métier |
-| [FRD](./3-functional-specification.md) | Spécifications complètes |
-| [Glossaire](../../../glossary.md) | Termes métier |
+| [Discovery](./1-discovery.md) | Needs elicitation |
+| [BRD](./2-business-requirements.md) | Business requirements |
+| [FRD](./3-functional-specification.md) | Complete specifications |
+| [Glossary](../../../glossary.md) | Business terms |
 
 ---
 
 ## Definition of Done
 
-- [ ] Entités créées et configurées
-- [ ] Migration générée (NON appliquée en prod)
-- [ ] Endpoints fonctionnels et documentés
-- [ ] Pages UI fonctionnelles
-- [ ] Validations front + back
-- [ ] Permissions implémentées
-- [ ] Tests unitaires passent
-- [ ] Tests d'intégration passent
-- [ ] Code review effectuée
+- [ ] Entities created and configured
+- [ ] Migration generated (NOT applied in prod)
+- [ ] Endpoints functional and documented
+- [ ] UI pages functional
+- [ ] Front + back validations
+- [ ] Permissions implemented
+- [ ] Unit tests passing
+- [ ] Integration tests passing
+- [ ] Code review completed
 
 ---
 
-*Généré par Business Analyse - {{DATE}}*
-*Ce prompt peut être utilisé directement avec Claude Code ou tout assistant de développement.*
+*Generated by Business Analyse - {{DATE}}*
+*This prompt can be used directly with Claude Code or any development assistant.*
 ```
 
-### Résumé
+### Summary
 
 ```
-HANDOFF GÉNÉRÉ
+HANDOFF GENERATED
 ═══════════════════════════════════════════════════════════
 Feature:     {{FEAT-XXX}} - {{NAME}}
 ═══════════════════════════════════════════════════════════
-Prompt de développement créé:
-  • Entités:     {{X}} spécifiées
-  • Endpoints:   {{Y}} documentés
-  • Pages:       {{Z}} wireframées
-  • Règles:      {{W}} à implémenter
-  • Steps:       {{N}} étapes d'implémentation
+Development prompt created:
+  • Entities:     {{X}} specified
+  • Endpoints:    {{Y}} documented
+  • Pages:        {{Z}} wireframed
+  • Rules:        {{W}} to implement
+  • Steps:        {{N}} implementation steps
 ═══════════════════════════════════════════════════════════
 Document: .../{{FEAT-XXX}}/4-development-handoff.md
 
-UTILISATION:
-  1. Copier le contenu du handoff
-  2. L'utiliser comme prompt pour le développeur
-  3. Ou l'exécuter avec Claude Code
+USAGE:
+  1. Copy handoff content
+  2. Use it as a prompt for the developer
+  3. Or execute it with Claude Code
 
-⚠️  LE BA A TERMINÉ SON TRAVAIL
-    Le développeur prend le relais pour l'implémentation.
+⚠️  THE BA HAS FINISHED THEIR WORK
+    The developer takes over for implementation.
 ═══════════════════════════════════════════════════════════
 ```
 
-## Règles
+## Rules
 
-1. **Prompt autonome** - Tout le contexte inclus
-2. **Ordre logique** - Backend → Frontend → Tests
-3. **DoD clair** - Critères de validation explicites
-4. **Pas de code** - Specs seulement, le dev code
-5. **Références** - Liens vers docs détaillées
-6. **Prêt à l'emploi** - Utilisable directement
+1. **Autonomous prompt** - All context included
+2. **Logical order** - Backend → Frontend → Tests
+3. **Clear DoD** - Explicit validation criteria
+4. **No code** - Specs only, dev codes
+5. **References** - Links to detailed docs
+6. **Ready to use** - Directly usable

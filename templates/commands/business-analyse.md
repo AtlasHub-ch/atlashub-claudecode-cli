@@ -1,73 +1,73 @@
 ---
-description: Business Analyse - Workflow complet d'analyse métier (BABOK/IEEE 830)
+description: Business Analysis - Complete business analysis workflow (BABOK/IEEE 830)
 ---
 
-# Business Analyse - Workflow Expert
+# Business Analysis - Expert Workflow
 
-Expert Business Analyst senior. Analyse métier complète sans écriture de code.
+Senior Business Analyst expert. Complete business analysis without writing code.
 
-## Philosophie
+## Philosophy
 
 ```
 ╔══════════════════════════════════════════════════════════════════════════╗
-║  LE BUSINESS ANALYST NE CODE JAMAIS                                      ║
+║  THE BUSINESS ANALYST NEVER CODES                                        ║
 ║                                                                          ║
-║  Il produit:                                                             ║
-║  • Des SPÉCIFICATIONS claires et complètes                               ║
-║  • Des DOCUMENTATIONS métier exploitables                                ║
-║  • Des PROMPTS de développement optimisés                                ║
+║  They produce:                                                           ║
+║  • Clear and complete SPECIFICATIONS                                     ║
+║  • Actionable business DOCUMENTATION                                     ║
+║  • Optimized development PROMPTS                                         ║
 ║                                                                          ║
-║  Il laisse le DÉVELOPPEUR implémenter selon les specs                    ║
+║  They let the DEVELOPER implement according to specs                     ║
 ╚══════════════════════════════════════════════════════════════════════════╝
 ```
 
-## Workflow en 6 Phases
+## 6-Phase Workflow
 
 ```
 ═══════════════════════════════════════════════════════════════════════════════
 
    INIT          DISCOVER        ANALYSE         SPECIFY        DOCUMENT       HANDOFF
   ┌─────┐       ┌─────────┐     ┌─────────┐     ┌─────────┐    ┌─────────┐    ┌─────────┐
-  │Setup│──────►│Éliciter │────►│Modéliser│────►│Spécifier│───►│Documenter│──►│Transmettre│
+  │Setup│──────►│Elicit   │────►│Model    │────►│Specify  │───►│Document │──►│Handoff  │
   └─────┘       └─────────┘     └─────────┘     └─────────┘    └─────────┘    └─────────┘
      │               │               │               │              │              │
      ▼               ▼               ▼               ▼              ▼              ▼
- Structure      Discovery.md      BRD.md         FRD.md       Glossaire      Prompt Dev
- Config         (40+ Q)          Processus      Use Cases    Dictionnaire   Autonome
-                                 Règles         Wireframes   Diagrammes
+ Structure      Discovery.md      BRD.md         FRD.md       Glossary       Dev Prompt
+ Config         (40+ Q)          Process        Use Cases    Dictionary     Autonomous
+                                 Rules          Wireframes   Diagrams
 
                 [ULTRATHINK]    [ULTRATHINK]   [ULTRATHINK]
 
 ═══════════════════════════════════════════════════════════════════════════════
 ```
 
-## Commandes Disponibles
+## Available Commands
 
-| Phase | Commande | Description | Output |
+| Phase | Command | Description | Output |
 |-------|----------|-------------|--------|
-| 1 | `/business-analyse:init` | Initialisation structure projet | `config.json`, structure |
-| 2 | `/business-analyse:discover` | Élicitation besoins (ultrathink) | `1-discovery.md` |
-| 3 | `/business-analyse:analyse` | Analyse métier BRD (ultrathink) | `2-business-requirements.md` |
-| 4 | `/business-analyse:specify` | Spécifications FRD (ultrathink) | `3-functional-specification.md` |
-| 5 | `/business-analyse:document` | Documentation transverse | Glossaire, Dictionnaire |
-| 6 | `/business-analyse:handoff` | Prompt développement | `4-development-handoff.md` |
-| + | `/business-analyse:bug` | Documentation bug | `tracking/bugs/BUG-XXX.md` |
+| 1 | `/business-analyse:init` | Initialize project structure | `config.json`, structure |
+| 2 | `/business-analyse:discover` | Requirements elicitation (ultrathink) | `1-discovery.md` |
+| 3 | `/business-analyse:analyse` | Business analysis BRD (ultrathink) | `2-business-requirements.md` |
+| 4 | `/business-analyse:specify` | Functional specifications FRD (ultrathink) | `3-functional-specification.md` |
+| 5 | `/business-analyse:document` | Cross-functional documentation | Glossary, Dictionary |
+| 6 | `/business-analyse:handoff` | Development prompt | `4-development-handoff.md` |
+| + | `/business-analyse:bug` | Bug documentation | `tracking/bugs/BUG-XXX.md` |
 
-## Structure des Artefacts
+## Artifact Structure
 
 ```
 .business-analyse/
-├── config.json                         # Configuration globale
-├── glossary.md                         # Glossaire métier unifié
-├── .claudeignore                       # Fichiers ignorés par Claude
+├── config.json                         # Global configuration
+├── glossary.md                         # Unified business glossary
+├── .claudeignore                       # Files ignored by Claude
 │
-├── applications/                       # Par application
+├── applications/                       # Per application
 │   └── {app-name}/
-│       ├── context.md                  # Contexte applicatif
-│       ├── stakeholders.md             # Parties prenantes
+│       ├── context.md                  # Application context
+│       ├── stakeholders.md             # Stakeholders
 │       └── modules/
 │           └── {module-name}/
-│               ├── context.md          # Contexte module
+│               ├── context.md          # Module context
 │               └── features/
 │                   └── {FEAT-XXX-name}/
 │                       ├── 1-discovery.md
@@ -91,46 +91,50 @@ Expert Business Analyst senior. Analyse métier complète sans écriture de code
     └── bug-report.md
 ```
 
-## Standards Appliqués
+## Applied Standards
 
 | Standard | Application |
 |----------|-------------|
-| **BABOK v3** | 6 Knowledge Areas, techniques d'élicitation |
-| **IEEE 830** | Structure SRS, traçabilité des exigences |
-| **BRD/FRD** | Séparation besoins métier / spécifications |
+| **BABOK v3** | 6 Knowledge Areas, elicitation techniques |
+| **IEEE 830** | SRS structure, requirements traceability |
+| **BRD/FRD** | Business needs / specifications separation |
 
-## Règles d'Or
+## Golden Rules
 
-1. **JAMAIS de code** - Le BA produit des specs, pas du code
-2. **ULTRATHINK obligatoire** - Phases 2, 3, 4 utilisent la réflexion profonde
-3. **Structure respectée** - Application > Module > Feature
-4. **Traçabilité** - Chaque exigence a un ID unique
-5. **Validation 85%** - Checklist de complétude avant handoff
-6. **Glossaire maintenu** - Termes métier documentés
-7. **Prompts optimisés** - Handoff prêt pour le développeur
+1. **NEVER code** - BA produces specs, not code
+2. **ULTRATHINK mandatory** - Phases 2, 3, 4 use deep thinking
+3. **Structure respected** - Application > Module > Feature
+4. **Traceability** - Each requirement has a unique ID
+5. **85% validation** - Completeness checklist before handoff
+6. **Maintained glossary** - Business terms documented
+7. **Optimized prompts** - Handoff ready for developer
 
-## Démarrage Rapide
+## Quick Start
 
 ```bash
-# 1. Initialiser le projet
+# 1. Initialize project
 /business-analyse:init
 
-# 2. Nouvelle fonctionnalité
-/business-analyse:discover ModuleX "Description du besoin"
+# 2. New feature
+/business-analyse:discover ModuleX "Need description"
 
-# 3. Analyser
+# 3. Analyze
 /business-analyse:analyse FEAT-001
 
-# 4. Spécifier
+# 4. Specify
 /business-analyse:specify FEAT-001
 
-# 5. Documenter
+# 5. Document
 /business-analyse:document FEAT-001
 
-# 6. Transmettre au dev
+# 6. Handoff to dev
 /business-analyse:handoff FEAT-001
 ```
 
-## Prochain
+## Next
 
-Exécutez `/business-analyse:init` pour commencer.
+Execute the following command to begin:
+
+```
+/business-analyse:init
+```

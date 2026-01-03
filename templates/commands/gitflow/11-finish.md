@@ -260,7 +260,11 @@ cleanup_worktree_for_branch() {
 cleanup_worktree_for_branch "$BRANCH"
 ```
 
-**Note:** Pour un audit complet de tous les worktrees, utilisez `/gitflow:12-cleanup`.
+**Note:** Pour un audit complet de tous les worktrees, utilisez:
+
+```
+/gitflow:12-cleanup
+```
 
 ---
 

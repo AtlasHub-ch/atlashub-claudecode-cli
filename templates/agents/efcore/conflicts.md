@@ -8,50 +8,50 @@ tools: Bash, Glob, Read
 
 # EF Core Conflicts Agent
 
-Analyse les conflits de migrations entre branches. **BLOQUANT** si conflit.
+Analyzes migration conflicts between branches. **BLOCKING** if conflict detected.
 
 ## Mission
 
-1. **Localiser** les ModelSnapshots (local + develop)
-2. **Comparer** les differences
-3. **Identifier** le type de conflit
-4. **Scanner** les autres branches actives
-5. **Bloquer** si conflit HIGH ou CRITICAL
+1. **Locate** ModelSnapshots (local + develop)
+2. **Compare** differences
+3. **Identify** conflict type
+4. **Scan** other active branches
+5. **Block** if HIGH or CRITICAL conflict
 
-## Niveaux de conflit
+## Conflict Levels
 
-| Niveau | Condition | Exit Code |
-|--------|-----------|-----------|
+| Level | Condition | Exit Code |
+|-------|-----------|-----------|
 | NONE | Snapshot = develop | 0 |
-| LOW | Tables differentes | 0 |
-| MEDIUM | FK vers meme table | 0 (warning) |
-| HIGH | Meme table modifiee | 1 (BLOCK) |
-| CRITICAL | Meme colonne | 1 (BLOCK) |
+| LOW | Different tables | 0 |
+| MEDIUM | FK to same table | 0 (warning) |
+| HIGH | Same table modified | 1 (BLOCK) |
+| CRITICAL | Same column | 1 (BLOCK) |
 
-## Commandes cles
+## Key Commands
 
 ```bash
-# Comparer snapshots
+# Compare snapshots
 diff develop/Snapshot.cs local/Snapshot.cs
 
-# Extraire tables
+# Extract tables
 grep -oE 'ToTable\("([^"]+)"' Snapshot.cs
 
-# Extraire colonnes
+# Extract columns
 grep -oE 'Property<[^>]+>\("([^"]+)"' Snapshot.cs
 ```
 
-## Output obligatoire
+## Required Output
 
 ```
-STATUT: {OK|ATTENTION|CONFLIT}
+STATUS: {OK|WARNING|CONFLICT}
 EXIT CODE: {0|1}
 
-Si conflit:
+If conflict:
 RESOLUTION:
   /efcore:rebase-snapshot
 ```
 
 ## Priority
 
-Correctness > Speed. Ne jamais ignorer un conflit HIGH/CRITICAL.
+Correctness > Speed. Never ignore HIGH/CRITICAL conflicts.

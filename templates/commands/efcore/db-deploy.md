@@ -1,28 +1,29 @@
 ---
-description: Deployer les migrations EF Core sur la base de donnees locale
+description: Deploy EF Core migrations to local database
 agent: efcore-db-deploy
+model: haiku
 ---
 
 # EF Core Database Deploy
 
-Applique toutes les migrations en attente sur la base de donnees configuree dans `appsettings.Local.json`.
+Applies all pending migrations to the database configured in `appsettings.Local.json`.
 
 ---
 
-## ETAPE 1: Verifier la configuration
+## STEP 1: Check configuration
 
 ```bash
-# Verifier que appsettings.Local.json existe
+# Check that appsettings.Local.json exists
 if [ ! -f "appsettings.Local.json" ]; then
-  echo "❌ appsettings.Local.json non trouve"
-  echo "   Utilisez /gitflow:10-start pour le creer"
+  echo "❌ appsettings.Local.json not found"
+  echo "   Use /gitflow:10-start to create it"
   exit 1
 fi
 
-# Detecter le projet EF Core
+# Detect EF Core project
 CSPROJ=$(find . -name "*.csproj" -exec grep -l "Microsoft.EntityFrameworkCore" {} \; | head -1)
 if [ -z "$CSPROJ" ]; then
-  echo "❌ Aucun projet EF Core detecte"
+  echo "❌ No EF Core project detected"
   exit 1
 fi
 
@@ -32,7 +33,7 @@ PROJECT_NAME=$(basename "$CSPROJ" .csproj)
 
 ---
 
-## ETAPE 2: Verifier les migrations en attente
+## STEP 2: Check pending migrations
 
 ```bash
 cd "$PROJECT_DIR"
@@ -40,59 +41,59 @@ dotnet ef migrations list --json 2>/dev/null | grep -E '"applied": false'
 PENDING_COUNT=$(dotnet ef migrations list --json 2>/dev/null | grep -c '"applied": false' || echo "0")
 ```
 
-**Afficher le statut:**
+**Display status:**
 
 ```
 ================================================================================
                          EF CORE - DATABASE DEPLOY
 ================================================================================
 
-PROJET:      {PROJECT_NAME}
+PROJECT:     {PROJECT_NAME}
 CONFIG:      appsettings.Local.json
-MIGRATIONS:  {PENDING_COUNT} en attente
+MIGRATIONS:  {PENDING_COUNT} pending
 
 ================================================================================
 ```
 
 ---
 
-## ETAPE 3: Appliquer les migrations
+## STEP 3: Apply migrations
 
 ```bash
-# Appliquer les migrations avec la config locale
+# Apply migrations with local config
 dotnet ef database update --configuration Release --verbose
 ```
 
-**Si erreur de connexion:**
+**If connection error:**
 
 ```
-⚠️  Erreur de connexion a la base de donnees
+⚠️  Database connection error
 
-VERIFICATIONS:
-1. SQL Server est-il demarre ?
-2. La base de donnees existe-t-elle ?
-3. Les credentials sont-ils corrects ?
+CHECKS:
+1. Is SQL Server running?
+2. Does the database exist?
+3. Are the credentials correct?
 
-COMMANDES UTILES:
-- Verifier la connexion:  sqlcmd -S {SERVER} -E
-- Creer la base:          /efcore:db-reset
+USEFUL COMMANDS:
+- Check connection:  sqlcmd -S {SERVER} -E
+- Create database:   /efcore:db-reset
 ```
 
 ---
 
-## ETAPE 4: Confirmation
+## STEP 4: Confirmation
 
 ```
 ================================================================================
-                         DEPLOIEMENT TERMINE
+                         DEPLOYMENT COMPLETE
 ================================================================================
 
-✓ {N} migration(s) appliquee(s)
-✓ Base de donnees a jour
+✓ {N} migration(s) applied
+✓ Database is up to date
 
-COMMANDES SUIVANTES:
-  /efcore:db-status  → Verifier l'etat
-  /efcore:db-seed    → Peupler les donnees de test
+NEXT COMMANDS:
+  /efcore:db-status  → Check status
+  /efcore:db-seed    → Populate test data
 
 ================================================================================
 ```
@@ -103,6 +104,6 @@ COMMANDES SUIVANTES:
 
 | Option | Description |
 |--------|-------------|
-| `--verbose` | Afficher les details SQL |
+| `--verbose` | Display SQL details |
 | `--connection "..."` | Override connection string |
-| `--context {name}` | Specifier le DbContext si multiple |
+| `--context {name}` | Specify DbContext if multiple |
