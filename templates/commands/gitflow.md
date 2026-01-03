@@ -38,6 +38,8 @@ hotfix/* ──3.COMMIT──► 7.PR(main) ──► 9.MERGE ──► 11.FINIS
      └───────────────── merge back ◄─────────────────┘
 
                     6. ABORT ◄── (rollback si probleme)
+
+                   12. CLEANUP ◄── (audit worktrees depuis main/develop)
 ```
 
 ## Phases
@@ -49,12 +51,13 @@ hotfix/* ──3.COMMIT──► 7.PR(main) ──► 9.MERGE ──► 11.FINIS
 | 3 | `/gitflow:3-commit` | Apres modifs | Validation EF Core |
 | 4 | `/gitflow:4-plan` | Avant merge | Plan detaille |
 | 5 | `/gitflow:5-exec` | Executer | Merge + Tag + Version |
-| 6 | `/gitflow:6-abort` | Probleme | Rollback |
+| 6 | `/gitflow:6-abort` | Probleme | Rollback + cleanup worktree |
 | 7 | `/gitflow:7-pull-request` | Feature prete | Creer PR + checks |
 | 8 | `/gitflow:8-review` | Review PR | Checklist + feedback |
 | 9 | `/gitflow:9-merge` | PR approuvee | Merge + post-actions |
 | 10 | `/gitflow:10-start` | Nouvelle branche | Creer feature/release/hotfix |
-| 11 | `/gitflow:11-finish` | Apres merge | Tag + merge back + cleanup |
+| 11 | `/gitflow:11-finish` | Apres merge | Tag + merge back + cleanup worktree |
+| 12 | `/gitflow:12-cleanup` | Maintenance | Audit + nettoyage worktrees |
 
 ## Workflow typique
 
@@ -72,9 +75,24 @@ hotfix/* ──3.COMMIT──► 7.PR(main) ──► 9.MERGE ──► 11.FINIS
 /gitflow:8-review {PR}
 /gitflow:9-merge {PR}
 
-# 5. Pour release: finaliser (tag + merge back)
+# 5. Pour release: finaliser (tag + merge back + cleanup auto)
 /gitflow:11-finish
+
+# 6. Maintenance: audit et nettoyage (depuis main ou develop)
+/gitflow:12-cleanup
 ```
+
+## Cleanup worktrees
+
+Le cleanup des worktrees est gere automatiquement et manuellement:
+
+| Mode | Declencheur | Scope |
+|------|-------------|-------|
+| **Automatique** | `/gitflow:11-finish` | Worktree de la branche finalisee |
+| **Automatique** | `/gitflow:6-abort --branch` | Worktree de la branche abandonnee |
+| **Manuel** | `/gitflow:12-cleanup` | Audit complet (orphelins + stale) |
+
+**Note:** `/gitflow:12-cleanup` doit etre execute depuis `main` ou `develop` uniquement.
 
 ## Versioning (.NET)
 

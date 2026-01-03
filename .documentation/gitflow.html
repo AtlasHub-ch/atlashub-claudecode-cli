@@ -1334,8 +1334,24 @@
                                     <span data-lang="en">Finish Release/Hotfix</span>
                                 </h5>
                                 <p style="color: #94a3b8; font-size: 0.85rem; margin: 0; line-height: 1.5;">
-                                    <span data-lang="fr">Termine une release ou hotfix : merge dans main, creation du tag de version, merge back vers develop, suppression de la branche.</span>
-                                    <span data-lang="en">Completes release or hotfix: merge to main, create version tag, merge back to develop, delete branch.</span>
+                                    <span data-lang="fr">Termine une release ou hotfix : merge dans main, creation du tag de version, merge back vers develop, suppression de la branche et cleanup du worktree.</span>
+                                    <span data-lang="en">Completes release or hotfix: merge to main, create version tag, merge back to develop, delete branch and cleanup worktree.</span>
+                                </p>
+                            </div>
+
+                            <!-- gitflow:12-cleanup -->
+                            <div class="command-card" style="background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 1.25rem; border-left: 4px solid #64748b;">
+                                <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem;">
+                                    <code style="background: #64748b; color: #f8fafc; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.85rem;">/gitflow:12-cleanup</code>
+                                    <span style="background: #1e293b; color: #94a3b8; padding: 0.15rem 0.4rem; border-radius: 3px; font-size: 0.7rem;">MAINTENANCE</span>
+                                </div>
+                                <h5 style="color: #f8fafc; margin: 0 0 0.5rem 0; font-size: 0.95rem;">
+                                    <span data-lang="fr">Audit et nettoyage worktrees</span>
+                                    <span data-lang="en">Audit and Cleanup Worktrees</span>
+                                </h5>
+                                <p style="color: #94a3b8; font-size: 0.85rem; margin: 0; line-height: 1.5;">
+                                    <span data-lang="fr">Audite et nettoie les worktrees orphelins (branche supprimee) ou obsoletes (inactifs). Execute depuis main ou develop uniquement.</span>
+                                    <span data-lang="en">Audit and clean up orphan (deleted branch) or stale (inactive) worktrees. Run from main or develop only.</span>
                                 </p>
                             </div>
                         </div>
@@ -1430,6 +1446,30 @@ git merge --no-ff feature/my-feature</code></pre>
                             <p data-lang="en">
                                 All changes must go through feature, release or hotfix branches. Claude Tools automatically protects main branches.
                             </p>
+                        </div>
+
+                        <div class="best-practice">
+                            <h4>
+                                <span class="bp-icon">&#128465;</span>
+                                <span data-lang="fr">Nettoyer regulierement les worktrees</span>
+                                <span data-lang="en">Regularly Clean Up Worktrees</span>
+                            </h4>
+                            <p data-lang="fr">
+                                Apres chaque release ou hotfix, les worktrees sont nettoyes automatiquement. Pour un audit complet, utilisez <code>/gitflow:12-cleanup</code> depuis main ou develop.
+                            </p>
+                            <p data-lang="en">
+                                After each release or hotfix, worktrees are automatically cleaned up. For a full audit, use <code>/gitflow:12-cleanup</code> from main or develop.
+                            </p>
+                            <div class="code-block">
+                                <pre><code># Audit et nettoyage complet (depuis main ou develop)
+/gitflow:12-cleanup
+
+# Audit seul sans suppression
+/gitflow:12-cleanup --dry-run
+
+# Nettoyage automatique des orphelins
+/gitflow:12-cleanup --force</code></pre>
+                            </div>
                         </div>
 
                         <div class="best-practice">
@@ -2434,6 +2474,65 @@ git push origin --delete hotfix/{name}
                                 </details>
                             </div>
                         </div>
+
+                        <!-- Command: /gitflow:12-cleanup -->
+                        <div class="command-card">
+                            <div class="command-header">
+                                <code class="command-name">/gitflow:12-cleanup</code>
+                                <span class="tag tag-workflow">Maintenance</span>
+                            </div>
+                            <div class="command-body">
+                                <p data-lang="fr">
+                                    Audite et nettoie les worktrees orphelins ou obsoletes. Doit etre execute depuis <code>main</code> ou <code>develop</code> uniquement.
+                                </p>
+                                <p data-lang="en">
+                                    Audit and clean up orphan or stale worktrees. Must be run from <code>main</code> or <code>develop</code> only.
+                                </p>
+                                <div class="code-block">
+                                    <button class="copy-btn">Copy</button>
+                                    <pre><code>/gitflow:12-cleanup</code></pre>
+                                </div>
+
+                                <details class="prompt-details">
+                                    <summary>
+                                        <span data-lang="fr">Voir le prompt complet</span>
+                                        <span data-lang="en">View full prompt</span>
+                                    </summary>
+                                    <div class="prompt-content">
+                                        <pre><code># Phase 12: CLEANUP - Audit et nettoyage des worktrees
+
+## Prerequis
+
+**IMPORTANT:** Cette commande doit etre executee depuis `main` ou `develop` uniquement.
+
+## Categories de worktrees
+
+| Type | Description |
+|------|-------------|
+| **Permanents** | main, develop (proteges) |
+| **Actifs** | Branches en cours de travail |
+| **Orphelins** | Branche supprimee |
+| **Stale** | Inactifs > 30 jours |
+| **Dirty** | Modifications non commitees |
+
+## Modes
+
+| Commande | Action |
+|----------|--------|
+| `/gitflow:12-cleanup` | Audit interactif |
+| `/gitflow:12-cleanup --dry-run` | Audit seul |
+| `/gitflow:12-cleanup --force` | Supprime tous les orphelins |
+| `/gitflow:12-cleanup --stale-days=30` | Seuil pour stale |
+
+## Integration automatique
+
+Cette commande est appelee automatiquement par:
+- `/gitflow:11-finish` → Apres finalisation
+- `/gitflow:6-abort --branch` → Apres abandon</code></pre>
+                                    </div>
+                                </details>
+                            </div>
+                        </div>
                     </section>
 
                     <!-- Complete Example -->
@@ -2482,10 +2581,13 @@ git push origin --delete hotfix/{name}
 /gitflow:7-pull-request main
 /gitflow:9-merge 456
 
-# 12. Finaliser la release (tag + merge back)
+# 12. Finaliser la release (tag + merge back + cleanup auto)
 /gitflow:11-finish
 
-# La release est maintenant sur main avec un tag!</code></pre>
+# La release est maintenant sur main avec un tag!
+
+# 13. Maintenance: Audit des worktrees (depuis main ou develop)
+/gitflow:12-cleanup</code></pre>
                         </div>
 
                         <div class="alert alert-info">

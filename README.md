@@ -2,9 +2,26 @@
 
 Claude Code automation toolkit - GitFlow, APEX, EF Core migrations, prompts and more.
 
+[![npm version](https://img.shields.io/npm/v/@atlashub/claude-tools.svg)](https://www.npmjs.com/package/@atlashub/claude-tools)
+[![License](https://img.shields.io/badge/license-Commercial-blue.svg)](https://atlashub.ch/claude-tools)
+
+## Documentation
+
+```bash
+ct docs
+```
+
+Ouvre la documentation interactive complete avec :
+- **GitFlow** - Workflow complet avec 12 phases et diagrammes interactifs
+- **EF Core** - Gestion avancee des migrations multi-contextes
+- **APEX** - Methodologie Analyze-Plan-Execute-eXamine
+- **Business Analyse** - Workflow specification → implementation
+- **Agents** - Agents specialises pour chaque tache
+- **Installation** - Guide detaille avec exemples
+
 ## Features
 
-- GitFlow workflow automation with 11 phases
+- GitFlow workflow automation with 12 phases
 - Advanced EF Core migration management (multi-context, validation, rollback)
 - APEX methodology (Analyze-Plan-Execute-eXamine)
 - Git workflow commands (commit, PR creation, merge)
@@ -56,6 +73,9 @@ claude-tools install --local
 
 # Check status
 claude-tools status
+
+# Open interactive documentation
+claude-tools docs
 ```
 
 ## CLI Commands
@@ -67,6 +87,7 @@ claude-tools status
 | `uninstall` | `u` | Remove commands, agents, and hooks |
 | `status` | `s` | Show license and installation status |
 | `update` | - | Update commands to latest version |
+| `docs` | `d` | Open interactive documentation |
 
 ### Install Options
 
@@ -124,7 +145,8 @@ claude-tools uninstall --yes
 | `/gitflow:8-review` | Review PR with checklist and suggestions |
 | `/gitflow:9-merge` | Merge PR with all validations |
 | `/gitflow:10-start` | Start new feature/release/hotfix branch (with worktree) |
-| `/gitflow:11-finish` | Finalize branch (tag + merge back + cleanup) |
+| `/gitflow:11-finish` | Finalize branch (tag + merge back + cleanup worktree) |
+| `/gitflow:12-cleanup` | Audit and cleanup orphan/stale worktrees |
 
 ### APEX Methodology
 
@@ -296,14 +318,15 @@ After installation, the following structure is created:
 │   │   ├── 8-review.md
 │   │   ├── 9-merge.md
 │   │   ├── 10-start.md
-│   │   └── 11-finish.md
+│   │   ├── 11-finish.md
+│   │   └── 12-cleanup.md
 │   ├── apex.md              # APEX orchestrator
 │   ├── apex/                # APEX phases
 │   ├── ef-migrations/       # EF Core commands
 │   ├── git/                 # Git workflow commands
 │   └── prompts/             # Prompt generators
 ├── agents/                   # Specialized agents
-│   ├── gitflow/             # GitFlow agents (11)
+│   ├── gitflow/             # GitFlow agents (12)
 │   │   ├── init.md
 │   │   ├── status.md
 │   │   ├── commit.md
@@ -314,7 +337,8 @@ After installation, the following structure is created:
 │   │   ├── review.md
 │   │   ├── merge.md
 │   │   ├── start.md
-│   │   └── finish.md
+│   │   ├── finish.md
+│   │   └── cleanup.md
 │   ├── explore-codebase.md
 │   ├── explore-docs.md
 │   ├── action.md

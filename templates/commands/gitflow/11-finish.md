@@ -225,6 +225,45 @@ Commande recommandee:
 
 ---
 
+## Cleanup automatique des worktrees
+
+Apres chaque finish, un cleanup cible est effectue pour le worktree de la branche finalisee:
+
+```bash
+# Fonction de cleanup cible (appelee automatiquement)
+cleanup_worktree_for_branch() {
+  BRANCH=$1
+  WORKTREE_BASE="../worktrees"
+
+  # Determiner le chemin selon le type
+  if [[ $BRANCH == feature/* ]]; then
+    NAME=${BRANCH#feature/}
+    WORKTREE_PATH="$WORKTREE_BASE/features/$NAME"
+  elif [[ $BRANCH == release/* ]]; then
+    VERSION=${BRANCH#release/}
+    WORKTREE_PATH="$WORKTREE_BASE/releases/$VERSION"
+  elif [[ $BRANCH == hotfix/* ]]; then
+    NAME=${BRANCH#hotfix/}
+    WORKTREE_PATH="$WORKTREE_BASE/hotfixes/$NAME"
+  fi
+
+  # Supprimer si existe
+  if [ -d "$WORKTREE_PATH" ]; then
+    git worktree remove "$WORKTREE_PATH" --force 2>/dev/null || true
+    rm -rf "$WORKTREE_PATH" 2>/dev/null || true
+    git worktree prune
+    echo "✓ Worktree nettoye: $WORKTREE_PATH"
+  fi
+}
+
+# Appel automatique
+cleanup_worktree_for_branch "$BRANCH"
+```
+
+**Note:** Pour un audit complet de tous les worktrees, utilisez `/gitflow:12-cleanup`.
+
+---
+
 ## Resume final
 
 ```
@@ -240,6 +279,7 @@ Resultats:
   Main:     {updated|N/A}
   Develop:  {updated|unchanged}
   Cleanup:  ✓ Branche supprimee
+  Worktree: ✓ Nettoye
 
 ════════════════════════════════════════
 Workflow GitFlow complete!

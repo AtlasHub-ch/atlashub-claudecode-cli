@@ -203,13 +203,42 @@ Creer `.claude/gitflow/logs/abort_{timestamp}.json`:
 }
 ```
 
-### Nettoyage worktree
+### Nettoyage worktree (cleanup automatique)
 
-Si la branche utilise un worktree:
+Si la branche utilise un worktree, un cleanup cible est effectue automatiquement:
 
 ```bash
-git worktree remove {path} --force
+# Fonction de cleanup cible (appelee automatiquement)
+cleanup_worktree_for_branch() {
+  BRANCH=$1
+  WORKTREE_BASE="../worktrees"
+
+  # Determiner le chemin selon le type
+  if [[ $BRANCH == feature/* ]]; then
+    NAME=${BRANCH#feature/}
+    WORKTREE_PATH="$WORKTREE_BASE/features/$NAME"
+  elif [[ $BRANCH == release/* ]]; then
+    VERSION=${BRANCH#release/}
+    WORKTREE_PATH="$WORKTREE_BASE/releases/$VERSION"
+  elif [[ $BRANCH == hotfix/* ]]; then
+    NAME=${BRANCH#hotfix/}
+    WORKTREE_PATH="$WORKTREE_BASE/hotfixes/$NAME"
+  fi
+
+  # Supprimer si existe
+  if [ -d "$WORKTREE_PATH" ]; then
+    git worktree remove "$WORKTREE_PATH" --force 2>/dev/null || true
+    rm -rf "$WORKTREE_PATH" 2>/dev/null || true
+    git worktree prune
+    echo "✓ Worktree nettoye: $WORKTREE_PATH"
+  fi
+}
+
+# Appel automatique apres abandon
+cleanup_worktree_for_branch "$BRANCH"
 ```
+
+**Note:** Pour un audit complet de tous les worktrees, utilisez `/gitflow:12-cleanup`.
 
 ---
 
@@ -282,7 +311,7 @@ Actions effectuees:
   {✓|✗} Salvage vers develop
   {✓|✗} Archive creee
   ✓ Branche supprimee
-  {✓|✗} Worktree nettoye
+  ✓ Worktree nettoye (cleanup automatique)
 
 ═══════════════════════════════════════════════════════════════
 
@@ -290,6 +319,7 @@ Prochaines etapes:
   - Documenter la raison si besoin
   - Creer issue pour suivi si applicable
   - Demarrer nouvelle branche: /gitflow:10-start {type} {nom}
+  - Audit complet worktrees: /gitflow:12-cleanup (optionnel)
 
 ═══════════════════════════════════════════════════════════════
 ```
