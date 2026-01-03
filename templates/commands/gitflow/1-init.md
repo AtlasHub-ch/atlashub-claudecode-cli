@@ -14,6 +14,65 @@ You are a GitFlow and EF Core expert. Initialize the .NET project for the GitFlo
 
 ## Default mode: Generate the plan
 
+### 0. Check existing structure
+
+**IMPORTANT:** Before analyzing, check if GitFlow is already initialized.
+
+```bash
+# Check for existing structure
+CONFIG_FILE=".claude/gitflow/config.json"
+EXPECTED_VERSION="1.2.0"
+
+if [ -f "$CONFIG_FILE" ]; then
+  EXISTING_VERSION=$(grep -oP '"version":\s*"\K[^"]+' "$CONFIG_FILE" 2>/dev/null || echo "unknown")
+  echo "Existing GitFlow detected: v$EXISTING_VERSION"
+fi
+```
+
+**If structure exists, analyze differences:**
+
+| Check | Expected | Current | Status |
+|-------|----------|---------|--------|
+| Config version | 1.2.0 | {existing} | {OK/OUTDATED} |
+| Worktrees enabled | true | {value} | {OK/MISSING} |
+| EF Core config | crossBranch section | {exists?} | {OK/MISSING} |
+| Folders | plans/, logs/, migrations/ | {exists?} | {OK/INCOMPLETE} |
+
+**If differences detected, ask user:**
+
+```javascript
+AskUserQuestion({
+  questions: [{
+    question: "Existing GitFlow structure detected (v{existing_version}). What do you want to do?",
+    header: "Init",
+    options: [
+      { label: "Migrate", description: "Update to v1.2.0 - preserve existing config (Recommended)" },
+      { label: "Reset", description: "Delete and recreate from scratch (loses config)" },
+      { label: "Skip", description: "Keep current structure unchanged" }
+    ],
+    multiSelect: false
+  }]
+})
+```
+
+**Migration actions (if "Migrate" selected):**
+1. Backup existing config to `.claude/gitflow/backup/config_<timestamp>.json`
+2. Add missing config sections (worktrees, efcore.crossBranch, etc.)
+3. Create missing folders
+4. Update version to 1.2.0
+5. Preserve user customizations (branch names, versioning source, etc.)
+
+**Reset actions (if "Reset" selected):**
+1. Backup entire `.claude/gitflow/` to `.claude/gitflow.bak_<timestamp>/`
+2. Delete `.claude/gitflow/`
+3. Continue with fresh initialization
+
+**Skip actions:**
+1. Display current config summary
+2. Exit without changes
+
+---
+
 ### 1. Analysis
 
 Analyze the repository and detect:
@@ -176,8 +235,62 @@ Rename to `init_<DATE>_DONE_<TIMESTAMP>.md`
 
 | Command | Action |
 |---------|--------|
-| `/gitflow:1-init` | Generate plan |
+| `/gitflow:1-init` | Generate plan (asks if structure exists) |
 | `/gitflow:1-init --exec` | Execute existing plan |
 | `/gitflow:1-init --yes` | Generate + execute without intermediate file |
+| `/gitflow:1-init --migrate` | Force migration of existing structure to v1.2.0 |
+| `/gitflow:1-init --reset` | Force reset (backup + recreate from scratch) |
 | `/gitflow:1-init --with-worktrees` | Generate plan with worktrees structure (default) |
 | `/gitflow:1-init --no-worktrees` | Generate plan without worktrees |
+
+---
+
+## Migration Details (v1.0 → v1.2)
+
+When migrating from an older version, these changes are applied:
+
+### Config additions
+
+```json
+{
+  "version": "1.2.0",           // Updated
+  "worktrees": {                // NEW SECTION
+    "enabled": true,
+    "basePath": "../worktrees",
+    "permanent": { "main": true, "develop": true },
+    "structure": { "features": "features/", "releases": "releases/", "hotfixes": "hotfixes/" },
+    "cleanupOnFinish": true
+  },
+  "efcore": {
+    "crossBranch": {            // NEW SUBSECTION
+      "enabled": true,
+      "scanOnMigrationCreate": true,
+      "blockOnConflict": true,
+      "cacheExpiry": "1h"
+    }
+  },
+  "workflow": {
+    "push": {                   // NEW SUBSECTION
+      "afterCommit": "worktree",
+      "afterFinish": "always"
+    }
+  }
+}
+```
+
+### Structure additions
+
+```
+.claude/gitflow/
+├── backup/                    # NEW - for migration backups
+├── cache/                     # NEW - for cross-branch scan cache
+└── (existing folders preserved)
+```
+
+### Preserved during migration
+
+- `versioning.source` and `versioning.sourceFile`
+- `repository.*` settings
+- `git.branches.*` custom branch names
+- `efcore.contexts` list
+- All existing plans and logs
