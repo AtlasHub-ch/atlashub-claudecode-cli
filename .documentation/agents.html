@@ -163,24 +163,51 @@
 
                             <h4 data-lang="fr">Cas d'utilisation</h4>
                             <h4 data-lang="en">Use Cases</h4>
-                            <ul>
-                                <li data-lang="fr">Trouver des implementations similaires a suivre comme exemple</li>
-                                <li data-lang="en">Find similar implementations to follow as examples</li>
-                                <li data-lang="fr">Localiser les fichiers a modifier</li>
-                                <li data-lang="en">Locate files to modify</li>
-                                <li data-lang="fr">Identifier les patterns et conventions existants</li>
-                                <li data-lang="en">Identify existing patterns and conventions</li>
-                                <li data-lang="fr">Decouvrir les utilitaires et helpers reutilisables</li>
-                                <li data-lang="en">Discover reusable utilities and helpers</li>
-                            </ul>
+                            <div class="feature-grid">
+                                <div class="feature-item">
+                                    <span class="feature-icon">&#128269;</span>
+                                    <span class="feature-text" data-lang="fr">Trouver des implementations similaires a suivre comme exemple</span>
+                                    <span class="feature-text" data-lang="en">Find similar implementations to follow as examples</span>
+                                </div>
+                                <div class="feature-item">
+                                    <span class="feature-icon">&#128193;</span>
+                                    <span class="feature-text" data-lang="fr">Localiser les fichiers a modifier</span>
+                                    <span class="feature-text" data-lang="en">Locate files to modify</span>
+                                </div>
+                                <div class="feature-item">
+                                    <span class="feature-icon">&#128736;</span>
+                                    <span class="feature-text" data-lang="fr">Identifier les patterns et conventions existants</span>
+                                    <span class="feature-text" data-lang="en">Identify existing patterns and conventions</span>
+                                </div>
+                                <div class="feature-item">
+                                    <span class="feature-icon">&#129520;</span>
+                                    <span class="feature-text" data-lang="fr">Decouvrir les utilitaires et helpers reutilisables</span>
+                                    <span class="feature-text" data-lang="en">Discover reusable utilities and helpers</span>
+                                </div>
+                            </div>
 
-                            <details class="prompt-details">
+                            <details class="template-section">
                                 <summary>
-                                    <span data-lang="fr">Voir le prompt complet</span>
-                                    <span data-lang="en">View complete prompt</span>
+                                    <h4 style="display: inline; margin: 0;">
+                                        <span data-lang="fr">Template Prompt</span>
+                                        <span data-lang="en">Prompt Template</span>
+                                    </h4>
+                                    <span class="template-badge">explore-codebase.md</span>
                                 </summary>
-                                <div class="prompt-content">
-                                    <pre><code>You are a codebase exploration specialist. Your only job is to find and present ALL relevant code and logic for the requested feature.
+                                <div class="template-content">
+                                    <p class="template-path">
+                                        <code>templates/agents/explore-codebase.md</code>
+                                    </p>
+                                    <div class="code-block template-code">
+                                        <button class="copy-btn">Copy</button>
+                                        <pre><code>---
+name: explore-codebase
+description: Use this agent whenever you need to explore the codebase to implement a feature.
+color: yellow
+model: haiku
+---
+
+You are a codebase exploration specialist. Your only job is to find and present ALL relevant code and logic for the requested feature.
 
 ## Search Strategy
 
@@ -230,6 +257,7 @@ Related to: [How it connects to the feature]
 ## Priority
 
 Thoroughness > Speed. Find everything relevant.</code></pre>
+                                    </div>
                                 </div>
                             </details>
                         </div>
@@ -256,22 +284,46 @@ Thoroughness > Speed. Find everything relevant.</code></pre>
 
                             <h4 data-lang="fr">Cas d'utilisation</h4>
                             <h4 data-lang="en">Use Cases</h4>
-                            <ul>
-                                <li data-lang="fr">Rechercher les APIs et patterns d'une librairie</li>
-                                <li data-lang="en">Search library APIs and patterns</li>
-                                <li data-lang="fr">Trouver les best practices officielles</li>
-                                <li data-lang="en">Find official best practices</li>
-                                <li data-lang="fr">Obtenir des exemples de code de la documentation</li>
-                                <li data-lang="en">Get code examples from documentation</li>
-                            </ul>
+                            <div class="feature-grid">
+                                <div class="feature-item">
+                                    <span class="feature-icon">&#128218;</span>
+                                    <span class="feature-text" data-lang="fr">Rechercher les APIs et patterns d'une librairie</span>
+                                    <span class="feature-text" data-lang="en">Search library APIs and patterns</span>
+                                </div>
+                                <div class="feature-item">
+                                    <span class="feature-icon">&#127942;</span>
+                                    <span class="feature-text" data-lang="fr">Trouver les best practices officielles</span>
+                                    <span class="feature-text" data-lang="en">Find official best practices</span>
+                                </div>
+                                <div class="feature-item">
+                                    <span class="feature-icon">&#128187;</span>
+                                    <span class="feature-text" data-lang="fr">Obtenir des exemples de code de la documentation</span>
+                                    <span class="feature-text" data-lang="en">Get code examples from documentation</span>
+                                </div>
+                            </div>
 
-                            <details class="prompt-details">
+                            <details class="template-section">
                                 <summary>
-                                    <span data-lang="fr">Voir le prompt complet</span>
-                                    <span data-lang="en">View complete prompt</span>
+                                    <h4 style="display: inline; margin: 0;">
+                                        <span data-lang="fr">Template Prompt</span>
+                                        <span data-lang="en">Prompt Template</span>
+                                    </h4>
+                                    <span class="template-badge">explore-docs.md</span>
                                 </summary>
-                                <div class="prompt-content">
-                                    <pre><code>You are a documentation exploration specialist. Your mission is to retrieve precise, actionable documentation with code examples.
+                                <div class="template-content">
+                                    <p class="template-path">
+                                        <code>templates/agents/explore-docs.md</code>
+                                    </p>
+                                    <div class="code-block template-code">
+                                        <button class="copy-btn">Copy</button>
+                                        <pre><code>---
+name: explore-docs
+description: Use this agent IMMEDIATELY when the user asks about library features, implementation methods, "how to do X with Y library", documentation searches, or ANY question about using/implementing specific libraries or frameworks
+color: yellow
+model: haiku
+---
+
+You are a documentation exploration specialist. Your mission is to retrieve precise, actionable documentation with code examples.
 
 ## Search Strategy
 
@@ -323,6 +375,7 @@ Thoroughness > Speed. Find everything relevant.</code></pre>
 ## Priority
 
 Actionable code examples > API specs > Configuration > Theory.</code></pre>
+                                    </div>
                                 </div>
                             </details>
                         </div>
@@ -349,22 +402,47 @@ Actionable code examples > API specs > Configuration > Theory.</code></pre>
 
                             <h4 data-lang="fr">Cas d'utilisation</h4>
                             <h4 data-lang="en">Use Cases</h4>
-                            <ul>
-                                <li data-lang="fr">Rechercher les dernieres approches et solutions</li>
-                                <li data-lang="en">Research latest approaches and solutions</li>
-                                <li data-lang="fr">Trouver des exemples de la communaute</li>
-                                <li data-lang="en">Find community examples</li>
-                                <li data-lang="fr">Obtenir des informations architecturales</li>
-                                <li data-lang="en">Get architectural guidance</li>
-                            </ul>
+                            <div class="feature-grid">
+                                <div class="feature-item">
+                                    <span class="feature-icon">&#127760;</span>
+                                    <span class="feature-text" data-lang="fr">Rechercher les dernieres approches et solutions</span>
+                                    <span class="feature-text" data-lang="en">Research latest approaches and solutions</span>
+                                </div>
+                                <div class="feature-item">
+                                    <span class="feature-icon">&#128101;</span>
+                                    <span class="feature-text" data-lang="fr">Trouver des exemples de la communaute</span>
+                                    <span class="feature-text" data-lang="en">Find community examples</span>
+                                </div>
+                                <div class="feature-item">
+                                    <span class="feature-icon">&#127959;</span>
+                                    <span class="feature-text" data-lang="fr">Obtenir des informations architecturales</span>
+                                    <span class="feature-text" data-lang="en">Get architectural guidance</span>
+                                </div>
+                            </div>
 
-                            <details class="prompt-details">
+                            <details class="template-section">
                                 <summary>
-                                    <span data-lang="fr">Voir le prompt complet</span>
-                                    <span data-lang="en">View complete prompt</span>
+                                    <h4 style="display: inline; margin: 0;">
+                                        <span data-lang="fr">Template Prompt</span>
+                                        <span data-lang="en">Prompt Template</span>
+                                    </h4>
+                                    <span class="template-badge">websearch.md</span>
                                 </summary>
-                                <div class="prompt-content">
-                                    <pre><code>You are a rapid web search specialist. Find accurate information fast.
+                                <div class="template-content">
+                                    <p class="template-path">
+                                        <code>templates/agents/websearch.md</code>
+                                    </p>
+                                    <div class="code-block template-code">
+                                        <button class="copy-btn">Copy</button>
+                                        <pre><code>---
+name: websearch
+description: Use this agent when you need to make a quick web search.
+color: yellow
+tools: WebSearch, WebFetch
+model: haiku
+---
+
+You are a rapid web search specialist. Find accurate information fast.
 
 ## Workflow
 
@@ -401,6 +479,7 @@ Actionable code examples > API specs > Configuration > Theory.</code></pre>
 ## Priority
 
 Accuracy > Speed. Get the right answer quickly.</code></pre>
+                                    </div>
                                 </div>
                             </details>
                         </div>
@@ -427,22 +506,46 @@ Accuracy > Speed. Get the right answer quickly.</code></pre>
 
                             <h4 data-lang="fr">Cas d'utilisation</h4>
                             <h4 data-lang="en">Use Cases</h4>
-                            <ul>
-                                <li data-lang="fr">Modifications rapides de code</li>
-                                <li data-lang="en">Quick code modifications</li>
-                                <li data-lang="fr">Refactoring simple</li>
-                                <li data-lang="en">Simple refactoring</li>
-                                <li data-lang="fr">Renommage de variables/fonctions</li>
-                                <li data-lang="en">Variable/function renaming</li>
-                            </ul>
+                            <div class="feature-grid">
+                                <div class="feature-item">
+                                    <span class="feature-icon">&#9889;</span>
+                                    <span class="feature-text" data-lang="fr">Modifications rapides de code</span>
+                                    <span class="feature-text" data-lang="en">Quick code modifications</span>
+                                </div>
+                                <div class="feature-item">
+                                    <span class="feature-icon">&#128295;</span>
+                                    <span class="feature-text" data-lang="fr">Refactoring simple</span>
+                                    <span class="feature-text" data-lang="en">Simple refactoring</span>
+                                </div>
+                                <div class="feature-item">
+                                    <span class="feature-icon">&#128221;</span>
+                                    <span class="feature-text" data-lang="fr">Renommage de variables/fonctions</span>
+                                    <span class="feature-text" data-lang="en">Variable/function renaming</span>
+                                </div>
+                            </div>
 
-                            <details class="prompt-details">
+                            <details class="template-section">
                                 <summary>
-                                    <span data-lang="fr">Voir le prompt complet</span>
-                                    <span data-lang="en">View complete prompt</span>
+                                    <h4 style="display: inline; margin: 0;">
+                                        <span data-lang="fr">Template Prompt</span>
+                                        <span data-lang="en">Prompt Template</span>
+                                    </h4>
+                                    <span class="template-badge">snipper.md</span>
                                 </summary>
-                                <div class="prompt-content">
-                                    <pre><code>You are a rapid code modification specialist. No explanations, just execute.
+                                <div class="template-content">
+                                    <p class="template-path">
+                                        <code>templates/agents/snipper.md</code>
+                                    </p>
+                                    <div class="code-block template-code">
+                                        <button class="copy-btn">Copy</button>
+                                        <pre><code>---
+name: Snipper
+description: Use this agent when you need to modify code. This agent is specialized to be fast. The output is small and optimized to code as fast as agent can.
+color: blue
+model: haiku
+---
+
+You are a rapid code modification specialist. No explanations, just execute.
 
 ## Workflow
 
@@ -471,6 +574,7 @@ Simply list each file and the change made:
 ## Priority
 
 Speed > Explanation. Just get it done.</code></pre>
+                                    </div>
                                 </div>
                             </details>
                         </div>
@@ -497,22 +601,46 @@ Speed > Explanation. Just get it done.</code></pre>
 
                             <h4 data-lang="fr">Cas d'utilisation</h4>
                             <h4 data-lang="en">Use Cases</h4>
-                            <ul>
-                                <li data-lang="fr">Correction de documentation</li>
-                                <li data-lang="en">Documentation correction</li>
-                                <li data-lang="fr">Correction de commentaires</li>
-                                <li data-lang="en">Comment correction</li>
-                                <li data-lang="fr">Correction de fichiers README</li>
-                                <li data-lang="en">README file correction</li>
-                            </ul>
+                            <div class="feature-grid">
+                                <div class="feature-item">
+                                    <span class="feature-icon">&#128214;</span>
+                                    <span class="feature-text" data-lang="fr">Correction de documentation</span>
+                                    <span class="feature-text" data-lang="en">Documentation correction</span>
+                                </div>
+                                <div class="feature-item">
+                                    <span class="feature-icon">&#128172;</span>
+                                    <span class="feature-text" data-lang="fr">Correction de commentaires</span>
+                                    <span class="feature-text" data-lang="en">Comment correction</span>
+                                </div>
+                                <div class="feature-item">
+                                    <span class="feature-icon">&#128196;</span>
+                                    <span class="feature-text" data-lang="fr">Correction de fichiers README</span>
+                                    <span class="feature-text" data-lang="en">README file correction</span>
+                                </div>
+                            </div>
 
-                            <details class="prompt-details">
+                            <details class="template-section">
                                 <summary>
-                                    <span data-lang="fr">Voir le prompt complet</span>
-                                    <span data-lang="en">View complete prompt</span>
+                                    <h4 style="display: inline; margin: 0;">
+                                        <span data-lang="fr">Template Prompt</span>
+                                        <span data-lang="en">Prompt Template</span>
+                                    </h4>
+                                    <span class="template-badge">fix-grammar.md</span>
                                 </summary>
-                                <div class="prompt-content">
-                                    <pre><code>You are DevProfCorrectorGPT, a professional text corrector. Fix grammar and spelling errors while preserving all formatting and meaning.
+                                <div class="template-content">
+                                    <p class="template-path">
+                                        <code>templates/agents/fix-grammar.md</code>
+                                    </p>
+                                    <div class="code-block template-code">
+                                        <button class="copy-btn">Copy</button>
+                                        <pre><code>---
+name: fix-grammar
+description: Use this agent to fix grammar and spelling errors in a single file while preserving formatting
+color: blue
+model: haiku
+---
+
+You are DevProfCorrectorGPT, a professional text corrector. Fix grammar and spelling errors while preserving all formatting and meaning.
 
 ## File Processing
 
@@ -540,6 +668,7 @@ Speed > Explanation. Just get it done.</code></pre>
 ## Priority
 
 Accuracy > Speed. Preserve meaning and formatting while fixing obvious errors.</code></pre>
+                                    </div>
                                 </div>
                             </details>
                         </div>
@@ -566,22 +695,46 @@ Accuracy > Speed. Preserve meaning and formatting while fixing obvious errors.</
 
                             <h4 data-lang="fr">Cas d'utilisation</h4>
                             <h4 data-lang="en">Use Cases</h4>
-                            <ul>
-                                <li data-lang="fr">Supprimer des dependances non utilisees</li>
-                                <li data-lang="en">Remove unused dependencies</li>
-                                <li data-lang="fr">Supprimer des exports non utilises</li>
-                                <li data-lang="en">Remove unused exports</li>
-                                <li data-lang="fr">Nettoyage conditionnel de code</li>
-                                <li data-lang="en">Conditional code cleanup</li>
-                            </ul>
+                            <div class="feature-grid">
+                                <div class="feature-item">
+                                    <span class="feature-icon">&#128230;</span>
+                                    <span class="feature-text" data-lang="fr">Supprimer des dependances non utilisees</span>
+                                    <span class="feature-text" data-lang="en">Remove unused dependencies</span>
+                                </div>
+                                <div class="feature-item">
+                                    <span class="feature-icon">&#128465;</span>
+                                    <span class="feature-text" data-lang="fr">Supprimer des exports non utilises</span>
+                                    <span class="feature-text" data-lang="en">Remove unused exports</span>
+                                </div>
+                                <div class="feature-item">
+                                    <span class="feature-icon">&#129529;</span>
+                                    <span class="feature-text" data-lang="fr">Nettoyage conditionnel de code</span>
+                                    <span class="feature-text" data-lang="en">Conditional code cleanup</span>
+                                </div>
+                            </div>
 
-                            <details class="prompt-details">
+                            <details class="template-section">
                                 <summary>
-                                    <span data-lang="fr">Voir le prompt complet</span>
-                                    <span data-lang="en">View complete prompt</span>
+                                    <h4 style="display: inline; margin: 0;">
+                                        <span data-lang="fr">Template Prompt</span>
+                                        <span data-lang="en">Prompt Template</span>
+                                    </h4>
+                                    <span class="template-badge">action.md</span>
                                 </summary>
-                                <div class="prompt-content">
-                                    <pre><code>Batch conditional executor. Handle ≤5 tasks. VERIFY INDEPENDENTLY before each action.
+                                <div class="template-content">
+                                    <p class="template-path">
+                                        <code>templates/agents/action.md</code>
+                                    </p>
+                                    <div class="code-block template-code">
+                                        <button class="copy-btn">Copy</button>
+                                        <pre><code>---
+name: action
+description: Conditional action executor - performs actions only when specific conditions are met
+color: purple
+model: haiku
+---
+
+Batch conditional executor. Handle ≤5 tasks. VERIFY INDEPENDENTLY before each action.
 
 ## Workflow
 
@@ -610,6 +763,7 @@ Accuracy > Speed. Preserve meaning and formatting while fixing obvious errors.</
 2. Grep `axios` → Not found → `pnpm remove axios` → Done
 3. Grep `moment` → Not found → `pnpm remove moment` → Done
    Report: "Removed 2/3: axios, moment. Skipped: lodash (used in utils.ts)"</code></pre>
+                                    </div>
                                 </div>
                             </details>
                         </div>

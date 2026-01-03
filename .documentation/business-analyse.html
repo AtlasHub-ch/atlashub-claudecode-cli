@@ -97,7 +97,6 @@
                             <a href="#phase-4" class="sidebar-toc-link">4. Specify</a>
                             <a href="#phase-5" class="sidebar-toc-link">5. Document</a>
                             <a href="#phase-6" class="sidebar-toc-link">6. Handoff</a>
-                            <a href="#phase-7" class="sidebar-toc-link">7. Dev</a>
                             <a href="#bug-tracking" class="sidebar-toc-link">Bug Tracking</a>
                         </nav>
                     </div>
@@ -170,6 +169,34 @@
                                 </p>
                             </div>
                         </div>
+
+                        <div class="alert alert-success">
+                            <span class="alert-icon">&#127919;</span>
+                            <div class="alert-content">
+                                <h5 data-lang="fr">BA Proactif</h5>
+                                <h5 data-lang="en">Proactive BA</h5>
+                                <p data-lang="fr">
+                                    Le BA <strong>propose des fonctionnalites</strong> que l'utilisateur n'a pas pensees, <strong>dessine des wireframes ASCII</strong> et <strong>challenge agressivement</strong> les besoins vagues.
+                                </p>
+                                <p data-lang="en">
+                                    The BA <strong>suggests features</strong> the user didn't think of, <strong>draws ASCII wireframes</strong> and <strong>aggressively challenges</strong> vague requirements.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="alert alert-info">
+                            <span class="alert-icon">&#127760;</span>
+                            <div class="alert-content">
+                                <h5 data-lang="fr">Optimise pour One-Shot</h5>
+                                <h5 data-lang="en">Optimized for One-Shot</h5>
+                                <p data-lang="fr">
+                                    Le prompt de developpement genere est <strong>en anglais</strong> et contient tout le necessaire pour que Claude Code implemente la feature <strong>sans poser de questions</strong>.
+                                </p>
+                                <p data-lang="en">
+                                    The generated development prompt is <strong>in English</strong> and contains everything needed for Claude Code to implement the feature <strong>without asking questions</strong>.
+                                </p>
+                            </div>
+                        </div>
                     </section>
 
                     <!-- Workflow Diagram -->
@@ -230,14 +257,14 @@
                                 <path d="M 145 85 L 165 85" stroke="#94a3b8" stroke-width="2"/>
                                 <polygon points="163,80 173,85 163,90" fill="#94a3b8"/>
 
-                                <!-- Phase 2: DISCOVER -->
+                                <!-- Phase 2: DISCOVER (Opus) -->
                                 <g transform="translate(170, 40)" filter="url(#baGlow)">
-                                    <rect x="0" y="0" width="110" height="90" rx="10" fill="url(#baDiscoverGrad)"/>
+                                    <rect x="0" y="0" width="110" height="90" rx="10" fill="url(#baDiscoverGrad)" stroke="#f472b6" stroke-width="2"/>
                                     <text x="55" y="30" text-anchor="middle" fill="white" font-size="12" font-weight="600">2. DISCOVER</text>
-                                    <text x="55" y="50" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="9">Questions</text>
-                                    <text x="55" y="65" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="9">adaptatives</text>
-                                    <rect x="70" y="70" width="35" height="14" rx="3" fill="rgba(255,255,255,0.2)"/>
-                                    <text x="87" y="80" text-anchor="middle" fill="white" font-size="7" font-weight="600">ultrathink</text>
+                                    <text x="55" y="50" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="9">OPUS</text>
+                                    <text x="55" y="65" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="9">ultrathink</text>
+                                    <rect x="70" y="70" width="35" height="14" rx="3" fill="rgba(255,255,255,0.3)"/>
+                                    <text x="87" y="80" text-anchor="middle" fill="white" font-size="7" font-weight="600">OPUS</text>
                                 </g>
                                 <text x="225" y="205" text-anchor="middle" fill="#8b5cf6" font-size="10" font-weight="500">discovery.md</text>
                                 <text x="225" y="220" text-anchor="middle" fill="#94a3b8" font-size="9">6-30+ questions</text>
@@ -318,7 +345,7 @@
                                         <span data-lang="en">Command</span>
                                     </th>
                                         <th>Output</th>
-                                        <th>Model</th>
+                                        <th>Mode</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -326,37 +353,37 @@
                                         <td><strong>1. Init</strong></td>
                                         <td><code>/business-analyse:1-init</code></td>
                                         <td><code>config.json, glossary.md</code></td>
-                                        <td>Haiku</td>
+                                        <td>ultrathink</td>
                                     </tr>
                                     <tr>
                                         <td><strong>2. Discover</strong></td>
                                         <td><code>/business-analyse:2-discover</code></td>
                                         <td><code>discovery.md</code></td>
-                                        <td>Sonnet + ultrathink</td>
+                                        <td><strong style="color: #ec4899;">OPUS</strong> + ultrathink</td>
                                     </tr>
                                     <tr>
                                         <td><strong>3. Analyse</strong></td>
                                         <td><code>/business-analyse:3-analyse</code></td>
                                         <td><code>BRD.md, process-model.md</code></td>
-                                        <td><strong>Opus</strong> + ultrathink</td>
+                                        <td>ultrathink</td>
                                     </tr>
                                     <tr>
                                         <td><strong>4. Specify</strong></td>
                                         <td><code>/business-analyse:4-specify</code></td>
                                         <td><code>FRD.md</code></td>
-                                        <td><strong>Opus</strong> + ultrathink</td>
+                                        <td>ultrathink</td>
                                     </tr>
                                     <tr>
                                         <td><strong>5. Document</strong></td>
                                         <td><code>/business-analyse:5-document</code></td>
                                         <td><code>data-dictionary.md</code></td>
-                                        <td>Sonnet</td>
+                                        <td>ultrathink</td>
                                     </tr>
                                     <tr>
                                         <td><strong>6. Handoff</strong></td>
                                         <td><code>/business-analyse:6-handoff</code></td>
-                                        <td><code>DEV-PROMPT.md</code></td>
-                                        <td><strong>Opus</strong></td>
+                                        <td><code>DEV-PROMPT.md (EN)</code></td>
+                                        <td>ultrathink</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -420,10 +447,10 @@
                                     <text x="170" y="20" text-anchor="middle" fill="#94a3b8" font-size="11" font-weight="700">LEGENDE</text>
 
                                     <rect x="20" y="35" width="18" height="18" rx="4" fill="url(#phaseGrad)"/>
-                                    <text x="45" y="49" fill="#94a3b8" font-size="10">Sonnet</text>
+                                    <text x="45" y="49" fill="#94a3b8" font-size="10">Default</text>
 
                                     <rect x="100" y="35" width="18" height="18" rx="4" fill="url(#opusGrad)"/>
-                                    <text x="125" y="49" fill="#94a3b8" font-size="10">Opus</text>
+                                    <text x="125" y="49" fill="#94a3b8" font-size="10">OPUS</text>
 
                                     <rect x="175" y="35" width="18" height="18" rx="4" fill="#06b6d4"/>
                                     <text x="200" y="49" fill="#94a3b8" font-size="10">Interaction</text>
@@ -441,7 +468,7 @@
                                 <g transform="translate(60, 150)">
                                     <rect x="0" y="0" width="140" height="70" rx="10" fill="url(#phaseGrad)"/>
                                     <text x="70" y="25" text-anchor="middle" fill="white" font-size="13" font-weight="700">1. INIT</text>
-                                    <text x="70" y="42" text-anchor="middle" fill="rgba(255,255,255,0.9)" font-size="9">Haiku</text>
+                                    <text x="70" y="42" text-anchor="middle" fill="rgba(255,255,255,0.9)" font-size="9">ultrathink</text>
                                     <text x="70" y="56" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="8">Structure projet</text>
 
                                     <!-- Output -->
@@ -454,11 +481,11 @@
                                 <path d="M 305 185 L 350 185" stroke="#64748b" stroke-width="2"/>
                                 <polygon points="348,180 360,185 348,190" fill="#64748b"/>
 
-                                <!-- Phase 2: DISCOVER -->
+                                <!-- Phase 2: DISCOVER (Opus) -->
                                 <g transform="translate(370, 150)">
-                                    <rect x="0" y="0" width="140" height="70" rx="10" fill="url(#phaseGrad)"/>
+                                    <rect x="0" y="0" width="140" height="70" rx="10" fill="url(#opusGrad)" stroke="#f472b6" stroke-width="2"/>
                                     <text x="70" y="25" text-anchor="middle" fill="white" font-size="13" font-weight="700">2. DISCOVER</text>
-                                    <text x="70" y="42" text-anchor="middle" fill="rgba(255,255,255,0.9)" font-size="9">Sonnet + ultrathink</text>
+                                    <text x="70" y="42" text-anchor="middle" fill="white" font-size="9" font-weight="600">OPUS + ultrathink</text>
                                     <text x="70" y="56" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="8">Questions adaptatives</text>
 
                                     <!-- Interaction indicator -->
@@ -476,11 +503,11 @@
                                 <path d="M 650 185 L 700 185 L 700 260 L 130 260 L 130 290" stroke="#64748b" stroke-width="2" fill="none"/>
                                 <polygon points="125,288 130,300 135,288" fill="#64748b"/>
 
-                                <!-- Phase 3: ANALYSE (Opus) -->
+                                <!-- Phase 3: ANALYSE -->
                                 <g transform="translate(60, 300)">
-                                    <rect x="0" y="0" width="140" height="70" rx="10" fill="url(#opusGrad)" stroke="#f472b6" stroke-width="2"/>
+                                    <rect x="0" y="0" width="140" height="70" rx="10" fill="url(#phaseGrad)"/>
                                     <text x="70" y="25" text-anchor="middle" fill="white" font-size="13" font-weight="700">3. ANALYSE</text>
-                                    <text x="70" y="42" text-anchor="middle" fill="white" font-size="9" font-weight="600">OPUS + ultrathink</text>
+                                    <text x="70" y="42" text-anchor="middle" fill="rgba(255,255,255,0.9)" font-size="9">ultrathink</text>
                                     <text x="70" y="56" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="8">BRD Generation</text>
 
                                     <!-- Output -->
@@ -493,11 +520,11 @@
                                 <path d="M 305 335 L 350 335" stroke="#64748b" stroke-width="2"/>
                                 <polygon points="348,330 360,335 348,340" fill="#64748b"/>
 
-                                <!-- Phase 4: SPECIFY (Opus) -->
+                                <!-- Phase 4: SPECIFY -->
                                 <g transform="translate(370, 300)">
-                                    <rect x="0" y="0" width="140" height="70" rx="10" fill="url(#opusGrad)" stroke="#f472b6" stroke-width="2"/>
+                                    <rect x="0" y="0" width="140" height="70" rx="10" fill="url(#phaseGrad)"/>
                                     <text x="70" y="25" text-anchor="middle" fill="white" font-size="13" font-weight="700">4. SPECIFY</text>
-                                    <text x="70" y="42" text-anchor="middle" fill="white" font-size="9" font-weight="600">OPUS + ultrathink</text>
+                                    <text x="70" y="42" text-anchor="middle" fill="rgba(255,255,255,0.9)" font-size="9">ultrathink</text>
                                     <text x="70" y="56" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="8">FRD, Use Cases</text>
 
                                     <!-- 85% check -->
@@ -519,7 +546,7 @@
                                 <g transform="translate(700, 300)">
                                     <rect x="0" y="0" width="130" height="70" rx="10" fill="url(#phaseGrad)"/>
                                     <text x="65" y="25" text-anchor="middle" fill="white" font-size="12" font-weight="700">5. DOCUMENT</text>
-                                    <text x="65" y="42" text-anchor="middle" fill="rgba(255,255,255,0.9)" font-size="9">Sonnet</text>
+                                    <text x="65" y="42" text-anchor="middle" fill="rgba(255,255,255,0.9)" font-size="9">ultrathink</text>
                                     <text x="65" y="56" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="8">Doc transverse</text>
                                 </g>
 
@@ -527,11 +554,11 @@
                                 <path d="M 765 375 L 765 405 L 130 405 L 130 430" stroke="#64748b" stroke-width="2" fill="none"/>
                                 <polygon points="125,428 130,440 135,428" fill="#64748b"/>
 
-                                <!-- Phase 6: HANDOFF (Opus) -->
+                                <!-- Phase 6: HANDOFF -->
                                 <g transform="translate(60, 440)">
-                                    <rect x="0" y="0" width="160" height="55" rx="10" fill="url(#opusGrad)" stroke="#f472b6" stroke-width="2"/>
+                                    <rect x="0" y="0" width="160" height="55" rx="10" fill="url(#phaseGrad)"/>
                                     <text x="80" y="22" text-anchor="middle" fill="white" font-size="13" font-weight="700">6. HANDOFF</text>
-                                    <text x="80" y="38" text-anchor="middle" fill="white" font-size="9" font-weight="600">OPUS</text>
+                                    <text x="80" y="38" text-anchor="middle" fill="rgba(255,255,255,0.9)" font-size="9">ultrathink</text>
                                     <text x="80" y="50" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="8">Prompt autonome</text>
                                 </g>
 
@@ -563,10 +590,16 @@
                         </h2>
 
                         <p data-lang="fr">
-                            Initialise la structure <code>.business-analyse/</code> avec une organisation hierarchique application/module/feature.
+                            <strong>Fonctionnalite :</strong> Cette phase initialise l'environnement Business Analyse en scannant le projet existant pour detecter la stack technique (framework, ORM, structure), puis cree la structure de dossiers hierarchique <code>.business-analyse/</code> organisee par application/module/feature. Elle genere egalement un fichier de configuration centralise et un glossaire metier initial avec les termes BA standards.
                         </p>
                         <p data-lang="en">
-                            Initializes the <code>.business-analyse/</code> structure with a hierarchical application/module/feature organization.
+                            <strong>Functionality:</strong> This phase initializes the Business Analysis environment by scanning the existing project to detect the technical stack (framework, ORM, structure), then creates the hierarchical <code>.business-analyse/</code> folder structure organized by application/module/feature. It also generates a centralized configuration file and an initial business glossary with standard BA terms.
+                        </p>
+                        <p data-lang="fr">
+                            <strong>Output :</strong> <code>config.json</code> (configuration projet), <code>glossary.md</code> (glossaire metier), <code>.claudeignore</code> (exclusions), <code>context.md</code> (contexte applicatif avec stakeholders et modules).
+                        </p>
+                        <p data-lang="en">
+                            <strong>Output:</strong> <code>config.json</code> (project configuration), <code>glossary.md</code> (business glossary), <code>.claudeignore</code> (exclusions), <code>context.md</code> (application context with stakeholders and modules).
                         </p>
 
                         <div class="command-card">
@@ -618,6 +651,60 @@
                                         <span class="feature-text" data-lang="en">Project configuration</span>
                                     </div>
                                 </div>
+
+                                <details class="template-section">
+                                    <summary>
+                                        <h4 style="display: inline; margin: 0;">
+                                            <span data-lang="fr">Template Prompt</span>
+                                            <span data-lang="en">Prompt Template</span>
+                                        </h4>
+                                        <span class="template-badge">1-init.md</span>
+                                    </summary>
+                                    <div class="template-content">
+                                        <p class="template-path">
+                                            <code>templates/commands/business-analyse/1-init.md</code>
+                                        </p>
+                                        <div class="code-block template-code">
+                                            <button class="copy-btn">Copy</button>
+                                            <pre><code># Business Analysis - Init
+
+Senior BA expert. Initialize business analysis structure.
+
+## Arguments
+/business-analyse:init [app-name]
+- app-name (optional): Application name. If absent, ask.
+
+## Workflow
+
+### Step 1: Information Gathering
+If app-name is empty, ask: "What is the name of the application?"
+Options: "New application" or "Existing" (scan project for technical stack)
+
+### Step 2: Technical Scan (if existing project)
+Use explore agent to scan: Architecture, Data (ORM, Entities), API, UI
+
+### Step 3: Structure Creation
+mkdir -p .business-analyse/{applications,documentation,templates}
+
+### Step 4: Create config.json
+Configuration with version, application info, structure, settings, technical stack
+
+### Step 5: Create Glossary
+Business glossary with terms, definitions, acronyms (BRD, FRD, BA)
+
+### Step 6: Create .claudeignore
+Exclude verbose files (discovery, analysis phases, templates)
+Keep: functional-specification.md, development-handoff.md, glossary.md
+
+### Step 7: Create Application Structure
+Application folder with context.md (stakeholders, modules)
+
+## Summary Output
+Structure created with all configuration files
+Next: /business-analyse:discover &lt;module&gt; "description"</code></pre>
+                                        </div>
+                                    </div>
+                                </details>
                             </div>
                         </div>
                     </section>
@@ -626,15 +713,35 @@
                     <section id="phase-2">
                         <h2>
                             <span style="color: #8b5cf6;">2.</span> Discover
-                            <span class="tag tag-workflow" style="margin-left: 0.5rem; vertical-align: middle;">ultrathink</span>
+                            <span class="tag tag-workflow" style="margin-left: 0.5rem; vertical-align: middle;">OPUS + ultrathink</span>
                         </h2>
 
                         <p data-lang="fr">
-                            Questionnaire adaptatif selon la complexite. Utilise <strong>ultrathink</strong> pour une analyse profonde du besoin.
+                            <strong>Fonctionnalite :</strong> Cette phase conduit une elicitation exhaustive des besoins via un questionnaire adaptatif (6-30+ questions selon la complexite). Le BA utilise OPUS + ultrathink pour challenger agressivement les hypotheses, identifier les non-dits, proposer des fonctionnalites connexes que l'utilisateur n'a pas pensees, et dessiner des wireframes ASCII pour valider la vision interface. C'est la phase la plus critique car elle definit le perimetre et les regles metier.
                         </p>
                         <p data-lang="en">
-                            Adaptive questionnaire based on complexity. Uses <strong>ultrathink</strong> for deep requirement analysis.
+                            <strong>Functionality:</strong> This phase conducts exhaustive requirements elicitation via an adaptive questionnaire (6-30+ questions based on complexity). The BA uses OPUS + ultrathink to aggressively challenge assumptions, identify unstated requirements, propose related features the user hasn't thought of, and draw ASCII wireframes to validate the interface vision. This is the most critical phase as it defines scope and business rules.
                         </p>
+                        <p data-lang="fr">
+                            <strong>Output :</strong> <code>1-discovery.md</code> contenant : resume executif, contexte strategique, personas utilisateurs, perimetre (IN/OUT), entites de donnees, flux metier, regles metier preliminaires, securite/permissions, risques identifies, et questions ouvertes.
+                        </p>
+                        <p data-lang="en">
+                            <strong>Output:</strong> <code>1-discovery.md</code> containing: executive summary, strategic context, user personas, scope (IN/OUT), data entities, business flows, preliminary business rules, security/permissions, identified risks, and open questions.
+                        </p>
+
+                        <div class="alert alert-warning">
+                            <span class="alert-icon">&#128142;</span>
+                            <div class="alert-content">
+                                <h5 data-lang="fr">Model requis : OPUS</h5>
+                                <h5 data-lang="en">Required model: OPUS</h5>
+                                <p data-lang="fr">
+                                    La phase Discovery est la plus critique du workflow BA. Elle necessite <strong>OPUS</strong> pour garantir une elicitation exhaustive et un challenge agressif des besoins utilisateur.
+                                </p>
+                                <p data-lang="en">
+                                    The Discovery phase is the most critical in the BA workflow. It requires <strong>OPUS</strong> to ensure exhaustive elicitation and aggressive challenging of user requirements.
+                                </p>
+                            </div>
+                        </div>
 
                         <div class="command-card">
                             <div class="command-header">
@@ -715,6 +822,73 @@
                                         </p>
                                     </div>
                                 </div>
+
+                                <details class="template-section">
+                                    <summary>
+                                        <h4 style="display: inline; margin: 0;">
+                                            <span data-lang="fr">Template Prompt</span>
+                                            <span data-lang="en">Prompt Template</span>
+                                        </h4>
+                                        <span class="template-badge">2-discover.md</span>
+                                    </summary>
+                                    <div class="template-content">
+                                        <p class="template-path">
+                                            <code>templates/commands/business-analyse/2-discover.md</code>
+                                        </p>
+                                        <div class="code-block template-code">
+                                            <button class="copy-btn">Copy</button>
+                                            <pre><code># Business Analyse - Discover
+
+Senior BA expert in elicitation. OPUS + ULTRATHINK mode mandatory.
+
+## Model Requirement
+**This phase REQUIRES OPUS model** for exhaustive elicitation.
+
+## Arguments
+/business-analyse:discover [module] "needs description"
+- module: Name of the concerned module
+- description: Initial description of the need
+
+## ULTRATHINK Mode
+This phase uses OPUS + deep thinking:
+- Question each hypothesis
+- Look for contradictions
+- Identify what's left unsaid
+- Explore edge cases
+- Validate priorities
+
+## Adaptive Questions by Complexity
+
+| Complexity | Questions | Priority areas |
+|------------|-----------|----------------|
+| Simple CRUD | 6-8 | Context, Data, Permissions |
+| Standard | 12-15 | + Business rules, UI |
+| Complex | 20-25 | + Edge cases, Integrations |
+| Critical | 30+ | All areas |
+
+### ESSENTIAL questions (always asked - 6 questions)
+1. What problem does this feature solve?
+2. Who uses it? (main roles)
+3. What data is manipulated? (CRUD entities)
+4. What permissions? (who can do what)
+5. Scope: what is IN and OUT?
+6. Are there specific business rules?
+
+### CONDITIONAL questions (based on complexity)
+- If &gt;= Standard: Main flow, Validations, Messages, Audit trail
+- If &gt;= Complex: Integrations, Concurrency, Volume, Edge cases
+- If = Critical: GDPR, Legal, Performance, Irreversible operations
+
+## Output
+Creates 1-discovery.md with:
+- Executive Summary, Strategic Context, Users, Scope
+- Data, Business Flows, Business Rules, Security, Risks
+- Open Questions, Next Steps
+
+Next: /business-analyse:analyse FEAT-XXX</code></pre>
+                                        </div>
+                                    </div>
+                                </details>
                             </div>
                         </div>
                     </section>
@@ -727,10 +901,16 @@
                         </h2>
 
                         <p data-lang="fr">
-                            Generation du BRD (Business Requirements Document) et modelisation des processus. Utilise <strong>ultrathink</strong> pour une analyse approfondie.
+                            <strong>Fonctionnalite :</strong> Cette phase transforme les informations brutes de la discovery en analyse metier structuree. Elle scanne d'abord les specifications existantes pour eviter les duplications, puis modelise les processus metier en diagrammes Mermaid (AS-IS/TO-BE), cree le modele conceptuel de donnees (ER diagram), catalogue exhaustivement les regles metier avec leur matrice de tracabilite, et analyse les impacts sur les systemes/donnees/utilisateurs existants.
                         </p>
                         <p data-lang="en">
-                            BRD (Business Requirements Document) generation and process modeling. Uses <strong>ultrathink</strong> for deep analysis.
+                            <strong>Functionality:</strong> This phase transforms raw discovery information into structured business analysis. It first scans existing specifications to avoid duplications, then models business processes in Mermaid diagrams (AS-IS/TO-BE), creates the conceptual data model (ER diagram), exhaustively catalogs business rules with their traceability matrix, and analyzes impacts on existing systems/data/users.
+                        </p>
+                        <p data-lang="fr">
+                            <strong>Output :</strong> <code>2-business-requirements.md</code> (BRD) contenant : objectifs metier, analyse des stakeholders, exigences fonctionnelles/non-fonctionnelles, modele de donnees conceptuel, diagrammes de processus Mermaid, catalogue des regles metier, analyse d'impact, risques et dependances.
+                        </p>
+                        <p data-lang="en">
+                            <strong>Output:</strong> <code>2-business-requirements.md</code> (BRD) containing: business objectives, stakeholder analysis, functional/non-functional requirements, conceptual data model, Mermaid process diagrams, business rules catalog, impact analysis, risks and dependencies.
                         </p>
 
                         <div class="command-card">
@@ -747,16 +927,90 @@
                                 <h4 data-lang="fr">Livrables</h4>
                                 <h4 data-lang="en">Deliverables</h4>
 
-                                <ul>
-                                    <li data-lang="fr"><strong>BRD.md</strong> - Document exigences metier (BABOK-aligned)</li>
-                                    <li data-lang="en"><strong>BRD.md</strong> - Business Requirements Document (BABOK-aligned)</li>
-                                    <li data-lang="fr"><strong>process-model.md</strong> - Diagrammes Mermaid des processus</li>
-                                    <li data-lang="en"><strong>process-model.md</strong> - Mermaid process diagrams</li>
-                                    <li data-lang="fr">Matrice des stakeholders</li>
-                                    <li data-lang="en">Stakeholder matrix</li>
-                                    <li data-lang="fr">Analyse d'impact</li>
-                                    <li data-lang="en">Impact analysis</li>
-                                </ul>
+                                <div class="feature-grid">
+                                    <div class="feature-item">
+                                        <span class="feature-icon">&#128196;</span>
+                                        <span class="feature-text" data-lang="fr"><strong>BRD.md</strong> - Document exigences metier (BABOK-aligned)</span>
+                                        <span class="feature-text" data-lang="en"><strong>BRD.md</strong> - Business Requirements Document (BABOK-aligned)</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <span class="feature-icon">&#128200;</span>
+                                        <span class="feature-text" data-lang="fr"><strong>process-model.md</strong> - Diagrammes Mermaid des processus</span>
+                                        <span class="feature-text" data-lang="en"><strong>process-model.md</strong> - Mermaid process diagrams</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <span class="feature-icon">&#128101;</span>
+                                        <span class="feature-text" data-lang="fr">Matrice des stakeholders</span>
+                                        <span class="feature-text" data-lang="en">Stakeholder matrix</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <span class="feature-icon">&#128161;</span>
+                                        <span class="feature-text" data-lang="fr">Analyse d'impact</span>
+                                        <span class="feature-text" data-lang="en">Impact analysis</span>
+                                    </div>
+                                </div>
+
+                                <details class="template-section">
+                                    <summary>
+                                        <h4 style="display: inline; margin: 0;">
+                                            <span data-lang="fr">Template Prompt</span>
+                                            <span data-lang="en">Prompt Template</span>
+                                        </h4>
+                                        <span class="template-badge">3-analyse.md</span>
+                                    </summary>
+                                    <div class="template-content">
+                                        <p class="template-path">
+                                            <code>templates/commands/business-analyse/3-analyse.md</code>
+                                        </p>
+                                        <div class="code-block template-code">
+                                            <button class="copy-btn">Copy</button>
+                                            <pre><code># Business Analyse - Analyse
+
+Senior BA expert. ULTRATHINK mode mandatory. Generate BRD.
+
+## Arguments
+/business-analyse:analyse &lt;feature-id&gt;
+- feature-id: Feature identifier (FEAT-XXX)
+
+## Prerequisites
+- Discovery phase completed (1-discovery.md exists)
+
+## ULTRATHINK Mode
+Deep analysis with:
+- Business impact evaluation
+- Process optimization opportunities
+- Gap analysis between current/target state
+- Risk assessment
+
+## Workflow
+
+### Step 1: Read Discovery
+Read all discovery documents and project context.
+
+### Step 2: Stakeholder Analysis
+Identify all stakeholders, their interests, and influence levels.
+
+### Step 3: Business Process Modeling
+Create Mermaid diagrams for:
+- Current state (AS-IS)
+- Target state (TO-BE)
+- Gap analysis
+
+### Step 4: Generate BRD
+Business Requirements Document with:
+- Executive Summary, Business Objectives
+- Stakeholder Analysis, Business Rules
+- Process Flows, Data Requirements
+- Success Metrics, Risks
+
+## Output
+- 2-business-requirements.md (BRD)
+- process-model.md (Mermaid diagrams)
+
+Next: /business-analyse:specify FEAT-XXX</code></pre>
+                                        </div>
+                                    </div>
+                                </details>
                             </div>
                         </div>
                     </section>
@@ -769,10 +1023,16 @@
                         </h2>
 
                         <p data-lang="fr">
-                            Generation du FRD (Functional Requirements Document) avec cas d'utilisation, wireframes ASCII et criteres Gherkin. Seuil de completude : <strong>85%</strong>.
+                            <strong>Fonctionnalite :</strong> Cette phase produit les specifications fonctionnelles detaillees pretes pour l'implementation. Elle genere les cas d'utilisation complets (UC-XXX) avec preconditions/postconditions, dessine des wireframes ASCII pour chaque ecran, definit les endpoints API avec leurs schemas request/response, et redige les criteres d'acceptation en format Gherkin testable. Pour les features complexes, elle inclut un plan d'implementation phase (Data → API → UI → Integration). Un score de completude de 85% minimum est requis.
                         </p>
                         <p data-lang="en">
-                            FRD (Functional Requirements Document) generation with use cases, ASCII wireframes and Gherkin criteria. Completeness threshold: <strong>85%</strong>.
+                            <strong>Functionality:</strong> This phase produces detailed functional specifications ready for implementation. It generates complete use cases (UC-XXX) with pre/postconditions, draws ASCII wireframes for each screen, defines API endpoints with their request/response schemas, and writes acceptance criteria in testable Gherkin format. For complex features, it includes a phased implementation plan (Data → API → UI → Integration). A minimum completeness score of 85% is required.
+                        </p>
+                        <p data-lang="fr">
+                            <strong>Output :</strong> <code>3-functional-specification.md</code> (FRD) contenant : cas d'utilisation detailles, modele de donnees avec attributs/types/contraintes, wireframes ASCII des ecrans, matrice des endpoints API, regles de validation front/back, messages d'erreur, criteres Gherkin, et plan d'implementation si complexite >= Standard.
+                        </p>
+                        <p data-lang="en">
+                            <strong>Output:</strong> <code>3-functional-specification.md</code> (FRD) containing: detailed use cases, data model with attributes/types/constraints, ASCII screen wireframes, API endpoints matrix, front/back validation rules, error messages, Gherkin criteria, and implementation plan if complexity >= Standard.
                         </p>
 
                         <div class="command-card">
@@ -965,6 +1225,72 @@
                                         </tbody>
                                     </table>
                                 </div>
+
+                                <details class="template-section">
+                                    <summary>
+                                        <h4 style="display: inline; margin: 0;">
+                                            <span data-lang="fr">Template Prompt</span>
+                                            <span data-lang="en">Prompt Template</span>
+                                        </h4>
+                                        <span class="template-badge">4-specify.md</span>
+                                    </summary>
+                                    <div class="template-content">
+                                        <p class="template-path">
+                                            <code>templates/commands/business-analyse/4-specify.md</code>
+                                        </p>
+                                        <div class="code-block template-code">
+                                            <button class="copy-btn">Copy</button>
+                                            <pre><code># Business Analyse - Specify
+
+Senior BA expert. ULTRATHINK mode. Generate FRD (Functional Requirements Document).
+
+## Arguments
+/business-analyse:specify &lt;feature-id&gt;
+- feature-id: Feature identifier (FEAT-XXX)
+
+## Prerequisites
+- Analysis phase completed (2-business-requirements.md exists)
+
+## ULTRATHINK Mode
+Deep specification with:
+- Use case completeness validation
+- Edge case coverage
+- UI/UX considerations
+- Technical feasibility check
+
+## FRD Content
+
+| Section | Description |
+|---------|-------------|
+| Use Cases | UC-XXX format with pre/postconditions |
+| Data Model | Mermaid erDiagram schema |
+| Wireframes | ASCII screen mockups |
+| API Endpoints | REST matrix with payloads |
+| Gherkin | Given/When/Then acceptance criteria |
+
+## Validation Threshold: 85%
+Specifications must reach 85% completeness. Checklist includes:
+- All use cases documented
+- Data model complete
+- API endpoints defined
+- Acceptance criteria written
+- Edge cases covered
+
+## Implementation Plan (if complexity &gt; Standard)
+For complex features, phased approach:
+1. Data: Entities, Migrations
+2. API: Endpoints, Services
+3. UI: Components, Forms
+4. Integration: Wiring, Tests
+
+## Output
+- 3-functional-specification.md (FRD)
+- wireframes/ (if needed)
+
+Next: /business-analyse:document FEAT-XXX</code></pre>
+                                        </div>
+                                    </div>
+                                </details>
                             </div>
                         </div>
                     </section>
@@ -976,10 +1302,16 @@
                         </h2>
 
                         <p data-lang="fr">
-                            Documentation transverse : glossaire, dictionnaire de donnees, flux d'integration.
+                            <strong>Fonctionnalite :</strong> Cette phase genere la documentation transverse qui complete les specifications. Elle extrait tous les termes metier des documents precedents pour enrichir le glossaire global, cree un dictionnaire de donnees complet avec tous les attributs/types/contraintes de chaque entite, et documente les flux d'integration entre systemes avec des diagrammes de sequence Mermaid. Cette documentation assure la coherence terminologique et technique entre toutes les features du projet.
                         </p>
                         <p data-lang="en">
-                            Cross-cutting documentation: glossary, data dictionary, integration flows.
+                            <strong>Functionality:</strong> This phase generates cross-cutting documentation that completes the specifications. It extracts all business terms from previous documents to enrich the global glossary, creates a complete data dictionary with all attributes/types/constraints for each entity, and documents integration flows between systems with Mermaid sequence diagrams. This documentation ensures terminological and technical consistency across all project features.
+                        </p>
+                        <p data-lang="fr">
+                            <strong>Output :</strong> <code>data-dictionary.md</code> (dictionnaire de donnees complet), <code>glossary.md</code> (glossaire metier mis a jour avec les nouveaux termes), <code>integration-flows.md</code> (flux d'integration et diagrammes de sequence entre systemes).
+                        </p>
+                        <p data-lang="en">
+                            <strong>Output:</strong> <code>data-dictionary.md</code> (complete data dictionary), <code>glossary.md</code> (business glossary updated with new terms), <code>integration-flows.md</code> (integration flows and sequence diagrams between systems).
                         </p>
 
                         <div class="command-card">
@@ -996,14 +1328,79 @@
                                 <h4 data-lang="fr">Documents generes</h4>
                                 <h4 data-lang="en">Generated documents</h4>
 
-                                <ul>
-                                    <li data-lang="fr"><strong>data-dictionary.md</strong> - Toutes les entites avec types et contraintes</li>
-                                    <li data-lang="en"><strong>data-dictionary.md</strong> - All entities with types and constraints</li>
-                                    <li data-lang="fr"><strong>glossary.md</strong> - Mise a jour du glossaire metier</li>
-                                    <li data-lang="en"><strong>glossary.md</strong> - Updated business glossary</li>
-                                    <li data-lang="fr"><strong>integration-flows.md</strong> - Flux entre systemes</li>
-                                    <li data-lang="en"><strong>integration-flows.md</strong> - System integration flows</li>
-                                </ul>
+                                <div class="feature-grid">
+                                    <div class="feature-item">
+                                        <span class="feature-icon">&#128218;</span>
+                                        <span class="feature-text" data-lang="fr"><strong>data-dictionary.md</strong> - Toutes les entites avec types et contraintes</span>
+                                        <span class="feature-text" data-lang="en"><strong>data-dictionary.md</strong> - All entities with types and constraints</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <span class="feature-icon">&#128214;</span>
+                                        <span class="feature-text" data-lang="fr"><strong>glossary.md</strong> - Mise a jour du glossaire metier</span>
+                                        <span class="feature-text" data-lang="en"><strong>glossary.md</strong> - Updated business glossary</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <span class="feature-icon">&#128279;</span>
+                                        <span class="feature-text" data-lang="fr"><strong>integration-flows.md</strong> - Flux entre systemes</span>
+                                        <span class="feature-text" data-lang="en"><strong>integration-flows.md</strong> - System integration flows</span>
+                                    </div>
+                                </div>
+
+                                <details class="template-section">
+                                    <summary>
+                                        <h4 style="display: inline; margin: 0;">
+                                            <span data-lang="fr">Template Prompt</span>
+                                            <span data-lang="en">Prompt Template</span>
+                                        </h4>
+                                        <span class="template-badge">5-document.md</span>
+                                    </summary>
+                                    <div class="template-content">
+                                        <p class="template-path">
+                                            <code>templates/commands/business-analyse/5-document.md</code>
+                                        </p>
+                                        <div class="code-block template-code">
+                                            <button class="copy-btn">Copy</button>
+                                            <pre><code># Business Analyse - Document
+
+Senior BA expert. Generate cross-cutting documentation.
+
+## Arguments
+/business-analyse:document &lt;feature-id&gt;
+- feature-id: Feature identifier (FEAT-XXX)
+
+## Prerequisites
+- Specification phase completed (3-functional-specification.md exists)
+
+## Workflow
+
+### Step 1: Read All Documents
+Read discovery, BRD, and FRD for context.
+
+### Step 2: Update Glossary
+Extract all business terms and update glossary.md.
+
+### Step 3: Generate Data Dictionary
+Create data-dictionary.md with:
+- All entities from data model
+- Field types and constraints
+- Relationships
+- Validation rules
+
+### Step 4: Document Integration Flows
+Create integration-flows.md with:
+- System interfaces
+- Data flows between systems
+- Sequence diagrams (Mermaid)
+
+## Output
+- data-dictionary.md (complete entity documentation)
+- glossary.md (updated with new terms)
+- integration-flows.md (system interactions)
+
+Next: /business-analyse:handoff FEAT-XXX</code></pre>
+                                        </div>
+                                    </div>
+                                </details>
                             </div>
                         </div>
                     </section>
@@ -1015,10 +1412,16 @@
                         </h2>
 
                         <p data-lang="fr">
-                            Generation du prompt de developpement autonome. Ce prompt contient tout le contexte necessaire pour qu'un developpeur (ou Claude) puisse implementer sans poser de questions.
+                            <strong>Fonctionnalite :</strong> Cette phase finale compile toutes les specifications en un prompt de developpement autonome optimise pour Claude Code. Le prompt est TOUJOURS genere en anglais (reduction de 20-30% des tokens, meilleure compatibilite IA) et contient absolument tout le contexte necessaire pour une implementation one-shot : entites avec attributs exacts, endpoints API avec schemas, wireframes des ecrans, regles metier, regles de validation, messages d'erreur, criteres Gherkin, et ordre d'implementation. Le developpeur (humain ou IA) peut implementer sans poser de questions.
                         </p>
                         <p data-lang="en">
-                            Autonomous development prompt generation. This prompt contains all the context needed for a developer (or Claude) to implement without asking questions.
+                            <strong>Functionality:</strong> This final phase compiles all specifications into an autonomous development prompt optimized for Claude Code. The prompt is ALWAYS generated in English (20-30% token reduction, better AI compatibility) and contains absolutely all context needed for one-shot implementation: entities with exact attributes, API endpoints with schemas, screen wireframes, business rules, validation rules, error messages, Gherkin criteria, and implementation order. The developer (human or AI) can implement without asking questions.
+                        </p>
+                        <p data-lang="fr">
+                            <strong>Output :</strong> <code>4-development-handoff.md</code> (DEV-PROMPT en anglais) contenant : objectif clair, contexte technique, entites avec types exacts, endpoints API detailles, wireframes ASCII, regles metier codifiees, criteres d'acceptation Gherkin, Definition of Done, et instructions d'utilisation (<code>cat DEV-PROMPT.md | claude</code>).
+                        </p>
+                        <p data-lang="en">
+                            <strong>Output:</strong> <code>4-development-handoff.md</code> (DEV-PROMPT in English) containing: clear objective, technical context, entities with exact types, detailed API endpoints, ASCII wireframes, codified business rules, Gherkin acceptance criteria, Definition of Done, and usage instructions (<code>cat DEV-PROMPT.md | claude</code>).
                         </p>
 
                         <div class="command-card">
@@ -1046,129 +1449,79 @@
                                     </div>
                                 </div>
 
-                                <div class="code-block">
-                                    <button class="copy-btn">Copy</button>
-                                    <pre><code># Pour implementer avec Claude :
-/apex DEV-PROMPT.md
-
-# Ou manuellement :
-cat .business-analyse/applications/.../DEV-PROMPT.md</code></pre>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-
-                    <!-- Phase 7: Dev -->
-                    <section id="phase-7">
-                        <h2>
-                            <span style="color: #f59e0b;">7.</span> Dev
-                        </h2>
-
-                        <p data-lang="fr">
-                            Implementation guidee par phases avec validation utilisateur obligatoire avant chaque etape. Aucune execution automatique.
-                        </p>
-                        <p data-lang="en">
-                            Guided implementation by phases with mandatory user validation before each step. No automatic execution.
-                        </p>
-
-                        <div class="command-card">
-                            <div class="command-header">
-                                <code class="command-name">/business-analyse:7-dev</code>
-                                <span class="tag tag-command">Implementation</span>
-                            </div>
-                            <div class="command-body">
-                                <div class="code-block">
-                                    <button class="copy-btn">Copy</button>
-                                    <pre><code>/business-analyse:7-dev FEAT-001
-/business-analyse:7-dev FEAT-001 data
-/business-analyse:7-dev FEAT-001 api
-/business-analyse:7-dev FEAT-001 ui
-/business-analyse:7-dev FEAT-001 integration</code></pre>
-                                </div>
-
-                                <div class="alert alert-warning">
-                                    <span class="alert-icon">&#9888;</span>
+                                <div class="alert alert-info">
+                                    <span class="alert-icon">&#127760;</span>
                                     <div class="alert-content">
-                                        <h5 data-lang="fr">Validation obligatoire</h5>
-                                        <h5 data-lang="en">Mandatory validation</h5>
+                                        <h5 data-lang="fr">Regles de langue</h5>
+                                        <h5 data-lang="en">Language rules</h5>
                                         <p data-lang="fr">
-                                            <strong>AUCUNE phase ne s'execute automatiquement.</strong> L'utilisateur doit valider explicitement avant chaque phase et confirmer les resultats avant de passer a la suivante.
+                                            <strong>Documents BA (Discovery, BRD, FRD)</strong> : langue de l'utilisateur<br/>
+                                            <strong>DEV-PROMPT.md</strong> : toujours en anglais (optimise pour Claude Code)
                                         </p>
                                         <p data-lang="en">
-                                            <strong>NO phase executes automatically.</strong> The user must explicitly validate before each phase and confirm results before moving to the next.
+                                            <strong>BA Documents (Discovery, BRD, FRD)</strong>: user's language<br/>
+                                            <strong>DEV-PROMPT.md</strong>: always in English (optimized for Claude Code)
                                         </p>
                                     </div>
                                 </div>
 
-                                <h4 data-lang="fr">Phases d'implementation</h4>
-                                <h4 data-lang="en">Implementation phases</h4>
+                                <div class="code-block">
+                                    <button class="copy-btn">Copy</button>
+                                    <pre><code># Vibe coding - pipe directement vers Claude :
+cat DEV-PROMPT.md | claude
 
-                                <div class="table-container">
-                                    <table>
-                                        <thead>
-                                            <tr>
-                                                <th>Phase</th>
-                                                <th>Scope</th>
-                                                <th>
-                                        <span data-lang="fr">Validation</span>
-                                        <span data-lang="en">Validation</span>
-                                    </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td><strong>1. Data</strong></td>
-                                                <td>
-                                        <span data-lang="fr">Entites, Migrations, Repositories</span>
-                                        <span data-lang="en">Entities, Migrations, Repositories</span>
-                                    </td>
-                                                <td>EF/Migration OK</td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>2. API</strong></td>
-                                                <td>
-                                        <span data-lang="fr">Endpoints, Services, DTOs</span>
-                                        <span data-lang="en">Endpoints, Services, DTOs</span>
-                                    </td>
-                                                <td>Swagger OK</td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>3. UI</strong></td>
-                                                <td>
-                                        <span data-lang="fr">Composants, Formulaires, State</span>
-                                        <span data-lang="en">Components, Forms, State</span>
-                                    </td>
-                                                <td>E2E OK</td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>4. Integration</strong></td>
-                                                <td>
-                                        <span data-lang="fr">Wiring, Tests complets</span>
-                                        <span data-lang="en">Wiring, Full tests</span>
-                                    </td>
-                                                <td>UAT OK</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+# Ou ouvrir une nouvelle session Claude Code :
+# 1. Copier le contenu de DEV-PROMPT.md
+# 2. Coller dans Claude Code
+# 3. Laisser Claude implementer</code></pre>
                                 </div>
 
-                                <h4 data-lang="fr">Workflow</h4>
-                                <h4 data-lang="en">Workflow</h4>
+                                <details class="template-section">
+                                    <summary>
+                                        <h4 style="display: inline; margin: 0;">
+                                            <span data-lang="fr">Template Prompt</span>
+                                            <span data-lang="en">Prompt Template</span>
+                                        </h4>
+                                        <span class="template-badge">6-handoff.md</span>
+                                    </summary>
+                                    <div class="template-content">
+                                        <p class="template-path">
+                                            <code>templates/commands/business-analyse/6-handoff.md</code>
+                                        </p>
+                                        <div class="code-block template-code">
+                                            <button class="copy-btn">Copy</button>
+                                            <pre><code># Business Analyse - Handoff
 
-                                <ol>
-                                    <li data-lang="fr">Affichage du plan d'implementation</li>
-                                    <li data-lang="en">Display implementation plan</li>
-                                    <li data-lang="fr">Demande de quelle phase executer</li>
-                                    <li data-lang="en">Ask which phase to execute</li>
-                                    <li data-lang="fr">Double confirmation avant execution</li>
-                                    <li data-lang="en">Double confirmation before execution</li>
-                                    <li data-lang="fr">Execution de la phase</li>
-                                    <li data-lang="en">Execute the phase</li>
-                                    <li data-lang="fr">Validation des resultats</li>
-                                    <li data-lang="en">Validate results</li>
-                                    <li data-lang="fr">Passage a la phase suivante (si valide)</li>
-                                    <li data-lang="en">Move to next phase (if validated)</li>
-                                </ol>
+Senior BA expert. Autonomous development prompt generation. ULTRATHINK mode.
+
+## Language Rules (CRITICAL)
+- BA Documents (Discovery, BRD, FRD): USER'S LANGUAGE
+- DEV-PROMPT.md: ALWAYS IN ENGLISH (optimized for Claude Code)
+
+## One-Shot Requirements
+The developer (human or AI) should be able to:
+1. READ the prompt once
+2. IMPLEMENT without asking questions
+3. VALIDATE against included acceptance criteria
+
+## DEV-PROMPT.md Checklist
+- All entities with EXACT attributes and types
+- All API endpoints with request/response schemas
+- All UI screens with wireframes
+- All business rules with conditions/actions
+- All validation rules (front + back)
+- All error messages
+- Gherkin acceptance criteria
+- Implementation order (phases if complex)
+
+## Output
+- 4-development-handoff.md (DEV-PROMPT.md in English)
+
+## Usage (Vibe Coding)
+cat DEV-PROMPT.md | claude</code></pre>
+                                        </div>
+                                    </div>
+                                </details>
                             </div>
                         </div>
                     </section>
@@ -1181,10 +1534,16 @@ cat .business-analyse/applications/.../DEV-PROMPT.md</code></pre>
                         </h2>
 
                         <p data-lang="fr">
-                            Documentation et specification de bugs avec analyse root cause et criteres de resolution.
+                            <strong>Fonctionnalite :</strong> Cette commande permet de documenter et specifier la resolution d'un bug de maniere structuree. Le BA collecte les informations de reproduction (severite, etapes, environnement), analyse systematiquement les causes probables (spec manquante, ambigue, regression, technique), identifie les composants impactes, et specifie le comportement correct attendu. Le bug est trace vers les specifications existantes qui seront mises a jour si necessaire.
                         </p>
                         <p data-lang="en">
-                            Bug documentation and specification with root cause analysis and resolution criteria.
+                            <strong>Functionality:</strong> This command documents and specifies bug resolution in a structured manner. The BA collects reproduction information (severity, steps, environment), systematically analyzes probable causes (missing spec, ambiguous, regression, technical), identifies impacted components, and specifies the expected correct behavior. The bug is traced to existing specifications that will be updated if needed.
+                        </p>
+                        <p data-lang="fr">
+                            <strong>Output :</strong> <code>BUG-XXX.md</code> dans <code>tracking/bugs/</code> contenant : metadonnees (severite, reproductibilite, statut), description du comportement observe vs attendu, etapes de reproduction, analyse des causes probables, impact utilisateur, composants impactes, specification du fix avec criteres d'acceptation Gherkin, tests de non-regression suggeres.
+                        </p>
+                        <p data-lang="en">
+                            <strong>Output:</strong> <code>BUG-XXX.md</code> in <code>tracking/bugs/</code> containing: metadata (severity, reproducibility, status), observed vs expected behavior description, reproduction steps, probable cause analysis, user impact, impacted components, fix specification with Gherkin acceptance criteria, suggested non-regression tests.
                         </p>
 
                         <div class="command-card">
@@ -1201,18 +1560,95 @@ cat .business-analyse/applications/.../DEV-PROMPT.md</code></pre>
                                 <h4 data-lang="fr">Structure du rapport</h4>
                                 <h4 data-lang="en">Report structure</h4>
 
-                                <ul>
-                                    <li data-lang="fr"><strong>Identification</strong> - ID, severite, priorite, version</li>
-                                    <li data-lang="en"><strong>Identification</strong> - ID, severity, priority, version</li>
-                                    <li data-lang="fr"><strong>Reproduction</strong> - Steps to reproduce, environnement</li>
-                                    <li data-lang="en"><strong>Reproduction</strong> - Steps to reproduce, environment</li>
-                                    <li data-lang="fr"><strong>Root Cause</strong> - Analyse de la cause racine</li>
-                                    <li data-lang="en"><strong>Root Cause</strong> - Root cause analysis</li>
-                                    <li data-lang="fr"><strong>Solution</strong> - Specification de la correction</li>
-                                    <li data-lang="en"><strong>Solution</strong> - Fix specification</li>
-                                    <li data-lang="fr"><strong>Validation</strong> - Criteres Gherkin de resolution</li>
-                                    <li data-lang="en"><strong>Validation</strong> - Gherkin resolution criteria</li>
-                                </ul>
+                                <div class="feature-grid">
+                                    <div class="feature-item">
+                                        <span class="feature-icon">&#127380;</span>
+                                        <span class="feature-text" data-lang="fr"><strong>Identification</strong> - ID, severite, priorite, version</span>
+                                        <span class="feature-text" data-lang="en"><strong>Identification</strong> - ID, severity, priority, version</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <span class="feature-icon">&#128260;</span>
+                                        <span class="feature-text" data-lang="fr"><strong>Reproduction</strong> - Steps to reproduce, environnement</span>
+                                        <span class="feature-text" data-lang="en"><strong>Reproduction</strong> - Steps to reproduce, environment</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <span class="feature-icon">&#128270;</span>
+                                        <span class="feature-text" data-lang="fr"><strong>Root Cause</strong> - Analyse de la cause racine</span>
+                                        <span class="feature-text" data-lang="en"><strong>Root Cause</strong> - Root cause analysis</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <span class="feature-icon">&#128736;</span>
+                                        <span class="feature-text" data-lang="fr"><strong>Solution</strong> - Specification de la correction</span>
+                                        <span class="feature-text" data-lang="en"><strong>Solution</strong> - Fix specification</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <span class="feature-icon">&#9989;</span>
+                                        <span class="feature-text" data-lang="fr"><strong>Validation</strong> - Criteres Gherkin de resolution</span>
+                                        <span class="feature-text" data-lang="en"><strong>Validation</strong> - Gherkin resolution criteria</span>
+                                    </div>
+                                </div>
+
+                                <details class="template-section">
+                                    <summary>
+                                        <h4 style="display: inline; margin: 0;">
+                                            <span data-lang="fr">Template Prompt</span>
+                                            <span data-lang="en">Prompt Template</span>
+                                        </h4>
+                                        <span class="template-badge">bug.md</span>
+                                    </summary>
+                                    <div class="template-content">
+                                        <p class="template-path">
+                                            <code>templates/commands/business-analyse/bug.md</code>
+                                        </p>
+                                        <div class="code-block template-code">
+                                            <button class="copy-btn">Copy</button>
+                                            <pre><code># Business Analyse - Bug
+
+Bug documentation and specification with root cause analysis.
+
+## Arguments
+/business-analyse:bug "bug description"
+- description: Clear description of the bug
+
+## Bug Report Structure
+
+### 1. Identification
+- Bug ID (BUG-XXX)
+- Severity (Critical, High, Medium, Low)
+- Priority
+- Affected version
+- Reporter
+
+### 2. Reproduction
+- Steps to reproduce
+- Environment details
+- Expected vs Actual behavior
+- Screenshots/logs if available
+
+### 3. Root Cause Analysis
+- Component affected
+- Code location (if known)
+- Root cause hypothesis
+- Impact analysis
+
+### 4. Solution Specification
+- Proposed fix description
+- Files to modify
+- Risk assessment
+- Rollback plan
+
+### 5. Validation Criteria
+Gherkin format:
+Given [initial state]
+When [action taken]
+Then [expected result]
+
+## Output
+Creates bug report in:
+.business-analyse/applications/.../tracking/bugs/BUG-XXX.md</code></pre>
+                                        </div>
+                                    </div>
+                                </details>
                             </div>
                         </div>
                     </section>

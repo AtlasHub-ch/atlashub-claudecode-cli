@@ -1985,3 +1985,34 @@ td .cmd-copy {
 .step-content .cmd-copy-block {
     margin-top: 0.5rem;
 }
+
+/* ============================================
+   FILE LINKS (clickable file paths)
+   ============================================ */
+
+.file-link {
+    color: var(--accent);
+    text-decoration: none;
+    transition: all var(--transition-fast);
+    border-bottom: 1px dotted var(--accent);
+}
+
+.file-link:hover {
+    color: var(--primary-light);
+    border-bottom-color: var(--primary-light);
+    text-decoration: none;
+}
+
+.file-link code {
+    color: inherit;
+    background: transparent;
+}
+
+/* File links in code blocks */
+pre .file-link {
+    border-bottom: none;
+}
+
+pre .file-link:hover {
+    text-decoration: underline;
+}

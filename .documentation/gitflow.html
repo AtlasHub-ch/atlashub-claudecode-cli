@@ -86,6 +86,10 @@
                                 <span data-lang="fr">Types de branches</span>
                                 <span data-lang="en">Branch Types</span>
                             </a>
+                            <a href="#architecture" class="sidebar-toc-link">
+                                <span data-lang="fr">Architecture</span>
+                                <span data-lang="en">Architecture</span>
+                            </a>
                             <a href="#best-practices" class="sidebar-toc-link">
                                 <span data-lang="fr">Bonnes pratiques</span>
                                 <span data-lang="en">Best Practices</span>
@@ -1357,6 +1361,138 @@
                         </div>
                     </section>
 
+                    <!-- Architecture & Structure -->
+                    <section id="architecture">
+                        <h2>
+                            <span data-lang="fr">Architecture &amp; Structure</span>
+                            <span data-lang="en">Architecture &amp; Structure</span>
+                        </h2>
+
+                        <h3 data-lang="fr">Structure des Worktrees</h3>
+                        <h3 data-lang="en">Worktrees Structure</h3>
+
+                        <p data-lang="fr">
+                            GitFlow utilise des <strong>git worktrees</strong> pour isoler chaque branche dans son propre repertoire. Cela permet de travailler sur plusieurs branches simultanement sans avoir a faire de checkout.
+                        </p>
+                        <p data-lang="en">
+                            GitFlow uses <strong>git worktrees</strong> to isolate each branch in its own directory. This allows working on multiple branches simultaneously without having to checkout.
+                        </p>
+
+                        <div class="code-block">
+                            <button class="copy-btn">Copy</button>
+                            <pre><code>parent/
+├── my-project/                    # Repertoire principal du projet
+│   ├── <a href=".claude/gitflow/" class="file-link">.claude/gitflow/</a>
+│   │   ├── <a href=".claude/gitflow/config.json" class="file-link">config.json</a>        # Configuration GitFlow
+│   │   ├── <a href=".claude/gitflow/plans/" class="file-link">plans/</a>              # Plans d'integration
+│   │   ├── <a href=".claude/gitflow/logs/" class="file-link">logs/</a>               # Historique des operations
+│   │   ├── <a href=".claude/gitflow/migrations/" class="file-link">migrations/</a>         # Snapshots EF Core
+│   │   ├── backup/             # Sauvegardes de config
+│   │   └── cache/              # Cache cross-branch
+│   └── ...
+│
+└── worktrees/                     # Worktrees organises
+    ├── main/                      # Worktree permanent (production)
+    ├── develop/                   # Worktree permanent (integration)
+    ├── features/                  # Features en cours
+    │   ├── user-auth/
+    │   └── payment-gateway/
+    ├── releases/                  # Releases en cours
+    │   └── v1.2.0/
+    └── hotfixes/                  # Hotfixes en cours
+        └── critical-fix/</code></pre>
+                        </div>
+
+                        <div class="alert alert-info">
+                            <span class="alert-icon">&#128161;</span>
+                            <div class="alert-content">
+                                <h5 data-lang="fr">Navigation entre worktrees</h5>
+                                <h5 data-lang="en">Navigating between worktrees</h5>
+                                <p data-lang="fr">
+                                    Pour travailler sur une feature : <code>cd ../worktrees/features/ma-feature/</code><br/>
+                                    Pour ouvrir dans VS Code : <code>code ../worktrees/features/ma-feature/</code>
+                                </p>
+                                <p data-lang="en">
+                                    To work on a feature: <code>cd ../worktrees/features/my-feature/</code><br/>
+                                    To open in VS Code: <code>code ../worktrees/features/my-feature/</code>
+                                </p>
+                            </div>
+                        </div>
+
+                        <h3 data-lang="fr">Fichiers de configuration</h3>
+                        <h3 data-lang="en">Configuration Files</h3>
+
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <span data-lang="fr">Fichier</span>
+                                            <span data-lang="en">File</span>
+                                        </th>
+                                        <th>
+                                            <span data-lang="fr">Description</span>
+                                            <span data-lang="en">Description</span>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><a href=".claude/gitflow/config.json" class="file-link"><code>.claude/gitflow/config.json</code></a></td>
+                                        <td>
+                                            <span data-lang="fr">Configuration principale : versioning, branches, EF Core, worktrees</span>
+                                            <span data-lang="en">Main configuration: versioning, branches, EF Core, worktrees</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href=".claude/gitflow/plans/" class="file-link"><code>.claude/gitflow/plans/</code></a></td>
+                                        <td>
+                                            <span data-lang="fr">Plans d'integration generes par /gitflow:4-plan</span>
+                                            <span data-lang="en">Integration plans generated by /gitflow:4-plan</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href=".claude/gitflow/logs/" class="file-link"><code>.claude/gitflow/logs/</code></a></td>
+                                        <td>
+                                            <span data-lang="fr">Historique des operations et checkpoints</span>
+                                            <span data-lang="en">Operations history and checkpoints</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href=".claude/gitflow/migrations/" class="file-link"><code>.claude/gitflow/migrations/</code></a></td>
+                                        <td>
+                                            <span data-lang="fr">Snapshots EF Core pour detection de conflits</span>
+                                            <span data-lang="en">EF Core snapshots for conflict detection</span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <h3 data-lang="fr">Creation automatique</h3>
+                        <h3 data-lang="en">Automatic Creation</h3>
+
+                        <p data-lang="fr">
+                            La structure est creee automatiquement par <code>/gitflow:1-init</code>. Les worktrees sont crees lors du premier <code>/gitflow:10-start</code>.
+                        </p>
+                        <p data-lang="en">
+                            The structure is automatically created by <code>/gitflow:1-init</code>. Worktrees are created on the first <code>/gitflow:10-start</code>.
+                        </p>
+
+                        <div class="code-block">
+                            <button class="copy-btn">Copy</button>
+                            <pre><code># Initialiser GitFlow avec worktrees
+/gitflow:1-init --with-worktrees
+
+# Demarrer une feature (cree le worktree automatiquement)
+/gitflow:10-start feature user-auth
+# → Worktree cree: ../worktrees/features/user-auth/
+
+# Travailler sans worktree (meme repertoire)
+/gitflow:10-start feature test --no-worktree</code></pre>
+                        </div>
+                    </section>
+
                     <!-- Best Practices -->
                     <section id="best-practices">
                         <h2>
@@ -1491,16 +1627,28 @@ git merge --no-ff feature/my-feature</code></pre>
                             <div class="alert-content">
                                 <h5 data-lang="fr">Eviter les anti-patterns</h5>
                                 <h5 data-lang="en">Avoid Anti-patterns</h5>
-                                <ul>
-                                    <li data-lang="fr">Ne jamais force push sur main ou develop</li>
-                                    <li data-lang="en">Never force push to main or develop</li>
-                                    <li data-lang="fr">Ne pas merger une feature non testee</li>
-                                    <li data-lang="en">Don't merge an untested feature</li>
-                                    <li data-lang="fr">Ne pas laisser des branches ouvertes trop longtemps</li>
-                                    <li data-lang="en">Don't leave branches open too long</li>
-                                    <li data-lang="fr">Ne pas ignorer les conflits de ModelSnapshot (EF Core)</li>
-                                    <li data-lang="en">Don't ignore ModelSnapshot conflicts (EF Core)</li>
-                                </ul>
+                                <div class="feature-grid">
+                                    <div class="feature-item">
+                                        <span class="feature-icon">&#10060;</span>
+                                        <span class="feature-text" data-lang="fr">Ne jamais force push sur main ou develop</span>
+                                        <span class="feature-text" data-lang="en">Never force push to main or develop</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <span class="feature-icon">&#10060;</span>
+                                        <span class="feature-text" data-lang="fr">Ne pas merger une feature non testee</span>
+                                        <span class="feature-text" data-lang="en">Don't merge an untested feature</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <span class="feature-icon">&#10060;</span>
+                                        <span class="feature-text" data-lang="fr">Ne pas laisser des branches ouvertes trop longtemps</span>
+                                        <span class="feature-text" data-lang="en">Don't leave branches open too long</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <span class="feature-icon">&#10060;</span>
+                                        <span class="feature-text" data-lang="fr">Ne pas ignorer les conflits de ModelSnapshot (EF Core)</span>
+                                        <span class="feature-text" data-lang="en">Don't ignore ModelSnapshot conflicts (EF Core)</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </section>
@@ -1533,15 +1681,29 @@ git merge --no-ff feature/my-feature</code></pre>
                                     <pre><code>/gitflow:1-init</code></pre>
                                 </div>
 
-                                <details class="prompt-details">
+                                <details class="template-section">
                                     <summary>
-                                        <span data-lang="fr">Voir le prompt complet</span>
-                                        <span data-lang="en">View complete prompt</span>
+                                        <h4 style="display: inline; margin: 0;">
+                                            <span data-lang="fr">Template Prompt</span>
+                                            <span data-lang="en">Prompt Template</span>
+                                        </h4>
+                                        <span class="template-badge">1-init.md</span>
                                     </summary>
-                                    <div class="prompt-content">
-                                        <pre><code># Phase 1: INIT - Project Initialization
+                                    <div class="template-content">
+                                        <p class="template-path">
+                                            <code>templates/commands/gitflow/1-init.md</code>
+                                        </p>
+                                        <div class="code-block template-code">
+                                            <button class="copy-btn">Copy</button>
+                                            <pre><code>---
+description: Phase 1 - Initialize GitFlow structure with versioning and EF Core configuration
+agent: gitflow-init
+model: haiku
+---
 
-Tu es expert GitFlow et EF Core. Initialise le projet .NET pour le workflow GitFlow.
+# Phase 1: INIT - Project Initialization
+
+You are a GitFlow and EF Core expert. Initialize the .NET project for the GitFlow workflow.
 
 **Workflow:** Analyse → Genere plan → Utilisateur valide → Execute avec `--exec`
 
@@ -1645,13 +1807,27 @@ Cree `.claude/gitflow/plans/init_&lt;YYYYMMDD&gt;.md` contenant :
 /gitflow:2-status --all-branches</code></pre>
                                 </div>
 
-                                <details class="prompt-details">
+                                <details class="template-section">
                                     <summary>
-                                        <span data-lang="fr">Voir le prompt complet</span>
-                                        <span data-lang="en">View complete prompt</span>
+                                        <h4 style="display: inline; margin: 0;">
+                                            <span data-lang="fr">Template Prompt</span>
+                                            <span data-lang="en">Prompt Template</span>
+                                        </h4>
+                                        <span class="template-badge">2-status.md</span>
                                     </summary>
-                                    <div class="prompt-content">
-                                        <pre><code># Phase 2: STATUS - Overview
+                                    <div class="template-content">
+                                        <p class="template-path">
+                                            <code>templates/commands/gitflow/2-status.md</code>
+                                        </p>
+                                        <div class="code-block template-code">
+                                            <button class="copy-btn">Copy</button>
+                                            <pre><code>---
+description: Phase 2 - Display GitFlow state with versioning and EF Core details
+agent: gitflow-status
+model: haiku
+---
+
+# Phase 2: STATUS - Overview
 
 Tu es expert GitFlow et EF Core. Affiche l'etat complet du projet .NET.
 
@@ -1713,6 +1889,7 @@ Actions: /gitflow:4-plan | /gitflow:3-commit | /gitflow:6-abort
 | Normal | Affichage complet |
 | `--short` | `[branch] status \| vX.Y.Z \| +X/-Y \| N pending` |
 | `--json` | JSON structure |</code></pre>
+                                        </div>
                                     </div>
                                 </details>
                             </div>
@@ -1736,13 +1913,28 @@ Actions: /gitflow:4-plan | /gitflow:3-commit | /gitflow:6-abort
                                     <pre><code>/gitflow:3-commit</code></pre>
                                 </div>
 
-                                <details class="prompt-details">
+                                <details class="template-section">
                                     <summary>
-                                        <span data-lang="fr">Voir le prompt complet</span>
-                                        <span data-lang="en">View complete prompt</span>
+                                        <h4 style="display: inline; margin: 0;">
+                                            <span data-lang="fr">Template Prompt</span>
+                                            <span data-lang="en">Prompt Template</span>
+                                        </h4>
+                                        <span class="template-badge">3-commit.md</span>
                                     </summary>
-                                    <div class="prompt-content">
-                                        <pre><code># Phase 3: COMMIT - Migration-aware commits
+                                    <div class="template-content">
+                                        <p class="template-path">
+                                            <code>templates/commands/gitflow/3-commit.md</code>
+                                        </p>
+                                        <div class="code-block template-code">
+                                            <button class="copy-btn">Copy</button>
+                                            <pre><code>---
+description: Phase 3 - Smart commit with EF Core migration validation
+agent: gitflow-commit
+model: sonnet
+args: [message]
+---
+
+# Phase 3: COMMIT - Migration-aware commits
 
 Tu es expert GitFlow et EF Core. Gere les commits avec validation des migrations .NET.
 
@@ -1815,6 +2007,7 @@ Si worktree detecte → push automatique apres commit.
 | `always` | - | Push automatique |
 | `ask` | - | Demander a l'utilisateur |
 | `never` | - | Ne pas push |</code></pre>
+                                        </div>
                                     </div>
                                 </details>
 
@@ -1852,13 +2045,27 @@ Si worktree detecte → push automatique apres commit.
                                     <pre><code>/gitflow:4-plan</code></pre>
                                 </div>
 
-                                <details class="prompt-details">
+                                <details class="template-section">
                                     <summary>
-                                        <span data-lang="fr">Voir le prompt complet</span>
-                                        <span data-lang="en">View complete prompt</span>
+                                        <h4 style="display: inline; margin: 0;">
+                                            <span data-lang="fr">Template Prompt</span>
+                                            <span data-lang="en">Prompt Template</span>
+                                        </h4>
+                                        <span class="template-badge">4-plan.md</span>
                                     </summary>
-                                    <div class="prompt-content">
-                                        <pre><code># Phase 4: PLAN - Integration Planning
+                                    <div class="template-content">
+                                        <p class="template-path">
+                                            <code>templates/commands/gitflow/4-plan.md</code>
+                                        </p>
+                                        <div class="code-block template-code">
+                                            <button class="copy-btn">Copy</button>
+                                            <pre><code>---
+description: Phase 4 - Generate integration plan with versioning and EF Core analysis
+agent: gitflow-plan
+model: sonnet
+---
+
+# Phase 4: PLAN - Integration Planning
 
 Tu es expert GitFlow et EF Core. Cree un plan d'integration pour la branche courante.
 
@@ -1925,6 +2132,7 @@ Cree `.claude/gitflow/plans/{type}-{nom}_{date}.md` :
 ## Executer
 `/gitflow:5-exec`
 ```</code></pre>
+                                        </div>
                                     </div>
                                 </details>
                             </div>
@@ -1948,13 +2156,28 @@ Cree `.claude/gitflow/plans/{type}-{nom}_{date}.md` :
                                     <pre><code>/gitflow:5-exec</code></pre>
                                 </div>
 
-                                <details class="prompt-details">
+                                <details class="template-section">
                                     <summary>
-                                        <span data-lang="fr">Voir le prompt complet</span>
-                                        <span data-lang="en">View complete prompt</span>
+                                        <h4 style="display: inline; margin: 0;">
+                                            <span data-lang="fr">Template Prompt</span>
+                                            <span data-lang="en">Prompt Template</span>
+                                        </h4>
+                                        <span class="template-badge">5-exec.md</span>
                                     </summary>
-                                    <div class="prompt-content">
-                                        <pre><code># Phase 5: EXEC - Plan Execution
+                                    <div class="template-content">
+                                        <p class="template-path">
+                                            <code>templates/commands/gitflow/5-exec.md</code>
+                                        </p>
+                                        <div class="code-block template-code">
+                                            <button class="copy-btn">Copy</button>
+                                            <pre><code>---
+description: Phase 5 - Execute plan with versioning auto-increment
+agent: gitflow-exec
+model: sonnet
+args: [plan_file]
+---
+
+# Phase 5: EXEC - Plan Execution
 
 Tu es expert GitFlow et EF Core. Execute le plan d'integration de maniere securisee.
 
@@ -2033,6 +2256,7 @@ Si conflit pendant rebase:
 | `/gitflow:5-exec --yes` | Sans confirmations |
 | `/gitflow:5-exec --dry-run` | Simulation |
 | `/gitflow:5-exec --resume` | Reprendre execution interrompue |</code></pre>
+                                        </div>
                                     </div>
                                 </details>
                             </div>
@@ -2055,6 +2279,46 @@ Si conflit pendant rebase:
                                     <button class="copy-btn">Copy</button>
                                     <pre><code>/gitflow:6-abort</code></pre>
                                 </div>
+                                <details class="template-section">
+                                    <summary>
+                                        <span data-lang="fr">Voir le prompt complet</span>
+                                        <span data-lang="en">View complete prompt</span>
+                                    </summary>
+                                    <div class="prompt-content">
+                                        <pre><code># GitFlow Abort - Rollback and Recovery
+
+Rollback and recovery operations for GitFlow.
+
+## Use Cases
+- Abort merge in progress
+- Rollback failed integration
+- Abandon and delete branch
+- Reset to checkpoint
+
+## Workflow
+
+1. **DETECT CURRENT STATE**
+   - Check for merge/rebase in progress
+   - Identify active branch type
+   - Find available checkpoints
+
+2. **OFFER OPTIONS** (via AskUserQuestion)
+   - Abort current merge: git merge --abort
+   - Reset to checkpoint: restore saved state
+   - Abandon branch: delete and return to develop
+   - Clean working tree: stash or discard changes
+
+3. **EXECUTE ROLLBACK**
+   - Restore from checkpoint if available
+   - Clean up temporary files
+   - Return to safe branch (develop)
+
+## Safety
+- NEVER delete without confirmation
+- Always show what will be lost
+- Create backup before destructive operations</code></pre>
+                                    </div>
+                                </details>
                             </div>
                         </div>
 
@@ -2094,6 +2358,46 @@ Si conflit pendant rebase:
 | `/gitflow:7-pull-request main` | PR vers main |
 | `/gitflow:7-pull-request --draft` | PR en draft |
 | `/gitflow:7-pull-request --dry-run` | Simulation |</code></pre>
+                                    </div>
+                                </details>
+                                <details class="template-section">
+                                    <summary>
+                                        <span data-lang="fr">Voir le prompt complet</span>
+                                        <span data-lang="en">View complete prompt</span>
+                                    </summary>
+                                    <div class="prompt-content">
+                                        <pre><code># GitFlow Pull Request - Fast PR Creation
+
+Create Pull Request with auto-generated description.
+
+## Arguments
+/gitflow:7-pull-request [base] [--draft] [--dry-run]
+- base: Target branch (default: develop)
+- --draft: Create as draft PR
+- --dry-run: Simulation only
+
+## Workflow
+
+1. **PRE-CHECKS**
+   - Verify on feature/release/hotfix branch
+   - Run build and tests
+   - Check for EF Core migrations
+
+2. **GENERATE CONTENT**
+   - Title from branch name
+   - Description from commits
+   - Add labels (feature/bugfix/release)
+   - Link related issues
+
+3. **CREATE PR**
+   gh pr create --title "..." --body "..."
+
+## PR Template
+- Summary (bullet points)
+- Changes by category
+- Test plan
+- EF Core migration notes (if any)
+- Checklist</code></pre>
                                     </div>
                                 </details>
                             </div>
@@ -2137,6 +2441,58 @@ Si conflit pendant rebase:
 | `/gitflow:8-review --quick` | Checklist rapide |</code></pre>
                                     </div>
                                 </details>
+                                <details class="template-section">
+                                    <summary>
+                                        <span data-lang="fr">Voir le prompt complet</span>
+                                        <span data-lang="en">View complete prompt</span>
+                                    </summary>
+                                    <div class="prompt-content">
+                                        <pre><code># GitFlow Review - PR Review Checklist
+
+Fast PR review with validation checklist.
+
+## Arguments
+/gitflow:8-review &lt;pr-number&gt; [--security] [--ef-core] [--quick]
+- pr-number: Pull Request number
+- --security: Focus on security review
+- --ef-core: Focus on EF Core migrations
+- --quick: Quick checklist only
+
+## Review Checklist
+
+### Code Quality
+- [ ] Follows existing patterns
+- [ ] No code duplication
+- [ ] Clear naming conventions
+- [ ] Appropriate error handling
+
+### .NET Patterns
+- [ ] Proper dependency injection
+- [ ] Async/await usage
+- [ ] Null safety
+- [ ] LINQ best practices
+
+### EF Core (if applicable)
+- [ ] Migration is reversible
+- [ ] No breaking changes
+- [ ] Proper indexes
+- [ ] Foreign keys defined
+
+### Security
+- [ ] No sensitive data exposure
+- [ ] Input validation
+- [ ] Authorization checks
+- [ ] SQL injection prevention
+
+### Tests
+- [ ] Unit tests added/updated
+- [ ] Integration tests if needed
+- [ ] Test coverage maintained
+
+## Output
+Recommendation: APPROVE / CHANGES_REQUESTED</code></pre>
+                                    </div>
+                                </details>
                             </div>
                         </div>
 
@@ -2176,6 +2532,54 @@ Si conflit pendant rebase:
 | `/gitflow:9-merge 123 --auto` | Merge auto quand CI vert |
 | `/gitflow:9-merge 123 --dry-run` | Simulation |
 | `/gitflow:9-merge 123 --admin` | Override protections (danger) |</code></pre>
+                                    </div>
+                                </details>
+                                <details class="template-section">
+                                    <summary>
+                                        <span data-lang="fr">Voir le prompt complet</span>
+                                        <span data-lang="en">View complete prompt</span>
+                                    </summary>
+                                    <div class="prompt-content">
+                                        <pre><code># GitFlow Merge - Safe Branch Merge
+
+Safe merge execution with validation.
+
+## Arguments
+/gitflow:9-merge &lt;pr-number&gt; [--auto] [--dry-run] [--admin]
+- pr-number: Pull Request number
+- --auto: Enable auto-merge when CI passes
+- --dry-run: Simulation only
+- --admin: Override branch protections (danger)
+
+## Pre-merge Checks
+- [ ] PR approved by required reviewers
+- [ ] All CI checks passing
+- [ ] No merge conflicts
+- [ ] Branch is up to date
+
+## Merge Strategy (automatic)
+- feature → develop: Squash merge
+- release → main: Merge commit
+- hotfix → main: Merge commit
+
+## Workflow
+
+1. **VALIDATE PR STATE**
+   - Check approvals
+   - Verify CI status
+   - Confirm no conflicts
+
+2. **EXECUTE MERGE**
+   gh pr merge &lt;number&gt; --squash/--merge
+
+3. **POST-MERGE CLEANUP**
+   - Delete source branch
+   - Update local branches
+   - Tag if release/hotfix
+
+## Safety
+- NEVER use --admin without explicit request
+- Always verify before merge</code></pre>
                                     </div>
                                 </details>
                             </div>
@@ -2227,13 +2631,27 @@ Si conflit pendant rebase:
                                     </div>
                                 </div>
 
-                                <details class="prompt-details">
+                                <details class="template-section">
                                     <summary>
-                                        <span data-lang="fr">Voir le prompt complet</span>
-                                        <span data-lang="en">View complete prompt</span>
+                                        <h4 style="display: inline; margin: 0;">
+                                            <span data-lang="fr">Template Prompt</span>
+                                            <span data-lang="en">Prompt Template</span>
+                                        </h4>
+                                        <span class="template-badge">10-start.md</span>
                                     </summary>
-                                    <div class="prompt-content">
-                                        <pre><code># Phase 10: START - Demarrer une branche GitFlow (Worktree)
+                                    <div class="template-content">
+                                        <p class="template-path">
+                                            <code>templates/commands/gitflow/10-start.md</code>
+                                        </p>
+                                        <div class="code-block template-code">
+                                            <button class="copy-btn">Copy</button>
+                                            <pre><code>---
+description: Phase 10 - Start a new feature, release or hotfix branch with worktree
+agent: gitflow-start
+model: haiku
+---
+
+# Phase 10: START - Demarrer une branche GitFlow (Worktree)
 
 Tu es expert GitFlow. Cree une branche dans un **worktree separe** (par defaut).
 
@@ -2357,6 +2775,7 @@ git worktree add -b hotfix/{name} "$WORKTREE_PATH" origin/main
 | `/gitflow:10-start release` | Propose versions basees sur actuelle |
 | `/gitflow:10-start hotfix login-fix` | `hotfix/login-fix` direct |
 | `/gitflow:10-start feature test --no-worktree` | Sans worktree |</code></pre>
+                                        </div>
                                     </div>
                                 </details>
                             </div>
@@ -2380,13 +2799,27 @@ git worktree add -b hotfix/{name} "$WORKTREE_PATH" origin/main
                                     <pre><code>/gitflow:11-finish</code></pre>
                                 </div>
 
-                                <details class="prompt-details">
+                                <details class="template-section">
                                     <summary>
-                                        <span data-lang="fr">Voir le prompt complet</span>
-                                        <span data-lang="en">View complete prompt</span>
+                                        <h4 style="display: inline; margin: 0;">
+                                            <span data-lang="fr">Template Prompt</span>
+                                            <span data-lang="en">Prompt Template</span>
+                                        </h4>
+                                        <span class="template-badge">11-finish.md</span>
                                     </summary>
-                                    <div class="prompt-content">
-                                        <pre><code># Phase 11: FINISH - Finaliser une branche GitFlow
+                                    <div class="template-content">
+                                        <p class="template-path">
+                                            <code>templates/commands/gitflow/11-finish.md</code>
+                                        </p>
+                                        <div class="code-block template-code">
+                                            <button class="copy-btn">Copy</button>
+                                            <pre><code>---
+description: Phase 11 - Finish and finalize a GitFlow branch (tag + merge back)
+agent: gitflow-finish
+model: sonnet
+---
+
+# Phase 11: FINISH - Finaliser une branche GitFlow
 
 Tu es expert GitFlow. Finalise une branche apres merge de la PR.
 
@@ -2470,6 +2903,7 @@ git push origin --delete hotfix/{name}
 | `/gitflow:11-finish feature/xxx` | Finaliser branche specifiee |
 | `/gitflow:11-finish --dry-run` | Simulation |
 | `/gitflow:11-finish --skip-tag` | Sans creation de tag |</code></pre>
+                                        </div>
                                     </div>
                                 </details>
                             </div>
@@ -2493,13 +2927,27 @@ git push origin --delete hotfix/{name}
                                     <pre><code>/gitflow:12-cleanup</code></pre>
                                 </div>
 
-                                <details class="prompt-details">
+                                <details class="template-section">
                                     <summary>
-                                        <span data-lang="fr">Voir le prompt complet</span>
-                                        <span data-lang="en">View full prompt</span>
+                                        <h4 style="display: inline; margin: 0;">
+                                            <span data-lang="fr">Template Prompt</span>
+                                            <span data-lang="en">Prompt Template</span>
+                                        </h4>
+                                        <span class="template-badge">12-cleanup.md</span>
                                     </summary>
-                                    <div class="prompt-content">
-                                        <pre><code># Phase 12: CLEANUP - Audit et nettoyage des worktrees
+                                    <div class="template-content">
+                                        <p class="template-path">
+                                            <code>templates/commands/gitflow/12-cleanup.md</code>
+                                        </p>
+                                        <div class="code-block template-code">
+                                            <button class="copy-btn">Copy</button>
+                                            <pre><code>---
+description: Phase 12 - Cleanup worktrees and orphan branches (audit and remove)
+agent: gitflow-cleanup
+model: sonnet
+---
+
+# Phase 12: CLEANUP - Audit et nettoyage des worktrees
 
 ## Prerequis
 
@@ -2529,6 +2977,7 @@ git push origin --delete hotfix/{name}
 Cette commande est appelee automatiquement par:
 - `/gitflow:11-finish` → Apres finalisation
 - `/gitflow:6-abort --branch` → Apres abandon</code></pre>
+                                        </div>
                                     </div>
                                 </details>
                             </div>

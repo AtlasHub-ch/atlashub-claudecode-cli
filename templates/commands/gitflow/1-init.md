@@ -18,16 +18,7 @@ You are a GitFlow and EF Core expert. Initialize the .NET project for the GitFlo
 
 **IMPORTANT:** Before analyzing, check if GitFlow is already initialized.
 
-```bash
-# Check for existing structure
-CONFIG_FILE=".claude/gitflow/config.json"
-EXPECTED_VERSION="1.2.0"
-
-if [ -f "$CONFIG_FILE" ]; then
-  EXISTING_VERSION=$(grep -oP '"version":\s*"\K[^"]+' "$CONFIG_FILE" 2>/dev/null || echo "unknown")
-  echo "Existing GitFlow detected: v$EXISTING_VERSION"
-fi
-```
+Check for existing structure at [.claude/gitflow/config.json](.claude/gitflow/config.json).
 
 **If structure exists, analyze differences:**
 
@@ -36,7 +27,7 @@ fi
 | Config version | 1.2.0 | {existing} | {OK/OUTDATED} |
 | Worktrees enabled | true | {value} | {OK/MISSING} |
 | EF Core config | crossBranch section | {exists?} | {OK/MISSING} |
-| Folders | plans/, logs/, migrations/ | {exists?} | {OK/INCOMPLETE} |
+| Folders | [plans/](.claude/gitflow/plans/), [logs/](.claude/gitflow/logs/), [migrations/](.claude/gitflow/migrations/) | {exists?} | {OK/INCOMPLETE} |
 
 **If differences detected, ask user:**
 
@@ -56,15 +47,15 @@ AskUserQuestion({
 ```
 
 **Migration actions (if "Migrate" selected):**
-1. Backup existing config to `.claude/gitflow/backup/config_<timestamp>.json`
+1. Backup existing config to [.claude/gitflow/backup/](.claude/gitflow/backup/)
 2. Add missing config sections (worktrees, efcore.crossBranch, etc.)
 3. Create missing folders
 4. Update version to 1.2.0
 5. Preserve user customizations (branch names, versioning source, etc.)
 
 **Reset actions (if "Reset" selected):**
-1. Backup entire `.claude/gitflow/` to `.claude/gitflow.bak_<timestamp>/`
-2. Delete `.claude/gitflow/`
+1. Backup entire [.claude/gitflow/](.claude/gitflow/) to `.claude/gitflow.bak_<timestamp>/`
+2. Delete [.claude/gitflow/](.claude/gitflow/)
 3. Continue with fresh initialization
 
 **Skip actions:**
@@ -96,7 +87,7 @@ Analyze the repository and detect:
 
 ### 2. Generate the plan file
 
-Create `.claude/gitflow/plans/init_<YYYYMMDD>.md` containing:
+Create plan file in [.claude/gitflow/plans/](.claude/gitflow/plans/) named `init_<YYYYMMDD>.md` containing:
 
 ````markdown
 # GitFlow Initialization Plan
@@ -158,13 +149,16 @@ Plan generated: .claude/gitflow/plans/init_<DATE>.md
 ## --exec mode: Execute the plan
 
 ### Prerequisites
-- Init plan exists in `.claude/gitflow/plans/`
+- Init plan exists in [.claude/gitflow/plans/](.claude/gitflow/plans/)
 
 ### Actions
 1. **Branches**: Create main and develop if absent, checkout develop
-2. **Structure**: Create `.claude/gitflow/{plans,logs,migrations}`
+2. **Structure**: Create [.claude/gitflow/](.claude/gitflow/) with subdirectories:
+   - [plans/](.claude/gitflow/plans/) - Integration plans
+   - [logs/](.claude/gitflow/logs/) - Operation history
+   - [migrations/](.claude/gitflow/migrations/) - EF Core snapshots
 3. **Worktrees** (if `--with-worktrees`): Create worktrees structure (see below)
-4. **Config**: Create `config.json` with plan configuration
+4. **Config**: Create [config.json](.claude/gitflow/config.json) with plan configuration
 5. **CLAUDE.md**: Add Repository section if branches existed
 6. **VERSION**: Create file if no source detected
 7. **Commit** (ask): `chore(gitflow): initialization v{VERSION}`

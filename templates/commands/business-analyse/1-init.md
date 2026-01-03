@@ -1,10 +1,21 @@
 ---
-description: Phase 1 - Initialize Business Analysis structure
+description: Phase 1 - Initialize Business Analysis structure (ULTRATHINK)
 ---
 
 # Business Analysis - Init
 
-Senior BA expert. Initialize business analysis structure.
+Senior BA expert. Initialize business analysis structure. ULTRATHINK mode mandatory.
+
+## ULTRATHINK Mode
+
+**IMPORTANT**: This phase uses deep thinking for comprehensive project analysis.
+
+Approach to adopt:
+- Thoroughly analyze existing codebase structure
+- Identify patterns and conventions
+- Detect technical stack accurately
+- Anticipate module organization
+- Challenge assumptions about architecture
 
 > **CLAUDE INSTRUCTION:** The `AskUserQuestion({...})` blocks are instructions to use the `AskUserQuestion` tool **interactively**. You MUST execute the tool with these parameters to get the user's response BEFORE continuing.
 

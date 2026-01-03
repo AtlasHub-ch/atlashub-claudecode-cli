@@ -1,10 +1,21 @@
 ---
-description: Bug resolution documentation and specification
+description: Bug resolution documentation and specification (ULTRATHINK)
 ---
 
 # Business Analyse - Bug
 
-Senior BA expert. Bug documentation and resolution specification.
+Senior BA expert. Bug documentation and resolution specification. ULTRATHINK mode mandatory.
+
+## ULTRATHINK Mode
+
+**IMPORTANT**: This phase uses deep thinking for root cause analysis.
+
+Approach to adopt:
+- Analyze all possible causes systematically
+- Trace bug to specification gaps
+- Identify related edge cases
+- Challenge reproduction steps
+- Validate fix criteria exhaustively
 
 > **CLAUDE INSTRUCTION:** The `AskUserQuestion({...})` blocks are instructions to use the `AskUserQuestion` tool **interactively**. You MUST execute the tool with these parameters to get the user's response BEFORE continuing.
 

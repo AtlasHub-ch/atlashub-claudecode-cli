@@ -412,6 +412,61 @@ if ! grep -q "appsettings.Local.json" .gitignore 2>/dev/null; then
 fi
 ```
 
+**Verification de coherence des ports:**
+
+```bash
+# Collecter tous les fichiers appsettings*.json du projet
+ALL_APPSETTINGS=$(find . -name "appsettings*.json" -not -path "*/bin/*" -not -path "*/obj/*" 2>/dev/null)
+
+# Extraire les ports configures (URLs Kestrel, ports DB, etc.)
+PORTS_FOUND=()
+for file in $ALL_APPSETTINGS; do
+  # Ports Kestrel (ex: "http://localhost:5000", "https://localhost:5001")
+  KESTREL_PORTS=$(grep -oP '(?<=localhost:)\d+' "$file" 2>/dev/null)
+
+  # Ports dans ConnectionStrings (ex: "Server=localhost,1433")
+  DB_PORTS=$(grep -oP '(?<=localhost,)\d+|(?<=Server=)[^;,]+,\d+' "$file" 2>/dev/null | grep -oP '\d+$')
+
+  PORTS_FOUND+=($KESTREL_PORTS $DB_PORTS)
+done
+
+# Detecter les conflits de ports entre projets
+DUPLICATE_PORTS=$(echo "${PORTS_FOUND[@]}" | tr ' ' '\n' | sort | uniq -d)
+```
+
+**Si conflits de ports detectes:**
+
+```javascript
+if (DUPLICATE_PORTS.length > 0) {
+  AskUserQuestion({
+    questions: [{
+      question: `⚠️ Ports en conflit detectes: ${DUPLICATE_PORTS.join(', ')}. Que faire ?`,
+      header: "Ports",
+      options: [
+        { label: "Corriger", description: "Modifier les ports pour eviter les conflits (Recommande)" },
+        { label: "Ignorer", description: "Continuer sans correction (attention aux erreurs au runtime)" }
+      ],
+      multiSelect: false
+    }]
+  })
+}
+
+// Si "Corriger" → Proposer des ports alternatifs:
+// - API Backend: 5000, 5001, 5002... ou 7000, 7001...
+// - Frontend: 3000, 4200, 8080...
+// - DB: generalement pas de conflit (1433 SQL Server)
+```
+
+**Recommandation ports par type d'application:**
+
+| Type | Port HTTP | Port HTTPS | Notes |
+|------|-----------|------------|-------|
+| API Backend | 5000-5099 | 5100-5199 | ou 7000-7099/7100-7199 |
+| Web Frontend | 3000-3099 | - | SPA (React, Angular, Vue) |
+| Blazor Server | 5200-5299 | 5300-5399 | |
+| Identity Server | 5500 | 5501 | Auth centralisee |
+| Gateway/BFF | 5600 | 5601 | API Gateway |
+
 **Afficher resume:**
 
 ```
@@ -423,6 +478,12 @@ FICHIER:  appsettings.Local.json
 SERVER:   {SERVER}
 DATABASE: {DATABASE}
 AUTH:     {Windows|SQL}
+
+PORTS CONFIGURES:
+  {PROJECT_NAME}: HTTP {PORT_HTTP} | HTTPS {PORT_HTTPS}
+  {Si plusieurs projets, lister chaque projet avec ses ports}
+
+VERIFICATION PORTS: {✓ Aucun conflit | ⚠️ Conflits corriges | ⚠️ Conflits ignores}
 
 ⚠️  Ce fichier est ignore par git (credentials securises)
 
@@ -544,7 +605,7 @@ git push --force-with-lease origin main
 # 3. Puis merge release → develop (normal)
 ```
 
-**Note:** Cette operation est enregistree dans `.claude/gitflow/logs/main-resets.json`
+**Note:** This operation is logged in [.claude/gitflow/logs/](.claude/gitflow/logs/)`main-resets.json`
 
 ### Consolidation des migrations EF Core
 

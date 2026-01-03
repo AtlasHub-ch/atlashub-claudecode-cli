@@ -1,6 +1,5 @@
 ---
 description: Phase 4 - Functional specifications FRD (ULTRATHINK)
-model: opus
 ---
 
 # Business Analyse - Specify

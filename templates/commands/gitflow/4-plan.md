@@ -76,9 +76,9 @@ fi
 | Migration urgente | Prefix `Hotfix_` + Script SQL |
 | Version | Auto-increment patch |
 
-### 3. Generer fichier plan
+### 3. Generate plan file
 
-Cree `.claude/gitflow/plans/{type}-{nom}_{date}.md` :
+Create plan in [.claude/gitflow/plans/](.claude/gitflow/plans/) named `{type}-{nom}_{date}.md`:
 
 ````markdown
 # Plan: {BRANCH_NAME}

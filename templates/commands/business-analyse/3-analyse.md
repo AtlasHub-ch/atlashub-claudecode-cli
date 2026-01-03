@@ -1,6 +1,5 @@
 ---
 description: Phase 3 - Business analysis and BRD (ULTRATHINK)
-model: opus
 ---
 
 # Business Analyse - Analyse
@@ -38,6 +37,55 @@ Approach to adopt:
 - Anticipate evolutions
 
 ## Workflow
+
+### Step 0: Scan existing specifications (Agent Sonnet)
+
+**MANDATORY**: Before any analysis, scan all existing specifications to understand the global context.
+
+```
+Task(subagent_type="Explore", model="sonnet", prompt="
+Scan all existing Business Analyse specifications in .business-analyse/
+
+SEARCH FOR:
+1. All existing features (FEAT-XXX)
+   - Path: .business-analyse/applications/**/features/*/
+   - Status of each (discovery/analysis/specified/validated)
+
+2. Existing FRDs (3-functional-specification.md)
+   - List entities already specified
+   - List APIs already documented
+   - List business rules already defined
+
+3. Dependencies between features
+   - Shared entities
+   - Shared business rules
+   - Integration points
+
+4. Glossary terms already defined
+   - Read .business-analyse/glossary.md
+
+RETURN a structured summary:
+{
+  'existing_features': [
+    {'id': 'FEAT-XXX', 'name': '...', 'status': '...', 'entities': [...]}
+  ],
+  'shared_entities': ['Entity1', 'Entity2'],
+  'shared_rules': ['BR-001', 'BR-002'],
+  'glossary_terms': ['term1', 'term2'],
+  'potential_conflicts': ['...']
+}
+
+This context will be used to ensure consistency with existing specifications.
+")
+```
+
+**Use scan results to:**
+- Avoid duplicating existing entities
+- Reuse existing business rules (BR-XXX)
+- Identify dependencies with other features
+- Ensure consistent naming conventions
+
+---
 
 ### Step 1: Load context
 
