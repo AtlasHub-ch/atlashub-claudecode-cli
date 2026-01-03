@@ -1773,3 +1773,215 @@ body.lang-en .diagram-tooltip::after {
         grid-template-columns: 1fr;
     }
 }
+
+/* ============================================
+   TEMPLATE SECTIONS (Collapsible)
+   ============================================ */
+
+.template-section {
+    margin-top: 1.5rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--bg-dark);
+    overflow: hidden;
+}
+
+.template-section summary {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 1.25rem;
+    cursor: pointer;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(249, 115, 22, 0.1) 100%);
+    border-bottom: 1px solid transparent;
+    transition: all var(--transition-fast);
+}
+
+.template-section summary:hover {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(249, 115, 22, 0.15) 100%);
+}
+
+.template-section[open] summary {
+    border-bottom-color: var(--border);
+}
+
+.template-section summary::marker,
+.template-section summary::-webkit-details-marker {
+    display: none;
+}
+
+.template-section summary::before {
+    content: '\25B6';
+    font-size: 0.7rem;
+    color: var(--primary);
+    transition: transform var(--transition-fast);
+}
+
+.template-section[open] summary::before {
+    transform: rotate(90deg);
+}
+
+.template-section summary h4 {
+    font-size: 0.95rem;
+    color: var(--text-bright);
+    font-weight: 600;
+}
+
+.template-badge {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    color: white;
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    font-weight: 500;
+}
+
+.template-content {
+    padding: 1rem 1.25rem;
+}
+
+.template-path {
+    margin-bottom: 1rem;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.template-path code {
+    background: var(--bg-hover);
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+}
+
+.template-code {
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.template-code pre {
+    font-size: 0.8rem !important;
+    line-height: 1.5 !important;
+}
+
+.template-code code {
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+/* ============================================
+   COPYABLE COMMAND BLOCKS
+   ============================================ */
+
+.cmd-copy {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--bg-code);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.5rem 0.75rem;
+    margin: 0.25rem 0;
+    font-family: 'Fira Code', 'Cascadia Code', 'JetBrains Mono', monospace;
+    font-size: 0.875rem;
+    color: var(--secondary);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    position: relative;
+}
+
+.cmd-copy:hover {
+    border-color: var(--primary);
+    background: var(--bg-hover);
+}
+
+.cmd-copy::after {
+    content: '📋';
+    font-size: 0.75rem;
+    opacity: 0;
+    transition: opacity var(--transition-fast);
+    margin-left: 0.5rem;
+}
+
+.cmd-copy:hover::after {
+    opacity: 0.7;
+}
+
+.cmd-copy.copied {
+    border-color: var(--success);
+    background: rgba(34, 197, 94, 0.1);
+}
+
+.cmd-copy.copied::after {
+    content: '✓';
+    opacity: 1;
+    color: var(--success);
+}
+
+/* Block variant for standalone commands */
+.cmd-copy-block {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--bg-code);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    margin: 0.75rem 0;
+    font-family: 'Fira Code', 'Cascadia Code', 'JetBrains Mono', monospace;
+    font-size: 0.9rem;
+    color: var(--secondary);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.cmd-copy-block:hover {
+    border-color: var(--primary);
+    background: var(--bg-hover);
+    box-shadow: 0 2px 8px rgba(99, 102, 241, 0.15);
+}
+
+.cmd-copy-block .cmd-text {
+    flex: 1;
+    user-select: all;
+}
+
+.cmd-copy-block .cmd-copy-btn {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    padding: 0.35rem 0.75rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    white-space: nowrap;
+    margin-left: 1rem;
+}
+
+.cmd-copy-block .cmd-copy-btn:hover {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+.cmd-copy-block.copied {
+    border-color: var(--success);
+}
+
+.cmd-copy-block.copied .cmd-copy-btn {
+    background: var(--success);
+    color: white;
+    border-color: var(--success);
+}
+
+/* Table cell variant */
+td .cmd-copy {
+    display: flex;
+    margin: 0;
+}
+
+/* Step content variant */
+.step-content .cmd-copy-block {
+    margin-top: 0.5rem;
+}

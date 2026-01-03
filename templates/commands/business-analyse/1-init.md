@@ -1,12 +1,12 @@
 ---
-description: Phase 1 - Initialisation structure Business Analyse
+description: Phase 1 - Initialize Business Analysis structure
 ---
 
-# Business Analyse - Init
+# Business Analysis - Init
 
-Expert BA senior. Initialise la structure d'analyse métier.
+Senior BA expert. Initialize business analysis structure.
 
-> **INSTRUCTION CLAUDE:** Les blocs `AskUserQuestion({...})` sont des instructions pour utiliser le tool `AskUserQuestion` de maniere **interactive**. Tu DOIS executer le tool avec ces parametres pour obtenir la reponse de l'utilisateur AVANT de continuer.
+> **CLAUDE INSTRUCTION:** The `AskUserQuestion({...})` blocks are instructions to use the `AskUserQuestion` tool **interactively**. You MUST execute the tool with these parameters to get the user's response BEFORE continuing.
 
 ## Arguments
 
@@ -14,23 +14,23 @@ Expert BA senior. Initialise la structure d'analyse métier.
 /business-analyse:init [app-name]
 ```
 
-- `app-name` (optionnel) : Nom de l'application. Si absent, demander.
+- `app-name` (optional): Application name. If absent, ask.
 
 ## Workflow
 
-### Étape 1 : Collecte d'informations
+### Step 1: Information Gathering
 
-Si `$ARGUMENTS` est vide, poser ces questions :
+If `$ARGUMENTS` is empty, ask these questions:
 
 ```
 AskUserQuestion({
   questions: [
     {
-      question: "Quel est le nom de l'application à analyser ?",
+      question: "What is the name of the application to analyze?",
       header: "Application",
       options: [
-        { label: "Nouvelle application", description: "Créer une nouvelle structure d'application" },
-        { label: "Existante", description: "Analyser une application existante dans le projet" }
+        { label: "New application", description: "Create a new application structure" },
+        { label: "Existing", description: "Analyze an existing application in the project" }
       ],
       multiSelect: false
     }
@@ -38,51 +38,51 @@ AskUserQuestion({
 })
 ```
 
-Si "Existante" → Scanner le projet pour détecter la stack technique.
+If "Existing" → Scan the project to detect the technical stack.
 
-### Étape 2 : Scan technique (si projet existant)
+### Step 2: Technical Scan (if existing project)
 
-Utiliser l'agent explore pour scanner :
+Use the explore agent to scan:
 
 ```
 Task(subagent_type="Explore", model="haiku", prompt="
-Scan le projet pour identifier:
+Scan the project to identify:
 
 ARCHITECTURE:
-- Type de projet (solution .sln, package.json, etc.)
-- Stack technique (frameworks, langages)
-- Structure des dossiers principaux
+- Project type (solution .sln, package.json, etc.)
+- Technical stack (frameworks, languages)
+- Main folder structure
 
-DONNÉES (si applicable):
-- ORM utilisé (EF Core, Prisma, etc.)
-- Entités/Modèles existants (count par domaine)
+DATA (if applicable):
+- ORM used (EF Core, Prisma, etc.)
+- Existing Entities/Models (count per domain)
 
-API (si applicable):
-- Type d'API (REST, GraphQL, etc.)
-- Nombre d'endpoints estimé
+API (if applicable):
+- API type (REST, GraphQL, etc.)
+- Estimated endpoint count
 
-UI (si applicable):
-- Framework frontend
-- Nombre de pages/composants estimé
+UI (if applicable):
+- Frontend framework
+- Estimated page/component count
 
-Retourne un JSON compact avec ces informations.
+Return a compact JSON with this information.
 ")
 ```
 
-### Étape 3 : Création de la structure
+### Step 3: Structure Creation
 
-Créer la structure `.business-analyse/` :
+Create the `.business-analyse/` structure:
 
 ```bash
 mkdir -p .business-analyse/{applications,documentation/{data-dictionary,process-flows,architecture-decisions},templates}
 ```
 
-### Étape 4 : Création config.json
+### Step 4: Create config.json
 
 ```json
 {
   "version": "2.0.0",
-  "initialized": "<DATE_ISO>",
+  "initialized": "<ISO_DATE>",
   "application": {
     "name": "<APP_NAME>",
     "description": "<DESCRIPTION>",
@@ -117,136 +117,136 @@ mkdir -p .business-analyse/{applications,documentation/{data-dictionary,process-
 }
 ```
 
-### Étape 5 : Création du glossaire
+### Step 5: Create Glossary
 
-Créer `.business-analyse/glossary.md` :
+Create `.business-analyse/glossary.md`:
 
 ```markdown
-# Glossaire Métier - {{APP_NAME}}
+# Business Glossary - {{APP_NAME}}
 
-> Dictionnaire des termes métier utilisés dans l'application.
-> Maintenu à jour lors de chaque phase d'analyse.
+> Dictionary of business terms used in the application.
+> Maintained and updated during each analysis phase.
 
-## Instructions d'utilisation
+## Usage Instructions
 
-- Chaque terme doit avoir une définition claire et non ambiguë
-- Indiquer le contexte d'utilisation si nécessaire
-- Utiliser les termes définis ici dans tous les documents BA
-
----
-
-## Termes Métier
-
-| Terme | Définition | Contexte | Ajouté le |
-|-------|------------|----------|-----------|
-| *À compléter lors des analyses* | | | |
+- Each term must have a clear and unambiguous definition
+- Indicate usage context if necessary
+- Use the terms defined here in all BA documents
 
 ---
 
-## Acronymes
+## Business Terms
 
-| Acronyme | Signification | Définition |
-|----------|---------------|------------|
-| BA | Business Analyse | Processus d'analyse des besoins métier |
-| BRD | Business Requirements Document | Document des exigences métier |
-| FRD | Functional Requirements Document | Document des spécifications fonctionnelles |
+| Term | Definition | Context | Added on |
+|------|------------|---------|----------|
+| *To be completed during analysis* | | | |
 
 ---
 
-*Dernière mise à jour : {{DATE}}*
+## Acronyms
+
+| Acronym | Meaning | Definition |
+|---------|---------|------------|
+| BA | Business Analysis | Business requirements analysis process |
+| BRD | Business Requirements Document | Business requirements document |
+| FRD | Functional Requirements Document | Functional specifications document |
+
+---
+
+*Last updated: {{DATE}}*
 ```
 
-### Étape 6 : Création du .claudeignore
+### Step 6: Create .claudeignore
 
-Créer `.business-analyse/.claudeignore` :
+Create `.business-analyse/.claudeignore`:
 
 ```
-# Business Analyse - Fichiers à exclure du contexte Claude
-# Ces fichiers sont pour la documentation métier uniquement
+# Business Analysis - Files to exclude from Claude context
+# These files are for business documentation only
 
-# Exclure les phases de découverte et analyse (trop verbeux)
+# Exclude discovery and analysis phases (too verbose)
 applications/**/1-discovery.md
 applications/**/2-business-requirements.md
 
-# Exclure la documentation transverse
+# Exclude cross-functional documentation
 documentation/**
 
-# Exclure les templates (utilisés uniquement par les commandes BA)
+# Exclude templates (only used by BA commands)
 templates/**
 
-# Exclure le tracking des bugs résolus
+# Exclude resolved bug tracking
 applications/**/tracking/bugs/*_RESOLVED.md
 
-# GARDER pour le contexte dev:
-# - 3-functional-specification.md (specs techniques)
-# - 4-development-handoff.md (prompt dev)
-# - glossary.md (termes métier)
+# KEEP for dev context:
+# - 3-functional-specification.md (technical specs)
+# - 4-development-handoff.md (dev prompt)
+# - glossary.md (business terms)
 # - config.json (configuration)
 ```
 
-### Étape 7 : Création structure application
+### Step 7: Create Application Structure
 
-Créer `.business-analyse/applications/<app-name>/` :
+Create `.business-analyse/applications/<app-name>/`:
 
 ```bash
 mkdir -p ".business-analyse/applications/<app-name>/modules"
 ```
 
-Créer `context.md` :
+Create `context.md`:
 
 ```markdown
-# Contexte Applicatif - {{APP_NAME}}
+# Application Context - {{APP_NAME}}
 
-## Informations Générales
+## General Information
 
-| Propriété | Valeur |
-|-----------|--------|
-| **Nom** | {{APP_NAME}} |
+| Property | Value |
+|----------|-------|
+| **Name** | {{APP_NAME}} |
 | **Type** | {{STACK_TYPE}} |
-| **Date création BA** | {{DATE}} |
+| **BA creation date** | {{DATE}} |
 | **Status** | Active |
 
 ## Description
 
 {{DESCRIPTION}}
 
-## Stack Technique
+## Technical Stack
 
 {{STACK_DETAILS}}
 
-## Parties Prenantes
+## Stakeholders
 
-| Rôle | Responsabilité |
-|------|----------------|
-| Product Owner | Définition des priorités et validation métier |
-| Business Analyst | Analyse et spécification des besoins |
-| Tech Lead | Validation technique et architecture |
-| Développeurs | Implémentation selon les specs |
+| Role | Responsibility |
+|------|---------------|
+| Product Owner | Priority definition and business validation |
+| Business Analyst | Requirements analysis and specification |
+| Tech Lead | Technical validation and architecture |
+| Developers | Implementation according to specs |
 
 ## Modules
 
 | Module | Description | Status |
 |--------|-------------|--------|
-| *À définir lors des analyses* | | |
+| *To be defined during analysis* | | |
 
 ---
 
-*Initialisé le {{DATE}}*
+*Initialized on {{DATE}}*
 ```
 
-### Étape 8 : Copie des templates
+### Step 8: Copy Templates
 
-Copier les templates dans `.business-analyse/templates/` depuis les ressources.
+Copy templates to `.business-analyse/templates/` from resources.
 
-### Résumé
+### Summary
 
 ```
-BUSINESS ANALYSE - INITIALISÉ
+BUSINESS ANALYSIS - INITIALIZED
 ═══════════════════════════════════════════════════════════
 Application:    {{APP_NAME}}
 Type:           {{STACK_TYPE}}
 ═══════════════════════════════════════════════════════════
-Structure créée:
+Structure created:
   ✓ .business-analyse/config.json
   ✓ .business-analyse/glossary.md
   ✓ .business-analyse/.claudeignore
@@ -254,13 +254,13 @@ Structure créée:
   ✓ .business-analyse/templates/
   ✓ .business-analyse/documentation/
 ═══════════════════════════════════════════════════════════
-Prochain: /business-analyse:discover <module> "description"
+Next: /business-analyse:discover <module> "description"
 ```
 
-## Gestion des Erreurs
+## Error Handling
 
-| Problème | Action |
-|----------|--------|
-| Structure existe déjà | Demander confirmation de réinitialisation |
-| Pas de droits écriture | Informer l'utilisateur |
-| Scan projet échoue | Continuer avec configuration manuelle |
+| Problem | Action |
+|---------|--------|
+| Structure already exists | Ask for reset confirmation |
+| No write permissions | Inform user |
+| Project scan fails | Continue with manual configuration |

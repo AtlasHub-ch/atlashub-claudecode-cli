@@ -1,11 +1,11 @@
 ---
-description: Phase 4 - Spécifications fonctionnelles FRD (ULTRATHINK)
+description: Phase 4 - Functional specifications FRD (ULTRATHINK)
 model: opus
 ---
 
 # Business Analyse - Specify
 
-Expert BA senior en spécifications. Mode ULTRATHINK obligatoire.
+Senior BA expert in specifications. ULTRATHINK mode mandatory.
 
 ## Arguments
 
@@ -13,87 +13,87 @@ Expert BA senior en spécifications. Mode ULTRATHINK obligatoire.
 /business-analyse:specify [feature-id]
 ```
 
-- `feature-id` : Identifiant de la feature (ex: FEAT-001)
+- `feature-id`: Feature identifier (e.g., FEAT-001)
 
-## Pré-requis
+## Prerequisites
 
 ```bash
-# Vérifier que le BRD existe
+# Verify that BRD exists
 test -f ".business-analyse/applications/*/modules/*/features/$ARGUMENTS/2-business-requirements.md" || \
-  echo "Exécuter /business-analyse:analyse d'abord"
+  echo "Execute /business-analyse:analyse first"
 ```
 
-## Mode ULTRATHINK
+## ULTRATHINK Mode
 
-**IMPORTANT** : Cette phase utilise le skill `ultrathink` pour des spécifications précises.
+**IMPORTANT**: This phase uses the `ultrathink` skill for precise specifications.
 
 ```
-Skill(skill="ultrathink", args="Spécifications fonctionnelles détaillées FRD")
+Skill(skill="ultrathink", args="Detailed functional specifications FRD")
 ```
 
-Approche à adopter :
-- Spécifier avec précision chirurgicale
-- Aucune ambiguïté tolérée
-- Cas d'utilisation complets
-- Critères d'acceptation vérifiables
+Approach to adopt:
+- Specify with surgical precision
+- No ambiguity tolerated
+- Complete use cases
+- Verifiable acceptance criteria
 
 ## Workflow
 
-### Étape 1 : Chargement du contexte
+### Step 1: Load context
 
 ```bash
 cat ".business-analyse/applications/*/modules/*/features/$FEATURE_ID/2-business-requirements.md"
 cat .business-analyse/config.json
 ```
 
-### Étape 2 : Cas d'utilisation détaillés
+### Step 2: Detailed use cases
 
-Pour chaque fonctionnalité, créer un cas d'utilisation complet :
+For each feature, create a complete use case:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
-│ USE CASE: UC-{{XXX}} - {{NOM}}                                          │
+│ USE CASE: UC-{{XXX}} - {{NAME}}                                         │
 ├─────────────────────────────────────────────────────────────────────────┤
-│ Acteur principal: {{ACTEUR}}                                            │
-│ Acteurs secondaires: {{ACTEURS_SECONDAIRES}}                            │
-│ Préconditions: {{PRECONDITIONS}}                                        │
-│ Postconditions (succès): {{POSTCONDITIONS_SUCCESS}}                     │
-│ Postconditions (échec): {{POSTCONDITIONS_FAILURE}}                      │
+│ Primary actor: {{ACTOR}}                                                │
+│ Secondary actors: {{SECONDARY_ACTORS}}                                  │
+│ Preconditions: {{PRECONDITIONS}}                                        │
+│ Postconditions (success): {{SUCCESS_POSTCONDITIONS}}                    │
+│ Postconditions (failure): {{FAILURE_POSTCONDITIONS}}                    │
 ├─────────────────────────────────────────────────────────────────────────┤
-│ SCÉNARIO PRINCIPAL (Happy Path)                                         │
-│ ───────────────────────────────                                         │
-│ 1. {{ACTEUR}} {{ACTION_1}}                                              │
-│ 2. Le système {{REACTION_1}}                                            │
-│ 3. {{ACTEUR}} {{ACTION_2}}                                              │
-│ 4. Le système {{REACTION_2}}                                            │
+│ MAIN SCENARIO (Happy Path)                                              │
+│ ──────────────────────────                                              │
+│ 1. {{ACTOR}} {{ACTION_1}}                                               │
+│ 2. The system {{REACTION_1}}                                            │
+│ 3. {{ACTOR}} {{ACTION_2}}                                               │
+│ 4. The system {{REACTION_2}}                                            │
 │ 5. ...                                                                  │
 ├─────────────────────────────────────────────────────────────────────────┤
-│ EXTENSIONS (Flux alternatifs)                                           │
-│ ─────────────────────────────                                           │
-│ 2a. Si {{CONDITION}}:                                                   │
-│     2a.1. Le système {{ACTION_ALTERNATIVE}}                             │
-│     2a.2. Retour à l'étape 3                                            │
+│ EXTENSIONS (Alternative flows)                                          │
+│ ──────────────────────────────                                          │
+│ 2a. If {{CONDITION}}:                                                   │
+│     2a.1. The system {{ALTERNATIVE_ACTION}}                             │
+│     2a.2. Return to step 3                                              │
 │                                                                         │
-│ 4a. Si {{ERREUR}}:                                                      │
-│     4a.1. Le système affiche "{{MESSAGE_ERREUR}}"                       │
-│     4a.2. Le cas d'utilisation se termine                               │
+│ 4a. If {{ERROR}}:                                                       │
+│     4a.1. The system displays "{{ERROR_MESSAGE}}"                       │
+│     4a.2. The use case ends                                             │
 ├─────────────────────────────────────────────────────────────────────────┤
-│ RÈGLES MÉTIER APPLICABLES                                               │
+│ APPLICABLE BUSINESS RULES                                               │
 │ ─────────────────────────                                               │
-│ • BR-001: {{REGLE}}                                                     │
-│ • BR-002: {{REGLE}}                                                     │
+│ • BR-001: {{RULE}}                                                      │
+│ • BR-002: {{RULE}}                                                      │
 └─────────────────────────────────────────────────────────────────────────┘
 ```
 
-### Étape 3 : Spécifications d'interface (Wireframes ASCII)
+### Step 3: Interface specifications (ASCII Wireframes)
 
-Pour chaque écran, créer un wireframe ASCII :
+For each screen, create an ASCII wireframe:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
-│ ÉCRAN: {{NOM_ECRAN}}                                                    │
+│ SCREEN: {{SCREEN_NAME}}                                                 │
 │ URL: {{URL_PATTERN}}                                                    │
-│ Rôles autorisés: {{ROLES}}                                              │
+│ Authorized roles: {{ROLES}}                                             │
 ├─────────────────────────────────────────────────────────────────────────┤
 │                                                                         │
 │  ┌─────────────────────────────────────────────────────────────────┐    │
@@ -102,70 +102,70 @@ Pour chaque écran, créer un wireframe ASCII :
 │  │ [Menu1] [Menu2] [Menu3]                                         │    │
 │  ├─────────────────────────────────────────────────────────────────┤    │
 │  │                                                                 │    │
-│  │  {{PAGE_TITLE}}                           [+ Nouveau]           │    │
+│  │  {{PAGE_TITLE}}                           [+ New]               │    │
 │  │  ─────────────────────────────────────────────────────────      │    │
 │  │                                                                 │    │
 │  │  ┌─────────────────────────────────────────────────────────┐    │    │
-│  │  │ Recherche: [________________________] [🔍]               │    │    │
-│  │  │ Filtres:   [Status ▼] [Date ▼]                          │    │    │
+│  │  │ Search: [________________________] [🔍]                  │    │    │
+│  │  │ Filters:   [Status ▼] [Date ▼]                          │    │    │
 │  │  └─────────────────────────────────────────────────────────┘    │    │
 │  │                                                                 │    │
 │  │  ┌──────┬─────────────┬──────────┬─────────┬─────────────┐     │    │
-│  │  │ ☐    │ Nom         │ Status   │ Date    │ Actions     │     │    │
+│  │  │ ☐    │ Name        │ Status   │ Date    │ Actions     │     │    │
 │  │  ├──────┼─────────────┼──────────┼─────────┼─────────────┤     │    │
-│  │  │ ☐    │ Item 1      │ ● Actif  │ 01/01   │ [✎] [🗑]    │     │    │
-│  │  │ ☐    │ Item 2      │ ○ Inactif│ 02/01   │ [✎] [🗑]    │     │    │
+│  │  │ ☐    │ Item 1      │ ● Active │ 01/01   │ [✎] [🗑]    │     │    │
+│  │  │ ☐    │ Item 2      │ ○ Inactive│ 02/01  │ [✎] [🗑]    │     │    │
 │  │  └──────┴─────────────┴──────────┴─────────┴─────────────┘     │    │
 │  │                                                                 │    │
-│  │  [◀ Précédent]  Page 1 sur 5  [Suivant ▶]                      │    │
+│  │  [◀ Previous]  Page 1 of 5  [Next ▶]                           │    │
 │  │                                                                 │    │
 │  └─────────────────────────────────────────────────────────────────┘    │
 │                                                                         │
 ├─────────────────────────────────────────────────────────────────────────┤
-│ ÉLÉMENTS INTERACTIFS                                                    │
-│ ────────────────────                                                    │
-│ • [+ Nouveau]: Ouvre formulaire création (voir écran FORM-001)          │
-│ • [✎]: Ouvre formulaire édition avec données pré-remplies              │
-│ • [🗑]: Confirmation puis suppression (soft delete si applicable)       │
-│ • Recherche: Filtre en temps réel sur nom                               │
-│ • Pagination: 20 items par page                                         │
+│ INTERACTIVE ELEMENTS                                                    │
+│ ───────────────────                                                     │
+│ • [+ New]: Opens creation form (see screen FORM-001)                    │
+│ • [✎]: Opens edit form with pre-filled data                            │
+│ • [🗑]: Confirmation then deletion (soft delete if applicable)          │
+│ • Search: Real-time filter on name                                      │
+│ • Pagination: 20 items per page                                         │
 │                                                                         │
-│ VALIDATIONS FRONT-END                                                   │
+│ FRONT-END VALIDATIONS                                                   │
 │ ─────────────────────                                                   │
-│ • Minimum 1 item sélectionné pour actions de masse                      │
-│ • Confirmation obligatoire avant suppression                            │
+│ • Minimum 1 item selected for bulk actions                              │
+│ • Confirmation required before deletion                                 │
 │                                                                         │
 │ MESSAGES                                                                │
 │ ────────                                                                │
-│ • Succès création: "{{ENTITY}} créé avec succès"                        │
-│ • Succès suppression: "{{ENTITY}} supprimé"                             │
-│ • Erreur: "Une erreur est survenue. Veuillez réessayer."                │
-│ • Vide: "Aucun résultat trouvé. Créez votre premier {{ENTITY}}."        │
+│ • Creation success: "{{ENTITY}} created successfully"                   │
+│ • Deletion success: "{{ENTITY}} deleted"                                │
+│ • Error: "An error occurred. Please try again."                         │
+│ • Empty: "No results found. Create your first {{ENTITY}}."              │
 └─────────────────────────────────────────────────────────────────────────┘
 ```
 
-### Étape 4 : Spécifications des champs
+### Step 4: Field specifications
 
-Pour chaque formulaire, documenter précisément les champs :
+For each form, precisely document the fields:
 
-| Champ | Label | Type | Obligatoire | Validation | Default | Aide |
-|-------|-------|------|-------------|------------|---------|------|
-| `name` | Nom | text | Oui | 2-100 chars, alphanum | - | "Nom unique" |
-| `email` | Email | email | Oui | Format email valide | - | - |
-| `status` | Statut | select | Oui | [actif, inactif] | actif | - |
-| `date` | Date | date | Non | >= aujourd'hui | aujourd'hui | - |
+| Field | Label | Type | Mandatory | Validation | Default | Help |
+|-------|-------|------|-----------|------------|---------|------|
+| `name` | Name | text | Yes | 2-100 chars, alphanum | - | "Unique name" |
+| `email` | Email | email | Yes | Valid email format | - | - |
+| `status` | Status | select | Yes | [active, inactive] | active | - |
+| `date` | Date | date | No | >= today | today | - |
 
-### Étape 5 : Spécifications API (si applicable)
+### Step 5: API specifications (if applicable)
 
-Pour chaque endpoint, documenter :
+For each endpoint, document:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
 │ ENDPOINT: {{METHOD}} {{ROUTE}}                                          │
 ├─────────────────────────────────────────────────────────────────────────┤
 │ Description: {{DESCRIPTION}}                                            │
-│ Authentification: {{AUTH_REQUIRED}}                                     │
-│ Rôles autorisés: {{ROLES}}                                              │
+│ Authentication: {{AUTH_REQUIRED}}                                       │
+│ Authorized roles: {{ROLES}}                                             │
 ├─────────────────────────────────────────────────────────────────────────┤
 │ REQUEST                                                                 │
 │ ───────                                                                 │
@@ -177,8 +177,8 @@ Pour chaque endpoint, documenter :
 │   {{param}}: {{type}} - {{description}}                                 │
 │                                                                         │
 │ Query params:                                                           │
-│   page: int (default: 1) - Numéro de page                               │
-│   limit: int (default: 20, max: 100) - Items par page                   │
+│   page: int (default: 1) - Page number                                  │
+│   limit: int (default: 20, max: 100) - Items per page                   │
 │                                                                         │
 │ Body (JSON):                                                            │
 │   {                                                                     │
@@ -209,196 +209,196 @@ Pour chaque endpoint, documenter :
 │ 500 Internal Server Error:                                              │
 │   { "error": "An unexpected error occurred" }                           │
 ├─────────────────────────────────────────────────────────────────────────┤
-│ RÈGLES MÉTIER APPLICABLES                                               │
+│ APPLICABLE BUSINESS RULES                                               │
 │ ─────────────────────────                                               │
-│ • BR-001: {{REGLE}}                                                     │
+│ • BR-001: {{RULE}}                                                      │
 └─────────────────────────────────────────────────────────────────────────┘
 ```
 
-### Étape 6 : Critères d'acceptation (Gherkin)
+### Step 6: Acceptance criteria (Gherkin)
 
-Pour chaque exigence, écrire des critères testables :
+For each requirement, write testable criteria:
 
 ```gherkin
 Feature: {{FEATURE_NAME}}
 
   Background:
-    Given l'utilisateur est connecté avec le rôle "{{ROLE}}"
-    And il se trouve sur la page "{{PAGE}}"
+    Given the user is logged in with role "{{ROLE}}"
+    And they are on page "{{PAGE}}"
 
   @{{TAG}}
-  Scenario: {{SCENARIO_NOM}} - Happy path
+  Scenario: {{SCENARIO_NAME}} - Happy path
     Given {{PRECONDITION}}
-    When l'utilisateur {{ACTION}}
-    Then le système {{RESULTAT_ATTENDU}}
-    And {{VERIFICATION_SUPPLEMENTAIRE}}
+    When the user {{ACTION}}
+    Then the system {{EXPECTED_RESULT}}
+    And {{ADDITIONAL_VERIFICATION}}
 
   @{{TAG}}
-  Scenario: {{SCENARIO_NOM}} - Cas d'erreur
+  Scenario: {{SCENARIO_NAME}} - Error case
     Given {{PRECONDITION}}
-    When l'utilisateur {{ACTION_INVALIDE}}
-    Then le système affiche le message "{{MESSAGE_ERREUR}}"
-    And {{ETAT_PRESERVE}}
+    When the user {{INVALID_ACTION}}
+    Then the system displays message "{{ERROR_MESSAGE}}"
+    And {{PRESERVED_STATE}}
 
   @{{TAG}}
-  Scenario Outline: {{SCENARIO_NOM}} - Validation
-    Given l'utilisateur saisit "<valeur>" dans le champ "{{CHAMP}}"
-    When il valide le formulaire
-    Then le résultat est "<resultat>"
+  Scenario Outline: {{SCENARIO_NAME}} - Validation
+    Given the user enters "<value>" in field "{{FIELD}}"
+    When they submit the form
+    Then the result is "<result>"
 
     Examples:
-      | valeur        | resultat    |
-      | valeur_valide | succès      |
-      | valeur_vide   | erreur      |
-      | valeur_trop_long | erreur   |
+      | value         | result      |
+      | valid_value   | success     |
+      | empty_value   | error       |
+      | too_long      | error       |
 ```
 
-### Étape 7 : Checklist de complétude (85% minimum)
+### Step 7: Completeness checklist (85% minimum)
 
-Évaluer avec la checklist :
+Evaluate with the checklist:
 
 ```bash
 cat .claude/commands/business-analyse/_resources/checklist-specification.md
 ```
 
-| Catégorie | Critère | Status |
-|-----------|---------|--------|
-| **Contexte (4/4)** | | |
-| | Objectif documenté | ✓/✗ |
-| | Scope défini | ✓/✗ |
-| | Stakeholders identifiés | ✓/✗ |
-| | Priorité établie | ✓/✗ |
+| Category | Criterion | Status |
+|----------|-----------|--------|
+| **Context (4/4)** | | |
+| | Objective documented | ✓/✗ |
+| | Scope defined | ✓/✗ |
+| | Stakeholders identified | ✓/✗ |
+| | Priority established | ✓/✗ |
 | **Use Cases (6/6)** | | |
-| | Happy path complet | ✓/✗ |
-| | Extensions documentées | ✓/✗ |
-| | Préconditions | ✓/✗ |
+| | Complete happy path | ✓/✗ |
+| | Extensions documented | ✓/✗ |
+| | Preconditions | ✓/✗ |
 | | Postconditions | ✓/✗ |
-| | Acteurs identifiés | ✓/✗ |
-| | Règles métier liées | ✓/✗ |
+| | Actors identified | ✓/✗ |
+| | Linked business rules | ✓/✗ |
 | **Interface (6/6)** | | |
-| | Wireframes présents | ✓/✗ |
-| | URLs définies | ✓/✗ |
-| | Rôles par écran | ✓/✗ |
-| | Éléments interactifs | ✓/✗ |
-| | Messages définis | ✓/✗ |
-| | Validations front | ✓/✗ |
-| **Données (5/5)** | | |
-| | Champs spécifiés | ✓/✗ |
-| | Types de données | ✓/✗ |
+| | Wireframes present | ✓/✗ |
+| | URLs defined | ✓/✗ |
+| | Roles per screen | ✓/✗ |
+| | Interactive elements | ✓/✗ |
+| | Messages defined | ✓/✗ |
+| | Front validations | ✓/✗ |
+| **Data (5/5)** | | |
+| | Fields specified | ✓/✗ |
+| | Data types | ✓/✗ |
 | | Validations | ✓/✗ |
-| | Valeurs par défaut | ✓/✗ |
-| | Obligatoire/optionnel | ✓/✗ |
+| | Default values | ✓/✗ |
+| | Mandatory/optional | ✓/✗ |
 | **API (5/5)** | | |
-| | Endpoints documentés | ✓/✗ |
+| | Endpoints documented | ✓/✗ |
 | | Request/Response | ✓/✗ |
-| | Codes d'erreur | ✓/✗ |
+| | Error codes | ✓/✗ |
 | | Auth/Permissions | ✓/✗ |
-| | Validations back | ✓/✗ |
+| | Back validations | ✓/✗ |
 | **Tests (4/4)** | | |
-| | Critères d'acceptation | ✓/✗ |
-| | Scénarios Gherkin | ✓/✗ |
-| | Cas nominaux | ✓/✗ |
-| | Cas d'erreur | ✓/✗ |
+| | Acceptance criteria | ✓/✗ |
+| | Gherkin scenarios | ✓/✗ |
+| | Nominal cases | ✓/✗ |
+| | Error cases | ✓/✗ |
 
 **Score**: {{X}}/30 ({{PERCENT}}%)
-**Seuil**: 85% (26/30)
+**Threshold**: 85% (26/30)
 
-### Étape 7bis : Plan d'implémentation (si complexité > Standard)
+### Step 7bis: Implementation plan (if complexity > Standard)
 
-**Déclencheur** : Si la complexité détectée en phase 2-Discover est "Complexe" ou "Critique", le découpage en phases testables est **obligatoire**.
+**Trigger**: If complexity detected in phase 2-Discover is "Complex" or "Critical", breakdown into testable phases is **mandatory**.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
-│ PLAN D'IMPLÉMENTATION - Découpage en phases testables                   │
+│ IMPLEMENTATION PLAN - Breakdown into testable phases                    │
 ├─────────────────────────────────────────────────────────────────────────┤
-│ Complexité détectée: {{COMPLEXITE}}                                     │
-│ Découpage: {{OBLIGATOIRE si Complexe/Critique | OPTIONNEL si Standard}} │
+│ Detected complexity: {{COMPLEXITY}}                                     │
+│ Breakdown: {{MANDATORY if Complex/Critical | OPTIONAL if Standard}}     │
 ├─────────────────────────────────────────────────────────────────────────┤
 │                                                                         │
-│ PHASE 1: DATA LAYER (Backend - Testable isolément)                      │
+│ PHASE 1: DATA LAYER (Backend - Testable in isolation)                   │
+│ ─────────────────────────────────────────────                           │
+│ Scope:                                                                  │
+│   • Entities / Data models                                              │
+│   • EF Core migrations / SQL                                            │
+│   • Repository pattern (if applicable)                                  │
+│   • Seed data (test data)                                               │
+│                                                                         │
+│ Deliverable: Functional data model                                      │
+│ Tests: Repository unit tests + Migration tests                          │
+│ Validation criterion: `dotnet ef database update` OK                    │
+│ Complexity estimate: {{LOW|MEDIUM|HIGH}}                                │
+│                                                                         │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                         │
+│ PHASE 2: API LAYER (Backend - Testable in isolation)                    │
 │ ─────────────────────────────────────────────────                       │
 │ Scope:                                                                  │
-│   • Entités / Modèles de données                                        │
-│   • Migrations EF Core / SQL                                            │
-│   • Repository pattern (si applicable)                                  │
-│   • Seed data (données de test)                                         │
-│                                                                         │
-│ Livrable: Modèle de données fonctionnel                                 │
-│ Tests: Tests unitaires Repository + Tests migrations                    │
-│ Critère de validation: `dotnet ef database update` OK                   │
-│ Estimation complexité: {{LOW|MEDIUM|HIGH}}                              │
-│                                                                         │
-├─────────────────────────────────────────────────────────────────────────┤
-│                                                                         │
-│ PHASE 2: API LAYER (Backend - Testable isolément)                       │
-│ ─────────────────────────────────────────────────                       │
-│ Scope:                                                                  │
-│   • Controllers / Endpoints REST                                        │
+│   • Controllers / REST Endpoints                                        │
 │   • Services / Business logic                                           │
-│   • Validations backend                                                 │
+│   • Backend validations                                                 │
 │   • DTOs / Mapping                                                      │
 │                                                                         │
-│ Livrable: API fonctionnelle (Swagger/Postman testable)                  │
-│ Tests: Tests d'intégration API + Tests unitaires services               │
-│ Critère de validation: Tous endpoints répondent correctement            │
-│ Dépendances: Phase 1 complète                                           │
-│ Estimation complexité: {{LOW|MEDIUM|HIGH}}                              │
+│ Deliverable: Functional API (Swagger/Postman testable)                  │
+│ Tests: API integration tests + Service unit tests                       │
+│ Validation criterion: All endpoints respond correctly                   │
+│ Dependencies: Phase 1 complete                                          │
+│ Complexity estimate: {{LOW|MEDIUM|HIGH}}                                │
 │                                                                         │
 ├─────────────────────────────────────────────────────────────────────────┤
 │                                                                         │
-│ PHASE 3: UI LAYER (Frontend - Testable isolément)                       │
+│ PHASE 3: UI LAYER (Frontend - Testable in isolation)                    │
 │ ─────────────────────────────────────────────────                       │
 │ Scope:                                                                  │
-│   • Composants UI (React/Angular/Vue/Blazor)                            │
+│   • UI Components (React/Angular/Vue/Blazor)                            │
 │   • State management                                                    │
-│   • Formulaires et validations front                                    │
-│   • Intégration API (appels HTTP)                                       │
+│   • Forms and front-end validations                                     │
+│   • API integration (HTTP calls)                                        │
 │                                                                         │
-│ Livrable: Interface utilisateur fonctionnelle                           │
-│ Tests: Tests composants + Tests E2E (Cypress/Playwright)                │
-│ Critère de validation: Scénarios Gherkin passent en E2E                 │
-│ Dépendances: Phase 2 complète (API disponible)                          │
-│ Estimation complexité: {{LOW|MEDIUM|HIGH}}                              │
+│ Deliverable: Functional user interface                                  │
+│ Tests: Component tests + E2E tests (Cypress/Playwright)                 │
+│ Validation criterion: Gherkin scenarios pass in E2E                     │
+│ Dependencies: Phase 2 complete (API available)                          │
+│ Complexity estimate: {{LOW|MEDIUM|HIGH}}                                │
 │                                                                         │
 ├─────────────────────────────────────────────────────────────────────────┤
 │                                                                         │
-│ PHASE 4: INTÉGRATION & FINALISATION                                     │
-│ ─────────────────────────────────────                                   │
+│ PHASE 4: INTEGRATION & FINALIZATION                                     │
+│ ─────────────────────────────────                                       │
 │ Scope:                                                                  │
-│   • Wiring complet (front ↔ back)                                       │
-│   • Tests end-to-end complets                                           │
-│   • Performance / Optimisation                                          │
-│   • Documentation technique                                             │
+│   • Complete wiring (front ↔ back)                                      │
+│   • Complete end-to-end tests                                           │
+│   • Performance / Optimization                                          │
+│   • Technical documentation                                             │
 │                                                                         │
-│ Livrable: Feature complète et validée                                   │
-│ Tests: Suite E2E complète + Tests de charge (si applicable)             │
-│ Critère de validation: UAT (User Acceptance Testing) OK                 │
-│ Dépendances: Phases 1, 2, 3 complètes                                   │
+│ Deliverable: Complete and validated feature                             │
+│ Tests: Complete E2E suite + Load tests (if applicable)                  │
+│ Validation criterion: UAT (User Acceptance Testing) OK                  │
+│ Dependencies: Phases 1, 2, 3 complete                                   │
 │                                                                         │
 └─────────────────────────────────────────────────────────────────────────┘
 ```
 
-**Tableau récapitulatif des phases :**
+**Phase summary table:**
 
-| Phase | Scope | Livrable | Tests | Validation | Deps |
-|-------|-------|----------|-------|------------|------|
-| 1. Data | Entités, Migrations | DB Schema | Unit + Migration | EF OK | - |
-| 2. API | Endpoints, Services | API REST | Integration | Swagger OK | P1 |
-| 3. UI | Composants, Forms | Interface | E2E | Gherkin OK | P2 |
-| 4. Intégration | Wiring, Perf | Feature | Full E2E | UAT OK | P1-3 |
+| Phase | Scope | Deliverable | Tests | Validation | Deps |
+|-------|-------|-------------|-------|------------|------|
+| 1. Data | Entities, Migrations | DB Schema | Unit + Migration | EF OK | - |
+| 2. API | Endpoints, Services | REST API | Integration | Swagger OK | P1 |
+| 3. UI | Components, Forms | Interface | E2E | Gherkin OK | P2 |
+| 4. Integration | Wiring, Perf | Feature | Full E2E | UAT OK | P1-3 |
 
-**Règle de découpage :**
+**Breakdown rule:**
 
-| Complexité | Phases requises | Justification |
+| Complexity | Required phases | Justification |
 |------------|-----------------|---------------|
-| CRUD simple | Pas de découpage | Implémentation directe possible |
-| Standard | Optionnel | Recommandé si > 3 endpoints |
-| Complexe | **Obligatoire** | Trop de risques sans découpage |
-| Critique | **Obligatoire + Reviews** | Chaque phase nécessite validation |
+| Simple CRUD | No breakdown | Direct implementation possible |
+| Standard | Optional | Recommended if > 3 endpoints |
+| Complex | **Mandatory** | Too many risks without breakdown |
+| Critical | **Mandatory + Reviews** | Each phase requires validation |
 
-### Étape 8 : Génération du FRD
+### Step 8: Generate FRD
 
-Créer `3-functional-specification.md` :
+Create `3-functional-specification.md`:
 
 ```markdown
 # Functional Requirements Document - {{FEATURE_NAME}}
@@ -407,36 +407,36 @@ Créer `3-functional-specification.md` :
 **Version**: 1.0
 **Date**: {{DATE}}
 **Status**: Draft
-**Auteur**: Claude (Business Analyse)
+**Author**: Claude (Business Analyse)
 **Source**: BRD v1.0
 
 ---
 
-## 1. Vue d'ensemble
+## 1. Overview
 
-### 1.1 Objectif
-{{OBJECTIF}}
+### 1.1 Objective
+{{OBJECTIVE}}
 
-### 1.2 Références
-| Document | Version | Lien |
+### 1.2 References
+| Document | Version | Link |
 |----------|---------|------|
 | BRD | 1.0 | [2-business-requirements.md](./2-business-requirements.md) |
 | Discovery | 1.0 | [1-discovery.md](./1-discovery.md) |
 
-### 1.3 Terminologie
-Voir [glossary.md](../../../glossary.md)
+### 1.3 Terminology
+See [glossary.md](../../../glossary.md)
 
 ---
 
-## 2. Cas d'Utilisation
+## 2. Use Cases
 
-### 2.1 Diagramme des cas d'utilisation
+### 2.1 Use case diagram
 
 ```mermaid
 graph LR
-    subgraph Acteurs
-        A1[{{ACTEUR_1}}]
-        A2[{{ACTEUR_2}}]
+    subgraph Actors
+        A1[{{ACTOR_1}}]
+        A2[{{ACTOR_2}}]
     end
     subgraph "Feature: {{NAME}}"
         UC1((UC-001))
@@ -447,50 +447,50 @@ graph LR
     A2 --> UC1
 ```
 
-### 2.2 UC-001: {{NOM}}
+### 2.2 UC-001: {{NAME}}
 
-{{USE_CASE_COMPLET}}
+{{COMPLETE_USE_CASE}}
 
-### 2.3 UC-002: {{NOM}}
+### 2.3 UC-002: {{NAME}}
 
-{{USE_CASE_COMPLET}}
+{{COMPLETE_USE_CASE}}
 
 ---
 
-## 3. Spécifications d'Interface
+## 3. Interface Specifications
 
-### 3.1 Plan de navigation
+### 3.1 Navigation plan
 
 ```mermaid
 flowchart TD
     {{NAVIGATION_FLOW}}
 ```
 
-### 3.2 Écrans
+### 3.2 Screens
 
 #### 3.2.1 {{SCREEN_NAME}}
 
-{{WIREFRAME_ASCII}}
+{{ASCII_WIREFRAME}}
 
 #### 3.2.2 {{SCREEN_NAME}}
 
-{{WIREFRAME_ASCII}}
+{{ASCII_WIREFRAME}}
 
 ---
 
-## 4. Spécifications des Données
+## 4. Data Specifications
 
-### 4.1 Formulaires
+### 4.1 Forms
 
 #### {{FORM_NAME}}
 
-| Champ | Label | Type | Obligatoire | Validation | Default | Aide |
-|-------|-------|------|-------------|------------|---------|------|
+| Field | Label | Type | Mandatory | Validation | Default | Help |
+|-------|-------|------|-----------|------------|---------|------|
 {{FIELDS_TABLE}}
 
 ---
 
-## 5. Spécifications API
+## 5. API Specifications
 
 ### 5.1 Endpoints
 
@@ -498,176 +498,176 @@ flowchart TD
 |--------|-------|-------------|------|
 {{ENDPOINTS_TABLE}}
 
-### 5.2 Détails des endpoints
+### 5.2 Endpoint details
 
 {{ENDPOINT_DETAILS}}
 
 ---
 
-## 6. Règles de Validation
+## 6. Validation Rules
 
-### 6.1 Validations Front-end
+### 6.1 Front-end Validations
 
-| Champ | Règle | Message d'erreur |
-|-------|-------|------------------|
-{{VALIDATION_FRONT}}
+| Field | Rule | Error message |
+|-------|------|---------------|
+{{FRONT_VALIDATION}}
 
-### 6.2 Validations Back-end
+### 6.2 Back-end Validations
 
-| Endpoint | Règle | Code | Message |
-|----------|-------|------|---------|
-{{VALIDATION_BACK}}
+| Endpoint | Rule | Code | Message |
+|----------|------|------|---------|
+{{BACK_VALIDATION}}
 
 ---
 
-## 7. Messages et Notifications
+## 7. Messages and Notifications
 
-### 7.1 Messages de succès
+### 7.1 Success messages
 
 | Action | Message |
 |--------|---------|
 {{SUCCESS_MESSAGES}}
 
-### 7.2 Messages d'erreur
+### 7.2 Error messages
 
-| Erreur | Message | Action utilisateur |
-|--------|---------|-------------------|
+| Error | Message | User action |
+|-------|---------|-------------|
 {{ERROR_MESSAGES}}
 
 ---
 
-## 8. Critères d'Acceptation
+## 8. Acceptance Criteria
 
-### 8.1 Scénarios de test
+### 8.1 Test scenarios
 
 ```gherkin
 {{GHERKIN_SCENARIOS}}
 ```
 
-### 8.2 Matrice de couverture
+### 8.2 Coverage matrix
 
-| Exigence | Use Case | Scénario | Status |
-|----------|----------|----------|--------|
+| Requirement | Use Case | Scenario | Status |
+|-------------|----------|----------|--------|
 {{COVERAGE_MATRIX}}
 
 ---
 
-## 9. Plan d'Implémentation
+## 9. Implementation Plan
 
-> **Note**: Cette section est obligatoire si complexité = Complexe ou Critique
+> **Note**: This section is mandatory if complexity = Complex or Critical
 
-### 9.1 Découpage en phases
+### 9.1 Phase breakdown
 
-| Phase | Scope | Livrable | Tests | Validation | Status |
-|-------|-------|----------|-------|------------|--------|
+| Phase | Scope | Deliverable | Tests | Validation | Status |
+|-------|-------|-------------|-------|------------|--------|
 | 1. Data | {{DATA_SCOPE}} | DB Schema | Unit | EF OK | ⏳ |
-| 2. API | {{API_SCOPE}} | API REST | Integration | Swagger OK | ⏳ |
+| 2. API | {{API_SCOPE}} | REST API | Integration | Swagger OK | ⏳ |
 | 3. UI | {{UI_SCOPE}} | Interface | E2E | Gherkin OK | ⏳ |
-| 4. Intégration | Wiring | Feature | Full E2E | UAT OK | ⏳ |
+| 4. Integration | Wiring | Feature | Full E2E | UAT OK | ⏳ |
 
-### 9.2 Détail Phase 1: Data Layer
+### 9.2 Phase 1 Detail: Data Layer
 
 **Scope:**
 {{DATA_LAYER_DETAILS}}
 
-**Entités à créer:**
+**Entities to create:**
 - [ ] {{ENTITY_1}}
 - [ ] {{ENTITY_2}}
 
 **Migrations:**
 - [ ] {{MIGRATION_NAME}}
 
-**Critère de validation:** `dotnet ef database update` sans erreur
+**Validation criterion:** `dotnet ef database update` without errors
 
-### 9.3 Détail Phase 2: API Layer
+### 9.3 Phase 2 Detail: API Layer
 
 **Scope:**
 {{API_LAYER_DETAILS}}
 
-**Endpoints à implémenter:**
+**Endpoints to implement:**
 - [ ] {{ENDPOINT_1}}
 - [ ] {{ENDPOINT_2}}
 
-**Critère de validation:** Tous les endpoints testables via Swagger/Postman
+**Validation criterion:** All endpoints testable via Swagger/Postman
 
-### 9.4 Détail Phase 3: UI Layer
+### 9.4 Phase 3 Detail: UI Layer
 
 **Scope:**
 {{UI_LAYER_DETAILS}}
 
-**Composants à créer:**
+**Components to create:**
 - [ ] {{COMPONENT_1}}
 - [ ] {{COMPONENT_2}}
 
-**Critère de validation:** Scénarios Gherkin passent en E2E
+**Validation criterion:** Gherkin scenarios pass in E2E
 
-### 9.5 Détail Phase 4: Intégration
+### 9.5 Phase 4 Detail: Integration
 
 **Scope:**
-- Wiring front ↔ back
-- Tests end-to-end complets
-- Optimisations performance
+- Front ↔ back wiring
+- Complete end-to-end tests
+- Performance optimizations
 
-**Critère de validation:** UAT (User Acceptance Testing) OK
+**Validation criterion:** UAT (User Acceptance Testing) OK
 
 ---
 
-## 10. Annexes
+## 10. Appendices
 
-### 10.1 Checklist de complétude
+### 10.1 Completeness checklist
 
 Score: {{SCORE}}/30 ({{PERCENT}}%)
 
-### 10.2 Questions résolues
+### 10.2 Resolved questions
 
 {{RESOLVED_QUESTIONS}}
 
-### 10.3 Décisions prises
+### 10.3 Decisions made
 
-| Décision | Justification | Date |
+| Decision | Justification | Date |
 |----------|---------------|------|
 {{DECISIONS}}
 
 ---
 
-## Historique des modifications
+## Modification History
 
-| Version | Date | Auteur | Modifications |
+| Version | Date | Author | Modifications |
 |---------|------|--------|---------------|
-| 1.0 | {{DATE}} | Claude BA | Création initiale |
+| 1.0 | {{DATE}} | Claude BA | Initial creation |
 
 ---
 
-*Généré par Business Analyse - {{DATE}}*
+*Generated by Business Analyse - {{DATE}}*
 ```
 
-### Résumé
+### Summary
 
 ```
-SPÉCIFICATIONS COMPLÈTES
+SPECIFICATIONS COMPLETE
 ═══════════════════════════════════════════════════════════
 Feature:     {{FEAT-XXX}} - {{NAME}}
 ═══════════════════════════════════════════════════════════
-Contenu:
-  • Use Cases:       {{X}} documentés
-  • Écrans:          {{Y}} wireframés
-  • Endpoints:       {{Z}} spécifiés
-  • Critères:        {{W}} scénarios Gherkin
+Content:
+  • Use Cases:       {{X}} documented
+  • Screens:         {{Y}} wireframed
+  • Endpoints:       {{Z}} specified
+  • Criteria:        {{W}} Gherkin scenarios
 
-Score complétude:    {{SCORE}}/30 ({{PERCENT}}%)
-Seuil:               85% (26/30) ✓/✗
+Completeness score:  {{SCORE}}/30 ({{PERCENT}}%)
+Threshold:           85% (26/30) ✓/✗
 ═══════════════════════════════════════════════════════════
 Document: .../{{FEAT-XXX}}/3-functional-specification.md
 ═══════════════════════════════════════════════════════════
-Prochain: /business-analyse:document {{FEAT-XXX}}
+Next: /business-analyse:document {{FEAT-XXX}}
 ```
 
-## Règles
+## Rules
 
-1. **ULTRATHINK obligatoire** - Précision maximale
-2. **Zéro ambiguïté** - Chaque spec doit être claire
-3. **Wireframes ASCII** - Visualisation sans outil externe
-4. **Gherkin testable** - Critères vérifiables
-5. **Score 85%+** - Minimum pour valider
-6. **Aucun code** - Specs fonctionnelles, pas techniques
-7. **Découpage obligatoire si Complexe/Critique** - Phases testables API/UI/Intégration
+1. **ULTRATHINK mandatory** - Maximum precision
+2. **Zero ambiguity** - Each spec must be clear
+3. **ASCII Wireframes** - Visualization without external tools
+4. **Testable Gherkin** - Verifiable criteria
+5. **85%+ Score** - Minimum to validate
+6. **No code** - Functional specs, not technical
+7. **Mandatory breakdown if Complex/Critical** - Testable API/UI/Integration phases

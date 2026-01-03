@@ -1,38 +1,39 @@
 ---
-description: Peupler la base de donnees avec des donnees de test ou initiales
+description: Populate database with test or initial data
 agent: efcore-db-seed
+model: haiku
 ---
 
 # EF Core Database Seed
 
-Insere des donnees de test ou initiales dans la base de donnees.
+Inserts test or initial data into the database.
 
-> **INSTRUCTION CLAUDE:** Les blocs `AskUserQuestion({...})` sont des instructions pour utiliser le tool `AskUserQuestion` de maniere **interactive**. Tu DOIS executer le tool avec ces parametres pour obtenir la reponse de l'utilisateur AVANT de continuer.
+> **CLAUDE INSTRUCTION:** The `AskUserQuestion({...})` blocks are instructions to use the `AskUserQuestion` tool in an **interactive** manner. You MUST execute the tool with these parameters to get the user's response BEFORE continuing.
 
 ---
 
-## ETAPE 1: Detecter les methodes de seeding disponibles
+## STEP 1: Detect available seeding methods
 
 ```bash
-# Chercher les differentes methodes de seed
+# Search for different seed methods
 SEED_METHODS=""
 
-# 1. Classe DbSeeder ou DataSeeder
+# 1. DbSeeder or DataSeeder class
 if grep -rq "class.*Seeder\|class.*Seed\|IDataSeeder" . --include="*.cs" 2>/dev/null; then
   SEED_METHODS="$SEED_METHODS seeder-class"
 fi
 
-# 2. HasData() dans les configurations
+# 2. HasData() in configurations
 if grep -rq "\.HasData(" . --include="*.cs" 2>/dev/null; then
   SEED_METHODS="$SEED_METHODS hasdata"
 fi
 
-# 3. Script SQL de seed
+# 3. SQL seed script
 if [ -f "./scripts/seed.sql" ] || [ -f "./Data/seed.sql" ]; then
   SEED_METHODS="$SEED_METHODS sql-script"
 fi
 
-# 4. Argument --seed dans Program.cs
+# 4. --seed argument in Program.cs
 if grep -q "\-\-seed" ./Program.cs 2>/dev/null; then
   SEED_METHODS="$SEED_METHODS cli-argument"
 fi
@@ -40,53 +41,53 @@ fi
 
 ---
 
-## ETAPE 2: Afficher les options
+## STEP 2: Display options
 
 ```
 ================================================================================
                          EF CORE - DATABASE SEED
 ================================================================================
 
-METHODES DETECTEES:
+DETECTED METHODS:
 ```
 
-**Si methodes trouvees:**
+**If methods found:**
 
 ```javascript
-// Construire les options dynamiquement
+// Build options dynamically
 options = []
 
 if (SEED_METHODS.includes("seeder-class")) {
   options.push({
     label: "Seeder Class",
-    description: "Executer la classe DbSeeder/DataSeeder"
+    description: "Execute DbSeeder/DataSeeder class"
   })
 }
 
 if (SEED_METHODS.includes("hasdata")) {
   options.push({
     label: "HasData (migrations)",
-    description: "Les donnees sont deja dans les migrations"
+    description: "Data is already in migrations"
   })
 }
 
 if (SEED_METHODS.includes("sql-script")) {
   options.push({
-    label: "Script SQL",
-    description: "Executer ./scripts/seed.sql"
+    label: "SQL Script",
+    description: "Execute ./scripts/seed.sql"
   })
 }
 
 if (SEED_METHODS.includes("cli-argument")) {
   options.push({
     label: "CLI --seed",
-    description: "Lancer l'app avec --seed"
+    description: "Launch app with --seed"
   })
 }
 
 AskUserQuestion({
   questions: [{
-    question: "Quelle methode de seeding utiliser ?",
+    question: "Which seeding method to use?",
     header: "Seed",
     options: options,
     multiSelect: false
@@ -94,17 +95,17 @@ AskUserQuestion({
 })
 ```
 
-**Si aucune methode trouvee:**
+**If no method found:**
 
 ```
-⚠️  Aucune methode de seeding detectee
+⚠️  No seeding method detected
 
 OPTIONS:
-1. Creer un script SQL dans ./scripts/seed.sql
-2. Ajouter HasData() dans vos EntityTypeConfiguration
-3. Creer une classe IDataSeeder
+1. Create SQL script in ./scripts/seed.sql
+2. Add HasData() in your EntityTypeConfiguration
+3. Create an IDataSeeder class
 
-EXEMPLE HasData():
+HASDATA EXAMPLE:
 ────────────────────────────────────────────────────────────────────────────────
 public class UserConfiguration : IEntityTypeConfiguration<User>
 {
@@ -123,26 +124,26 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
 
 ---
 
-## ETAPE 3: Executer le seeding
+## STEP 3: Execute seeding
 
 ### Option A: Seeder Class
 
 ```bash
-# Detecter le projet startup
+# Detect startup project
 STARTUP_PROJECT=$(find . -name "*.csproj" -exec grep -l "Microsoft.AspNetCore" {} \; | head -1)
 
-# Executer avec l'option seed
+# Execute with seed option
 dotnet run --project "$STARTUP_PROJECT" -- --seed
 ```
 
-### Option B: Script SQL
+### Option B: SQL Script
 
 ```bash
-# Extraire les infos de connexion
+# Extract connection info
 SERVER=$(grep -oP 'Server=\K[^;]+' appsettings.Local.json | head -1)
 DATABASE=$(grep -oP 'Database=\K[^;]+' appsettings.Local.json | head -1)
 
-# Executer le script
+# Execute script
 sqlcmd -S "$SERVER" -E -d "$DATABASE" -i "./scripts/seed.sql"
 ```
 
@@ -154,10 +155,10 @@ dotnet run --project "$STARTUP_PROJECT" -- --seed
 
 ---
 
-## ETAPE 4: Verification
+## STEP 4: Verification
 
 ```bash
-# Compter les enregistrements dans les tables principales
+# Count records in main tables
 TABLES=$(sqlcmd -S "$SERVER" -E -d "$DATABASE" -Q "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE='BASE TABLE'" -h -1)
 
 for table in $TABLES; do
@@ -168,33 +169,33 @@ done
 
 ---
 
-## ETAPE 5: Resume
+## STEP 5: Summary
 
 ```
 ================================================================================
-                         SEEDING TERMINE
+                         SEEDING COMPLETE
 ================================================================================
 
-METHODE:     {methode utilisee}
-RESULTATS:
-  Users:     {N} enregistrements
-  Products:  {N} enregistrements
+METHOD:      {method used}
+RESULTS:
+  Users:     {N} records
+  Products:  {N} records
   ...
 
-✓ Base de donnees peuplee avec succes
+✓ Database populated successfully
 
-COMMANDES SUIVANTES:
-  /efcore:db-status  → Verifier l'etat
-  dotnet run         → Lancer l'application
+NEXT COMMANDS:
+  /efcore:db-status  → Check status
+  dotnet run         → Launch application
 
 ================================================================================
 ```
 
 ---
 
-## Creer un script seed.sql
+## Create a seed.sql script
 
-Si vous n'avez pas de methode de seeding, creez `./scripts/seed.sql`:
+If you don't have a seeding method, create `./scripts/seed.sql`:
 
 ```sql
 -- Seed data for development
@@ -210,4 +211,8 @@ SET IDENTITY_INSERT [Users] OFF;
 -- Add more seed data here...
 ```
 
-Puis executez `/efcore:db-seed` et selectionnez "Script SQL".
+Then execute the following command and select "SQL Script":
+
+```
+/efcore:db-seed
+```

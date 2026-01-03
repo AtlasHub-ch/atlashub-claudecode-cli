@@ -1,170 +1,170 @@
-# Questionnaire d'Élicitation Adaptatif - Business Analyse
+# Adaptive Elicitation Questionnaire - Business Analysis
 
-> Questions adaptées à la complexité de la fonctionnalité.
-> Basé sur BABOK v3 - Approche pragmatique.
+> Questions adapted to feature complexity.
+> Based on BABOK v3 - Pragmatic approach.
 
 ---
 
-## Principe : Questions Adaptatives
+## Principle: Adaptive Questions
 
-**NE PAS poser 44 questions pour un CRUD simple !**
+**DO NOT ask 44 questions for a simple CRUD!**
 
-| Complexité | Questions | Durée estimée |
+| Complexity | Questions | Estimated duration |
 |------------|-----------|---------------|
-| CRUD simple | 6-8 | 5-10 min |
+| Simple CRUD | 6-8 | 5-10 min |
 | Standard | 12-15 | 15-20 min |
-| Complexe | 20-25 | 30-45 min |
-| Critique | 30+ | 1h+ |
+| Complex | 20-25 | 30-45 min |
+| Critical | 30+ | 1h+ |
 
 ---
 
-## Évaluation de la Complexité
+## Complexity Assessment
 
-**Poser cette question EN PREMIER :**
+**Ask this question FIRST:**
 
-> Quelle est la nature de cette fonctionnalité ?
-> - CRUD simple (entité basique)
-> - Standard (quelques règles métier)
-> - Complexe (workflows, intégrations)
-> - Critique (sécurité, finance, légal)
+> What is the nature of this feature?
+> - Simple CRUD (basic entity)
+> - Standard (some business rules)
+> - Complex (workflows, integrations)
+> - Critical (security, finance, legal)
 
 ---
 
-## Questions ESSENTIELLES (6 questions - TOUJOURS posées)
+## ESSENTIAL Questions (6 questions - ALWAYS asked)
 
-| # | Question | Objectif |
+| # | Question | Objective |
 |---|----------|----------|
-| 1 | **Quel problème** résout cette fonctionnalité ? | Comprendre le besoin |
-| 2 | **Qui** l'utilise ? (rôles) | Identifier les users |
-| 3 | **Quelles données** ? (entités CRUD) | Modèle de données |
-| 4 | **Quelles permissions** ? (qui fait quoi) | Sécurité |
-| 5 | **Scope** : IN et OUT ? | Délimiter |
-| 6 | **Règles métier** spécifiques ? | Logique métier |
+| 1 | **What problem** does this feature solve? | Understand the need |
+| 2 | **Who** uses it? (roles) | Identify users |
+| 3 | **What data**? (CRUD entities) | Data model |
+| 4 | **What permissions**? (who does what) | Security |
+| 5 | **Scope**: IN and OUT? | Delimit |
+| 6 | **Business rules** specific? | Business logic |
 
 ---
 
-## Questions STANDARD (+4 si complexité >= Standard)
+## STANDARD Questions (+4 if complexity >= Standard)
 
 | # | Question | Condition |
 |---|----------|-----------|
-| 7 | Quel est le **flux principal** ? | Toujours si Standard+ |
-| 8 | **Validations** particulières ? | Toujours si Standard+ |
-| 9 | Quels **messages** (succès/erreur) ? | Toujours si Standard+ |
-| 10 | **Audit trail** requis ? | Toujours si Standard+ |
+| 7 | What is the **main flow**? | Always if Standard+ |
+| 8 | Specific **validations**? | Always if Standard+ |
+| 9 | What **messages** (success/error)? | Always if Standard+ |
+| 10 | **Audit trail** required? | Always if Standard+ |
 
 ---
 
-## Questions COMPLEXES (+5 si complexité >= Complexe)
+## COMPLEX Questions (+5 if complexity >= Complex)
 
 | # | Question | Condition |
 |---|----------|-----------|
-| 11 | Quelles **intégrations** ? | Si systèmes externes |
-| 12 | **Concurrence** (2 users) ? | Si données partagées |
-| 13 | **Volumétrie** attendue ? | Si données massives |
-| 14 | **Flux alternatifs** ? | Si processus complexe |
-| 15 | **Edge cases** à anticiper ? | Toujours si Complexe+ |
+| 11 | What **integrations**? | If external systems |
+| 12 | **Concurrency** (2 users)? | If shared data |
+| 13 | Expected **volume**? | If massive data |
+| 14 | **Alternative flows**? | If complex process |
+| 15 | **Edge cases** to anticipate? | Always if Complex+ |
 
 ---
 
-## Questions CRITIQUES (+5 si complexité = Critique)
+## CRITICAL Questions (+5 if complexity = Critical)
 
 | # | Question | Condition |
 |---|----------|-----------|
-| 16 | **Données sensibles** (RGPD) ? | Si données personnelles |
-| 17 | **Contraintes légales** ? | Si réglementé |
-| 18 | **Performance** requise ? | Si SLA stricts |
-| 19 | **Opérations irréversibles** ? | Si actions critiques |
-| 20 | **Rollback** possible ? | Si transactions critiques |
+| 16 | **Sensitive data** (GDPR)? | If personal data |
+| 17 | **Legal constraints**? | If regulated |
+| 18 | **Performance** required? | If strict SLAs |
+| 19 | **Irreversible operations**? | If critical actions |
+| 20 | **Rollback** possible? | If critical transactions |
 
 ---
 
-## Questions OPTIONNELLES (proposer d'approfondir)
+## OPTIONAL Questions (propose to go deeper)
 
-Après les questions principales, demander :
+After main questions, ask:
 
-> Voulez-vous approfondir certains aspects ?
-> - Non, c'est suffisant
-> - Évolution future
-> - Cas limites détaillés
-> - Performance/Scalabilité
+> Do you want to go deeper on certain aspects?
+> - No, this is sufficient
+> - Future evolution
+> - Detailed edge cases
+> - Performance/Scalability
 
-### Si "Évolution future" :
-- Comment ça évolue dans 6 mois ?
-- Phases de déploiement (MVP, v1, v2) ?
+### If "Future evolution":
+- How does it evolve in 6 months?
+- Deployment phases (MVP, v1, v2)?
 
-### Si "Cas limites" :
-- Annulation à mi-parcours ?
-- Données invalides ?
-- Timeouts ?
+### If "Edge cases":
+- Mid-process cancellation?
+- Invalid data?
+- Timeouts?
 
-### Si "Performance" :
-- Temps de réponse cible ?
-- Pics d'utilisation ?
-- Cache nécessaire ?
+### If "Performance":
+- Target response time?
+- Usage peaks?
+- Cache needed?
 
 ---
 
-## Exemples par Type
+## Examples by Type
 
-### CRUD Simple (ex: Gestion des catégories)
+### Simple CRUD (e.g., Category Management)
 
-Questions posées :
-1. Problème → "Organiser les produits par catégorie"
-2. Users → "Admin uniquement"
-3. Données → "Catégorie: nom, description, parent"
-4. Permissions → "Admin: CRUD complet"
-5. Scope → "IN: CRUD catégories, OUT: gestion produits"
-6. Règles → "Nom unique, pas de suppression si produits liés"
+Questions asked:
+1. Problem → "Organize products by category"
+2. Users → "Admin only"
+3. Data → "Category: name, description, parent"
+4. Permissions → "Admin: full CRUD"
+5. Scope → "IN: CRUD categories, OUT: product management"
+6. Rules → "Unique name, no deletion if linked products"
 
-**Total : 6 questions, 5 minutes**
+**Total: 6 questions, 5 minutes**
 
-### Standard (ex: Gestion des commandes)
+### Standard (e.g., Order Management)
 
-Questions 1-6 + :
-7. Flux → "Panier → Validation → Paiement → Confirmation"
-8. Validations → "Stock disponible, adresse valide"
-9. Messages → "Commande confirmée #XXX"
-10. Audit → "Oui, historique des changements de statut"
+Questions 1-6 +:
+7. Flow → "Cart → Validation → Payment → Confirmation"
+8. Validations → "Stock available, valid address"
+9. Messages → "Order confirmed #XXX"
+10. Audit → "Yes, status change history"
 
-**Total : 10 questions, 15 minutes**
+**Total: 10 questions, 15 minutes**
 
-### Complexe (ex: Workflow d'approbation)
+### Complex (e.g., Approval Workflow)
 
-Questions 1-10 + :
-11. Intégrations → "API comptabilité, notifications email"
-12. Concurrence → "Verrouillage optimiste"
-13. Volumétrie → "1000 approbations/jour"
-14. Flux alt → "Rejet, Demande d'info, Escalade"
-15. Edge cases → "Approbateur absent, délai dépassé"
+Questions 1-10 +:
+11. Integrations → "Accounting API, email notifications"
+12. Concurrency → "Optimistic locking"
+13. Volume → "1000 approvals/day"
+14. Alt flows → "Rejection, Info request, Escalation"
+15. Edge cases → "Approver absent, deadline exceeded"
 
-**Total : 15 questions, 30 minutes**
+**Total: 15 questions, 30 minutes**
 
 ---
 
 ## Anti-patterns
 
-### À éviter :
+### To avoid:
 
-- Poser 44 questions pour un CRUD simple
-- Questions techniques trop tôt (avant de comprendre le besoin)
-- Questions fermées uniquement (oui/non)
-- Accepter "on verra" comme réponse
+- Asking 44 questions for a simple CRUD
+- Technical questions too early (before understanding the need)
+- Only closed questions (yes/no)
+- Accepting "we'll see" as an answer
 
-### Bonnes pratiques :
+### Best practices:
 
-- Adapter au contexte
-- Reformuler si réponse floue
-- Proposer des exemples
-- Documenter les "je ne sais pas" comme risques
+- Adapt to context
+- Rephrase if answer is vague
+- Provide examples
+- Document "I don't know" as risks
 
 ---
 
-## Référence Complète (44 questions)
+## Complete Reference (44 questions)
 
-Pour les fonctionnalités CRITIQUES nécessitant une élicitation exhaustive, voir le fichier complet :
+For CRITICAL features requiring exhaustive elicitation, see the complete file:
 
 [questions-elicitation-complete.md](./_archive/questions-elicitation-complete.md)
 
 ---
 
-*Approche pragmatique basée sur BABOK v3*
+*Pragmatic approach based on BABOK v3*

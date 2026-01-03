@@ -8,22 +8,22 @@ tools: Bash, Glob
 
 # EF Core Database Deploy Agent
 
-Applique les migrations en attente sur la base de donnees locale.
+Applies pending migrations to the local database.
 
 ## Workflow
 
-1. **Verifier** appsettings.Local.json existe
-2. **Compter** migrations pending
-3. **Appliquer** `dotnet ef database update`
-4. **Confirmer** succes
+1. **Verify** appsettings.Local.json exists
+2. **Count** pending migrations
+3. **Apply** `dotnet ef database update`
+4. **Confirm** success
 
-## Commandes
+## Commands
 
 ```bash
-# Verifier config
+# Verify config
 test -f appsettings.Local.json && echo "OK" || echo "MISSING"
 
-# Appliquer
+# Apply
 dotnet ef database update --verbose
 ```
 
@@ -38,14 +38,14 @@ DB DEPLOY
 
 ## Error Handling
 
-Si erreur connexion:
+If connection error:
 ```
-ERREUR: Connexion DB impossible
-  → Verifier SQL Server demarre
-  → Verifier appsettings.Local.json
-  → /efcore:db-reset pour creer la DB
+ERROR: Database connection failed
+  → Verify SQL Server is running
+  → Verify appsettings.Local.json
+  → /efcore:db-reset to create DB
 ```
 
 ## Priority
 
-Speed > Verbosity. Minimum output si succes.
+Speed > Verbosity. Minimal output if successful.

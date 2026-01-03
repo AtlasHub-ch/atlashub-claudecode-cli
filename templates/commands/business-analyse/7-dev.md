@@ -1,14 +1,14 @@
 ---
-description: Phase 7 - Implémentation guidée par phases avec validation utilisateur
+description: Phase 7 - Phased implementation with user validation
 model: opus
 args: [feature-id, phase]
 ---
 
-# Business Analyse - DEV (Implémentation)
+# Business Analyse - DEV (Implementation)
 
-Expert développeur senior. Implémentation guidée par phases avec validation obligatoire.
+Senior developer expert. Phased implementation with mandatory validation.
 
-> **INSTRUCTION CLAUDE:** Les blocs `AskUserQuestion({...})` sont des instructions pour utiliser le tool `AskUserQuestion` de maniere **interactive**. Tu DOIS executer le tool avec ces parametres pour obtenir la reponse de l'utilisateur AVANT de continuer.
+> **CLAUDE INSTRUCTION:** The `AskUserQuestion({...})` blocks are instructions to use the `AskUserQuestion` tool **interactively**. You MUST execute the tool with these parameters to get the user's response BEFORE continuing.
 
 ## Arguments
 
@@ -16,139 +16,139 @@ Expert développeur senior. Implémentation guidée par phases avec validation o
 /business-analyse:7-dev [feature-id] [phase]
 ```
 
-- `feature-id` : Identifiant de la feature (ex: FEAT-001)
-- `phase` : Phase à exécuter (optionnel: data|api|ui|integration|all)
+- `feature-id`: Feature identifier (e.g., FEAT-001)
+- `phase`: Phase to execute (optional: data|api|ui|integration|all)
 
-## Philosophie
+## Philosophy
 
 ```
 ╔══════════════════════════════════════════════════════════════════════════╗
-║  VALIDATION UTILISATEUR OBLIGATOIRE                                      ║
+║  MANDATORY USER VALIDATION                                               ║
 ╠══════════════════════════════════════════════════════════════════════════╣
 ║                                                                          ║
-║  AUCUNE phase ne s'exécute automatiquement.                             ║
-║  L'utilisateur DOIT valider explicitement avant chaque phase.           ║
+║  NO phase executes automatically.                                       ║
+║  The user MUST explicitly validate before each phase.                   ║
 ║                                                                          ║
 ║  Workflow:                                                               ║
-║    1. Afficher le plan d'implémentation                                 ║
-║    2. Demander validation utilisateur                                   ║
-║    3. Exécuter UNIQUEMENT si validé                                     ║
-║    4. Valider les résultats avant phase suivante                        ║
+║    1. Display implementation plan                                       ║
+║    2. Request user validation                                           ║
+║    3. Execute ONLY if validated                                         ║
+║    4. Validate results before next phase                                ║
 ║                                                                          ║
 ╚══════════════════════════════════════════════════════════════════════════╝
 ```
 
-## Pré-requis
+## Prerequisites
 
 ```bash
-# Vérifier que le handoff existe
+# Verify that handoff exists
 test -f ".business-analyse/applications/*/modules/*/features/$FEATURE_ID/4-development-handoff.md" || \
-  echo "Exécuter /business-analyse:6-handoff d'abord"
+  echo "Execute /business-analyse:6-handoff first"
 ```
 
 ## Workflow
 
-### Étape 1 : Chargement du contexte
+### Step 1: Loading context
 
-Charger le handoff et le FRD :
+Load the handoff and FRD:
 
 ```bash
 HANDOFF=$(cat ".business-analyse/applications/*/modules/*/features/$FEATURE_ID/4-development-handoff.md")
 FRD=$(cat ".business-analyse/applications/*/modules/*/features/$FEATURE_ID/3-functional-specification.md")
 ```
 
-Extraire le plan d'implémentation (section 9 du FRD).
+Extract the implementation plan (section 9 of FRD).
 
-### Étape 2 : Affichage du plan
+### Step 2: Plan display
 
 ```
 ╔══════════════════════════════════════════════════════════════════════════╗
-║  PLAN D'IMPLÉMENTATION - {{FEATURE_NAME}}                                ║
+║  IMPLEMENTATION PLAN - {{FEATURE_NAME}}                                  ║
 ╠══════════════════════════════════════════════════════════════════════════╣
 ║                                                                          ║
-║  Complexité détectée: {{COMPLEXITE}}                                     ║
+║  Detected complexity: {{COMPLEXITY}}                                     ║
 ║                                                                          ║
 ║  ┌────────────────────────────────────────────────────────────────────┐  ║
 ║  │ PHASE │ SCOPE                    │ VALIDATION      │ STATUS       │  ║
 ║  ├───────┼──────────────────────────┼─────────────────┼──────────────┤  ║
-║  │ 1     │ Data Layer (Entités)     │ EF OK           │ ⏳ En attente │  ║
-║  │ 2     │ API Layer (Endpoints)    │ Swagger OK      │ ⏳ En attente │  ║
-║  │ 3     │ UI Layer (Composants)    │ Gherkin OK      │ ⏳ En attente │  ║
-║  │ 4     │ Intégration              │ UAT OK          │ ⏳ En attente │  ║
+║  │ 1     │ Data Layer (Entities)    │ EF OK           │ ⏳ Pending   │  ║
+║  │ 2     │ API Layer (Endpoints)    │ Swagger OK      │ ⏳ Pending   │  ║
+║  │ 3     │ UI Layer (Components)    │ Gherkin OK      │ ⏳ Pending   │  ║
+║  │ 4     │ Integration              │ UAT OK          │ ⏳ Pending   │  ║
 ║  └────────────────────────────────────────────────────────────────────┘  ║
 ║                                                                          ║
 ╚══════════════════════════════════════════════════════════════════════════╝
 ```
 
-### Étape 3 : Demande de validation utilisateur
+### Step 3: User validation request
 
-**OBLIGATOIRE** - Utiliser AskUserQuestion :
+**MANDATORY** - Use AskUserQuestion:
 
 ```
 AskUserQuestion({
   questions: [{
-    question: "Quelle phase voulez-vous exécuter ?",
+    question: "Which phase do you want to execute?",
     header: "Phase",
     options: [
-      { label: "1. Data Layer", description: "Entités, migrations, repositories" },
+      { label: "1. Data Layer", description: "Entities, migrations, repositories" },
       { label: "2. API Layer", description: "Endpoints, services, DTOs" },
-      { label: "3. UI Layer", description: "Composants, formulaires, state" },
-      { label: "4. Intégration", description: "Wiring complet, tests E2E" },
-      { label: "Voir le plan détaillé", description: "Afficher le plan sans exécuter" }
+      { label: "3. UI Layer", description: "Components, forms, state" },
+      { label: "4. Integration", description: "Complete wiring, E2E tests" },
+      { label: "View detailed plan", description: "Show plan without executing" }
     ],
     multiSelect: false
   }]
 })
 ```
 
-**SI l'utilisateur choisit "Voir le plan détaillé"** → Afficher le détail et redemander
+**IF user chooses "View detailed plan"** → Show details and ask again
 
-**SI l'utilisateur choisit une phase** → Passer à l'étape 4
+**IF user chooses a phase** → Proceed to step 4
 
-### Étape 4 : Confirmation avant exécution
+### Step 4: Confirmation before execution
 
-**OBLIGATOIRE** - Double confirmation :
+**MANDATORY** - Double confirmation:
 
 ```
 AskUserQuestion({
   questions: [{
-    question: "Confirmer l'exécution de la Phase {{N}} ?",
-    header: "Confirmer",
+    question: "Confirm execution of Phase {{N}}?",
+    header: "Confirm",
     options: [
-      { label: "Oui, exécuter maintenant", description: "Lancer l'implémentation" },
-      { label: "Non, annuler", description: "Retour au menu" }
+      { label: "Yes, execute now", description: "Start implementation" },
+      { label: "No, cancel", description: "Return to menu" }
     ],
     multiSelect: false
   }]
 })
 ```
 
-**SI "Non"** → Retour à l'étape 3
-**SI "Oui"** → Passer à l'étape 5
+**IF "No"** → Return to step 3
+**IF "Yes"** → Proceed to step 5
 
 ---
 
-## Étape 5 : Exécution des phases
+## Step 5: Phase execution
 
 ### Phase 1: DATA LAYER
 
 **Scope:**
-- Créer/modifier les entités (classes C#, modèles TypeScript, etc.)
-- Configurer le DbContext / ORM
-- Générer les migrations
-- Créer les repositories (si pattern utilisé)
-- Ajouter les seed data de test
+- Create/modify entities (C# classes, TypeScript models, etc.)
+- Configure DbContext / ORM
+- Generate migrations
+- Create repositories (if pattern used)
+- Add test seed data
 
 **Actions:**
 
 ```
-1. Lire le modèle de données du handoff (section 3)
-2. Créer les fichiers d'entités selon la stack :
-   - .NET : Models/*.cs
-   - Node : models/*.ts
-   - Python : models/*.py
-3. Configurer les relations
-4. Générer la migration
+1. Read data model from handoff (section 3)
+2. Create entity files according to stack:
+   - .NET: Models/*.cs
+   - Node: models/*.ts
+   - Python: models/*.py
+3. Configure relations
+4. Generate migration
 ```
 
 **Validation:**
@@ -165,19 +165,19 @@ npm run migration:generate -- Add{{FeatureName}}
 npm run migration:run
 ```
 
-**Critère de succès:** Migration appliquée sans erreur
+**Success criteria:** Migration applied without error
 
-**Après exécution - Demander validation:**
+**After execution - Request validation:**
 
 ```
 AskUserQuestion({
   questions: [{
-    question: "Phase 1 (Data Layer) terminée. La migration s'est-elle appliquée correctement ?",
-    header: "Valider P1",
+    question: "Phase 1 (Data Layer) completed. Did the migration apply correctly?",
+    header: "Validate P1",
     options: [
-      { label: "Oui, passer à Phase 2", description: "Data Layer validé" },
-      { label: "Non, il y a des erreurs", description: "Corriger avant de continuer" },
-      { label: "Arrêter ici", description: "Ne pas continuer avec les autres phases" }
+      { label: "Yes, proceed to Phase 2", description: "Data Layer validated" },
+      { label: "No, there are errors", description: "Fix before continuing" },
+      { label: "Stop here", description: "Don't continue with other phases" }
     ],
     multiSelect: false
   }]
@@ -188,46 +188,46 @@ AskUserQuestion({
 
 ### Phase 2: API LAYER
 
-**Pré-requis:** Phase 1 validée
+**Prerequisites:** Phase 1 validated
 
 **Scope:**
-- Créer les Controllers/Routes
-- Implémenter les Services
-- Créer les DTOs (Request/Response)
-- Ajouter les validations
-- Configurer l'authentification/autorisation
+- Create Controllers/Routes
+- Implement Services
+- Create DTOs (Request/Response)
+- Add validations
+- Configure authentication/authorization
 
 **Actions:**
 
 ```
-1. Lire les endpoints du handoff (section 4)
-2. Créer les fichiers selon la stack :
-   - .NET : Controllers/*Controller.cs, Services/*Service.cs
-   - Node : routes/*.ts, services/*.ts
-   - Python : routes/*.py, services/*.py
-3. Implémenter chaque endpoint
-4. Ajouter les validations
+1. Read endpoints from handoff (section 4)
+2. Create files according to stack:
+   - .NET: Controllers/*Controller.cs, Services/*Service.cs
+   - Node: routes/*.ts, services/*.ts
+   - Python: routes/*.py, services/*.py
+3. Implement each endpoint
+4. Add validations
 ```
 
 **Validation:**
 ```bash
-# Lancer l'API et tester via Swagger/Postman
-# Vérifier que tous les endpoints répondent correctement
+# Start API and test via Swagger/Postman
+# Verify all endpoints respond correctly
 ```
 
-**Critère de succès:** Tous les endpoints testables via Swagger/Postman
+**Success criteria:** All endpoints testable via Swagger/Postman
 
-**Après exécution - Demander validation:**
+**After execution - Request validation:**
 
 ```
 AskUserQuestion({
   questions: [{
-    question: "Phase 2 (API Layer) terminée. Tous les endpoints fonctionnent-ils correctement ?",
-    header: "Valider P2",
+    question: "Phase 2 (API Layer) completed. Are all endpoints working correctly?",
+    header: "Validate P2",
     options: [
-      { label: "Oui, passer à Phase 3", description: "API Layer validé" },
-      { label: "Non, il y a des erreurs", description: "Corriger avant de continuer" },
-      { label: "Arrêter ici", description: "Ne pas continuer avec les autres phases" }
+      { label: "Yes, proceed to Phase 3", description: "API Layer validated" },
+      { label: "No, there are errors", description: "Fix before continuing" },
+      { label: "Stop here", description: "Don't continue with other phases" }
     ],
     multiSelect: false
   }]
@@ -238,49 +238,49 @@ AskUserQuestion({
 
 ### Phase 3: UI LAYER
 
-**Pré-requis:** Phase 2 validée
+**Prerequisites:** Phase 2 validated
 
 **Scope:**
-- Créer les pages/composants
-- Implémenter le state management
-- Créer les formulaires avec validations
-- Intégrer les appels API
-- Ajouter les messages/notifications
+- Create pages/components
+- Implement state management
+- Create forms with validations
+- Integrate API calls
+- Add messages/notifications
 
 **Actions:**
 
 ```
-1. Lire les wireframes du handoff (section 5)
-2. Créer les composants selon la stack :
-   - React : components/*.tsx, pages/*.tsx
-   - Angular : *.component.ts
-   - Vue : *.vue
-   - Blazor : *.razor
-3. Implémenter les formulaires
-4. Connecter à l'API
+1. Read wireframes from handoff (section 5)
+2. Create components according to stack:
+   - React: components/*.tsx, pages/*.tsx
+   - Angular: *.component.ts
+   - Vue: *.vue
+   - Blazor: *.razor
+3. Implement forms
+4. Connect to API
 ```
 
 **Validation:**
 ```bash
-# Lancer les tests E2E
+# Run E2E tests
 npm run test:e2e
-# Ou
+# Or
 dotnet test --filter Category=E2E
 ```
 
-**Critère de succès:** Scénarios Gherkin passent en E2E
+**Success criteria:** Gherkin scenarios pass in E2E
 
-**Après exécution - Demander validation:**
+**After execution - Request validation:**
 
 ```
 AskUserQuestion({
   questions: [{
-    question: "Phase 3 (UI Layer) terminée. L'interface fonctionne-t-elle correctement ?",
-    header: "Valider P3",
+    question: "Phase 3 (UI Layer) completed. Is the interface working correctly?",
+    header: "Validate P3",
     options: [
-      { label: "Oui, passer à Phase 4", description: "UI Layer validé" },
-      { label: "Non, il y a des erreurs", description: "Corriger avant de continuer" },
-      { label: "Arrêter ici", description: "Ne pas continuer avec l'intégration" }
+      { label: "Yes, proceed to Phase 4", description: "UI Layer validated" },
+      { label: "No, there are errors", description: "Fix before continuing" },
+      { label: "Stop here", description: "Don't continue with integration" }
     ],
     multiSelect: false
   }]
@@ -289,49 +289,49 @@ AskUserQuestion({
 
 ---
 
-### Phase 4: INTÉGRATION
+### Phase 4: INTEGRATION
 
-**Pré-requis:** Phases 1, 2, 3 validées
+**Prerequisites:** Phases 1, 2, 3 validated
 
 **Scope:**
-- Vérifier le wiring complet front ↔ back
-- Exécuter la suite de tests complète
-- Optimiser les performances si nécessaire
-- Finaliser la documentation technique
+- Verify complete front ↔ back wiring
+- Execute full test suite
+- Optimize performance if needed
+- Finalize technical documentation
 
 **Actions:**
 
 ```
-1. Tests E2E complets
-2. Vérification des permissions
-3. Test de charge (si applicable)
-4. Documentation technique
+1. Complete E2E tests
+2. Permission verification
+3. Load testing (if applicable)
+4. Technical documentation
 ```
 
 **Validation:**
 ```bash
-# Suite complète
+# Full suite
 npm run test
 npm run test:e2e
 npm run lint
 
-# Ou .NET
+# Or .NET
 dotnet test
 dotnet build --configuration Release
 ```
 
-**Critère de succès:** UAT (User Acceptance Testing) OK
+**Success criteria:** UAT (User Acceptance Testing) OK
 
-**Après exécution - Confirmation finale:**
+**After execution - Final confirmation:**
 
 ```
 AskUserQuestion({
   questions: [{
-    question: "Phase 4 (Intégration) terminée. La feature est-elle prête pour la livraison ?",
-    header: "Valider P4",
+    question: "Phase 4 (Integration) completed. Is the feature ready for delivery?",
+    header: "Validate P4",
     options: [
-      { label: "Oui, feature complète", description: "Prêt pour merge/PR" },
-      { label: "Non, corrections nécessaires", description: "Retouches à faire" }
+      { label: "Yes, feature complete", description: "Ready for merge/PR" },
+      { label: "No, corrections needed", description: "Adjustments to make" }
     ],
     multiSelect: false
   }]
@@ -340,54 +340,54 @@ AskUserQuestion({
 
 ---
 
-## Résumé de fin
+## End summary
 
 ```
-IMPLÉMENTATION TERMINÉE
+IMPLEMENTATION COMPLETED
 ═══════════════════════════════════════════════════════════
 Feature:     {{FEAT-XXX}} - {{NAME}}
 ═══════════════════════════════════════════════════════════
-Phases exécutées:
-  • Phase 1 - Data Layer:    ✅ Validé
-  • Phase 2 - API Layer:     ✅ Validé
-  • Phase 3 - UI Layer:      ✅ Validé
-  • Phase 4 - Intégration:   ✅ Validé
+Executed phases:
+  • Phase 1 - Data Layer:    ✅ Validated
+  • Phase 2 - API Layer:     ✅ Validated
+  • Phase 3 - UI Layer:      ✅ Validated
+  • Phase 4 - Integration:   ✅ Validated
 ═══════════════════════════════════════════════════════════
-Fichiers créés:
-  • Entités:     {{X}} fichiers
-  • Migrations:  {{Y}} fichiers
-  • Endpoints:   {{Z}} fichiers
-  • Composants:  {{W}} fichiers
-  • Tests:       {{N}} fichiers
+Files created:
+  • Entities:     {{X}} files
+  • Migrations:   {{Y}} files
+  • Endpoints:    {{Z}} files
+  • Components:   {{W}} files
+  • Tests:        {{N}} files
 ═══════════════════════════════════════════════════════════
 
-PROCHAINES ÉTAPES:
-  1. Créer une PR: /gitflow:7-pull-request
-  2. Ou commiter: /gitflow:3-commit
+NEXT STEPS:
+  1. Create a PR: /gitflow:7-pull-request
+  2. Or commit: /gitflow:3-commit
 ═══════════════════════════════════════════════════════════
 ```
 
 ---
 
-## Modes d'utilisation
+## Usage modes
 
-| Commande | Action |
-|----------|--------|
-| `/business-analyse:7-dev FEAT-001` | Affiche le plan et demande quelle phase |
-| `/business-analyse:7-dev FEAT-001 data` | Demande confirmation puis exécute Phase 1 |
-| `/business-analyse:7-dev FEAT-001 api` | Demande confirmation puis exécute Phase 2 |
-| `/business-analyse:7-dev FEAT-001 ui` | Demande confirmation puis exécute Phase 3 |
-| `/business-analyse:7-dev FEAT-001 integration` | Demande confirmation puis exécute Phase 4 |
-| `/business-analyse:7-dev FEAT-001 all` | Exécute toutes les phases avec validation entre chaque |
+| Command | Action |
+|---------|--------|
+| `/business-analyse:7-dev FEAT-001` | Shows plan and asks which phase |
+| `/business-analyse:7-dev FEAT-001 data` | Requests confirmation then executes Phase 1 |
+| `/business-analyse:7-dev FEAT-001 api` | Requests confirmation then executes Phase 2 |
+| `/business-analyse:7-dev FEAT-001 ui` | Requests confirmation then executes Phase 3 |
+| `/business-analyse:7-dev FEAT-001 integration` | Requests confirmation then executes Phase 4 |
+| `/business-analyse:7-dev FEAT-001 all` | Executes all phases with validation between each |
 
 ---
 
-## Règles
+## Rules
 
-1. **Validation obligatoire** - JAMAIS d'exécution automatique
-2. **Double confirmation** - Afficher plan + confirmer avant action
-3. **Phase par phase** - Valider chaque phase avant la suivante
-4. **Rollback possible** - L'utilisateur peut arrêter à tout moment
-5. **Contexte FRD** - Toujours se baser sur les specs du handoff
-6. **Tests après chaque phase** - Validation par tests automatisés
-7. **Stack-agnostic** - S'adapter à la stack détectée du projet
+1. **Mandatory validation** - NEVER automatic execution
+2. **Double confirmation** - Show plan + confirm before action
+3. **Phase by phase** - Validate each phase before next
+4. **Rollback possible** - User can stop at any time
+5. **FRD context** - Always based on handoff specs
+6. **Tests after each phase** - Validation through automated tests
+7. **Stack-agnostic** - Adapt to detected project stack

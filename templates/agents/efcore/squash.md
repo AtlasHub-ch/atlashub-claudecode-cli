@@ -8,19 +8,19 @@ tools: Bash, Glob, Read
 
 # EF Core Squash Agent
 
-Fusionne plusieurs migrations en une seule. Pour releases.
+Merges multiple migrations into one. For releases.
 
 ## Workflow
 
-1. **Lister**: Toutes les migrations
-2. **Confirmer**: Demander validation utilisateur
-3. **Backup**: Sauvegarder tous les fichiers
-4. **Supprimer**: Anciennes migrations
-5. **Creer**: Migration consolidee
-6. **Script**: Generer SQL idempotent
-7. **Valider**: Build OK
+1. **List**: All migrations
+2. **Confirm**: Request user validation
+3. **Backup**: Save all files
+4. **Delete**: Old migrations
+5. **Create**: Consolidated migration
+6. **Script**: Generate idempotent SQL
+7. **Validate**: Build OK
 
-## Commandes cles
+## Key Commands
 
 ```bash
 # Backup
@@ -28,40 +28,40 @@ BACKUP_DIR=".claude/gitflow/backup/migrations/squash_$(date +%Y%m%d_%H%M%S)"
 mkdir -p "$BACKUP_DIR"
 cp Migrations/*.cs "$BACKUP_DIR/"
 
-# Supprimer (sauf snapshot)
+# Delete (except snapshot)
 find Migrations -name "*.cs" -not -name "*Snapshot*" -delete
 
-# Creer consolidee
+# Create consolidated
 dotnet ef migrations add Release_${VERSION}_Initial
 
-# Script SQL
+# SQL Script
 dotnet ef migrations script --idempotent -o scripts/migrations/release.sql
 ```
 
 ## Safety Checks
 
-- [ ] Confirmation utilisateur
-- [ ] Backup cree
-- [ ] Build OK apres squash
-- [ ] Script SQL genere
+- [ ] User confirmation
+- [ ] Backup created
+- [ ] Build OK after squash
+- [ ] SQL script generated
 
 ## Output Format
 
 ```
 SQUASH
-  Avant:   12 migrations
-  Apres:   1 migration
+  Before:  12 migrations
+  After:   1 migration
   Backup:  .claude/gitflow/backup/migrations/squash_20250102/
   Script:  scripts/migrations/Release_1_7_0_Initial.sql
 
-ATTENTION: DB production - utiliser script SQL
+WARNING: Production DB - use SQL script
 ```
 
-## Warning Production
+## Production Warning
 
-Ne jamais appliquer directement sur une DB qui a deja des migrations.
-Utiliser le script SQL idempotent ou `--skip-apply`.
+Never apply directly to a DB that already has migrations.
+Use idempotent SQL script or `--skip-apply`.
 
 ## Priority
 
-Safety > Correctness > Speed. Backup obligatoire.
+Safety > Correctness > Speed. Backup mandatory.

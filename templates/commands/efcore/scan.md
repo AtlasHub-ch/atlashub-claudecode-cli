@@ -1,33 +1,33 @@
 ---
-description: Scanner toutes les branches pour migrations avec analyse de risque
+description: Scan all branches for migrations with risk analysis
 agent: efcore-scan
 model: sonnet
 ---
 
 # EF Core Scan - Cross-Branch Migration Scanner
 
-Scanne toutes les branches actives pour detecter les migrations et analyser les risques de conflit.
+Scans all active branches to detect migrations and analyze conflict risks.
 
-**UTILISATION:** Avant de creer une migration ou avant un merge pour verifier l'etat des autres branches.
+**USAGE:** Before creating a migration or before a merge to check the status of other branches.
 
-**SECURITE:** Lecture seule - aucune modification.
+**SECURITY:** Read-only - no modifications.
 
 ---
 
-## ETAPE 1: Lister les worktrees actifs
+## STEP 1: List active worktrees
 
 ```bash
-# Verifier que les worktrees existent
+# Check that worktrees exist
 WORKTREE_BASE=$(git config --get gitflow.worktrees.basePath 2>/dev/null || echo "../worktrees")
 
 if [ ! -d "$WORKTREE_BASE" ]; then
-  echo "Structure worktrees non trouvee: $WORKTREE_BASE"
-  echo "Executez /gitflow:1-init pour creer la structure"
+  echo "Worktrees structure not found: $WORKTREE_BASE"
+  echo "Run /gitflow:1-init to create structure"
   exit 1
 fi
 
-# Lister tous les worktrees
-echo "WORKTREES DETECTES"
+# List all worktrees
+echo "DETECTED WORKTREES"
 echo "=================="
 git worktree list
 echo ""
@@ -35,10 +35,10 @@ echo ""
 
 ---
 
-## ETAPE 2: Scanner les migrations par branche
+## STEP 2: Scan migrations per branch
 
 ```bash
-# Pour chaque worktree
+# For each worktree
 for worktree in $(git worktree list --porcelain | grep "^worktree" | cut -d' ' -f2); do
   BRANCH=$(git -C "$worktree" branch --show-current 2>/dev/null)
 
@@ -46,14 +46,14 @@ for worktree in $(git worktree list --porcelain | grep "^worktree" | cut -d' ' -
     continue
   fi
 
-  # Trouver le dossier Migrations
+  # Find Migrations folder
   MIGRATIONS_DIR=$(find "$worktree" -type d -name "Migrations" 2>/dev/null | head -1)
 
   if [ -n "$MIGRATIONS_DIR" ]; then
-    # Compter les migrations
+    # Count migrations
     MIGRATION_COUNT=$(find "$MIGRATIONS_DIR" -name "*.cs" | grep -v "Designer" | grep -v "Snapshot" | wc -l)
 
-    # Hash du ModelSnapshot
+    # ModelSnapshot hash
     SNAPSHOT=$(find "$MIGRATIONS_DIR" -name "*ModelSnapshot.cs" 2>/dev/null | head -1)
     if [ -n "$SNAPSHOT" ]; then
       SNAPSHOT_HASH=$(md5sum "$SNAPSHOT" 2>/dev/null | cut -d' ' -f1 | head -c 8)
@@ -68,10 +68,10 @@ done
 
 ---
 
-## ETAPE 3: Comparer avec develop
+## STEP 3: Compare with develop
 
 ```bash
-# Obtenir le hash du ModelSnapshot de develop
+# Get develop's ModelSnapshot hash
 DEVELOP_WORKTREE="$WORKTREE_BASE/develop"
 
 if [ -d "$DEVELOP_WORKTREE" ]; then
@@ -87,14 +87,14 @@ fi
 
 ---
 
-## ETAPE 4: Analyser les risques de conflit
+## STEP 4: Analyze conflict risks
 
 ```bash
 echo ""
-echo "ANALYSE DES RISQUES"
+echo "RISK ANALYSIS"
 echo "==================="
 
-# Comparer chaque branche avec develop
+# Compare each branch with develop
 for worktree in $(git worktree list --porcelain | grep "^worktree" | cut -d' ' -f2); do
   BRANCH=$(git -C "$worktree" branch --show-current 2>/dev/null)
 
@@ -105,11 +105,11 @@ for worktree in $(git worktree list --porcelain | grep "^worktree" | cut -d' ' -
   SNAPSHOT=$(find "$worktree" -name "*ModelSnapshot.cs" 2>/dev/null | head -1)
 
   if [ -n "$SNAPSHOT" ] && [ -n "$DEVELOP_SNAPSHOT" ]; then
-    # Comparer les snapshots
+    # Compare snapshots
     if diff -q "$SNAPSHOT" "$DEVELOP_SNAPSHOT" > /dev/null 2>&1; then
       RISK="NONE"
     else
-      # Analyser les differences
+      # Analyze differences
       DIFF_LINES=$(diff "$DEVELOP_SNAPSHOT" "$SNAPSHOT" 2>/dev/null | wc -l)
 
       if [ "$DIFF_LINES" -lt 50 ]; then
@@ -128,16 +128,16 @@ done
 
 ---
 
-## ETAPE 5: Recommander l'ordre de merge
+## STEP 5: Recommend merge order
 
 ```bash
 echo ""
-echo "ORDRE DE MERGE RECOMMANDE"
+echo "RECOMMENDED MERGE ORDER"
 echo "========================="
-echo "1. Branches avec RISK=NONE (independantes)"
-echo "2. Branches avec RISK=LOW (modifications mineures)"
-echo "3. Branches avec RISK=MEDIUM (attention a l'ordre)"
-echo "4. Branches avec RISK=HIGH (rebase requis avant merge)"
+echo "1. Branches with RISK=NONE (independent)"
+echo "2. Branches with RISK=LOW (minor modifications)"
+echo "3. Branches with RISK=MEDIUM (order matters)"
+echo "4. Branches with RISK=HIGH (rebase required before merge)"
 ```
 
 ---
@@ -149,28 +149,28 @@ echo "4. Branches avec RISK=HIGH (rebase requis avant merge)"
                     EF CORE CROSS-BRANCH SCAN
 ================================================================================
 
-WORKTREES DETECTES (5)
+DETECTED WORKTREES (5)
   main/                    [main]
   develop/                 [develop]
   features/user-auth/      [feature/user-auth]
   features/add-products/   [feature/add-products]
   hotfixes/login-fix/      [hotfix/login-fix]
 
-MIGRATIONS PAR BRANCHE
-  develop          | 12 migrations | Snapshot: a1b2c3d4 (REFERENCE)
+MIGRATIONS PER BRANCH
+  develop               | 12 migrations | Snapshot: a1b2c3d4 (REFERENCE)
   feature/user-auth     | 13 migrations | Snapshot: e5f6g7h8
   feature/add-products  | 13 migrations | Snapshot: i9j0k1l2
   hotfix/login-fix      | 12 migrations | Snapshot: a1b2c3d4
 
-ANALYSE DES RISQUES
-  feature/user-auth     : LOW      (table differente)
-  feature/add-products  : MEDIUM   (FK vers meme table)
+RISK ANALYSIS
+  feature/user-auth     : LOW      (different table)
+  feature/add-products  : MEDIUM   (FK to same table)
   hotfix/login-fix      : NONE     (snapshot = develop)
 
-ORDRE DE MERGE RECOMMANDE
-  1. hotfix/login-fix      (NONE - merge direct)
+RECOMMENDED MERGE ORDER
+  1. hotfix/login-fix      (NONE - direct merge)
   2. feature/user-auth     (LOW - merge OK)
-  3. feature/add-products  (MEDIUM - apres user-auth)
+  3. feature/add-products  (MEDIUM - after user-auth)
 
 ================================================================================
 ```
@@ -181,14 +181,14 @@ ORDRE DE MERGE RECOMMANDE
 
 | Option | Description |
 |--------|-------------|
-| `--json` | Output en format JSON pour CI/CD |
-| `--branch <name>` | Scanner une branche specifique |
-| `--verbose` | Afficher les details des differences |
-| `--no-recommend` | Ne pas afficher les recommandations |
+| `--json` | JSON output for CI/CD |
+| `--branch <name>` | Scan a specific branch |
+| `--verbose` | Display difference details |
+| `--no-recommend` | Don't display recommendations |
 
 ---
 
-## Utilisation dans CI/CD
+## CI/CD Usage
 
 ```yaml
 # GitHub Actions

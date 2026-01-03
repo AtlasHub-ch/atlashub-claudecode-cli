@@ -6,131 +6,142 @@ model: haiku
 
 # Phase 1: INIT - Project Initialization
 
-Tu es expert GitFlow et EF Core. Initialise le projet .NET pour le workflow GitFlow.
+You are a GitFlow and EF Core expert. Initialize the .NET project for the GitFlow workflow.
 
-**Workflow:** Analyse → Genere plan → Utilisateur valide → Execute avec `--exec`
+**Workflow:** Analysis → Generate plan → User validates → Execute with `--exec`
 
 ---
 
-## Mode par defaut : Generer le plan
+## Default mode: Generate the plan
 
-### 1. Analyse
+### 1. Analysis
 
-Analyse le repository et detecte :
+Analyze the repository and detect:
 
 **Git:**
-- Verifier si c'est un repo Git
-- Lister les branches existantes (main/master, develop)
-- Recuperer l'URL du remote origin
+- Check if it's a Git repo
+- List existing branches (main/master, develop)
+- Get remote origin URL
 
-**Version (.NET - ordre de priorite):**
-1. `*.csproj` → balise `<Version>`
-2. `Directory.Build.props` → balise `<Version>`
-3. `AssemblyInfo.cs` → attribut `[AssemblyVersion]`
-4. Fichier `VERSION` → contenu brut
-5. Dernier tag git → format `vX.Y.Z`
-6. Aucune → proposer `0.1.0` avec fichier `VERSION`
+**Version (.NET - priority order):**
+1. `*.csproj` → `<Version>` tag
+2. `Directory.Build.props` → `<Version>` tag
+3. `AssemblyInfo.cs` → `[AssemblyVersion]` attribute
+4. `VERSION` file → raw content
+5. Last git tag → format `vX.Y.Z`
+6. None → suggest `0.1.0` with `VERSION` file
 
 **EF Core:**
-- Detecter si EF Core est reference dans les csproj
-- Lister les DbContext existants
+- Detect if EF Core is referenced in csproj files
+- List existing DbContexts
 
-### 2. Generer le fichier plan
+### 2. Generate the plan file
 
-Cree `.claude/gitflow/plans/init_<YYYYMMDD>.md` contenant :
+Create `.claude/gitflow/plans/init_<YYYYMMDD>.md` containing:
 
-```markdown
-# Plan d'initialisation GitFlow
+````markdown
+# GitFlow Initialization Plan
 
-> Lisez ce fichier puis executez: `/gitflow:1-init --exec`
+> Read this file then execute:
+
+```
+/gitflow:1-init --exec
+```
 
 ## Repository
-| Info | Valeur |
-|------|--------|
-| Nom | {nom_repo} |
-| Remote | {url_ou_local} |
+| Info | Value |
+|------|-------|
+| Name | {repo_name} |
+| Remote | {url_or_local} |
 
 ## Version
-| Source | Fichier | Version |
-|--------|---------|---------|
-| {type} | {chemin} | {version} |
+| Source | File | Version |
+|--------|------|---------|
+| {type} | {path} | {version} |
 
-## Actions prevues
-- [ ] Branches: main ({creer|existe}), develop ({creer|existe})
+## Planned Actions
+- [ ] Branches: main ({create|exists}), develop ({create|exists})
 - [ ] Structure: .claude/gitflow/{config.json, plans/, logs/, migrations/}
-- [ ] CLAUDE.md: section Repository
-- [ ] EF Core: {actif|inactif} - Contexts: {liste}
+- [ ] CLAUDE.md: Repository section
+- [ ] EF Core: {active|inactive} - Contexts: {list}
 
 ## Configuration
 - Versioning: SemVer
 - Tag prefix: v
 - Auto-increment: feature→minor, hotfix→patch, release→manual
 
-## Modifier?
-Editez ce fichier avant d'executer.
+## Modify?
+Edit this file before executing.
 
-## Executer
-`/gitflow:1-init --exec`
-```
-
-### 3. Afficher message
+## Execute
 
 ```
-Plan genere: .claude/gitflow/plans/init_<DATE>.md
-
-1. Lisez le fichier
-2. Modifiez si necessaire
-3. Executez: /gitflow:1-init --exec
+/gitflow:1-init --exec
 ```
+````
+
+### 3. Display message
+
+````
+Plan generated: .claude/gitflow/plans/init_<DATE>.md
+
+1. Read the file
+2. Modify if necessary
+3. Execute:
+
+```
+/gitflow:1-init --exec
+```
+````
 
 ---
 
-## Mode --exec : Executer le plan
+## --exec mode: Execute the plan
 
-### Prerequis
-- Plan init existe dans `.claude/gitflow/plans/`
+### Prerequisites
+- Init plan exists in `.claude/gitflow/plans/`
 
 ### Actions
-1. **Branches**: Creer main et develop si absentes, checkout develop
-2. **Structure**: Creer `.claude/gitflow/{plans,logs,migrations}`
-3. **Worktrees** (si `--with-worktrees`): Creer structure worktrees (voir ci-dessous)
-4. **Config**: Creer `config.json` avec la configuration du plan
-5. **CLAUDE.md**: Ajouter section Repository si branches existaient
-6. **VERSION**: Creer fichier si aucune source detectee
-7. **Commit** (demander): `chore(gitflow): initialisation v{VERSION}`
+1. **Branches**: Create main and develop if absent, checkout develop
+2. **Structure**: Create `.claude/gitflow/{plans,logs,migrations}`
+3. **Worktrees** (if `--with-worktrees`): Create worktrees structure (see below)
+4. **Config**: Create `config.json` with plan configuration
+5. **CLAUDE.md**: Add Repository section if branches existed
+6. **VERSION**: Create file if no source detected
+7. **Commit** (ask): `chore(gitflow): initialization v{VERSION}`
 
-### Creation Worktrees (v1.2)
+### Creating Worktrees (v1.2)
 
-Si `--with-worktrees` est specifie (defaut: true), creer la structure :
+If `--with-worktrees` is specified (default: true), create the structure:
 
 ```bash
-# Base path (relatif au repo principal)
+# Base path (relative to main repo)
 WORKTREE_BASE="../worktrees"
 
-# Creer les repertoires
+# Create directories
 mkdir -p "$WORKTREE_BASE/features"
 mkdir -p "$WORKTREE_BASE/releases"
 mkdir -p "$WORKTREE_BASE/hotfixes"
 
-# Creer worktrees permanents pour main et develop
+# Create permanent worktrees for main and develop
 git worktree add "$WORKTREE_BASE/main" main
 git worktree add "$WORKTREE_BASE/develop" develop
 ```
 
-**Structure resultante:**
+**Resulting structure:**
 ```
 parent/
-├── atlashub-project/          # Repo principal
+├── atlashub-project/          # Main repo
 │   ├── .claude/gitflow/
 │   └── ...
 └── worktrees/
-    ├── main/                  # Worktree permanent
-    ├── develop/               # Worktree permanent
-    ├── features/              # Features en cours
+    ├── main/                  # Permanent worktree
+    ├── develop/               # Permanent worktree
+    ├── features/              # Features in progress
     │   └── {feature-name}/
-    ├── releases/              # Releases en cours
+    ├── releases/              # Releases in progress
     │   └── v{version}/
-    └── hotfixes/              # Hotfixes en cours
+    └── hotfixes/              # Hotfixes in progress
         └── {hotfix-name}/
 ```
 
@@ -156,17 +167,17 @@ parent/
 }
 ```
 
-### Archiver plan
-Renommer en `init_<DATE>_DONE_<TIMESTAMP>.md`
+### Archive plan
+Rename to `init_<DATE>_DONE_<TIMESTAMP>.md`
 
 ---
 
 ## Modes
 
-| Commande | Action |
-|----------|--------|
-| `/gitflow:1-init` | Genere plan |
-| `/gitflow:1-init --exec` | Execute plan existant |
-| `/gitflow:1-init --yes` | Genere + execute sans fichier intermediaire |
-| `/gitflow:1-init --with-worktrees` | Genere plan avec structure worktrees (defaut) |
-| `/gitflow:1-init --no-worktrees` | Genere plan sans worktrees |
+| Command | Action |
+|---------|--------|
+| `/gitflow:1-init` | Generate plan |
+| `/gitflow:1-init --exec` | Execute existing plan |
+| `/gitflow:1-init --yes` | Generate + execute without intermediate file |
+| `/gitflow:1-init --with-worktrees` | Generate plan with worktrees structure (default) |
+| `/gitflow:1-init --no-worktrees` | Generate plan without worktrees |

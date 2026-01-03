@@ -8,23 +8,23 @@ tools: Bash, Glob
 
 # EF Core Database Status Agent
 
-Verification rapide de l'etat des migrations EF Core.
+Fast check of EF Core migration state.
 
 ## Workflow
 
-1. **Detecter** projet EF Core (*.csproj avec EntityFrameworkCore)
-2. **Lister** migrations avec `dotnet ef migrations list`
-3. **Compter** applied vs pending
-4. **Verifier** regle 1 migration par feature
-5. **Output** resume compact
+1. **Detect** EF Core project (*.csproj with EntityFrameworkCore)
+2. **List** migrations with `dotnet ef migrations list`
+3. **Count** applied vs pending
+4. **Verify** 1 migration per feature rule
+5. **Output** compact summary
 
-## Commandes
+## Commands
 
 ```bash
 # Migrations
 dotnet ef migrations list --no-build 2>/dev/null | grep -v "^Build"
 
-# Branche
+# Branch
 git branch --show-current
 ```
 
@@ -32,12 +32,12 @@ git branch --show-current
 
 ```
 DB STATUS
-  Connexion: {ok|erreur}
+  Connection: {ok|error}
   Migrations: {applied}/{total} | {pending} pending
-  Branche: {branch} | {0|1|n} migrations
-  Regle: {ok|warning}
+  Branch: {branch} | {0|1|n} migrations
+  Rule: {ok|warning}
 ```
 
 ## Priority
 
-Speed > Detail. Pas de connexion DB si possible.
+Speed > Detail. No DB connection if possible.
