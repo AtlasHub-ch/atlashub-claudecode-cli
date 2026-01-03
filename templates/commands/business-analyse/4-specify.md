@@ -143,6 +143,112 @@ For each screen, create an ASCII wireframe:
 └─────────────────────────────────────────────────────────────────────────┘
 ```
 
+### Step 3bis: Navigation Matrix (Hierarchical Access)
+
+For applications with hierarchical data structures (Master-Detail patterns), document the navigation matrix:
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│ NAVIGATION MATRIX - Hierarchical Data Access                           │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                         │
+│ ENTRY POINT: {{MODULE_ROUTE}} (e.g., /domains)                          │
+│                                                                         │
+│ From: {{MASTER_ENTITY}} (e.g., Domain)                                  │
+│ ├── Direct Access: {{CHILD_1}} (e.g., Users → /domains/{id}/users)      │
+│ ├── Direct Access: {{CHILD_2}} (e.g., Projects → /domains/{id}/projects)│
+│ ├── Direct Access: {{CHILD_3}} (e.g., Sources → /domains/{id}/sources)  │
+│ └── Context preserved: Domain context visible in all child views        │
+│                                                                         │
+│ NAVIGATION PATTERN:                                                     │
+│ ┌──────────┐    ┌──────────────┐    ┌────────────────┐                  │
+│ │  Module  │───►│ Master List  │───►│ Master Detail  │                  │
+│ │  Route   │    │  (domains)   │    │  (domain/123)  │                  │
+│ └──────────┘    └──────────────┘    └───────┬────────┘                  │
+│                                             │                           │
+│                 ┌───────────────────────────┼───────────────────────┐   │
+│                 ▼                           ▼                       ▼   │
+│         ┌──────────────┐          ┌──────────────┐          ┌──────────┐│
+│         │ Child View 1 │          │ Child View 2 │          │ Child N  ││
+│         │   (users)    │          │  (projects)  │          │ (sources)││
+│         └──────────────┘          └──────────────┘          └──────────┘│
+│                                                                         │
+├─────────────────────────────────────────────────────────────────────────┤
+│ CONTEXT RULES                                                           │
+│ ─────────────                                                           │
+│ • Parent context always visible in breadcrumb                           │
+│ • Child operations scoped to parent (no orphan creation)                │
+│ • Cross-reference links to related entities                             │
+│ • Back navigation preserves filter state                                │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+**Navigation Matrix Table:**
+
+| From Entity | To Entity | Route Pattern | Relationship | Context Preserved |
+|-------------|-----------|---------------|--------------|-------------------|
+| {{MASTER}} | {{CHILD_1}} | /{{master}}/{id}/{{child1}} | 1:N | Master ID, Name |
+| {{MASTER}} | {{CHILD_2}} | /{{master}}/{id}/{{child2}} | 1:N | Master ID, Name |
+| {{CHILD_1}} | {{GRANDCHILD}} | /{{child1}}/{id}/{{grandchild}} | 1:N | Child + Master context |
+
+### Step 3ter: Data Access Patterns
+
+Document how users access related data from a given context:
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│ DATA ACCESS PATTERNS - Cross-Entity Navigation                          │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                         │
+│ SCENARIO: User is on {{MASTER_DETAIL}} page                             │
+│ ──────────────────────────────────────                                  │
+│                                                                         │
+│ ACCESSIBLE DATA:                                                        │
+│ ┌───────────────────────────────────────────────────────────────────┐   │
+│ │ Current Entity: {{MASTER}}                                        │   │
+│ │ ─────────────────────────                                         │   │
+│ │ • All {{MASTER}} attributes displayed                             │   │
+│ │ • Edit/Delete actions available (based on permissions)            │   │
+│ └───────────────────────────────────────────────────────────────────┘   │
+│                                                                         │
+│ ┌───────────────────────────────────────────────────────────────────┐   │
+│ │ Related Entities (tabs or sections):                              │   │
+│ │ ──────────────────────────────────                                │   │
+│ │ [TAB 1: {{CHILD_1}}]   Count: {{N}} | Quick actions: View, Add    │   │
+│ │ [TAB 2: {{CHILD_2}}]   Count: {{N}} | Quick actions: View, Add    │   │
+│ │ [TAB 3: {{CHILD_3}}]   Count: {{N}} | Quick actions: View, Add    │   │
+│ └───────────────────────────────────────────────────────────────────┘   │
+│                                                                         │
+│ ┌───────────────────────────────────────────────────────────────────┐   │
+│ │ Cross-References (links to other masters):                        │   │
+│ │ ────────────────────────────────────────                          │   │
+│ │ • Owner → User profile (view only)                                │   │
+│ │ • Category → Category detail (view only)                          │   │
+│ │ • Parent → Parent entity (navigate up)                            │   │
+│ └───────────────────────────────────────────────────────────────────┘   │
+│                                                                         │
+├─────────────────────────────────────────────────────────────────────────┤
+│ ACCESS CONTROL PER RELATIONSHIP                                         │
+│ ───────────────────────────────                                         │
+│                                                                         │
+│ | Relationship | View | Add | Edit | Delete | Filter |                  │
+│ |--------------|------|-----|------|--------|--------|                  │
+│ | {{CHILD_1}}  | ✓    | ✓   | ✓    | ✓      | ✓      |                  │
+│ | {{CHILD_2}}  | ✓    | ✓   | ✗    | ✗      | ✓      |                  │
+│ | {{REF}}      | ✓    | ✗   | ✗    | ✗      | ✗      |                  │
+│                                                                         │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+**Data Access Summary Table:**
+
+| From Context | Data Accessible | Access Type | Actions Available |
+|--------------|-----------------|-------------|-------------------|
+| {{MASTER}} Detail | {{CHILD_1}} list | Owned | CRUD, Filter, Export |
+| {{MASTER}} Detail | {{CHILD_2}} list | Owned | CRUD, Filter |
+| {{MASTER}} Detail | {{REF_ENTITY}} | Reference | View only |
+| {{CHILD}} Detail | Parent {{MASTER}} | Parent | View, Navigate up |
+
 ### Step 4: Field specifications
 
 For each form, precisely document the fields:
@@ -298,9 +404,14 @@ cat .claude/commands/business-analyse/_resources/checklist-specification.md
 | | Gherkin scenarios | ✓/✗ |
 | | Nominal cases | ✓/✗ |
 | | Error cases | ✓/✗ |
+| **Navigation (4/4)** | _(if hierarchical data)_ | |
+| | Navigation Matrix defined | ✓/✗/N/A |
+| | Data Access Patterns documented | ✓/✗/N/A |
+| | Context preservation rules | ✓/✗/N/A |
+| | Breadcrumb structure | ✓/✗/N/A |
 
-**Score**: {{X}}/30 ({{PERCENT}}%)
-**Threshold**: 85% (26/30)
+**Score**: {{X}}/30 ({{PERCENT}}%) _(+4 if hierarchical: {{X}}/34)_
+**Threshold**: 85% (26/30 or 29/34 if hierarchical)
 
 ### Step 7bis: Implementation plan (if complexity > Standard)
 
@@ -465,13 +576,39 @@ flowchart TD
     {{NAVIGATION_FLOW}}
 ```
 
-### 3.2 Screens
+### 3.2 Navigation Matrix (if hierarchical data)
 
-#### 3.2.1 {{SCREEN_NAME}}
+> **Note**: Include this section if the feature involves Master-Detail relationships or hierarchical data access.
+
+**Entry Point**: {{MODULE_ROUTE}}
+
+| From Entity | To Entity | Route Pattern | Relationship | Context Preserved |
+|-------------|-----------|---------------|--------------|-------------------|
+| {{MASTER}} | {{CHILD_1}} | /{{master}}/{id}/{{child1}} | 1:N | Master ID, Name |
+| {{MASTER}} | {{CHILD_2}} | /{{master}}/{id}/{{child2}} | 1:N | Master ID, Name |
+
+**Context Rules:**
+- Parent context visible in breadcrumb
+- Child operations scoped to parent
+- Back navigation preserves filter state
+
+### 3.3 Data Access Patterns (if hierarchical data)
+
+> **Note**: Include this section if users need to access related data from a parent context.
+
+| From Context | Data Accessible | Access Type | Actions Available |
+|--------------|-----------------|-------------|-------------------|
+| {{MASTER}} Detail | {{CHILD_1}} list | Owned | CRUD, Filter, Export |
+| {{MASTER}} Detail | {{CHILD_2}} list | Owned | CRUD, Filter |
+| {{MASTER}} Detail | {{REF_ENTITY}} | Reference | View only |
+
+### 3.4 Screens
+
+#### 3.4.1 {{SCREEN_NAME}}
 
 {{ASCII_WIREFRAME}}
 
-#### 3.2.2 {{SCREEN_NAME}}
+#### 3.4.2 {{SCREEN_NAME}}
 
 {{ASCII_WIREFRAME}}
 
@@ -615,7 +752,13 @@ flowchart TD
 
 ### 10.1 Completeness checklist
 
-Score: {{SCORE}}/30 ({{PERCENT}}%)
+Score: {{SCORE}}/30 ({{PERCENT}}%) _(+4 if hierarchical data: {{SCORE}}/34)_
+
+**Navigation criteria (if applicable):**
+- [ ] Navigation Matrix defined
+- [ ] Data Access Patterns documented
+- [ ] Context preservation rules
+- [ ] Breadcrumb structure
 
 ### 10.2 Resolved questions
 
@@ -670,3 +813,109 @@ Next: /business-analyse:document {{FEAT-XXX}}
 5. **85%+ Score** - Minimum to validate
 6. **No code** - Functional specs, not technical
 7. **Mandatory breakdown if Complex/Critical** - Testable API/UI/Integration phases
+
+## Content Rules (CRITICAL)
+
+```
+╔══════════════════════════════════════════════════════════════════════════╗
+║  FRD IS A FUNCTIONAL DOCUMENT - NOT A TECHNICAL GUIDE                    ║
+╠══════════════════════════════════════════════════════════════════════════╣
+║                                                                          ║
+║  The FRD describes WHAT the system should do, not HOW to build it.       ║
+║  It is written for stakeholders, product owners, and developers          ║
+║  to UNDERSTAND requirements - not to copy-paste code.                    ║
+║                                                                          ║
+╚══════════════════════════════════════════════════════════════════════════╝
+```
+
+### ALLOWED in FRD ✓
+
+| Category | Content Type | Example |
+|----------|--------------|---------|
+| **Use Cases** | Actor-based scenarios | "User clicks Save, system validates..." |
+| **Wireframes** | ASCII mockups | Visual layout with `┌─────┐` boxes |
+| **Fields** | Specification tables | `name \| string \| 2-100 chars \| required` |
+| **API Specs** | Endpoint descriptions | `POST /api/resource` with response structure |
+| **Business Rules** | Text descriptions | "BR-001: Name must be unique" |
+| **Messages** | User-facing text | "Item created successfully" |
+| **Gherkin** | Acceptance criteria | `Given/When/Then` scenarios |
+| **ER Diagrams** | Mermaid relationships | Entity relationships |
+
+### Rule Levels: Business vs Functional vs Technical
+
+```
+╔══════════════════════════════════════════════════════════════════════════╗
+║  THREE LEVELS OF RULES - KNOW THE DIFFERENCE                             ║
+╠══════════════════════════════════════════════════════════════════════════╣
+║                                                                          ║
+║  BUSINESS RULE (BA writes, PO validates)                                 ║
+║  ────────────────────────────────────────                                ║
+║  "Each domain must have an identified owner"                             ║
+║  → WHY something must happen (business value)                            ║
+║                                                                          ║
+║  FUNCTIONAL CONSTRAINT (BA writes)                                       ║
+║  ─────────────────────────────────                                       ║
+║  "Name field accepts 2-100 characters"                                   ║
+║  → WHAT the system enforces (user-facing behavior)                       ║
+║                                                                          ║
+║  TECHNICAL IMPLEMENTATION (Developer decides)                            ║
+║  ────────────────────────────────────────────                            ║
+║  "VARCHAR(100) NOT NULL, FK constraint"                                  ║
+║  → HOW it's built (code-level detail)                                    ║
+║                                                                          ║
+║  ⚠️ FRD contains BUSINESS + FUNCTIONAL only. Never TECHNICAL.            ║
+║                                                                          ║
+╚══════════════════════════════════════════════════════════════════════════╝
+```
+
+**Rule writing examples:**
+
+| Level | WRONG ❌ | CORRECT ✓ |
+|-------|----------|-----------|
+| Business | "Add FK to User table" | "Owner must be a registered user" |
+| Functional | "VARCHAR(100)" | "Name: 2-100 characters" |
+| Technical | _(not in FRD)_ | _(developer decides)_ |
+
+### FORBIDDEN in FRD ✗
+
+| Category | Why Forbidden | Instead Use |
+|----------|---------------|-------------|
+| **Source Code** (C#, JS, Python) | FRD is not implementation | Describe behavior in text |
+| **Class Definitions** | Technical detail | Entity attribute tables |
+| **SQL Scripts** | Database implementation | Seed data described in tables |
+| **Razor/HTML Components** | UI implementation | ASCII wireframes |
+| **Controller/Service Code** | Backend implementation | API endpoint descriptions |
+| **Migration Code** | EF Core detail | Entity relationship descriptions |
+
+### Examples
+
+**WRONG** ❌ (Code in FRD):
+```csharp
+public class DataGovernanceRole
+{
+    public int Id { get; set; }
+    public string Name { get; set; }
+}
+```
+
+**CORRECT** ✓ (Functional description):
+```
+Entity: DataGovernanceRole
+| Attribute | Type | Constraints | Business Purpose |
+|-----------|------|-------------|------------------|
+| Id | integer | PK, auto | Unique identifier |
+| Name | string | max 100, required | Display name for UI |
+```
+
+**WRONG** ❌ (SQL in FRD):
+```sql
+INSERT INTO Roles VALUES ('DATA_OWNER', 'Data Owner');
+```
+
+**CORRECT** ✓ (Seed data description):
+```
+Initial Data (to be seeded):
+| Code | Name | Description |
+|------|------|-------------|
+| DATA_OWNER | Data Owner | Business owner responsible for data value |
+```

@@ -51,10 +51,12 @@ Senior Business Analyst expert. Complete business analysis without writing code.
 | 2 | `/business-analyse:discover` | Requirements elicitation (ultrathink) | `1-discovery.md` |
 | 3 | `/business-analyse:analyse` | Business analysis BRD + doc scan (ultrathink) | `2-business-requirements.md` |
 | 4 | `/business-analyse:specify` | Functional specifications FRD (ultrathink) | `3-functional-specification.md` |
-| 5 | `/business-analyse:validate` | User validation gate | `validation-status.json` |
+| 5 | `/business-analyse:validate` | User validation gate | `validation.json` |
 | 6 | `/business-analyse:handoff` | Development prompt (ultrathink) | `4-development-handoff.md` |
 | 7 | `/business-analyse:document` | User-readable documentation (post-handoff) | Glossary, Dictionary, Diagrams |
 | + | `/business-analyse:bug` | Bug documentation | `tracking/bugs/BUG-XXX.md` |
+| ⚡ | `/business-analyse:hotfix` | Urgent fix (lightweight template) | `tracking/bugs/{{BUG-ID}}.md` |
+| 🔄 | `/business-analyse:change-request` | Formal spec change during dev | `tracking/changes/CR-XXX.md` |
 
 ## Artifact Structure
 
@@ -77,8 +79,10 @@ Senior Business Analyst expert. Complete business analysis without writing code.
 │                       ├── 2-business-requirements.md
 │                       ├── 3-functional-specification.md
 │                       ├── 4-development-handoff.md
+│                       ├── validation.json
 │                       └── tracking/
-│                           ├── changes.md
+│                           ├── changes/
+│                           │   └── CR-FEAT-XXX-001.md
 │                           └── bugs/
 │
 ├── documentation/
@@ -102,9 +106,85 @@ Senior Business Analyst expert. Complete business analysis without writing code.
 | **IEEE 830** | SRS structure, requirements traceability |
 | **BRD/FRD** | Business needs / specifications separation |
 
+## Feature ID Standards
+
+```
+╔══════════════════════════════════════════════════════════════════════════╗
+║  FEATURE ID FORMAT: FEAT-XXX (where XXX is 3-digit number)               ║
+╠══════════════════════════════════════════════════════════════════════════╣
+║                                                                          ║
+║  Format:    FEAT-001, FEAT-002, ..., FEAT-999                            ║
+║  Regex:     ^FEAT-\d{3}$                                                 ║
+║                                                                          ║
+║  RELATED IDs:                                                            ║
+║  • Business Rules:  BR-XXX       (e.g., BR-001)                          ║
+║  • Functional Reqs: FR-XXX       (e.g., FR-001)                          ║
+║  • Bugs:            BUG-XXX      (e.g., BUG-001)                         ║
+║  • Change Requests: CR-FEAT-XXX-N (e.g., CR-FEAT-001-001)                ║
+║                                                                          ║
+║  VALIDATION: Each command validates ID format before proceeding.         ║
+║                                                                          ║
+╚══════════════════════════════════════════════════════════════════════════╝
+```
+
+## Document Versioning
+
+```
+╔══════════════════════════════════════════════════════════════════════════╗
+║  SPECIFICATION VERSIONING: Track changes to documents                    ║
+╠══════════════════════════════════════════════════════════════════════════╣
+║                                                                          ║
+║  VERSION FORMAT: Major.Minor (e.g., 1.0, 1.1, 2.0)                       ║
+║                                                                          ║
+║  Major version (X.0):                                                    ║
+║  • Significant scope change                                              ║
+║  • Major revision after validation rejection                             ║
+║  • Breaking changes to previously approved specs                         ║
+║                                                                          ║
+║  Minor version (X.Y):                                                    ║
+║  • Clarifications, typo fixes                                            ║
+║  • Minor additions within scope                                          ║
+║  • Change request implementations                                        ║
+║                                                                          ║
+║  VERSION HISTORY: Each document maintains a changelog                    ║
+║  LOCKED AT HANDOFF: Version is locked when handoff is generated          ║
+║  POST-HANDOFF CHANGES: Require Change Request (CR) process               ║
+║                                                                          ║
+╚══════════════════════════════════════════════════════════════════════════╝
+```
+
+## ULTRATHINK Mode Definition
+
+```
+╔══════════════════════════════════════════════════════════════════════════╗
+║  ULTRATHINK: Deep Thinking Mode for Complex Analysis                     ║
+╠══════════════════════════════════════════════════════════════════════════╣
+║                                                                          ║
+║  ULTRATHINK is a BEHAVIORAL MODE, not a tool or skill to invoke.         ║
+║                                                                          ║
+║  WHEN TO USE:                                                            ║
+║  Phases marked with (ultrathink): discover, analyse, specify, handoff    ║
+║                                                                          ║
+║  HOW IT WORKS:                                                           ║
+║  Claude activates extended thinking to:                                  ║
+║  • Consider all edge cases before responding                             ║
+║  • Challenge assumptions aggressively                                    ║
+║  • Generate comprehensive outputs                                        ║
+║  • Validate completeness before outputting                               ║
+║                                                                          ║
+║  MODEL REQUIREMENT:                                                      ║
+║  ULTRATHINK phases require OPUS model for best results.                  ║
+║  Other models may produce less thorough analysis.                        ║
+║                                                                          ║
+║  NOT A SKILL INVOCATION:                                                 ║
+║  Do NOT call Skill("ultrathink"). It is a behavioral instruction.        ║
+║                                                                          ║
+╚══════════════════════════════════════════════════════════════════════════╝
+```
+
 ## Golden Rules
 
-1. **NEVER code** - BA produces specs, not code
+1. **NEVER code** - BA produces specs, not code. NO C#, JS, SQL, Razor in any document.
 2. **ULTRATHINK mandatory** - Phases 2, 3, 4, 6 use deep thinking
 3. **Structure respected** - Application > Module > Feature
 4. **Traceability** - Each requirement has a unique ID
@@ -112,6 +192,8 @@ Senior Business Analyst expert. Complete business analysis without writing code.
 6. **NOK → Revise** - Rejected specs return to ANALYSE phase
 7. **Maintained glossary** - Business terms documented
 8. **Optimized prompts** - Handoff ready for one-shot implementation
+9. **Tables over code** - Use attribute tables, not class definitions
+10. **Explore-First** - Handoff instructs developer to explore existing patterns
 
 ## Quick Start
 
