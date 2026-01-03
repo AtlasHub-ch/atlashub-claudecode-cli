@@ -1,54 +1,54 @@
 ---
-description: Rebaser ModelSnapshot sur develop et regenerer la migration
+description: Rebase ModelSnapshot on develop and regenerate migration
 agent: efcore-rebase-snapshot
 model: sonnet
 ---
 
 # EF Core Rebase-Snapshot - Resync with Develop
 
-Rebase le ModelSnapshot sur develop et regenere une migration consolidee. Utilise quand un conflit est detecte.
+Rebases the ModelSnapshot on develop and regenerates a consolidated migration. Used when conflict is detected.
 
-**UTILISATION:** Apres `/efcore:conflicts` signale un conflit HIGH.
+**USAGE:** After `/efcore:conflicts` signals a HIGH conflict.
 
-**ATTENTION:** Cette operation modifie les fichiers de migration. Un backup est cree automatiquement.
+**WARNING:** This operation modifies migration files. A backup is created automatically.
 
 ---
 
-## ETAPE 1: Verification des prerequis
+## STEP 1: Check prerequisites
 
 ```bash
 CURRENT_BRANCH=$(git branch --show-current)
-echo "Branche courante: $CURRENT_BRANCH"
+echo "Current branch: $CURRENT_BRANCH"
 
-# Verifier que c'est une branche feature/release/hotfix
+# Check that it's a feature/release/hotfix branch
 if [[ ! $CURRENT_BRANCH =~ ^(feature|release|hotfix)/ ]]; then
-  echo "ERREUR: Cette commande ne peut etre executee que depuis une branche GitFlow"
+  echo "ERROR: This command can only be executed from a GitFlow branch"
   exit 1
 fi
 
-# Verifier que le working directory est propre
+# Check that working directory is clean
 if [ -n "$(git status --porcelain)" ]; then
-  echo "ERREUR: Working directory non propre"
-  echo "Committez ou stashez vos changements d'abord"
+  echo "ERROR: Working directory not clean"
+  echo "Commit or stash your changes first"
   exit 1
 fi
 
-# Trouver le projet EF Core
+# Find EF Core project
 CSPROJ=$(find . -name "*.csproj" -exec grep -l "Microsoft.EntityFrameworkCore" {} \; 2>/dev/null | head -1)
 if [ -z "$CSPROJ" ]; then
-  echo "ERREUR: Aucun projet EF Core trouve"
+  echo "ERROR: No EF Core project found"
   exit 1
 fi
 
 PROJECT_DIR=$(dirname "$CSPROJ")
 MIGRATIONS_DIR="$PROJECT_DIR/Migrations"
-echo "Projet: $PROJECT_DIR"
+echo "Project: $PROJECT_DIR"
 echo "Migrations: $MIGRATIONS_DIR"
 ```
 
 ---
 
-## ETAPE 2: Backup des migrations actuelles
+## STEP 2: Backup current migrations
 
 ```bash
 BACKUP_DIR=".claude/gitflow/backup/migrations/rebase_$(date +%Y%m%d_%H%M%S)"
@@ -59,26 +59,26 @@ echo "BACKUP"
 echo "======"
 cp "$MIGRATIONS_DIR"/*.cs "$BACKUP_DIR/" 2>/dev/null
 BACKUP_COUNT=$(ls -1 "$BACKUP_DIR" | wc -l)
-echo "  $BACKUP_COUNT fichiers sauvegardes dans $BACKUP_DIR"
+echo "  $BACKUP_COUNT files backed up to $BACKUP_DIR"
 ```
 
 ---
 
-## ETAPE 3: Identifier les migrations de cette branche
+## STEP 3: Identify this branch's migrations
 
 ```bash
-# Trouver les migrations ajoutees sur cette branche (pas sur develop)
+# Find migrations added on this branch (not on develop)
 echo ""
-echo "MIGRATIONS DE CETTE BRANCHE"
+echo "THIS BRANCH'S MIGRATIONS"
 echo "==========================="
 
-# Obtenir la liste des migrations sur develop
+# Get migration list on develop
 DEVELOP_MIGRATIONS=$(git show develop:$MIGRATIONS_DIR 2>/dev/null | grep "\.cs$" | grep -v "Designer" | grep -v "Snapshot")
 
-# Migrations locales
+# Local migrations
 LOCAL_MIGRATIONS=$(ls -1 "$MIGRATIONS_DIR"/*.cs 2>/dev/null | xargs -n1 basename | grep -v "Designer" | grep -v "Snapshot")
 
-# Nouvelles migrations (sur cette branche mais pas sur develop)
+# New migrations (on this branch but not on develop)
 BRANCH_MIGRATIONS=""
 for migration in $LOCAL_MIGRATIONS; do
   if ! echo "$DEVELOP_MIGRATIONS" | grep -q "$migration"; then
@@ -88,37 +88,37 @@ for migration in $LOCAL_MIGRATIONS; do
 done
 
 if [ -z "$BRANCH_MIGRATIONS" ]; then
-  echo "  Aucune migration specifique a cette branche"
-  echo "  Rien a rebaser"
+  echo "  No migration specific to this branch"
+  echo "  Nothing to rebase"
   exit 0
 fi
 ```
 
 ---
 
-## ETAPE 4: Reset ModelSnapshot sur develop
+## STEP 4: Reset ModelSnapshot on develop
 
 ```bash
 echo ""
 echo "RESET MODELSNAPSHOT"
 echo "==================="
 
-# Obtenir le ModelSnapshot de develop
+# Get develop's ModelSnapshot
 git fetch origin develop
 SNAPSHOT_FILE=$(find "$MIGRATIONS_DIR" -name "*ModelSnapshot.cs" | head -1)
 SNAPSHOT_NAME=$(basename "$SNAPSHOT_FILE")
 
 git checkout origin/develop -- "$MIGRATIONS_DIR/$SNAPSHOT_NAME"
-echo "  ModelSnapshot reset sur develop"
+echo "  ModelSnapshot reset on develop"
 ```
 
 ---
 
-## ETAPE 5: Supprimer les migrations de cette branche
+## STEP 5: Delete this branch's migrations
 
 ```bash
 echo ""
-echo "SUPPRESSION MIGRATIONS BRANCHE"
+echo "DELETE BRANCH MIGRATIONS"
 echo "=============================="
 
 for migration in $BRANCH_MIGRATIONS; do
@@ -131,14 +131,14 @@ done
 
 ---
 
-## ETAPE 6: Regenerer la migration consolidee
+## STEP 6: Regenerate consolidated migration
 
 ```bash
 echo ""
-echo "REGENERATION MIGRATION"
+echo "REGENERATE MIGRATION"
 echo "======================"
 
-# Extraire info de branche pour le nom
+# Extract branch info for name
 BRANCH_TYPE=$(echo "$CURRENT_BRANCH" | cut -d'/' -f1)
 BRANCH_NAME=$(echo "$CURRENT_BRANCH" | cut -d'/' -f2 | sed 's/-/_/g' | sed 's/.*/\u&/')
 
@@ -146,7 +146,7 @@ BRANCH_NAME=$(echo "$CURRENT_BRANCH" | cut -d'/' -f2 | sed 's/-/_/g' | sed 's/.*
 VERSION=$(grep -oP '(?<=<Version>).*(?=</Version>)' "$CSPROJ" 2>/dev/null | head -1 || echo "1.0.0")
 VERSION_CLEAN=$(echo "$VERSION" | sed 's/\./_/g')
 
-# Nom de la migration
+# Migration name
 case $BRANCH_TYPE in
   "feature")
     MIGRATION_NAME="Feature_${VERSION_CLEAN}_${BRANCH_NAME}_Consolidated"
@@ -162,16 +162,16 @@ case $BRANCH_TYPE in
     ;;
 esac
 
-echo "Nom: $MIGRATION_NAME"
+echo "Name: $MIGRATION_NAME"
 
 cd "$PROJECT_DIR"
 dotnet ef migrations add "$MIGRATION_NAME" --verbose
 
 if [ $? -eq 0 ]; then
-  echo "  Migration creee avec succes"
+  echo "  Migration created successfully"
 else
-  echo "  ERREUR: Echec de creation de migration"
-  echo "  Restauration du backup..."
+  echo "  ERROR: Failed to create migration"
+  echo "  Restoring backup..."
   cp "$BACKUP_DIR"/*.cs "$MIGRATIONS_DIR/"
   exit 1
 fi
@@ -179,7 +179,7 @@ fi
 
 ---
 
-## ETAPE 7: Validation
+## STEP 7: Validation
 
 ```bash
 echo ""
@@ -189,17 +189,17 @@ echo "=========="
 # Build
 dotnet build --no-restore
 if [ $? -ne 0 ]; then
-  echo "  ERREUR: Build echoue"
-  echo "  Restauration du backup..."
+  echo "  ERROR: Build failed"
+  echo "  Restoring backup..."
   cp "$BACKUP_DIR"/*.cs "$MIGRATIONS_DIR/"
   exit 1
 fi
 echo "  Build: OK"
 
-# Verifier que la migration peut generer un script
+# Check that migration can generate script
 dotnet ef migrations script --no-build > /dev/null 2>&1
 if [ $? -ne 0 ]; then
-  echo "  ERREUR: Script generation echoue"
+  echo "  ERROR: Script generation failed"
   exit 1
 fi
 echo "  Script: OK"
@@ -207,34 +207,34 @@ echo "  Script: OK"
 
 ---
 
-## ETAPE 8: Resume
+## STEP 8: Summary
 
 ```
 ================================================================================
-                    REBASE-SNAPSHOT TERMINE
+                    REBASE-SNAPSHOT COMPLETE
 ================================================================================
 
-BRANCHE:          {current_branch}
-BACKUP:           {backup_dir}
+BRANCH:          {current_branch}
+BACKUP:          {backup_dir}
 
-AVANT:
-  Migrations:     {old_migrations}
-  ModelSnapshot:  {old_hash}
+BEFORE:
+  Migrations:    {old_migrations}
+  ModelSnapshot: {old_hash}
 
-APRES:
-  Migration:      {new_migration_name}
-  ModelSnapshot:  {new_hash} (= develop)
-
-================================================================================
-PROCHAINES ETAPES
-================================================================================
-
-1. Verifier le contenu de la migration
-2. Tester: /efcore:db-reset && /efcore:db-deploy
-3. Committer: /gitflow:3-commit
+AFTER:
+  Migration:     {new_migration_name}
+  ModelSnapshot: {new_hash} (= develop)
 
 ================================================================================
-RESTAURATION (si necessaire)
+NEXT STEPS
+================================================================================
+
+1. Check migration content
+2. Test: /efcore:db-reset && /efcore:db-deploy
+3. Commit: /gitflow:3-commit
+
+================================================================================
+RESTORE (if needed)
 ================================================================================
 
 cp {backup_dir}/*.cs {migrations_dir}/
@@ -248,17 +248,17 @@ cp {backup_dir}/*.cs {migrations_dir}/
 
 | Option | Description |
 |--------|-------------|
-| `--no-backup` | Ne pas creer de backup (dangereux) |
-| `--name <name>` | Forcer un nom de migration specifique |
-| `--dry-run` | Afficher ce qui serait fait sans executer |
+| `--no-backup` | Don't create backup (dangerous) |
+| `--name <name>` | Force a specific migration name |
+| `--dry-run` | Show what would be done without executing |
 
 ---
 
-## Quand utiliser
+## When to use
 
 | Situation | Action |
 |-----------|--------|
-| `/efcore:conflicts` retourne HIGH | Utiliser rebase-snapshot |
-| Merge conflit sur ModelSnapshot | Utiliser rebase-snapshot |
-| Plusieurs migrations a consolider | Utiliser rebase-snapshot |
-| Migration cassee | Utiliser rebase-snapshot |
+| `/efcore:conflicts` returns HIGH | Use rebase-snapshot |
+| Merge conflict on ModelSnapshot | Use rebase-snapshot |
+| Multiple migrations to consolidate | Use rebase-snapshot |
+| Broken migration | Use rebase-snapshot |

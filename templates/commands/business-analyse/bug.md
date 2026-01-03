@@ -1,78 +1,78 @@
 ---
-description: Documentation et spécification de résolution de bug
+description: Bug resolution documentation and specification
 ---
 
 # Business Analyse - Bug
 
-Expert BA senior. Documentation et spécification de résolution de bug.
+Senior BA expert. Bug documentation and resolution specification.
 
-> **INSTRUCTION CLAUDE:** Les blocs `AskUserQuestion({...})` sont des instructions pour utiliser le tool `AskUserQuestion` de maniere **interactive**. Tu DOIS executer le tool avec ces parametres pour obtenir la reponse de l'utilisateur AVANT de continuer.
+> **CLAUDE INSTRUCTION:** The `AskUserQuestion({...})` blocks are instructions to use the `AskUserQuestion` tool **interactively**. You MUST execute the tool with these parameters to get the user's response BEFORE continuing.
 
 ## Arguments
 
 ```
-/business-analyse:bug [feature-id] "description du bug"
+/business-analyse:bug [feature-id] "bug description"
 ```
 
-- `feature-id` : Identifiant de la feature concernée (ex: FEAT-001)
-- `description` : Description du bug rencontré
+- `feature-id`: Concerned feature identifier (e.g., FEAT-001)
+- `description`: Encountered bug description
 
-## Pré-requis
+## Prerequisites
 
 ```bash
-# Vérifier que la feature existe
+# Verify that feature exists
 test -d ".business-analyse/applications/*/modules/*/features/$FEATURE_ID" || \
-  echo "Feature non trouvée"
+  echo "Feature not found"
 ```
 
-## Philosophie
+## Philosophy
 
 ```
 ╔══════════════════════════════════════════════════════════════════════════╗
-║  LE BA DOCUMENTE LE BUG, IL NE LE CORRIGE PAS                           ║
+║  THE BA DOCUMENTS THE BUG, DOESN'T FIX IT                                ║
 ╠══════════════════════════════════════════════════════════════════════════╣
 ║                                                                          ║
-║  Le Business Analyst:                                                    ║
-║  ✓ Documente le bug (reproduction, impact)                               ║
-║  ✓ Analyse la cause probable                                             ║
-║  ✓ Spécifie le comportement attendu                                      ║
-║  ✓ Met à jour les specs si nécessaire                                    ║
+║  The Business Analyst:                                                   ║
+║  ✓ Documents the bug (reproduction, impact)                              ║
+║  ✓ Analyzes probable cause                                               ║
+║  ✓ Specifies expected behavior                                           ║
+║  ✓ Updates specs if needed                                               ║
 ║                                                                          ║
-║  Le Développeur:                                                         ║
-║  ✓ Implémente la correction                                              ║
-║  ✓ Écrit les tests de non-régression                                     ║
+║  The Developer:                                                          ║
+║  ✓ Implements the fix                                                    ║
+║  ✓ Writes non-regression tests                                           ║
 ║                                                                          ║
 ╚══════════════════════════════════════════════════════════════════════════╝
 ```
 
 ## Workflow
 
-### Étape 1 : Collecte d'informations
+### Step 1: Information gathering
 
-Poser les questions pour documenter le bug :
+Ask questions to document the bug:
 
 ```
 AskUserQuestion({
   questions: [
     {
-      question: "Quelle est la sévérité du bug ?",
-      header: "Sévérité",
+      question: "What is the bug severity?",
+      header: "Severity",
       options: [
-        { label: "Critique", description: "Bloque l'utilisation, perte de données" },
-        { label: "Majeur", description: "Fonctionnalité principale impactée" },
-        { label: "Mineur", description: "Fonctionnalité secondaire, contournement possible" },
-        { label: "Cosmétique", description: "Affichage, UX, pas d'impact fonctionnel" }
+        { label: "Critical", description: "Blocks usage, data loss" },
+        { label: "Major", description: "Main functionality impacted" },
+        { label: "Minor", description: "Secondary functionality, workaround possible" },
+        { label: "Cosmetic", description: "Display, UX, no functional impact" }
       ],
       multiSelect: false
     },
     {
-      question: "Le bug est-il reproductible ?",
+      question: "Is the bug reproducible?",
       header: "Repro",
       options: [
-        { label: "Toujours", description: "100% reproductible" },
-        { label: "Souvent", description: "~75% des tentatives" },
-        { label: "Parfois", description: "~25% des tentatives" },
-        { label: "Rarement", description: "Difficile à reproduire" }
+        { label: "Always", description: "100% reproducible" },
+        { label: "Often", description: "~75% of attempts" },
+        { label: "Sometimes", description: "~25% of attempts" },
+        { label: "Rarely", description: "Hard to reproduce" }
       ],
       multiSelect: false
     }
@@ -80,233 +80,233 @@ AskUserQuestion({
 })
 ```
 
-### Étape 2 : Documentation détaillée
+### Step 2: Detailed documentation
 
-Questions à poser à l'utilisateur :
+Questions to ask the user:
 
-1. **Étapes de reproduction** - Exactement quelles actions mènent au bug ?
-2. **Comportement observé** - Que se passe-t-il ?
-3. **Comportement attendu** - Que devrait-il se passer ?
-4. **Environnement** - Navigateur, OS, version, données ?
-5. **Screenshots/Logs** - Preuves visuelles ou techniques ?
-6. **Impact utilisateur** - Combien d'utilisateurs affectés ?
+1. **Reproduction steps** - Exactly which actions lead to the bug?
+2. **Observed behavior** - What happens?
+3. **Expected behavior** - What should happen?
+4. **Environment** - Browser, OS, version, data?
+5. **Screenshots/Logs** - Visual or technical evidence?
+6. **User impact** - How many users affected?
 
-### Étape 3 : Analyse de la cause
+### Step 3: Cause analysis
 
-Identifier la cause probable :
+Identify probable cause:
 
-| Type de cause | Description | Exemple |
-|---------------|-------------|---------|
-| **Spec manquante** | Le cas n'était pas spécifié | Edge case non prévu |
-| **Spec ambiguë** | La spec prête à confusion | Interprétation différente |
-| **Régression** | Fonctionnait avant, plus maintenant | Effet de bord |
-| **Données** | Données invalides ou corrompues | Format inattendu |
-| **Technique** | Bug d'implémentation | Code incorrect |
-| **Infrastructure** | Environnement/config | Timeout, mémoire |
+| Cause type | Description | Example |
+|------------|-------------|---------|
+| **Missing spec** | Case wasn't specified | Unpredicted edge case |
+| **Ambiguous spec** | Spec open to confusion | Different interpretation |
+| **Regression** | Worked before, not anymore | Side effect |
+| **Data** | Invalid or corrupted data | Unexpected format |
+| **Technical** | Implementation bug | Incorrect code |
+| **Infrastructure** | Environment/config | Timeout, memory |
 
-### Étape 4 : Génération ID bug
+### Step 4: Bug ID generation
 
-Incrémenter le compteur dans config.json :
+Increment counter in config.json:
 
 ```
 BUG-{NNN}
 ```
 
-### Étape 5 : Création du rapport de bug
+### Step 5: Bug report creation
 
-Créer `.business-analyse/.../features/{{FEAT-XXX}}/tracking/bugs/BUG-{{NNN}}.md` :
+Create `.business-analyse/.../features/{{FEAT-XXX}}/tracking/bugs/BUG-{{NNN}}.md`:
 
 ```markdown
-# BUG-{{NNN}} - {{TITRE_COURT}}
+# BUG-{{NNN}} - {{SHORT_TITLE}}
 
-## Métadonnées
+## Metadata
 
-| Propriété | Valeur |
-|-----------|--------|
+| Property | Value |
+|----------|-------|
 | **ID** | BUG-{{NNN}} |
 | **Feature** | {{FEAT-XXX}} |
-| **Sévérité** | {{CRITIQUE/MAJEUR/MINEUR/COSMETIQUE}} |
-| **Reproductibilité** | {{TOUJOURS/SOUVENT/PARFOIS/RAREMENT}} |
-| **Status** | Ouvert |
-| **Date découverte** | {{DATE}} |
-| **Rapporté par** | {{USER}} |
-| **Assigné à** | Non assigné |
+| **Severity** | {{CRITICAL/MAJOR/MINOR/COSMETIC}} |
+| **Reproducibility** | {{ALWAYS/OFTEN/SOMETIMES/RARELY}} |
+| **Status** | Open |
+| **Discovered date** | {{DATE}} |
+| **Reported by** | {{USER}} |
+| **Assigned to** | Unassigned |
 
 ---
 
 ## 1. Description
 
-### 1.1 Résumé
-{{RESUME_1_PHRASE}}
+### 1.1 Summary
+{{SUMMARY_1_SENTENCE}}
 
-### 1.2 Comportement observé
-{{CE_QUI_SE_PASSE}}
+### 1.2 Observed behavior
+{{WHAT_HAPPENS}}
 
-### 1.3 Comportement attendu
-{{CE_QUI_DEVRAIT_SE_PASSER}}
+### 1.3 Expected behavior
+{{WHAT_SHOULD_HAPPEN}}
 
 ---
 
 ## 2. Reproduction
 
-### 2.1 Prérequis
-- {{PREREQUIS_1}}
-- {{PREREQUIS_2}}
+### 2.1 Prerequisites
+- {{PREREQUISITE_1}}
+- {{PREREQUISITE_2}}
 
-### 2.2 Étapes
+### 2.2 Steps
 1. {{STEP_1}}
 2. {{STEP_2}}
 3. {{STEP_3}}
-4. Observer: {{OBSERVATION}}
+4. Observe: {{OBSERVATION}}
 
-### 2.3 Environnement
-| Propriété | Valeur |
-|-----------|--------|
-| Navigateur | {{BROWSER}} |
+### 2.3 Environment
+| Property | Value |
+|----------|-------|
+| Browser | {{BROWSER}} |
 | OS | {{OS}} |
-| Version app | {{VERSION}} |
-| Données | {{DATA_CONTEXT}} |
+| App version | {{VERSION}} |
+| Data | {{DATA_CONTEXT}} |
 
 ---
 
-## 3. Preuves
+## 3. Evidence
 
 ### 3.1 Screenshots
-{{SCREENSHOTS_OU_DESCRIPTIONS}}
+{{SCREENSHOTS_OR_DESCRIPTIONS}}
 
 ### 3.2 Logs
 ```
-{{LOGS_PERTINENTS}}
+{{RELEVANT_LOGS}}
 ```
 
-### 3.3 Données de test
-{{DONNEES_TEST}}
+### 3.3 Test data
+{{TEST_DATA}}
 
 ---
 
-## 4. Analyse
+## 4. Analysis
 
-### 4.1 Cause probable
-**Type**: {{SPEC_MANQUANTE/SPEC_AMBIGUE/REGRESSION/DONNEES/TECHNIQUE/INFRA}}
+### 4.1 Probable cause
+**Type**: {{MISSING_SPEC/AMBIGUOUS_SPEC/REGRESSION/DATA/TECHNICAL/INFRA}}
 
-{{DESCRIPTION_CAUSE}}
+{{CAUSE_DESCRIPTION}}
 
 ### 4.2 Impact
-- **Utilisateurs affectés**: {{NOMBRE/POURCENTAGE}}
-- **Fréquence**: {{FREQUENCE}}
-- **Contournement possible**: {{OUI/NON}} - {{DESCRIPTION_CONTOURNEMENT}}
+- **Affected users**: {{NUMBER/PERCENTAGE}}
+- **Frequency**: {{FREQUENCY}}
+- **Workaround possible**: {{YES/NO}} - {{WORKAROUND_DESCRIPTION}}
 
-### 4.3 Composants impactés
-| Composant | Type | Fichier probable |
-|-----------|------|------------------|
-| {{COMPOSANT}} | {{ENTITE/API/UI}} | {{FICHIER}} |
+### 4.3 Impacted components
+| Component | Type | Probable file |
+|-----------|------|---------------|
+| {{COMPONENT}} | {{ENTITY/API/UI}} | {{FILE}} |
 
 ---
 
-## 5. Spécification de la correction
+## 5. Fix specification
 
-### 5.1 Comportement correct attendu
-{{DESCRIPTION_COMPORTEMENT_CORRECT}}
+### 5.1 Expected correct behavior
+{{CORRECT_BEHAVIOR_DESCRIPTION}}
 
-### 5.2 Règles métier concernées
-| ID | Règle | Clarification |
-|----|-------|---------------|
-| BR-{{XXX}} | {{REGLE}} | {{CLARIFICATION}} |
+### 5.2 Concerned business rules
+| ID | Rule | Clarification |
+|----|------|---------------|
+| BR-{{XXX}} | {{RULE}} | {{CLARIFICATION}} |
 
-### 5.3 Critères d'acceptation de la correction
+### 5.3 Fix acceptance criteria
 
 ```gherkin
-Scenario: Correction BUG-{{NNN}}
+Scenario: Fix BUG-{{NNN}}
   Given {{PRECONDITION}}
   When {{ACTION}}
-  Then {{RESULTAT_ATTENDU}}
-  And le bug BUG-{{NNN}} ne se reproduit plus
+  Then {{EXPECTED_RESULT}}
+  And bug BUG-{{NNN}} no longer reproduces
 ```
 
-### 5.4 Tests de non-régression suggérés
+### 5.4 Suggested non-regression tests
 - [ ] {{TEST_1}}
 - [ ] {{TEST_2}}
 
 ---
 
-## 6. Mise à jour des specs (si nécessaire)
+## 6. Specs update (if needed)
 
-### 6.1 Documents à modifier
+### 6.1 Documents to modify
 | Document | Section | Modification |
 |----------|---------|--------------|
 | {{FRD}} | {{SECTION}} | {{MODIFICATION}} |
 
-### 6.2 Clarifications ajoutées
-{{CLARIFICATIONS_SPECS}}
+### 6.2 Added clarifications
+{{SPECS_CLARIFICATIONS}}
 
 ---
 
-## 7. Historique
+## 7. History
 
-| Date | Action | Auteur |
+| Date | Action | Author |
 |------|--------|--------|
-| {{DATE}} | Bug reporté | {{USER}} |
-| {{DATE}} | Analyse BA | Claude BA |
+| {{DATE}} | Bug reported | {{USER}} |
+| {{DATE}} | BA analysis | Claude BA |
 
 ---
 
-## 8. Résolution (à compléter par le dev)
+## 8. Resolution (to be completed by dev)
 
-### 8.1 Fix appliqué
-_À compléter après correction_
+### 8.1 Applied fix
+_To be completed after fix_
 
-### 8.2 Fichiers modifiés
-_À compléter après correction_
+### 8.2 Modified files
+_To be completed after fix_
 
-### 8.3 Tests ajoutés
-_À compléter après correction_
+### 8.3 Added tests
+_To be completed after fix_
 
-### 8.4 Date de résolution
-_À compléter après correction_
+### 8.4 Resolution date
+_To be completed after fix_
 
 ---
 
-*Généré par Business Analyse - {{DATE}}*
+*Generated by Business Analyse - {{DATE}}*
 ```
 
-### Étape 6 : Mise à jour des specs (si nécessaire)
+### Step 6: Specs update (if needed)
 
-Si le bug révèle une spec manquante ou ambiguë :
+If the bug reveals a missing or ambiguous spec:
 
-1. Ouvrir le FRD concerné
-2. Ajouter/Clarifier la spécification
-3. Incrémenter la version du document
-4. Référencer le bug comme source de modification
+1. Open concerned FRD
+2. Add/Clarify specification
+3. Increment document version
+4. Reference bug as source of modification
 
-### Résumé
+### Summary
 
 ```
-BUG DOCUMENTÉ
+BUG DOCUMENTED
 ═══════════════════════════════════════════════════════════
-Bug:         BUG-{{NNN}} - {{TITRE}}
+Bug:         BUG-{{NNN}} - {{TITLE}}
 Feature:     {{FEAT-XXX}}
-Sévérité:    {{SEVERITE}}
+Severity:    {{SEVERITY}}
 ═══════════════════════════════════════════════════════════
-Analyse:
-  • Cause:            {{TYPE_CAUSE}}
+Analysis:
+  • Cause:            {{CAUSE_TYPE}}
   • Impact:           {{IMPACT}}
-  • Contournement:    {{OUI/NON}}
+  • Workaround:       {{YES/NO}}
 
-Specs modifiées:      {{OUI/NON}}
+Specs modified:      {{YES/NO}}
 ═══════════════════════════════════════════════════════════
 Document: .../tracking/bugs/BUG-{{NNN}}.md
 
-PROCHAINE ÉTAPE:
-  Transmettre au développeur pour correction.
-  Utiliser le document comme spec de correction.
+NEXT STEP:
+  Forward to developer for fix.
+  Use document as fix specification.
 ═══════════════════════════════════════════════════════════
 ```
 
-## Règles
+## Rules
 
-1. **Documentation complète** - Toutes les infos pour reproduire
-2. **Cause analysée** - Identifier le type de problème
-3. **Specs clarifiées** - Mettre à jour si nécessaire
-4. **Critères testables** - Gherkin pour valider la correction
-5. **Aucun code** - Le BA spécifie, le dev corrige
-6. **Traçabilité** - Lien bug → spec → test
+1. **Complete documentation** - All info to reproduce
+2. **Analyzed cause** - Identify problem type
+3. **Clarified specs** - Update if needed
+4. **Testable criteria** - Gherkin to validate fix
+5. **No code** - BA specifies, dev fixes
+6. **Traceability** - Bug → spec → test link

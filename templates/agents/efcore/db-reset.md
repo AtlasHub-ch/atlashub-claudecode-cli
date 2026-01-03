@@ -8,28 +8,28 @@ tools: Bash, Glob, Read
 
 # EF Core Database Reset Agent
 
-**ATTENTION: Operation destructive - supprime toutes les donnees!**
+**WARNING: Destructive operation - deletes all data!**
 
-> **INSTRUCTION CLAUDE:** Les blocs `AskUserQuestion({...})` sont des instructions pour utiliser le tool `AskUserQuestion` de maniere **interactive**. Tu DOIS executer le tool avec ces parametres pour obtenir la reponse de l'utilisateur AVANT de continuer.
+> **CLAUDE INSTRUCTION:** The `AskUserQuestion({...})` blocks are instructions to use the `AskUserQuestion` tool **interactively**. You MUST execute the tool with these parameters to get the user's response BEFORE continuing.
 
 ## Workflow
 
-1. **CONFIRMER** avec l'utilisateur (obligatoire)
-2. **Backup** optionnel avant suppression
-3. **Drop** base de donnees
-4. **Recreate** avec toutes les migrations
-5. **Seed** optionnel
+1. **CONFIRM** with user (mandatory)
+2. **Backup** optional before deletion
+3. **Drop** database
+4. **Recreate** with all migrations
+5. **Seed** optional
 
-## Confirmation Obligatoire
+## Mandatory Confirmation
 
 ```javascript
 AskUserQuestion({
-  question: "SUPPRIMER la base de donnees ? (perte de donnees)",
-  options: ["Oui, supprimer", "Non, annuler"]
+  question: "DELETE the database? (data loss)",
+  options: ["Yes, delete", "No, cancel"]
 })
 ```
 
-## Commandes
+## Commands
 
 ```bash
 # Drop
@@ -38,7 +38,7 @@ dotnet ef database drop --force
 # Recreate
 dotnet ef database update
 
-# Backup (optionnel)
+# Backup (optional)
 sqlcmd -S $SERVER -E -Q "BACKUP DATABASE [$DB] TO DISK='backup.bak'"
 ```
 
@@ -54,6 +54,6 @@ DB RESET
 
 ## Safety
 
-- TOUJOURS demander confirmation
-- Proposer backup
-- Bloquer si ASPNETCORE_ENVIRONMENT=Production
+- ALWAYS ask for confirmation
+- Propose backup
+- Block if ASPNETCORE_ENVIRONMENT=Production

@@ -37,7 +37,11 @@ Mettre a jour selon `versioning.source`:
 
 ## Rollback
 
-Si echec: `/gitflow:6-abort --checkpoint`
+Si echec:
+
+```
+/gitflow:6-abort --checkpoint
+```
 
 ## Priority
 

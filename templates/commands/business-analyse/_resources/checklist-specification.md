@@ -1,7 +1,7 @@
-# Checklist de Complétude - Spécifications (FRD)
+# Completeness Checklist - Specifications (FRD)
 
-> Seuil de validation : **85% minimum (26/30)**
-> Basé sur IEEE 830 et bonnes pratiques FRD
+> Validation threshold: **85% minimum (26/30)**
+> Based on IEEE 830 and FRD best practices
 
 ---
 
@@ -9,120 +9,120 @@
 
 | Score | Status | Action |
 |-------|--------|--------|
-| 90-100% | ✅ Excellent | Prêt pour développement |
-| 85-89% | ✅ Acceptable | Prêt avec notes mineures |
-| 70-84% | ⚠️ Insuffisant | Compléter avant handoff |
-| < 70% | ❌ Incomplet | Retour à l'analyse |
+| 90-100% | ✅ Excellent | Ready for development |
+| 85-89% | ✅ Acceptable | Ready with minor notes |
+| 70-84% | ⚠️ Insufficient | Complete before handoff |
+| < 70% | ❌ Incomplete | Return to analysis |
 
 ---
 
-## Catégorie 1 : Contexte (4 points)
+## Category 1: Context (4 points)
 
-| # | Critère | Poids | ✓/✗ |
+| # | Criterion | Weight | ✓/✗ |
 |---|---------|-------|-----|
-| 1.1 | Objectif business clairement documenté | 1 | |
-| 1.2 | Scope (IN/OUT) explicitement défini | 1 | |
-| 1.3 | Stakeholders et rôles identifiés | 1 | |
-| 1.4 | Priorité établie (MoSCoW) | 1 | |
+| 1.1 | Business objective clearly documented | 1 | |
+| 1.2 | Scope (IN/OUT) explicitly defined | 1 | |
+| 1.3 | Stakeholders and roles identified | 1 | |
+| 1.4 | Priority established (MoSCoW) | 1 | |
 
-**Sous-total**: _/4
+**Subtotal**: _/4
 
 ---
 
-## Catégorie 2 : Cas d'Utilisation (6 points)
+## Category 2: Use Cases (6 points)
 
-| # | Critère | Poids | ✓/✗ |
+| # | Criterion | Weight | ✓/✗ |
 |---|---------|-------|-----|
-| 2.1 | Happy path complet (toutes les étapes) | 1 | |
-| 2.2 | Extensions/flux alternatifs documentés | 1 | |
-| 2.3 | Préconditions définies | 1 | |
-| 2.4 | Postconditions (succès/échec) définies | 1 | |
-| 2.5 | Acteurs clairement identifiés | 1 | |
-| 2.6 | Règles métier liées aux UC | 1 | |
+| 2.1 | Complete happy path (all steps) | 1 | |
+| 2.2 | Extensions/alternative flows documented | 1 | |
+| 2.3 | Preconditions defined | 1 | |
+| 2.4 | Postconditions (success/failure) defined | 1 | |
+| 2.5 | Actors clearly identified | 1 | |
+| 2.6 | Business rules linked to UCs | 1 | |
 
-**Sous-total**: _/6
+**Subtotal**: _/6
 
 ---
 
-## Catégorie 3 : Interface Utilisateur (6 points)
+## Category 3: User Interface (6 points)
 
-| # | Critère | Poids | ✓/✗ |
+| # | Criterion | Weight | ✓/✗ |
 |---|---------|-------|-----|
-| 3.1 | Wireframes/maquettes présents | 1 | |
-| 3.2 | URLs/routes définies | 1 | |
-| 3.3 | Rôles autorisés par écran | 1 | |
-| 3.4 | Éléments interactifs documentés | 1 | |
-| 3.5 | Messages (succès/erreur) spécifiés | 1 | |
-| 3.6 | Validations front-end définies | 1 | |
+| 3.1 | Wireframes/mockups present | 1 | |
+| 3.2 | URLs/routes defined | 1 | |
+| 3.3 | Authorized roles per screen | 1 | |
+| 3.4 | Interactive elements documented | 1 | |
+| 3.5 | Messages (success/error) specified | 1 | |
+| 3.6 | Front-end validations defined | 1 | |
 
-**Sous-total**: _/6
+**Subtotal**: _/6
 
 ---
 
-## Catégorie 4 : Données (5 points)
+## Category 4: Data (5 points)
 
-| # | Critère | Poids | ✓/✗ |
+| # | Criterion | Weight | ✓/✗ |
 |---|---------|-------|-----|
-| 4.1 | Tous les champs spécifiés | 1 | |
-| 4.2 | Types de données définis | 1 | |
-| 4.3 | Règles de validation par champ | 1 | |
-| 4.4 | Valeurs par défaut spécifiées | 1 | |
-| 4.5 | Obligatoire/optionnel indiqué | 1 | |
+| 4.1 | All fields specified | 1 | |
+| 4.2 | Data types defined | 1 | |
+| 4.3 | Validation rules per field | 1 | |
+| 4.4 | Default values specified | 1 | |
+| 4.5 | Required/optional indicated | 1 | |
 
-**Sous-total**: _/5
+**Subtotal**: _/5
 
 ---
 
-## Catégorie 5 : API (5 points)
+## Category 5: API (5 points)
 
-| # | Critère | Poids | ✓/✗ |
+| # | Criterion | Weight | ✓/✗ |
 |---|---------|-------|-----|
-| 5.1 | Tous les endpoints documentés | 1 | |
-| 5.2 | Request/Response formats définis | 1 | |
-| 5.3 | Codes d'erreur HTTP spécifiés | 1 | |
-| 5.4 | Authentification/Autorisation définie | 1 | |
-| 5.5 | Validations back-end documentées | 1 | |
+| 5.1 | All endpoints documented | 1 | |
+| 5.2 | Request/Response formats defined | 1 | |
+| 5.3 | HTTP error codes specified | 1 | |
+| 5.4 | Authentication/Authorization defined | 1 | |
+| 5.5 | Back-end validations documented | 1 | |
 
-**Sous-total**: _/5
+**Subtotal**: _/5
 
 ---
 
-## Catégorie 6 : Tests (4 points)
+## Category 6: Tests (4 points)
 
-| # | Critère | Poids | ✓/✗ |
+| # | Criterion | Weight | ✓/✗ |
 |---|---------|-------|-----|
-| 6.1 | Critères d'acceptation définis | 1 | |
-| 6.2 | Scénarios Gherkin écrits | 1 | |
-| 6.3 | Cas nominaux couverts | 1 | |
-| 6.4 | Cas d'erreur couverts | 1 | |
+| 6.1 | Acceptance criteria defined | 1 | |
+| 6.2 | Gherkin scenarios written | 1 | |
+| 6.3 | Nominal cases covered | 1 | |
+| 6.4 | Error cases covered | 1 | |
 
-**Sous-total**: _/4
+**Subtotal**: _/4
 
 ---
 
-## Récapitulatif
+## Summary
 
-| Catégorie | Score | Max |
+| Category | Score | Max |
 |-----------|-------|-----|
-| Contexte | | 4 |
-| Cas d'Utilisation | | 6 |
+| Context | | 4 |
+| Use Cases | | 6 |
 | Interface | | 6 |
-| Données | | 5 |
+| Data | | 5 |
 | API | | 5 |
 | Tests | | 4 |
 | **TOTAL** | | **30** |
 
-**Pourcentage**: _%
+**Percentage**: _%
 
-**Status**: ✅ Validé / ⚠️ Insuffisant / ❌ Incomplet
+**Status**: ✅ Validated / ⚠️ Insufficient / ❌ Incomplete
 
 ---
 
-## Points à compléter
+## Items to Complete
 
-Si score < 85%, lister les points manquants :
+If score < 85%, list missing items:
 
-| # | Critère manquant | Priorité | Action |
+| # | Missing criterion | Priority | Action |
 |---|-----------------|----------|--------|
 | | | | |
 
@@ -130,8 +130,8 @@ Si score < 85%, lister les points manquants :
 
 ## Notes
 
-_Observations du BA :_
+_BA observations:_
 
 ---
 
-*Checklist basée sur IEEE 830 et BABOK v3*
+*Checklist based on IEEE 830 and BABOK v3*

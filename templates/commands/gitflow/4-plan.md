@@ -80,7 +80,7 @@ fi
 
 Cree `.claude/gitflow/plans/{type}-{nom}_{date}.md` :
 
-```markdown
+````markdown
 # Plan: {BRANCH_NAME}
 
 ## Meta
@@ -109,20 +109,27 @@ Cree `.claude/gitflow/plans/{type}-{nom}_{date}.md` :
 Reset au commit initial + restore migrations backup
 
 ## Executer
-`/gitflow:5-exec {fichier_plan}`
+
 ```
+/gitflow:5-exec {fichier_plan}
+```
+````
 
 ### 4. Afficher resume
 
-```
+````
 Plan genere: .claude/gitflow/plans/{name}.md
 
 Branche: {source} → {target}
 Version: {current} → {new}
 Strategie: {rebase|merge|remove+readd}
 
-Executez: /gitflow:5-exec
+Executez:
+
 ```
+/gitflow:5-exec
+```
+````
 
 ---
 

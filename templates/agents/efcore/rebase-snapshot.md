@@ -8,17 +8,17 @@ tools: Bash, Glob, Read, Edit
 
 # EF Core Rebase-Snapshot Agent
 
-Rebase le ModelSnapshot sur develop pour resoudre les conflits.
+Rebases ModelSnapshot on develop to resolve conflicts.
 
 ## Workflow
 
-1. **Backup** toutes les migrations
-2. **Reset** ModelSnapshot sur develop
-3. **Supprimer** migrations de la branche
-4. **Regenerer** migration consolidee
-5. **Valider** build OK
+1. **Backup** all migrations
+2. **Reset** ModelSnapshot to develop
+3. **Delete** branch migrations
+4. **Regenerate** consolidated migration
+5. **Validate** build OK
 
-## Commandes cles
+## Key Commands
 
 ```bash
 # Backup
@@ -26,21 +26,21 @@ BACKUP_DIR=".claude/gitflow/backup/migrations/rebase_$(date +%Y%m%d_%H%M%S)"
 mkdir -p "$BACKUP_DIR"
 cp Migrations/*.cs "$BACKUP_DIR/"
 
-# Reset snapshot sur develop
+# Reset snapshot to develop
 git checkout origin/develop -- Migrations/*ModelSnapshot.cs
 
-# Supprimer migrations branche
+# Delete branch migrations
 rm -f Migrations/*Feature_*.cs
 rm -f Migrations/*Feature_*.Designer.cs
 
-# Regenerer
+# Regenerate
 dotnet ef migrations add Feature_1_7_0_Consolidated
 
-# Valider
+# Validate
 dotnet build
 ```
 
-## Nommage migration
+## Migration Naming
 
 ```
 {Type}_{Version}_{BranchName}_{Description}
@@ -52,11 +52,11 @@ Release_1_7_0_Initial
 
 ## Safety Checks
 
-- [ ] Working directory propre
-- [ ] Backup cree
-- [ ] Build OK apres rebase
-- [ ] Script SQL generable
+- [ ] Clean working directory
+- [ ] Backup created
+- [ ] Build OK after rebase
+- [ ] SQL script can be generated
 
 ## Priority
 
-Safety > Correctness > Speed. Backup obligatoire.
+Safety > Correctness > Speed. Backup mandatory.

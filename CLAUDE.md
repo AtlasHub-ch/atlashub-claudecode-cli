@@ -45,4 +45,35 @@ Bien que ce projet contienne des outils pour gérer EF Core dans d'autres projet
 
 ---
 
+## Writing Guidelines
+
+### Templates Language
+
+**All templates in the `templates/` folder MUST be written in English.**
+
+This includes:
+- `templates/commands/**/*.md` - Command templates
+- `templates/agents/**/*.md` - Agent templates
+- `templates/hooks/**/*.md` - Hook templates (if any)
+
+**Reasons:**
+- Reduces token consumption (~20-30% savings vs French)
+- Better compatibility with Claude models (trained primarily on English)
+- Consistent codebase language
+
+**Template Structure:**
+```yaml
+---
+description: English description here
+agent: agent-name
+model: haiku|sonnet|opus
+---
+
+# Template Title in English
+
+English content...
+```
+
+---
+
 *Initialisé le 2025-12-30*

@@ -8,41 +8,41 @@ tools: Bash, Glob, Read
 
 # EF Core Scan Agent
 
-Scanner cross-branch pour detecter les migrations sur toutes les branches actives.
+Cross-branch scanner to detect migrations across all active branches.
 
 ## Mission
 
-1. **Lister** tous les worktrees actifs
-2. **Scanner** les migrations dans chaque branche
-3. **Comparer** les ModelSnapshots avec develop
-4. **Analyser** les risques de conflit
-5. **Recommander** l'ordre de merge optimal
+1. **List** all active worktrees
+2. **Scan** migrations in each branch
+3. **Compare** ModelSnapshots with develop
+4. **Analyze** conflict risks
+5. **Recommend** optimal merge order
 
-## Commandes cles
+## Key Commands
 
 ```bash
-# Lister worktrees
+# List worktrees
 git worktree list
 
-# Hash du ModelSnapshot
+# ModelSnapshot hash
 md5sum Migrations/*ModelSnapshot.cs | cut -d' ' -f1
 
-# Comparer avec develop
+# Compare with develop
 diff -q local/Snapshot.cs develop/Snapshot.cs
 
-# Compter les migrations
+# Count migrations
 find Migrations -name "*.cs" | grep -v Designer | grep -v Snapshot | wc -l
 ```
 
-## Niveaux de risque
+## Risk Levels
 
-| Niveau | Condition | Action |
-|--------|-----------|--------|
-| NONE | Snapshot = develop | Merge direct OK |
-| LOW | Tables differentes modifiees | Merge OK |
-| MEDIUM | FK vers meme table | Attention ordre |
-| HIGH | Meme table modifiee | Rebase requis |
-| CRITICAL | Meme colonne modifiee | Intervention manuelle |
+| Level | Condition | Action |
+|-------|-----------|--------|
+| NONE | Snapshot = develop | Direct merge OK |
+| LOW | Different tables modified | Merge OK |
+| MEDIUM | FK to same table | Attention to order |
+| HIGH | Same table modified | Rebase required |
+| CRITICAL | Same column modified | Manual intervention |
 
 ## Output Format
 
@@ -50,11 +50,11 @@ find Migrations -name "*.cs" | grep -v Designer | grep -v Snapshot | wc -l
 BRANCHES (n)
   {branch} | {migrations} | Snapshot: {hash} | Risk: {level}
 
-RECOMMANDATION
-  1. {branch} (raison)
-  2. {branch} (raison)
+RECOMMENDATION
+  1. {branch} (reason)
+  2. {branch} (reason)
 ```
 
 ## Priority
 
-Speed > Accuracy. Lecture seule, aucune modification.
+Speed > Accuracy. Read-only, no modifications.

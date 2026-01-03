@@ -1,164 +1,165 @@
 ---
-description: Reinitialiser completement la base de donnees (Drop + Recreate + Migrations)
+description: Completely reset database (Drop + Recreate + Migrations)
 agent: efcore-db-reset
+model: sonnet
 ---
 
 # EF Core Database Reset
 
-Supprime et recree la base de donnees, puis applique toutes les migrations.
+Drops and recreates the database, then applies all migrations.
 
-**⚠️ ATTENTION: Cette commande SUPPRIME toutes les donnees !**
+**⚠️ WARNING: This command DELETES all data!**
 
-> **INSTRUCTION CLAUDE:** Les blocs `AskUserQuestion({...})` sont des instructions pour utiliser le tool `AskUserQuestion` de maniere **interactive**. Tu DOIS executer le tool avec ces parametres pour obtenir la reponse de l'utilisateur AVANT de continuer.
+> **CLAUDE INSTRUCTION:** The `AskUserQuestion({...})` blocks are instructions to use the `AskUserQuestion` tool in an **interactive** manner. You MUST execute the tool with these parameters to get the user's response BEFORE continuing.
 
 ---
 
-## ETAPE 1: Confirmation obligatoire
+## STEP 1: Mandatory confirmation
 
 ```javascript
 AskUserQuestion({
   questions: [{
-    question: "⚠️ ATTENTION: Cela va SUPPRIMER toutes les donnees de la base. Confirmer ?",
+    question: "⚠️ WARNING: This will DELETE all database data. Confirm?",
     header: "Reset DB",
     options: [
-      { label: "Oui, supprimer", description: "Drop + Recreate la base (PERTE DE DONNEES)" },
-      { label: "Non, annuler", description: "Garder la base actuelle" }
+      { label: "Yes, delete", description: "Drop + Recreate database (DATA LOSS)" },
+      { label: "No, cancel", description: "Keep current database" }
     ],
     multiSelect: false
   }]
 })
 ```
 
-**Si Non → Arreter immediatement**
+**If No → Stop immediately**
 
 ---
 
-## ETAPE 2: Verifier la configuration
+## STEP 2: Check configuration
 
 ```bash
-# Verifier que appsettings.Local.json existe
+# Check that appsettings.Local.json exists
 if [ ! -f "appsettings.Local.json" ]; then
-  echo "❌ appsettings.Local.json non trouve"
+  echo "❌ appsettings.Local.json not found"
   exit 1
 fi
 
-# Detecter le projet EF Core
+# Detect EF Core project
 CSPROJ=$(find . -name "*.csproj" -exec grep -l "Microsoft.EntityFrameworkCore" {} \; | head -1)
 PROJECT_DIR=$(dirname "$CSPROJ")
 ```
 
 ---
 
-## ETAPE 3: Backup optionnel
+## STEP 3: Optional backup
 
 ```javascript
 AskUserQuestion({
   questions: [{
-    question: "Creer un backup avant la suppression ?",
+    question: "Create backup before deletion?",
     header: "Backup",
     options: [
-      { label: "Oui", description: "Sauvegarder dans ./backups/ (Recommande)" },
-      { label: "Non", description: "Pas de backup" }
+      { label: "Yes", description: "Backup to ./backups/ (Recommended)" },
+      { label: "No", description: "No backup" }
     ],
     multiSelect: false
   }]
 })
 ```
 
-**Si backup:**
+**If backup:**
 
 ```bash
 BACKUP_DIR="./backups"
 BACKUP_FILE="${BACKUP_DIR}/backup_$(date +%Y%m%d_%H%M%S).bak"
 mkdir -p "$BACKUP_DIR"
 
-# Extraire les infos de connexion depuis appsettings.Local.json
+# Extract connection info from appsettings.Local.json
 SERVER=$(grep -oP '"Server=\K[^;]+' appsettings.Local.json | head -1)
 DATABASE=$(grep -oP '"Database=\K[^;]+' appsettings.Local.json | head -1)
 
-# Backup SQL Server
+# SQL Server backup
 sqlcmd -S "$SERVER" -E -Q "BACKUP DATABASE [$DATABASE] TO DISK = N'$(pwd)/$BACKUP_FILE' WITH FORMAT"
-echo "✓ Backup cree: $BACKUP_FILE"
+echo "✓ Backup created: $BACKUP_FILE"
 ```
 
 ---
 
-## ETAPE 4: Drop la base de donnees
+## STEP 4: Drop database
 
 ```bash
 cd "$PROJECT_DIR"
 
-# Methode EF Core
+# EF Core method
 dotnet ef database drop --force
 
-# OU methode SQL directe si EF echoue
+# OR direct SQL method if EF fails
 # sqlcmd -S "$SERVER" -E -Q "DROP DATABASE IF EXISTS [$DATABASE]"
 ```
 
 ---
 
-## ETAPE 5: Recreer et appliquer les migrations
+## STEP 5: Recreate and apply migrations
 
 ```bash
-# Appliquer toutes les migrations (cree la base si inexistante)
+# Apply all migrations (creates database if missing)
 dotnet ef database update --verbose
 ```
 
 ---
 
-## ETAPE 6: Seed optionnel
+## STEP 6: Optional seed
 
 ```javascript
 AskUserQuestion({
   questions: [{
-    question: "Peupler la base avec des donnees de test ?",
+    question: "Populate database with test data?",
     header: "Seed",
     options: [
-      { label: "Oui", description: "Executer le seeding" },
-      { label: "Non", description: "Base vide" }
+      { label: "Yes", description: "Execute seeding" },
+      { label: "No", description: "Empty database" }
     ],
     multiSelect: false
   }]
 })
 ```
 
-**Si oui:**
+**If yes:**
 
 ```bash
-# Chercher un script de seed ou utiliser la commande dotnet
+# Search for seed script or use dotnet command
 dotnet run --project "$PROJECT_DIR" -- --seed
-# OU
-dotnet ef database seed 2>/dev/null || echo "Pas de seed configure"
+# OR
+dotnet ef database seed 2>/dev/null || echo "No seed configured"
 ```
 
 ---
 
-## ETAPE 7: Resume
+## STEP 7: Summary
 
 ```
 ================================================================================
-                         DATABASE RESET TERMINE
+                         DATABASE RESET COMPLETE
 ================================================================================
 
-✓ Ancienne base supprimee
-✓ Nouvelle base creee
-✓ {N} migration(s) appliquee(s)
-{✓ Donnees de test inserees | ○ Base vide}
-{✓ Backup: ./backups/backup_xxx.bak | ○ Pas de backup}
+✓ Old database deleted
+✓ New database created
+✓ {N} migration(s) applied
+{✓ Test data inserted | ○ Empty database}
+{✓ Backup: ./backups/backup_xxx.bak | ○ No backup}
 
-COMMANDES SUIVANTES:
-  /efcore:db-status  → Verifier l'etat
-  /efcore:db-seed    → Ajouter des donnees de test
+NEXT COMMANDS:
+  /efcore:db-status  → Check status
+  /efcore:db-seed    → Add test data
 
 ================================================================================
 ```
 
 ---
 
-## Securite
+## Security
 
 | Protection | Description |
 |------------|-------------|
-| Confirmation | Obligatoire avant suppression |
-| Backup | Propose automatiquement |
-| Env Check | Bloque si `ASPNETCORE_ENVIRONMENT=Production` |
+| Confirmation | Required before deletion |
+| Backup | Automatically offered |
+| Env Check | Blocked if `ASPNETCORE_ENVIRONMENT=Production` |

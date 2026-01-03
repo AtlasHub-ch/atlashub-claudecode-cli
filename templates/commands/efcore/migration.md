@@ -1,58 +1,59 @@
 ---
-description: Creer ou recreer la migration EF Core pour la branche courante (1 migration par feature)
+description: Create or recreate the EF Core migration for the current branch (1 migration per feature)
 agent: efcore-migration
+model: sonnet
 ---
 
-# EF Core Migration - 1 Migration par Feature
+# EF Core Migration - 1 Migration per Feature
 
-Cree ou recree la migration unique pour la branche courante.
+Creates or recreates the unique migration for the current branch.
 
-**REGLE D'OR : 1 seule migration par feature/hotfix. Si elle existe deja, on la supprime et on la recree.**
+**GOLDEN RULE: 1 single migration per feature/hotfix. If it already exists, delete and recreate it.**
 
-> **INSTRUCTION CLAUDE:** Les blocs `AskUserQuestion({...})` sont des instructions pour utiliser le tool `AskUserQuestion` de maniere **interactive**. Tu DOIS executer le tool avec ces parametres pour obtenir la reponse de l'utilisateur AVANT de continuer.
+> **CLAUDE INSTRUCTION:** The `AskUserQuestion({...})` blocks are instructions to use the `AskUserQuestion` tool **interactively**. You MUST execute the tool with these parameters to get the user's response BEFORE continuing.
 
 ---
 
-## ETAPE 0: Validation Cross-Branch (v1.2)
+## STEP 0: Cross-Branch Validation (v1.2)
 
-**NOUVEAU:** Avant de creer une migration, verifier qu'il n'y a pas de conflits avec les autres branches.
+**NEW:** Before creating a migration, check for conflicts with other branches.
 
 ```bash
-# Verifier si validation cross-branch activee
+# Check if cross-branch validation is enabled
 CROSS_BRANCH_ENABLED=$(git config --get efcore.crossBranch.enabled 2>/dev/null || echo "true")
 BLOCK_ON_CONFLICT=$(git config --get efcore.crossBranch.blockOnConflict 2>/dev/null || echo "true")
 
 if [ "$CROSS_BRANCH_ENABLED" = "true" ]; then
-  echo "Validation cross-branch..."
+  echo "Cross-branch validation..."
 
-  # Scanner les autres branches via worktrees
+  # Scan other branches via worktrees
   WORKTREE_BASE=$(git config --get gitflow.worktrees.basePath 2>/dev/null || echo "../worktrees")
 
   if [ -d "$WORKTREE_BASE/develop" ]; then
-    # Comparer ModelSnapshot avec develop
+    # Compare ModelSnapshot with develop
     LOCAL_SNAPSHOT=$(find . -name "*ModelSnapshot.cs" -not -path "*/node_modules/*" | head -1)
     DEVELOP_SNAPSHOT=$(find "$WORKTREE_BASE/develop" -name "*ModelSnapshot.cs" | head -1)
 
     if [ -n "$LOCAL_SNAPSHOT" ] && [ -n "$DEVELOP_SNAPSHOT" ]; then
       if ! diff -q "$LOCAL_SNAPSHOT" "$DEVELOP_SNAPSHOT" > /dev/null 2>&1; then
-        # Differences detectees - analyser le niveau de risque
+        # Differences detected - analyze risk level
         DIFF_LINES=$(diff "$DEVELOP_SNAPSHOT" "$LOCAL_SNAPSHOT" 2>/dev/null | wc -l)
 
         if [ "$DIFF_LINES" -gt 100 ]; then
           echo ""
-          echo "ATTENTION: CONFLIT CROSS-BRANCH DETECTE"
+          echo "WARNING: CROSS-BRANCH CONFLICT DETECTED"
           echo ""
-          echo "Votre ModelSnapshot differe significativement de develop."
-          echo "Differences: $DIFF_LINES lignes"
+          echo "Your ModelSnapshot differs significantly from develop."
+          echo "Differences: $DIFF_LINES lines"
           echo ""
           echo "RESOLUTIONS:"
-          echo "  1. /efcore:rebase-snapshot    (recommande)"
-          echo "  2. /efcore:conflicts          (voir details)"
-          echo "  3. /efcore:migration --force  (non recommande)"
+          echo "  1. /efcore:rebase-snapshot    (recommended)"
+          echo "  2. /efcore:conflicts          (see details)"
+          echo "  3. /efcore:migration --force  (not recommended)"
           echo ""
 
           if [ "$BLOCK_ON_CONFLICT" = "true" ]; then
-            echo "BLOQUE: Utilisez --force pour ignorer"
+            echo "BLOCKED: Use --force to ignore"
             exit 1
           fi
         fi
@@ -60,24 +61,24 @@ if [ "$CROSS_BRANCH_ENABLED" = "true" ]; then
     fi
   fi
 
-  echo "Validation cross-branch: OK"
+  echo "Cross-branch validation: OK"
 fi
 ```
 
-**Options pour ignorer:**
-- `--force` : Ignorer la validation cross-branch
-- `--no-cross-check` : Desactiver la validation pour cette execution
-- `--rebase-first` : Executer rebase-snapshot automatiquement si conflit
+**Options to ignore:**
+- `--force` : Ignore cross-branch validation
+- `--no-cross-check` : Disable validation for this execution
+- `--rebase-first` : Run rebase-snapshot automatically if conflict
 
 ---
 
-## ETAPE 1: Analyser le contexte Git
+## STEP 1: Analyze Git Context
 
 ```bash
-# Branche courante
+# Current branch
 CURRENT_BRANCH=$(git branch --show-current)
 
-# Extraire le type et le nom
+# Extract type and name
 if [[ "$CURRENT_BRANCH" == feature/* ]]; then
   BRANCH_TYPE="Feature"
   BRANCH_NAME=$(echo "$CURRENT_BRANCH" | sed 's/feature\///' | sed 's/-/_/g' | sed 's/\b\w/\u&/g')
@@ -92,94 +93,94 @@ else
   BRANCH_NAME="Manual"
 fi
 
-# Version actuelle
+# Current version
 VERSION=$(grep -oP '"version":\s*"\K[^"]+' package.json 2>/dev/null || grep -oP '(?<=<Version>).*(?=</Version>)' *.csproj 2>/dev/null | head -1)
 VERSION_CLEAN=$(echo "$VERSION" | sed 's/\./_/g')
 ```
 
 ---
 
-## ETAPE 2: Detecter le projet EF Core
+## STEP 2: Detect EF Core Project
 
 ```bash
-# Trouver le projet avec EF Core
+# Find the project with EF Core
 CSPROJ=$(find . -name "*.csproj" -exec grep -l "Microsoft.EntityFrameworkCore" {} \; | head -1)
 PROJECT_DIR=$(dirname "$CSPROJ")
 PROJECT_NAME=$(basename "$CSPROJ" .csproj)
 
-# Dossier des migrations
+# Migrations folder
 MIGRATIONS_DIR="$PROJECT_DIR/Migrations"
 ```
 
 ---
 
-## ETAPE 3: Chercher migration existante pour cette branche
+## STEP 3: Search for Existing Migration for This Branch
 
 ```bash
-# Pattern de recherche base sur le nom de branche
+# Search pattern based on branch name
 SEARCH_PATTERN="${BRANCH_TYPE}_.*_${BRANCH_NAME}"
 
-# Trouver les fichiers de migration correspondants
+# Find matching migration files
 EXISTING_MIGRATIONS=$(find "$MIGRATIONS_DIR" -name "*.cs" | grep -E "$SEARCH_PATTERN" | grep -v "Designer" | grep -v "Snapshot")
 MIGRATION_COUNT=$(echo "$EXISTING_MIGRATIONS" | grep -c "." || echo "0")
 ```
 
-**Afficher le contexte:**
+**Display context:**
 
 ```
 ================================================================================
-                    EF CORE MIGRATION - CONTEXTE
+                    EF CORE MIGRATION - CONTEXT
 ================================================================================
 
-BRANCHE
-  Courante:    {CURRENT_BRANCH}
+BRANCH
+  Current:     {CURRENT_BRANCH}
   Type:        {BRANCH_TYPE}
-  Nom:         {BRANCH_NAME}
+  Name:        {BRANCH_NAME}
 
 VERSION:       {VERSION}
 
-MIGRATIONS EXISTANTES POUR CETTE BRANCHE:
-  {MIGRATION_COUNT} migration(s) trouvee(s)
-  {Liste des fichiers si > 0}
+EXISTING MIGRATIONS FOR THIS BRANCH:
+  {MIGRATION_COUNT} migration(s) found
+  {File list if > 0}
 
 ================================================================================
 ```
 
 ---
 
-## ETAPE 4: Decision - Creer ou Recreer
+## STEP 4: Decision - Create or Recreate
 
-### Si migration existante (MIGRATION_COUNT > 0):
+### If existing migration (MIGRATION_COUNT > 0):
 
 ```javascript
 AskUserQuestion({
   questions: [{
-    question: "Une migration existe deja pour cette branche. Que faire ?",
+    question: "A migration already exists for this branch. What to do?",
     header: "Migration",
     options: [
-      { label: "Recreer", description: "Supprimer et recreer la migration (Recommande)" },
-      { label: "Garder", description: "Garder l'existante, ajouter une nouvelle (Non recommande)" },
-      { label: "Annuler", description: "Ne rien faire" }
+      { label: "Recreate", description: "Delete and recreate the migration (Recommended)" },
+      { label: "Keep", description: "Keep existing, add a new one (Not recommended)" },
+      { label: "Cancel", description: "Do nothing" }
     ],
     multiSelect: false
   }]
 })
 ```
 
-**Si Recreer:**
+**If Recreate:**
 
 ```bash
-# 1. Lister les migrations a supprimer
-echo "Migrations a supprimer:"
+# 1. List migrations to delete
+echo "Migrations to delete:"
 for file in $EXISTING_MIGRATIONS; do
   echo "  - $file"
-  # Trouver les fichiers associes (Designer, etc.)
+  # Find associated files (Designer, etc.)
   BASE_NAME=$(basename "$file" .cs)
   rm -f "$MIGRATIONS_DIR/${BASE_NAME}.cs"
   rm -f "$MIGRATIONS_DIR/${BASE_NAME}.Designer.cs"
 done
 
-# 2. Annuler dans la DB si appliquee
+# 2. Rollback in DB if applied
 LAST_GOOD_MIGRATION=$(dotnet ef migrations list 2>/dev/null | grep -v "(Pending)" | tail -2 | head -1)
 if [ -n "$LAST_GOOD_MIGRATION" ]; then
   dotnet ef database update "$LAST_GOOD_MIGRATION" --force
@@ -188,93 +189,93 @@ fi
 
 ---
 
-## ETAPE 5: Demander la description
+## STEP 5: Request Description
 
 ```javascript
 AskUserQuestion({
   questions: [{
-    question: "Description courte de la migration (ex: AddUserRoles, FixEmailIndex)",
+    question: "Short migration description (e.g., AddUserRoles, FixEmailIndex)",
     header: "Description",
     options: [
-      { label: "Add", description: "Ajout de tables/colonnes" },
-      { label: "Update", description: "Modification de structure" },
-      { label: "Fix", description: "Correction de schema" },
-      { label: "Remove", description: "Suppression d'elements" }
+      { label: "Add", description: "Adding tables/columns" },
+      { label: "Update", description: "Structure modification" },
+      { label: "Fix", description: "Schema correction" },
+      { label: "Remove", description: "Removing elements" }
     ],
     multiSelect: false
   }]
 })
 
-// Puis demander le nom specifique en texte libre
-// Ex: "AddUserRoles", "FixEmailNullable", "RemoveObsoleteTable"
+// Then ask for specific name in free text
+// E.g., "AddUserRoles", "FixEmailNullable", "RemoveObsoleteTable"
 ```
 
 ---
 
-## ETAPE 6: Generer le nom de migration
+## STEP 6: Generate Migration Name
 
 ```bash
 # Pattern: {BranchType}_{Version}_{BranchName}_{Description}
-# Exemple: Feature_1_2_0_UserAuth_AddRolesTable
+# Example: Feature_1_2_0_UserAuth_AddRolesTable
 
 MIGRATION_NAME="${BRANCH_TYPE}_${VERSION_CLEAN}_${BRANCH_NAME}_${DESCRIPTION}"
 
-# Nettoyer le nom (pas d'espaces, pas de caracteres speciaux)
+# Clean the name (no spaces, no special characters)
 MIGRATION_NAME=$(echo "$MIGRATION_NAME" | sed 's/[^a-zA-Z0-9_]//g')
 
-echo "Nom de migration: $MIGRATION_NAME"
+echo "Migration name: $MIGRATION_NAME"
 ```
 
-**Exemples de noms generes:**
+**Generated name examples:**
 
-| Branche | Version | Description | Nom final |
-|---------|---------|-------------|-----------|
+| Branch | Version | Description | Final Name |
+|--------|---------|-------------|------------|
 | feature/user-auth | 1.2.0 | AddRolesTable | Feature_1_2_0_UserAuth_AddRolesTable |
 | hotfix/login-fix | 1.2.1 | FixNullEmail | Hotfix_1_2_1_LoginFix_FixNullEmail |
 | release/v1.3.0 | 1.3.0 | Initial | Release_1_3_0_Initial |
 
 ---
 
-## ETAPE 7: Creer la migration
+## STEP 7: Create Migration
 
 ```bash
 cd "$PROJECT_DIR"
 
-# Creer la migration avec le nom genere
+# Create migration with generated name
 dotnet ef migrations add "$MIGRATION_NAME" --verbose
 
-# Verifier la creation
+# Verify creation
 if [ $? -eq 0 ]; then
-  echo "✓ Migration creee avec succes"
+  echo "OK Migration created successfully"
 
-  # Lister les fichiers crees
+  # List created files
   NEW_FILES=$(find "$MIGRATIONS_DIR" -name "*${MIGRATION_NAME}*" -type f)
   echo ""
-  echo "Fichiers crees:"
+  echo "Created files:"
   for f in $NEW_FILES; do
     echo "  - $f"
   done
 else
-  echo "❌ Erreur lors de la creation"
+  echo "ERROR Failed to create migration"
   exit 1
 fi
 ```
 
 ---
 
-## ETAPE 8: Validation du contenu
+## STEP 8: Content Validation
 
 ```bash
-# Afficher un apercu de la migration
+# Display migration preview
 MIGRATION_FILE=$(find "$MIGRATIONS_DIR" -name "*${MIGRATION_NAME}.cs" | grep -v "Designer" | head -1)
 
 echo ""
 echo "================================================================================
-                    APERCU DE LA MIGRATION
+                    MIGRATION PREVIEW
 ================================================================================"
 echo ""
 
-# Afficher les methodes Up() et Down()
+# Display Up() and Down() methods
 grep -A 20 "protected override void Up" "$MIGRATION_FILE"
 echo ""
 echo "..."
@@ -282,17 +283,17 @@ echo ""
 grep -A 10 "protected override void Down" "$MIGRATION_FILE"
 ```
 
-**Verifier les operations:**
+**Verify operations:**
 
 ```javascript
 AskUserQuestion({
   questions: [{
-    question: "La migration semble correcte ?",
+    question: "Does the migration look correct?",
     header: "Validation",
     options: [
-      { label: "Oui, appliquer", description: "Deployer sur la DB locale" },
-      { label: "Oui, pas maintenant", description: "Garder sans appliquer" },
-      { label: "Non, supprimer", description: "Annuler et recommencer" }
+      { label: "Yes, apply", description: "Deploy to local DB" },
+      { label: "Yes, not now", description: "Keep without applying" },
+      { label: "No, delete", description: "Cancel and start over" }
     ],
     multiSelect: false
   }]
@@ -301,57 +302,57 @@ AskUserQuestion({
 
 ---
 
-## ETAPE 9: Resume
+## STEP 9: Summary
 
 ```
 ================================================================================
-                    MIGRATION CREEE
+                    MIGRATION CREATED
 ================================================================================
 
-NOM:          {MIGRATION_NAME}
-BRANCHE:      {CURRENT_BRANCH}
+NAME:         {MIGRATION_NAME}
+BRANCH:       {CURRENT_BRANCH}
 VERSION:      {VERSION}
 
-FICHIERS:
-  ✓ {timestamp}_{MIGRATION_NAME}.cs
-  ✓ {timestamp}_{MIGRATION_NAME}.Designer.cs
-  ✓ ApplicationDbContextModelSnapshot.cs (mis a jour)
+FILES:
+  OK {timestamp}_{MIGRATION_NAME}.cs
+  OK {timestamp}_{MIGRATION_NAME}.Designer.cs
+  OK ApplicationDbContextModelSnapshot.cs (updated)
 
-REGLES RESPECTEES:
-  ✓ 1 migration par feature
-  ✓ Nommage standardise
-  ✓ Tracabilite branche/version
+RULES FOLLOWED:
+  OK 1 migration per feature
+  OK Standardized naming
+  OK Branch/version traceability
 
 ================================================================================
-PROCHAINES ETAPES
+NEXT STEPS
 ================================================================================
 
-1. Verifier le code genere dans Migrations/
-2. /efcore:db-deploy    → Appliquer sur la DB locale
-3. /gitflow:3-commit    → Committer les changements
-4. Avant merge: rebase sur develop + recreer si conflits
+1. Review generated code in Migrations/
+2. /efcore:db-deploy    -> Apply to local DB
+3. /gitflow:3-commit    -> Commit changes
+4. Before merge: rebase on develop + recreate if conflicts
 
 ================================================================================
 ```
 
 ---
 
-## Gestion des conflits de migration
+## Migration Conflict Handling
 
-Quand vous faites un rebase sur develop et qu'il y a des conflits sur ModelSnapshot :
+When you rebase on develop and there are conflicts on ModelSnapshot:
 
 ```bash
-# 1. Accepter la version de develop pour ModelSnapshot
+# 1. Accept develop version for ModelSnapshot
 git checkout --theirs Migrations/ApplicationDbContextModelSnapshot.cs
 
-# 2. Supprimer votre migration
+# 2. Delete your migration
 rm Migrations/*_{MIGRATION_NAME}.*
 
-# 3. Recreer la migration
+# 3. Recreate the migration
 /efcore:migration
 ```
 
-Cette commande le fera automatiquement si elle detecte un conflit.
+This command will do it automatically if it detects a conflict.
 
 ---
 
@@ -359,6 +360,8 @@ Cette commande le fera automatiquement si elle detecte un conflit.
 
 | Option | Description |
 |--------|-------------|
-| `--name {name}` | Forcer un nom specifique |
-| `--no-apply` | Ne pas proposer d'appliquer |
-| `--force` | Supprimer l'existante sans confirmation |
+| `--name {name}` | Force a specific name |
+| `--no-apply` | Don't offer to apply |
+| `--force` | Delete existing without confirmation |
+| `--no-cross-check` | Disable cross-branch validation |
+| `--rebase-first` | Run rebase-snapshot automatically if conflict |

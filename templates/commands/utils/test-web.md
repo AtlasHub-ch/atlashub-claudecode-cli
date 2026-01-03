@@ -5,61 +5,61 @@ allowed-tools: WebFetch, WebSearch, Read, Write, Bash
 model: sonnet
 ---
 
-# /test-web - Agent de test web
+# /test-web - Web testing agent
 
-Teste l'accessibilité et le contenu des ressources web du projet.
+Tests accessibility and content of project web resources.
 
-## Modes d'exécution
+## Execution Modes
 
 | Mode | Flag | Description |
 |------|------|-------------|
-| Quick | `--quick` | WebFetch uniquement (HTTP 200 + contenu texte) |
-| Chrome | `--chrome` | Tests E2E avec Claude for Chrome (requires `claude --chrome`) |
-| Report | `--report` | Génère un rapport détaillé dans reports/ |
-| Full | (défaut) | Quick + Chrome si disponible |
+| Quick | `--quick` | WebFetch only (HTTP 200 + text content) |
+| Chrome | `--chrome` | E2E tests with Claude for Chrome (requires `claude --chrome`) |
+| Report | `--report` | Generates detailed report in reports/ |
+| Full | (default) | Quick + Chrome if available |
 
 ## Configuration
 
-Lit la configuration depuis : [.claude/test-web/config.json](.claude/test-web/config.json)
+Reads configuration from: [.claude/test-web/config.json](.claude/test-web/config.json)
 
 ## Workflow
 
-### Mode Quick (--quick)
+### Quick Mode (--quick)
 
-1. **Charger configuration**
+1. **Load configuration**
    ```bash
    cat .claude/test-web/config.json
    ```
 
-2. **Pour chaque target type "fetch"** :
-   - `WebFetch(url, "Vérifie que la page est accessible et contient: {expects.contains}")`
-   - Vérifier status HTTP (200 attendu)
-   - Vérifier présence du contenu attendu
+2. **For each target type "fetch"**:
+   - `WebFetch(url, "Verify that the page is accessible and contains: {expects.contains}")`
+   - Check HTTP status (200 expected)
+   - Verify expected content presence
 
-3. **Pour chaque target type "search"** :
+3. **For each target type "search"**:
    - `WebSearch(query)`
-   - Vérifier que des résultats existent
+   - Verify results exist
 
-4. **Rapport** : Afficher résultats dans la console
+4. **Report**: Display results in console
 
-### Mode Chrome (--chrome)
+### Chrome Mode (--chrome)
 
-**Prérequis** :
-- Extension "Claude for Chrome" installée
-- Plan Max/Pro/Team/Enterprise
-- Claude Code lancé avec : `claude --chrome`
+**Prerequisites**:
+- "Claude for Chrome" extension installed
+- Max/Pro/Team/Enterprise plan
+- Claude Code launched with: `claude --chrome`
 
-1. **Vérifier mode Chrome actif**
-2. **Pour chaque target chrome** :
-   - Naviguer vers l'URL
-   - Exécuter les actions (click, verify, etc.)
-   - Capturer screenshots si demandé
+1. **Verify Chrome mode is active**
+2. **For each chrome target**:
+   - Navigate to URL
+   - Execute actions (click, verify, etc.)
+   - Capture screenshots if requested
 
-3. **Rapport** : Générer rapport avec captures
+3. **Report**: Generate report with captures
 
-### Mode Report (--report)
+### Report Mode (--report)
 
-Génère un fichier markdown dans [.claude/test-web/reports/](.claude/test-web/reports/) :
+Generates markdown file in [.claude/test-web/reports/](.claude/test-web/reports/):
 
 ```markdown
 # Test Web Report - YYYY-MM-DD HH:mm
@@ -77,39 +77,39 @@ Génère un fichier markdown dans [.claude/test-web/reports/](.claude/test-web/r
 - Screenshot: (if chrome mode)
 ```
 
-## Exemples
+## Examples
 
-### Test rapide de toutes les URLs configurées
+### Quick test of all configured URLs
 
 ```
 /test-web --quick
 ```
 
-### Test E2E avec navigateur
+### E2E test with browser
 
 ```bash
-# D'abord lancer Claude Code avec Chrome
+# First launch Claude Code with Chrome
 claude --chrome
 
-# Puis exécuter les tests
+# Then execute tests
 /test-web --chrome
 ```
 
-### Test d'une URL spécifique
+### Test specific URL
 
 ```
 /test-web https://github.com/SIMON-Atlashub/atlashub-claudecode-cli
 ```
 
-### Générer rapport détaillé
+### Generate detailed report
 
 ```
 /test-web --report
 ```
 
-## Format de sortie
+## Output Format
 
-### Succès
+### Success
 
 ```
 TEST WEB RESULTS
@@ -122,7 +122,7 @@ Status: 3/3 PASS
 ────────────────────────────────
 ```
 
-### Échec
+### Failure
 
 ```
 TEST WEB RESULTS
@@ -135,11 +135,11 @@ Status: 1/3 PASS, 1 FAIL, 1 WARNING
 ────────────────────────────────
 ```
 
-## Intégration BA/EPCT
+## BA/EPCT Integration
 
-Cette commande peut être appelée automatiquement dans :
-- Phase T (Test) du workflow BA : `/ba:5-verify`
-- Phase T du workflow EPCT
+This command can be called automatically in:
+- Phase T (Test) of BA workflow: `/ba:5-verify`
+- Phase T of EPCT workflow
 
 ## Sources
 

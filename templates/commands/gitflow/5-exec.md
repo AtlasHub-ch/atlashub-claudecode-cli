@@ -140,4 +140,8 @@ Si conflit pendant rebase:
 
 ## Rollback rapide
 
-Si echec: `/gitflow:6-abort --checkpoint`
+Si echec:
+
+```
+/gitflow:6-abort --checkpoint
+```
