@@ -705,23 +705,23 @@
 
                         <div class="code-block">
                             <button class="copy-btn">Copy</button>
-                            <pre><code># Situation: Vous avez deja une migration et devez modifier le modele
+                            <pre><code># Situation: You already have a migration and need to modify the model
 
-# 1. Verifier l'etat actuel
+# 1. Check current state
 /efcore:db-status
 
-# 2. Voir qu'il y a deja 1 migration pour cette branche
-#    Output: "1 migration pour feature/user-auth"
+# 2. See there's already 1 migration for this branch
+#    Output: "1 migration for feature/user-auth"
 
-# 3. Creer/Recreer la migration (supprime l'ancienne automatiquement)
+# 3. Create/Recreate migration (deletes old one automatically)
 /efcore:migration
 
-# 4. Choisir "Recreer" quand demande
-# 5. Entrer la description (ex: "AddRolesTable")
-# 6. Appliquer sur la DB locale
+# 4. Choose "Recreate" when prompted
+# 5. Enter description (e.g., "AddRolesTable")
+# 6. Apply to local DB
 /efcore:db-deploy
 
-# 7. Committer
+# 7. Commit
 /gitflow:3-commit</code></pre>
                         </div>
                     </section>
@@ -957,10 +957,10 @@
 
                                 <div class="code-block">
                                     <button class="copy-btn">Copy</button>
-                                    <pre><code># Exemple d'utilisation
+                                    <pre><code># Usage example
 /efcore:migration
 
-# Avec options
+# With options
 /efcore:migration --force --no-apply</code></pre>
                                 </div>
 
@@ -980,36 +980,37 @@
                                         <div class="code-block template-code">
                                             <button class="copy-btn">Copy</button>
                                             <pre><code>---
-description: Creer ou recreer la migration EF Core pour la branche courante (1 migration par feature)
+description: Create or recreate the EF Core migration for the current branch (1 migration per feature)
 agent: efcore-migration
+model: sonnet
 ---
 
-# EF Core Migration - 1 Migration par Feature
+# EF Core Migration - 1 Migration per Feature
 
-Cree ou recree la migration unique pour la branche courante.
+Creates or recreates the unique migration for the current branch.
 
-**REGLE D'OR : 1 seule migration par feature/hotfix. Si elle existe deja, on la supprime et on la recree.**
+**GOLDEN RULE: 1 single migration per feature/hotfix. If it already exists, delete and recreate it.**
 
 ---
 
-## ETAPE 0: Validation Cross-Branch (v1.2)
+## STEP 0: Cross-Branch Validation (v1.2)
 
-**NOUVEAU:** Avant de creer une migration, verifier qu'il n'y a pas de conflits avec les autres branches.
+**NEW:** Before creating a migration, check for conflicts with other branches.
 
 ```bash
 CROSS_BRANCH_ENABLED=$(git config --get efcore.crossBranch.enabled 2>/dev/null || echo "true")
 BLOCK_ON_CONFLICT=$(git config --get efcore.crossBranch.blockOnConflict 2>/dev/null || echo "true")
 
 if [ "$CROSS_BRANCH_ENABLED" = "true" ]; then
-  echo "Validation cross-branch..."
-  # Scanner les autres branches via worktrees
+  echo "Cross-branch validation..."
+  # Scan other branches via worktrees
   # ...
 fi
 ```
 
 ---
 
-## ETAPE 1: Analyser le contexte Git
+## STEP 1: Analyze Git Context
 
 ```bash
 CURRENT_BRANCH=$(git branch --show-current)
@@ -1026,31 +1027,31 @@ fi
 
 ---
 
-## ETAPE 2-8: Detection, Decision, Creation, Validation
+## STEPS 2-8: Detection, Decision, Creation, Validation
 
-1. Detecter le projet EF Core (.csproj)
-2. Chercher migration existante pour cette branche
-3. Decision: Creer ou Recreer
-4. Demander la description (Add/Update/Fix/Remove)
-5. Generer le nom: {BranchType}_{Version}_{BranchName}_{Description}
-6. Creer: `dotnet ef migrations add "$MIGRATION_NAME"`
-7. Validation du contenu
+1. Detect EF Core project (.csproj)
+2. Search for existing migration for this branch
+3. Decision: Create or Recreate
+4. Request description (Add/Update/Fix/Remove)
+5. Generate name: {BranchType}_{Version}_{BranchName}_{Description}
+6. Create: `dotnet ef migrations add "$MIGRATION_NAME"`
+7. Content validation
 
 ---
 
-## ETAPE 9: Resume
+## STEP 9: Summary
 
 ```
 ================================================================================
-                    MIGRATION CREEE
+                    MIGRATION CREATED
 ================================================================================
-NOM:          Feature_1_2_0_UserAuth_AddRolesTable
-BRANCHE:      feature/user-auth
+NAME:         Feature_1_2_0_UserAuth_AddRolesTable
+BRANCH:       feature/user-auth
 VERSION:      1.2.0
 
-PROCHAINES ETAPES:
-1. /efcore:db-deploy    → Appliquer sur la DB locale
-2. /gitflow:3-commit    → Committer les changements
+NEXT STEPS:
+1. /efcore:db-deploy    → Apply to local DB
+2. /gitflow:3-commit    → Commit changes
 ================================================================================
 ```</code></pre>
                                         </div>
@@ -1078,7 +1079,7 @@ PROCHAINES ETAPES:
                                             </tr>
                                             <tr>
                                                 <td><strong>Model</strong></td>
-                                                <td>haiku (rapide)</td>
+                                                <td>haiku (fast)</td>
                                             </tr>
                                             <tr>
                                                 <td><strong>Tools</strong></td>
@@ -1183,19 +1184,20 @@ REGLE "1 MIGRATION PAR FEATURE"
                                         <div class="code-block template-code">
                                             <button class="copy-btn">Copy</button>
                                             <pre><code>---
-description: Afficher l'etat des migrations et de la base de donnees
+description: Display migrations and database status
 agent: efcore-db-status
+model: haiku
 ---
 
 # EF Core Database Status
 
-Affiche l'etat complet des migrations EF Core et de la connexion a la base.
+Displays the complete status of EF Core migrations and database connection.
 
-**Commande rapide, lecture seule, sans modification.**
+**Quick command, read-only, no modifications.**
 
 ---
 
-## ETAPE 1: Detecter la configuration
+## STEP 1: Detect configuration
 
 ```bash
 CONFIG_LOCAL="appsettings.Local.json"
@@ -1203,13 +1205,13 @@ CONFIG_DEV="appsettings.Development.json"
 CSPROJ=$(find . -name "*.csproj" -exec grep -l "Microsoft.EntityFrameworkCore" {} \; | head -1)
 ```
 
-## ETAPE 2: Tester la connexion
+## STEP 2: Test connection
 
 ```bash
 CONNECTION_OK=$(dotnet ef database list 2>&amp;1)
 ```
 
-## ETAPE 3: Lister les migrations
+## STEP 3: List migrations
 
 ```bash
 CODE_MIGRATIONS=$(dotnet ef migrations list 2>/dev/null)
@@ -1217,19 +1219,19 @@ APPLIED=$(dotnet ef migrations list | grep "(Pending)" -v | wc -l)
 PENDING=$(dotnet ef migrations list | grep "(Pending)" | wc -l)
 ```
 
-## ETAPE 4: Rapport + Verification "1 migration par feature"
+## STEP 4: Report + "1 migration per feature" verification
 
 ```
 ================================================================================
                          EF CORE - DATABASE STATUS
 ================================================================================
-PROJET:        {PROJECT_NAME}
-CONNEXION:     {STATUS}
-MIGRATIONS:    {TOTAL} total, {APPLIED} appliquees, {PENDING} en attente
+PROJECT:       {PROJECT_NAME}
+CONNECTION:    {STATUS}
+MIGRATIONS:    {TOTAL} total, {APPLIED} applied, {PENDING} pending
 
-REGLE "1 MIGRATION PAR FEATURE":
-  Branche: {CURRENT_BRANCH}
-  Status:  {OK/WARNING}
+"1 MIGRATION PER FEATURE" RULE:
+  Branch: {CURRENT_BRANCH}
+  Status: {OK/WARNING}
 ================================================================================
 ```</code></pre>
                                         </div>
@@ -1257,7 +1259,7 @@ REGLE "1 MIGRATION PAR FEATURE":
                                             </tr>
                                             <tr>
                                                 <td><strong>Model</strong></td>
-                                                <td>haiku (rapide)</td>
+                                                <td>haiku (fast)</td>
                                             </tr>
                                             <tr>
                                                 <td><strong>Tools</strong></td>
@@ -1280,10 +1282,10 @@ REGLE "1 MIGRATION PAR FEATURE":
 
                                 <div class="code-block">
                                     <button class="copy-btn">Copy</button>
-                                    <pre><code># Deployer les migrations
+                                    <pre><code># Deploy migrations
 /efcore:db-deploy
 
-# Equivalent a:
+# Equivalent to:
 dotnet ef database update --verbose</code></pre>
                                 </div>
 
@@ -1338,51 +1340,52 @@ dotnet ef database update --verbose</code></pre>
                                         <div class="code-block template-code">
                                             <button class="copy-btn">Copy</button>
                                             <pre><code>---
-description: Deployer les migrations EF Core sur la base de donnees locale
+description: Deploy EF Core migrations to local database
 agent: efcore-db-deploy
+model: haiku
 ---
 
 # EF Core Database Deploy
 
-Applique toutes les migrations en attente sur la base configuree dans `appsettings.Local.json`.
+Applies all pending migrations to the database configured in `appsettings.Local.json`.
 
 ---
 
-## ETAPE 1: Verifier la configuration
+## STEP 1: Check configuration
 
 ```bash
 if [ ! -f "appsettings.Local.json" ]; then
-  echo "appsettings.Local.json non trouve"
+  echo "appsettings.Local.json not found"
   exit 1
 fi
 
 CSPROJ=$(find . -name "*.csproj" -exec grep -l "Microsoft.EntityFrameworkCore" {} \; | head -1)
 ```
 
-## ETAPE 2: Verifier les migrations en attente
+## STEP 2: Check pending migrations
 
 ```bash
 PENDING_COUNT=$(dotnet ef migrations list --json | grep -c '"applied": false')
 ```
 
-## ETAPE 3: Appliquer les migrations
+## STEP 3: Apply migrations
 
 ```bash
 dotnet ef database update --configuration Release --verbose
 ```
 
-## ETAPE 4: Confirmation
+## STEP 4: Confirmation
 
 ```
 ================================================================================
-                         DEPLOIEMENT TERMINE
+                         DEPLOYMENT COMPLETE
 ================================================================================
-OK {N} migration(s) appliquee(s)
-OK Base de donnees a jour
+OK {N} migration(s) applied
+OK Database is up to date
 
-COMMANDES SUIVANTES:
-  /efcore:db-status  - Verifier l'etat
-  /efcore:db-seed    - Peupler les donnees de test
+NEXT COMMANDS:
+  /efcore:db-status  - Check status
+  /efcore:db-seed    - Populate test data
 ================================================================================
 ```</code></pre>
                                         </div>
@@ -1410,7 +1413,7 @@ COMMANDES SUIVANTES:
                                             </tr>
                                             <tr>
                                                 <td><strong>Model</strong></td>
-                                                <td>haiku (rapide)</td>
+                                                <td>haiku (fast)</td>
                                             </tr>
                                             <tr>
                                                 <td><strong>Tools</strong></td>
@@ -1471,11 +1474,11 @@ COMMANDES SUIVANTES:
 
                                 <div class="code-block">
                                     <button class="copy-btn">Copy</button>
-                                    <pre><code># Executer le seeding
+                                    <pre><code># Execute seeding
 /efcore:db-seed
 
-# L'agent detecte automatiquement les methodes disponibles
-# et vous propose de choisir</code></pre>
+# The agent automatically detects available methods
+# and offers you a choice</code></pre>
                                 </div>
 
                                 <!-- Template Section -->
@@ -1494,59 +1497,60 @@ COMMANDES SUIVANTES:
                                         <div class="code-block template-code">
                                             <button class="copy-btn">Copy</button>
                                             <pre><code>---
-description: Peupler la base de donnees avec des donnees de test ou initiales
+description: Populate database with test or initial data
 agent: efcore-db-seed
+model: haiku
 ---
 
 # EF Core Database Seed
 
-Insere des donnees de test ou initiales dans la base de donnees.
+Inserts test or initial data into the database.
 
 ---
 
-## ETAPE 1: Detecter les methodes de seeding disponibles
+## STEP 1: Detect available seeding methods
 
 ```bash
-# 1. Classe DbSeeder ou DataSeeder
+# 1. DbSeeder or DataSeeder class
 grep -rq "class.*Seeder" . --include="*.cs"
 
-# 2. HasData() dans les configurations
+# 2. HasData() in configurations
 grep -rq ".HasData(" . --include="*.cs"
 
-# 3. Script SQL de seed
+# 3. SQL seed script
 [ -f "./scripts/seed.sql" ]
 
-# 4. Argument --seed dans Program.cs
+# 4. --seed argument in Program.cs
 grep -q "--seed" ./Program.cs
 ```
 
-## ETAPE 2: Proposer les options (via AskUserQuestion)
+## STEP 2: Propose options (via AskUserQuestion)
 
-L'agent demande a l'utilisateur quelle methode utiliser parmi celles detectees.
+The agent asks the user which method to use from those detected.
 
-## ETAPE 3: Executer le seeding
+## STEP 3: Execute seeding
 
 ```bash
 # Option A: Seeder Class
 dotnet run --project "$STARTUP_PROJECT" -- --seed
 
-# Option B: Script SQL
+# Option B: SQL Script
 sqlcmd -S "$SERVER" -E -d "$DATABASE" -i "./scripts/seed.sql"
 
 # Option C: CLI --seed
 dotnet run -- --seed
 ```
 
-## ETAPE 4: Verification et Resume
+## STEP 4: Verification and Summary
 
 ```
 ================================================================================
-                         SEEDING TERMINE
+                         SEEDING COMPLETE
 ================================================================================
-METHODE:     {methode utilisee}
-RESULTATS:
-  Users:     {N} enregistrements
-  Products:  {N} enregistrements
+METHOD:      {method used}
+RESULTS:
+  Users:     {N} records
+  Products:  {N} records
 ================================================================================
 ```</code></pre>
                                         </div>
@@ -1608,15 +1612,15 @@ RESULTATS:
 
                                 <div class="code-block">
                                     <button class="copy-btn">Copy</button>
-                                    <pre><code># Reset complet de la base
+                                    <pre><code># Complete database reset
 /efcore:db-reset
 
 # Workflow:
-# 1. Confirmation obligatoire
-# 2. Backup optionnel (recommande)
+# 1. Mandatory confirmation
+# 2. Optional backup (recommended)
 # 3. DROP DATABASE
 # 4. CREATE DATABASE (via migrations)
-# 5. Seed optionnel</code></pre>
+# 5. Optional seed</code></pre>
                                 </div>
 
                                 <!-- Template Section -->
@@ -1635,23 +1639,24 @@ RESULTATS:
                                         <div class="code-block template-code">
                                             <button class="copy-btn">Copy</button>
                                             <pre><code>---
-description: Reinitialiser completement la base de donnees (Drop + Recreate + Migrations)
+description: Completely reset database (Drop + Recreate + Migrations)
 agent: efcore-db-reset
+model: sonnet
 ---
 
 # EF Core Database Reset
 
-Supprime et recree la base de donnees, puis applique toutes les migrations.
+Drops and recreates the database, then applies all migrations.
 
-**ATTENTION: Cette commande SUPPRIME toutes les donnees !**
+**WARNING: This command DELETES all data!**
 
 ---
 
-## ETAPE 1: Confirmation obligatoire (AskUserQuestion)
+## STEP 1: Mandatory confirmation (AskUserQuestion)
 
-L'agent demande confirmation avant toute suppression.
+The agent asks for confirmation before any deletion.
 
-## ETAPE 2: Verifier la configuration
+## STEP 2: Check configuration
 
 ```bash
 if [ ! -f "appsettings.Local.json" ]; then
@@ -1659,46 +1664,46 @@ if [ ! -f "appsettings.Local.json" ]; then
 fi
 ```
 
-## ETAPE 3: Backup optionnel (AskUserQuestion)
+## STEP 3: Optional backup (AskUserQuestion)
 
-L'agent propose de creer un backup dans ./backups/
+The agent offers to create a backup in ./backups/
 
-## ETAPE 4: Drop la base de donnees
+## STEP 4: Drop database
 
 ```bash
 dotnet ef database drop --force
 ```
 
-## ETAPE 5: Recreer et appliquer les migrations
+## STEP 5: Recreate and apply migrations
 
 ```bash
 dotnet ef database update --verbose
 ```
 
-## ETAPE 6: Seed optionnel (AskUserQuestion)
+## STEP 6: Optional seed (AskUserQuestion)
 
-L'agent propose de peupler avec des donnees de test.
+The agent offers to populate with test data.
 
-## ETAPE 7: Resume
+## STEP 7: Summary
 
 ```
 ================================================================================
-                         DATABASE RESET TERMINE
+                         DATABASE RESET COMPLETE
 ================================================================================
-OK Ancienne base supprimee
-OK Nouvelle base creee
-OK {N} migration(s) appliquee(s)
+OK Old database deleted
+OK New database created
+OK {N} migration(s) applied
 {OK Backup: ./backups/backup_xxx.bak}
 ================================================================================
 ```
 
-## Securite
+## Security
 
 | Protection    | Description                              |
 |---------------|------------------------------------------|
-| Confirmation  | Obligatoire avant suppression            |
-| Backup        | Propose automatiquement                  |
-| Env Check     | Bloque si ASPNETCORE_ENVIRONMENT=Production |</code></pre>
+| Confirmation  | Required before deletion                 |
+| Backup        | Automatically offered                    |
+| Env Check     | Blocked if ASPNETCORE_ENVIRONMENT=Production |</code></pre>
                                         </div>
                                     </div>
                                 </details>
@@ -1895,49 +1900,49 @@ ORDRE DE MERGE RECOMMANDE
                                         <div class="code-block template-code">
                                             <button class="copy-btn">Copy</button>
                                             <pre><code>---
-description: Scanner toutes les branches pour migrations avec analyse de risque
+description: Scan all branches for migrations with risk analysis
 agent: efcore-scan
 model: sonnet
 ---
 
 # EF Core Scan - Cross-Branch Migration Scanner
 
-Scanne toutes les branches actives pour detecter les migrations et analyser les risques de conflit.
+Scans all active branches to detect migrations and analyze conflict risks.
 
-**UTILISATION:** Avant de creer une migration ou avant un merge.
-**SECURITE:** Lecture seule - aucune modification.
+**USAGE:** Before creating a migration or before a merge.
+**SECURITY:** Read-only - no modifications.
 
 ---
 
-## ETAPE 1: Lister les worktrees actifs
+## STEP 1: List active worktrees
 
 ```bash
 WORKTREE_BASE=$(git config --get gitflow.worktrees.basePath || echo "../worktrees")
 git worktree list
 ```
 
-## ETAPE 2: Scanner les migrations par branche
+## STEP 2: Scan migrations per branch
 
-Pour chaque worktree:
-- Compter les migrations
-- Hash du ModelSnapshot
-- Comparer avec develop
+For each worktree:
+- Count migrations
+- ModelSnapshot hash
+- Compare with develop
 
-## ETAPE 3: Analyser les risques de conflit
+## STEP 3: Analyze conflict risks
 
-| Niveau | Critere                        |
+| Level  | Criteria                       |
 |--------|--------------------------------|
-| NONE   | Snapshot identique a develop   |
-| LOW    | &lt; 50 lignes de diff         |
-| MEDIUM | 50-200 lignes de diff          |
-| HIGH   | &gt; 200 lignes de diff        |
+| NONE   | Snapshot identical to develop  |
+| LOW    | &lt; 50 lines diff             |
+| MEDIUM | 50-200 lines diff              |
+| HIGH   | &gt; 200 lines diff            |
 
-## ETAPE 4: Recommander l'ordre de merge
+## STEP 4: Recommend merge order
 
-1. NONE (independantes)
-2. LOW (modifications mineures)
-3. MEDIUM (attention a l'ordre)
-4. HIGH (rebase requis)</code></pre>
+1. NONE (independent)
+2. LOW (minor modifications)
+3. MEDIUM (order matters)
+4. HIGH (rebase required)</code></pre>
                                         </div>
                                     </div>
                                 </details>
@@ -2015,12 +2020,12 @@ Pour chaque worktree:
 
                                 <div class="code-block">
                                     <button class="copy-btn">Copy</button>
-                                    <pre><code># Verifier les conflits avant merge
+                                    <pre><code># Check conflicts before merge
 /efcore:conflicts
 
-# Si conflit detecte:
-# → /efcore:rebase-snapshot (recommande)
-# → /efcore:conflicts --force (non recommande)</code></pre>
+# If conflict detected:
+# → /efcore:rebase-snapshot (recommended)
+# → /efcore:conflicts --force (not recommended)</code></pre>
                                 </div>
 
                                 <h4>Options</h4>
@@ -2081,59 +2086,59 @@ Pour chaque worktree:
                                         <div class="code-block template-code">
                                             <button class="copy-btn">Copy</button>
                                             <pre><code>---
-description: Analyser conflits avant merge (BLOQUANT si conflit detecte)
+description: Analyze conflicts before merge (BLOCKING if conflict detected)
 agent: efcore-conflicts
 model: sonnet
 ---
 
 # EF Core Conflicts - Cross-Branch Conflict Analysis
 
-Analyse les conflits potentiels entre la branche courante et develop. **BLOQUANT** si conflit detecte.
+Analyzes potential conflicts between current branch and develop. **BLOCKING** if conflict detected.
 
-**COMPORTEMENT:** Retourne exit code 1 si conflit detecte (bloque le merge/commit).
+**BEHAVIOR:** Returns exit code 1 if conflict detected (blocks merge/commit).
 
 ---
 
-## ETAPE 1: Verifier la branche courante
+## STEP 1: Check current branch
 
 ```bash
 CURRENT_BRANCH=$(git branch --show-current)
 if [ "$CURRENT_BRANCH" = "main" ] || [ "$CURRENT_BRANCH" = "develop" ]; then
-  exit 0  # Aucune analyse necessaire
+  exit 0  # No analysis needed
 fi
 ```
 
-## ETAPE 2: Localiser les ModelSnapshots
+## STEP 2: Locate ModelSnapshots
 
-Comparer local vs develop via worktrees ou git show.
+Compare local vs develop via worktrees or git show.
 
-## ETAPE 3: Comparer les ModelSnapshots
+## STEP 3: Compare ModelSnapshots
 
 ```bash
 if diff -q "$LOCAL_SNAPSHOT" "$DEVELOP_SNAPSHOT"; then
   CONFLICT_LEVEL="NONE"
 else
   DIFF_LINES=$(diff ... | wc -l)
-  # Determiner niveau: NONE, LOW, MEDIUM, HIGH, CRITICAL
+  # Determine level: NONE, LOW, MEDIUM, HIGH, CRITICAL
 fi
 ```
 
-## ETAPE 4: Analyser le type de conflit
+## STEP 4: Analyze conflict type
 
-- Tables modifiees des deux cotes → HIGH
-- Meme colonne modifiee → CRITICAL
+- Tables modified on both sides → HIGH
+- Same column modified → CRITICAL
 
-## ETAPE 5: Scanner les autres branches actives
+## STEP 5: Scan other active branches
 
-Detecter si d'autres branches ont des conflits potentiels.
+Detect if other branches have potential conflicts.
 
-## ETAPE 6: Verdict final
+## STEP 6: Final verdict
 
-| Code | Signification                    |
+| Code | Meaning                          |
 |------|----------------------------------|
-| 0    | Aucun conflit ou conflit mineur  |
-| 1    | Conflit detecte - merge bloque   |
-| 2    | Erreur technique                 |</code></pre>
+| 0    | No conflict or minor conflict    |
+| 1    | Conflict detected - merge blocked|
+| 2    | Technical error                  |</code></pre>
                                         </div>
                                     </div>
                                 </details>
@@ -2394,57 +2399,57 @@ Detecter si d'autres branches ont des conflits potentiels.
                                         <div class="code-block template-code">
                                             <button class="copy-btn">Copy</button>
                                             <pre><code>---
-description: Rebaser ModelSnapshot sur develop et regenerer la migration
+description: Rebase ModelSnapshot on develop and regenerate migration
 agent: efcore-rebase-snapshot
 model: sonnet
 ---
 
 # EF Core Rebase-Snapshot - Resync with Develop
 
-Rebase le ModelSnapshot sur develop et regenere une migration consolidee.
+Rebases the ModelSnapshot on develop and regenerates a consolidated migration.
 
-**UTILISATION:** Apres `/efcore:conflicts` signale un conflit HIGH.
-**ATTENTION:** Modifie les fichiers de migration. Backup automatique.
+**USAGE:** After `/efcore:conflicts` signals a HIGH conflict.
+**WARNING:** Modifies migration files. Automatic backup.
 
 ---
 
-## ETAPE 1: Verification des prerequis
+## STEP 1: Check prerequisites
 
 ```bash
 CURRENT_BRANCH=$(git branch --show-current)
-# Verifier branche GitFlow (feature/release/hotfix)
-# Verifier working directory propre
+# Check GitFlow branch (feature/release/hotfix)
+# Check clean working directory
 ```
 
-## ETAPE 2: Backup des migrations actuelles
+## STEP 2: Backup current migrations
 
 ```bash
 BACKUP_DIR=".claude/gitflow/backup/migrations/rebase_$(date +%Y%m%d_%H%M%S)"
 cp "$MIGRATIONS_DIR"/*.cs "$BACKUP_DIR/"
 ```
 
-## ETAPE 3: Identifier les migrations de cette branche
+## STEP 3: Identify this branch's migrations
 
-Comparer avec develop pour trouver les nouvelles migrations.
+Compare with develop to find new migrations.
 
-## ETAPE 4: Reset ModelSnapshot sur develop
+## STEP 4: Reset ModelSnapshot on develop
 
 ```bash
 git checkout origin/develop -- "$MIGRATIONS_DIR/$SNAPSHOT_NAME"
 ```
 
-## ETAPE 5: Supprimer les migrations de cette branche
+## STEP 5: Delete this branch's migrations
 
-## ETAPE 6: Regenerer la migration consolidee
+## STEP 6: Regenerate consolidated migration
 
 ```bash
 MIGRATION_NAME="${BRANCH_TYPE}_${VERSION}_${BRANCH_NAME}_Consolidated"
 dotnet ef migrations add "$MIGRATION_NAME"
 ```
 
-## ETAPE 7: Validation (Build + Script)
+## STEP 7: Validation (Build + Script)
 
-## ETAPE 8: Resume avec instructions de restauration</code></pre>
+## STEP 8: Summary with restore instructions</code></pre>
                                         </div>
                                     </div>
                                 </details>
@@ -2609,65 +2614,65 @@ dotnet ef migrations add "$MIGRATION_NAME"
                                         <div class="code-block template-code">
                                             <button class="copy-btn">Copy</button>
                                             <pre><code>---
-description: Fusionner plusieurs migrations en une seule (pour releases)
+description: Merge multiple migrations into one (for releases)
 agent: efcore-squash
 model: sonnet
 ---
 
 # EF Core Squash - Consolidate Migrations
 
-Fusionne plusieurs migrations en une seule migration consolidee.
+Merges multiple migrations into a single consolidated migration.
 
-**UTILISATION:** Avant de creer une branche release.
-**ATTENTION:** Operation DESTRUCTIVE. L'historique des migrations sera perdu.
+**USAGE:** Before creating a release branch.
+**WARNING:** DESTRUCTIVE operation. Migration history will be lost.
 
 ---
 
-## ETAPE 1: Verification des prerequis
+## STEP 1: Check prerequisites
 
 ```bash
-# Verifier branche et etat propre
-# Compter les migrations existantes
+# Check branch and clean state
+# Count existing migrations
 MIGRATION_COUNT=$(find "$MIGRATIONS_DIR" -name "*.cs" | grep -v "Designer" | grep -v "Snapshot" | wc -l)
 ```
 
-## ETAPE 2: Demander confirmation (AskUserQuestion)
+## STEP 2: Request confirmation (AskUserQuestion)
 
-Operation DESTRUCTIVE - confirmation obligatoire.
+DESTRUCTIVE operation - confirmation required.
 
-## ETAPE 3: Backup complet
+## STEP 3: Full backup
 
 ```bash
 BACKUP_DIR=".claude/gitflow/backup/migrations/squash_$(date +%Y%m%d_%H%M%S)"
 cp "$MIGRATIONS_DIR"/*.cs "$BACKUP_DIR/"
 ```
 
-## ETAPE 4: Supprimer toutes les migrations
+## STEP 4: Delete all migrations
 
-Garder uniquement le ModelSnapshot comme reference.
+Keep only ModelSnapshot as reference.
 
-## ETAPE 5: Creer la migration consolidee
+## STEP 5: Create consolidated migration
 
 ```bash
 MIGRATION_NAME="Release_${VERSION_CLEAN}_Initial"
-# ou: Consolidated_${VERSION_CLEAN}_AllMigrations
+# or: Consolidated_${VERSION_CLEAN}_AllMigrations
 dotnet ef migrations add "$MIGRATION_NAME"
 ```
 
-## ETAPE 6: Generer script SQL idempotent
+## STEP 6: Generate idempotent SQL script
 
 ```bash
 dotnet ef migrations script --idempotent -o "scripts/migrations/${MIGRATION_NAME}.sql"
 ```
 
-## ETAPE 7: Validation (Build + Script)
+## STEP 7: Validation (Build + Script)
 
-## ETAPE 8: Resume avec instructions production
+## STEP 8: Summary with production instructions
 
-IMPORTANT: Pour les bases de production avec migrations deja appliquees:
-1. NE PAS appliquer directement
-2. Utiliser le script SQL idempotent
-3. Ou marquer comme appliquee: --skip-apply</code></pre>
+IMPORTANT: For production databases with already applied migrations:
+1. DO NOT apply directly
+2. Use the idempotent SQL script
+3. Or mark as applied: --skip-apply</code></pre>
                                         </div>
                                     </div>
                                 </details>
@@ -2707,16 +2712,16 @@ IMPORTANT: Pour les bases de production avec migrations deja appliquees:
 
                         <div class="code-block">
                             <button class="copy-btn">Copy</button>
-                            <pre><code># 1. Scanner toutes les branches actives
+                            <pre><code># 1. Scan all active branches
 /efcore:scan
 
-# 2. Verifier les conflits avant de creer une migration
+# 2. Check conflicts before creating a migration
 /efcore:conflicts
 
-# 3. Si conflit detecte, rebaser sur develop
+# 3. If conflict detected, rebase on develop
 /efcore:rebase-snapshot
 
-# 4. Creer la migration (validation cross-branch automatique)
+# 4. Create migration (automatic cross-branch validation)
 /efcore:migration</code></pre>
                         </div>
 
@@ -2902,11 +2907,11 @@ dotnet ef migrations add Update</code></pre>
                             </h4>
                             <div class="code-block">
                                 <button class="copy-btn">Copy</button>
-                                <pre><code># Generer un script SQL idempotent
+                                <pre><code># Generate an idempotent SQL script
 dotnet ef migrations script --idempotent -o ./scripts/migrations/v1.2.0.sql
 
-# Le script verifie si chaque migration a deja ete appliquee
-# avant de l'executer, ce qui le rend sur pour une re-execution</code></pre>
+# The script checks if each migration has already been applied
+# before executing it, making it safe for re-execution</code></pre>
                             </div>
                         </div>
 
