@@ -13,9 +13,9 @@ Finalisation complete de branche GitFlow.
 ## Workflow
 
 1. **Verifier**: Branche valide, PR merged, build OK
-2. **Version**: Confirmer/bumper selon type
-3. **Tag**: Creer tag annote
-4. **Merge**: Double merge si release (main + develop)
+2. **Version**: Auto-increment selon type (PATCH pour hotfix)
+3. **Tag**: Creer tag annote avec nouvelle version
+4. **Merge**: Double merge si release/hotfix (main + develop)
 5. **Cleanup**: Supprimer branche + worktree
 6. **Push**: Tags + branches
 
@@ -24,8 +24,19 @@ Finalisation complete de branche GitFlow.
 | Type | Version | Tag | Merge to |
 |------|---------|-----|----------|
 | Feature | - | - | develop |
-| Release | bump | vX.Y.Z | main + develop |
-| Hotfix | patch | vX.Y.Z | main + develop |
+| Release | bump (manual) | vX.Y.Z | main + develop |
+| Hotfix | **AUTO patch** | vX.Y.Z | main + develop |
+
+### Hotfix Versioning (IMPORTANT)
+
+Pour les hotfixes, le versioning est **AUTOMATIQUE**:
+- Lecture de la version actuelle depuis `package.json`
+- Increment du PATCH: `1.7.1` → `1.7.2`
+- Mise a jour de `package.json`
+- Commit du bump
+- Creation du tag avec la nouvelle version
+- Push main + tag
+- Merge back vers develop
 
 ## Commandes
 
