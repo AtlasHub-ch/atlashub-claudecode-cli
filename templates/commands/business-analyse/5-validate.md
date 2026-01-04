@@ -37,6 +37,145 @@ test -f ".business-analyse/applications/*/modules/*/features/$ARGUMENTS/3-functi
 +==============================================================================+
 ```
 
+## Iteration Limits & Escalation
+
+```
+╔══════════════════════════════════════════════════════════════════════════╗
+║  ITERATION CONTROL: Preventing infinite revision loops                   ║
+╠══════════════════════════════════════════════════════════════════════════╣
+║                                                                          ║
+║  MAXIMUM ITERATIONS: 3 major revisions                                   ║
+║                                                                          ║
+║  Iteration 1: Normal revision cycle                                      ║
+║  Iteration 2: Requires BA review of feedback quality                     ║
+║  Iteration 3: FINAL - Must escalate if still not approved                ║
+║                                                                          ║
+║  AFTER 3 ITERATIONS:                                                     ║
+║  → Escalate to Product Owner / Stakeholder meeting                       ║
+║  → Consider feature scope reduction                                      ║
+║  → Document blockers in escalation report                                ║
+║  → Option to abandon or defer feature                                    ║
+║                                                                          ║
+╚══════════════════════════════════════════════════════════════════════════╝
+```
+
+### Escalation Protocol (after 3 iterations)
+
+If validation fails 3 times:
+
+1. **Stop iteration** - Do not return to ANALYSE automatically
+2. **Create escalation report**:
+
+```markdown
+# Escalation Report - {{FEAT-XXX}}
+
+**Date**: {{DATE}}
+**Iterations**: 3 (maximum reached)
+**Status**: REQUIRES STAKEHOLDER DECISION
+
+## Iteration History
+
+| # | Date | Decision | Main Feedback |
+|---|------|----------|---------------|
+| 1 | {{DATE}} | Major Revision | {{SUMMARY}} |
+| 2 | {{DATE}} | Major Revision | {{SUMMARY}} |
+| 3 | {{DATE}} | Major Revision | {{SUMMARY}} |
+
+## Root Cause Analysis
+
+- [ ] Requirements unclear from start
+- [ ] Scope creep during iterations
+- [ ] Stakeholder disagreement
+- [ ] Technical constraints not understood
+- [ ] Other: {{SPECIFY}}
+
+## Recommended Actions
+
+- [ ] **REDUCE SCOPE**: Split into smaller features
+- [ ] **STAKEHOLDER MEETING**: Align on requirements
+- [ ] **DEFER**: Move to future iteration
+- [ ] **ABANDON**: Feature not viable
+
+## Decision Required From
+
+- Product Owner: {{NAME}}
+- Technical Lead: {{NAME}}
+- Business Stakeholder: {{NAME}}
+```
+
+3. **Notify stakeholders** - Feature requires executive decision
+4. **Block handoff** - Cannot proceed until escalation resolved
+
+## Stakeholder Sign-off
+
+```
+╔══════════════════════════════════════════════════════════════════════════╗
+║  STAKEHOLDER IDENTIFICATION: Who approves what                           ║
+╠══════════════════════════════════════════════════════════════════════════╣
+║                                                                          ║
+║  FEATURE COMPLEXITY determines required approvers:                       ║
+║                                                                          ║
+║  SIMPLE (CRUD, UI changes):                                              ║
+║  → Single approver (Product Owner OR Tech Lead)                          ║
+║                                                                          ║
+║  STANDARD (New feature, multiple components):                            ║
+║  → Product Owner (business approval)                                     ║
+║  → Tech Lead (technical feasibility)                                     ║
+║                                                                          ║
+║  CRITICAL (Security, compliance, cross-team):                            ║
+║  → Product Owner                                                         ║
+║  → Tech Lead                                                             ║
+║  → Security/Compliance (if applicable)                                   ║
+║  → Affected team leads (if cross-team)                                   ║
+║                                                                          ║
+╚══════════════════════════════════════════════════════════════════════════╝
+```
+
+### Validation record with stakeholder identity
+
+Update validation.json to capture approver details:
+
+```json
+{
+  "feature_id": "{{FEAT-XXX}}",
+  "status": "approved",
+  "validated_at": "{{ISO_DATE}}",
+  "iteration": 1,
+  "complexity": "simple|standard|critical",
+  "approvers": [
+    {
+      "role": "Product Owner",
+      "name": "{{NAME}}",
+      "approved_at": "{{ISO_DATE}}",
+      "comments": ""
+    }
+  ],
+  "pending_approvers": []
+}
+```
+
+### Multi-stakeholder approval flow (for CRITICAL features)
+
+```
+AskUserQuestion({
+  questions: [
+    {
+      question: "Who is approving this specification?",
+      header: "Approver",
+      options: [
+        { label: "Product Owner", description: "Business requirements approval" },
+        { label: "Tech Lead", description: "Technical feasibility approval" },
+        { label: "Security Lead", description: "Security/compliance approval" },
+        { label: "Other Stakeholder", description: "Specify role and name" }
+      ],
+      multiSelect: false
+    }
+  ]
+})
+```
+
+For CRITICAL features, repeat approval flow until all required approvers have signed off.
+
 ## Workflow
 
 ### Step 1: Load FRD for review

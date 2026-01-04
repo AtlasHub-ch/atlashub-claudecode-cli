@@ -145,21 +145,26 @@ These questions are **MANDATORY** regardless of complexity:
 9. What **messages** to display (success/error)?
 10. Is an **audit trail** required?
 
+**Basic NFRs (ALWAYS ask for Standard+):**
+11. **Expected response time**: < 1s / < 3s / < 10s / Not critical?
+12. **Expected concurrent users**: 1-10 / 10-100 / 100+ ?
+13. **Data sensitivity**: Public / Internal / Confidential / Regulated (GDPR/HIPAA)?
+
 #### If complexity >= Complex, add:
 
-11. What **integrations** with other systems?
-12. What happens in case of **concurrency** (2 users)?
-13. What **volume** is expected?
-14. Are there **alternative flows**?
-15. What **edge cases** to anticipate?
+14. What **integrations** with other systems?
+15. What happens in case of **concurrency** (2 users)?
+16. What **volume** is expected? (records, requests/sec)
+17. Are there **alternative flows**?
+18. What **edge cases** to anticipate?
 
 #### If complexity = Critical, add:
 
-16. Is there **sensitive data** (GDPR)?
-17. What **legal constraints**?
-18. What **performance** level is required?
-19. Are there **irreversible operations**?
-20. How to **rollback** in case of problem?
+19. What **legal constraints** apply?
+20. Are there **irreversible operations**?
+21. How to **rollback** in case of problem?
+22. What **SLA** is expected? (uptime, response time P95)
+23. Is there **data migration** needed?
 
 #### OPTIONAL questions (offer to deepen)
 
