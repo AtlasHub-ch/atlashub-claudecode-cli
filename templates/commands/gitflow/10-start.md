@@ -284,9 +284,60 @@ AskUserQuestion({
 
 ## ETAPE 6: Creer la branche
 
-### Mode Worktree (defaut)
+### Detecter le mode worktree
 
-**Structure organisee:** `../worktrees/{type}s/{name}/`
+```bash
+# Lire la config GitFlow
+CONFIG_FILE=".claude/gitflow/config.json"
+if [ -f "$CONFIG_FILE" ]; then
+  WORKTREE_MODE=$(grep -o '"mode": *"[^"]*"' "$CONFIG_FILE" | head -1 | cut -d'"' -f4)
+  # Default to adjacent if not specified
+  WORKTREE_MODE=${WORKTREE_MODE:-adjacent}
+else
+  WORKTREE_MODE="adjacent"
+fi
+```
+
+### Mode Worktree - Organized (v1.3)
+
+**Si `worktrees.mode` = "organized"** (structure 01-Main, 02-Develop, etc.)
+
+```bash
+# Paths relatifs au projet parent (on est dans 02-Develop)
+PROJECT_ROOT=".."
+
+git fetch origin
+
+# Feature (depuis develop)
+WORKTREE_PATH="${PROJECT_ROOT}/features/{name}"
+mkdir -p "${PROJECT_ROOT}/features"
+git worktree add -b feature/{name} "$WORKTREE_PATH" origin/develop
+
+# Release (depuis develop)
+WORKTREE_PATH="${PROJECT_ROOT}/releases/v{version}"
+mkdir -p "${PROJECT_ROOT}/releases"
+git worktree add -b release/v{version} "$WORKTREE_PATH" origin/develop
+
+# Hotfix (depuis main)
+WORKTREE_PATH="${PROJECT_ROOT}/hotfixes/{name}"
+mkdir -p "${PROJECT_ROOT}/hotfixes"
+git worktree add -b hotfix/{name} "$WORKTREE_PATH" origin/main
+```
+
+**Structure resultante (Organized):**
+```
+{project}/
+├── 01-Main/
+├── 02-Develop/          ← Current
+├── features/
+│   └── {name}/          ← NEW
+├── releases/
+└── hotfixes/
+```
+
+### Mode Worktree - Adjacent (Legacy v1.2)
+
+**Si `worktrees.mode` = "adjacent"** (structure ../worktrees/)
 
 ```bash
 WORKTREE_BASE="../worktrees"
@@ -309,6 +360,15 @@ git worktree add -b release/v{version} "$WORKTREE_PATH" origin/develop
 # Hotfix (depuis main)
 WORKTREE_PATH="${WORKTREE_BASE}/hotfixes/{name}"
 git worktree add -b hotfix/{name} "$WORKTREE_PATH" origin/main
+```
+
+**Structure resultante (Adjacent):**
+```
+parent/
+├── repo/                ← Current
+└── worktrees/
+    └── features/
+        └── {name}/      ← NEW
 ```
 
 ### Mode --no-worktree
@@ -523,13 +583,19 @@ BASE:     {develop|main}
 CIBLE:    {develop|main+develop}
 VERSION:  {version} (si release)
 
-WORKTREE: ../worktrees/{type}s/{name} (ou "meme repertoire" si --no-worktree)
+WORKTREE:
+  - Organized mode: ../{type}s/{name}/ (ex: ../features/add-user/)
+  - Adjacent mode:  ../worktrees/{type}s/{name}/
+  - No worktree:    meme repertoire
 
 ================================================================================
 PROCHAINES ETAPES
 ================================================================================
 
-1. {Si worktree: "cd ../worktrees/{type}s/{name}" ou "code ../worktrees/{type}s/{name}"}
+1. Naviguer vers le worktree:
+   - Organized: cd "../{type}s/{name}" ou code "../{type}s/{name}"
+   - Adjacent:  cd "../worktrees/{type}s/{name}"
+
 2. Faire vos modifications
 3. /gitflow:3-commit
 4. /gitflow:7-pull-request
