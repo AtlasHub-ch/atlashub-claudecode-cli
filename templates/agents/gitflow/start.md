@@ -16,7 +16,8 @@ Creation rapide de branche GitFlow avec worktree.
 2. **Choisir**: Type (feature/release/hotfix)
 3. **Creer**: Worktree ou checkout
 4. **Configurer**: appsettings.Local.json si .NET
-5. **Resume**: Prochaines etapes
+5. **Verifier ports**: Detecter conflits entre projets
+6. **Resume**: Prochaines etapes
 
 ## Commandes
 
@@ -48,6 +49,7 @@ BRANCH CREATED
   Base: {develop|main}
   Worktree: ../worktrees/{type}s/{name}
   Config: {appsettings.Local.json created|skipped}
+  Ports: {✓ OK|⚠️ Conflicts resolved|⚠️ Conflicts ignored}
 
 NEXT STEPS:
   cd ../worktrees/{type}s/{name}

@@ -1,70 +1,112 @@
 ---
-description: Phase 2 - Découverte et élicitation des besoins (ULTRATHINK)
+description: Phase 2 - Discovery and requirements elicitation (ULTRATHINK)
 ---
 
 # Business Analyse - Discover
 
-Expert BA senior en élicitation. Mode ULTRATHINK obligatoire.
+Senior BA expert in elicitation. ULTRATHINK mode mandatory.
 
-> **INSTRUCTION CLAUDE:** Les blocs `AskUserQuestion({...})` sont des instructions pour utiliser le tool `AskUserQuestion` de maniere **interactive**. Tu DOIS executer le tool avec ces parametres pour obtenir la reponse de l'utilisateur AVANT de continuer.
+## Model Requirement
+
+```
+╔══════════════════════════════════════════════════════════════════════════╗
+║  THIS PHASE REQUIRES OPUS MODEL                                          ║
+╠══════════════════════════════════════════════════════════════════════════╣
+║                                                                          ║
+║  Discovery is the MOST CRITICAL phase in the BA workflow.                ║
+║  It requires OPUS to guarantee:                                          ║
+║  • Exhaustive elicitation                                                ║
+║  • Aggressive challenging of user assumptions                            ║
+║  • Deep thinking for edge cases                                          ║
+║  • Proactive feature suggestions                                         ║
+║                                                                          ║
+║  If running on a different model, inform the user that results           ║
+║  may be less thorough.                                                   ║
+║                                                                          ║
+╚══════════════════════════════════════════════════════════════════════════╝
+```
+
+> **CLAUDE INSTRUCTION:** The `AskUserQuestion({...})` blocks are instructions to use the `AskUserQuestion` tool **interactively**. You MUST execute the tool with these parameters to get the user's response BEFORE continuing.
 
 ## Arguments
 
 ```
-/business-analyse:discover [module] "description du besoin"
+/business-analyse:discover [module] "needs description"
 ```
 
-- `module` : Nom du module concerné
-- `description` : Description initiale du besoin
+- `module`: Name of the concerned module
+- `description`: Initial description of the need
 
-## Pré-requis
+## Prerequisites
 
 ```bash
-# Vérifier l'initialisation
-test -f .business-analyse/config.json || echo "Exécuter /business-analyse:init d'abord"
+# Verify initialization
+test -f .business-analyse/config.json || echo "Execute /business-analyse:init first"
 ```
 
-## Mode ULTRATHINK
+## ULTRATHINK Mode
 
-**IMPORTANT** : Cette phase utilise le skill `ultrathink` pour une réflexion approfondie.
+**IMPORTANT**: This phase uses deep thinking for comprehensive elicitation.
+
+Approach to adopt:
+- Question each hypothesis
+- Look for contradictions
+- Identify what's left unsaid
+- Explore edge cases
+- Validate priorities
+- **PROACTIVELY suggest related features**
+- **PROPOSE interface mockups (ASCII wireframes)**
+- **CHALLENGE user assumptions aggressively**
+
+## BA Proactive Role
 
 ```
-Skill(skill="ultrathink", args="Élicitation complète du besoin métier")
+╔══════════════════════════════════════════════════════════════════════════╗
+║  THE BA IS PROACTIVE - NOT JUST A NOTE-TAKER                             ║
+╠══════════════════════════════════════════════════════════════════════════╣
+║                                                                          ║
+║  MUST DO:                                                                ║
+║  ✓ Suggest related features the user may not have thought of             ║
+║  ✓ Propose interface sketches (ASCII wireframes) during discovery        ║
+║  ✓ Challenge incomplete or vague requirements aggressively               ║
+║  ✓ Identify potential UX improvements                                    ║
+║  ✓ Warn about edge cases and potential issues                            ║
+║  ✓ Suggest optimizations based on similar patterns                       ║
+║                                                                          ║
+║  NEVER:                                                                  ║
+║  ✗ Accept vague answers without follow-up                                ║
+║  ✗ Skip proposing alternatives                                           ║
+║  ✗ Miss obvious related features                                         ║
+║                                                                          ║
+╚══════════════════════════════════════════════════════════════════════════╝
 ```
-
-Approche à adopter :
-- Questionner chaque hypothèse
-- Chercher les contradictions
-- Identifier les non-dits
-- Explorer les cas limites
-- Valider les priorités
 
 ## Workflow
 
-### Étape 1 : Contexte initial
+### Step 1: Initial context
 
-Lire le contexte projet :
+Read project context:
 
 ```bash
 cat .business-analyse/config.json
 cat .business-analyse/applications/*/context.md
 ```
 
-### Étape 2 : Évaluation de la complexité
+### Step 2: Complexity evaluation
 
-**AVANT de poser des questions, évaluer la complexité de la feature.**
+**BEFORE asking questions, evaluate the feature's complexity.**
 
 ```
 AskUserQuestion({
   questions: [
     {
-      question: "Quelle est la nature de cette fonctionnalité ?",
+      question: "What is the nature of this feature?",
       header: "Type",
       options: [
-        { label: "CRUD simple", description: "Création/Lecture/Modification/Suppression basique d'une entité" },
-        { label: "Fonctionnalité standard", description: "Logique métier modérée, quelques règles" },
-        { label: "Fonctionnalité complexe", description: "Règles métier complexes, workflows, intégrations" },
-        { label: "Fonctionnalité critique", description: "Sécurité, finance, légal, données sensibles" }
+        { label: "Simple CRUD", description: "Basic Create/Read/Update/Delete of an entity" },
+        { label: "Standard feature", description: "Moderate business logic, a few rules" },
+        { label: "Complex feature", description: "Complex business rules, workflows, integrations" },
+        { label: "Critical feature", description: "Security, finance, legal, sensitive data" }
       ],
       multiSelect: false
     }
@@ -72,68 +114,73 @@ AskUserQuestion({
 })
 ```
 
-### Étape 3 : Questions adaptatives selon la complexité
+### Step 3: Adaptive questions based on complexity
 
-**Le nombre de questions dépend de la complexité :**
+**The number of questions depends on complexity:**
 
-| Complexité | Questions | Domaines prioritaires |
-|------------|-----------|----------------------|
-| CRUD simple | 6-8 | Contexte, Données, Permissions |
-| Standard | 12-15 | + Règles métier, UI |
-| Complexe | 20-25 | + Edge cases, Intégrations |
-| Critique | 30+ | Tous les domaines |
+| Complexity | Questions | Priority areas |
+|------------|-----------|----------------|
+| Simple CRUD | 6-8 | Context, Data, Permissions |
+| Standard | 12-15 | + Business rules, UI |
+| Complex | 20-25 | + Edge cases, Integrations |
+| Critical | 30+ | All areas |
 
-### Questions ESSENTIELLES (toujours posées - 6 questions)
+### ESSENTIAL questions (always asked - 6 questions)
 
-Ces questions sont **OBLIGATOIRES** quelle que soit la complexité :
+These questions are **MANDATORY** regardless of complexity:
 
-1. **Quel problème** résout cette fonctionnalité ? (1 phrase)
-2. **Qui** l'utilise ? (rôles principaux)
-3. **Quelles données** sont manipulées ? (entités CRUD)
-4. **Quelles permissions** ? (qui peut faire quoi)
-5. **Scope** : qu'est-ce qui est IN et OUT ?
-6. **Y a-t-il des règles métier** spécifiques ?
+1. **What problem** does this feature solve? (1 sentence)
+2. **Who** uses it? (main roles)
+3. **What data** is manipulated? (CRUD entities)
+4. **What permissions**? (who can do what)
+5. **Scope**: what is IN and OUT?
+6. **Are there specific business rules**?
 
-### Questions CONDITIONNELLES (selon complexité et contexte)
+### CONDITIONAL questions (based on complexity and context)
 
-#### Si complexité >= Standard, ajouter :
+#### If complexity >= Standard, add:
 
-7. Quel est le **flux principal** ? (happy path)
-8. Y a-t-il des **validations** particulières ?
-9. Quels **messages** afficher (succès/erreur) ?
-10. Y a-t-il un **audit trail** requis ?
+7. What is the **main flow**? (happy path)
+8. Are there particular **validations**?
+9. What **messages** to display (success/error)?
+10. Is an **audit trail** required?
 
-#### Si complexité >= Complexe, ajouter :
+**Basic NFRs (ALWAYS ask for Standard+):**
+11. **Expected response time**: < 1s / < 3s / < 10s / Not critical?
+12. **Expected concurrent users**: 1-10 / 10-100 / 100+ ?
+13. **Data sensitivity**: Public / Internal / Confidential / Regulated (GDPR/HIPAA)?
 
-11. Quelles **intégrations** avec d'autres systèmes ?
-12. Que se passe-t-il en cas de **concurrence** (2 users) ?
-13. Quelle **volumétrie** attendue ?
-14. Y a-t-il des **flux alternatifs** ?
-15. Quels **edge cases** anticiper ?
+#### If complexity >= Complex, add:
 
-#### Si complexité = Critique, ajouter :
+14. What **integrations** with other systems?
+15. What happens in case of **concurrency** (2 users)?
+16. What **volume** is expected? (records, requests/sec)
+17. Are there **alternative flows**?
+18. What **edge cases** to anticipate?
 
-16. Y a-t-il des **données sensibles** (RGPD) ?
-17. Quelles **contraintes légales** ?
-18. Quel niveau de **performance** requis ?
-19. Y a-t-il des **opérations irréversibles** ?
-20. Comment **rollback** en cas de problème ?
+#### If complexity = Critical, add:
 
-#### Questions OPTIONNELLES (proposer d'approfondir)
+19. What **legal constraints** apply?
+20. Are there **irreversible operations**?
+21. How to **rollback** in case of problem?
+22. What **SLA** is expected? (uptime, response time P95)
+23. Is there **data migration** needed?
 
-Après les questions obligatoires, proposer :
+#### OPTIONAL questions (offer to deepen)
+
+After mandatory questions, offer:
 
 ```
 AskUserQuestion({
   questions: [
     {
-      question: "Voulez-vous approfondir certains aspects ?",
-      header: "Détails",
+      question: "Do you want to deepen certain aspects?",
+      header: "Details",
       options: [
-        { label: "Non, c'est suffisant", description: "Passer à la synthèse" },
-        { label: "Évolution future", description: "Comment ça va évoluer ?" },
-        { label: "Cas limites", description: "Edge cases et erreurs" },
-        { label: "Performance", description: "Volumétrie, SLAs" }
+        { label: "No, this is sufficient", description: "Move to synthesis" },
+        { label: "Future evolution", description: "How will it evolve?" },
+        { label: "Edge cases", description: "Edge cases and errors" },
+        { label: "Performance", description: "Volume, SLAs" }
       ],
       multiSelect: true
     }
@@ -141,9 +188,67 @@ AskUserQuestion({
 })
 ```
 
-### Étape 4 : Création structure feature
+### Step 3bis: Proactive Feature Suggestions (MANDATORY)
 
-Incrémenter le compteur et créer la structure :
+**BEFORE moving to synthesis**, the BA MUST:
+
+1. **Propose related features** the user may have forgotten:
+```
+Based on your feature "{{FEATURE}}", I suggest considering:
+
+RELATED FEATURES (potential additions):
+┌────────────────────────────────────────────────────────────────────┐
+│ 1. {{SUGGESTED_FEATURE_1}}                                         │
+│    Why: {{JUSTIFICATION}}                                          │
+│    Complexity: {{LOW|MEDIUM|HIGH}}                                 │
+│                                                                    │
+│ 2. {{SUGGESTED_FEATURE_2}}                                         │
+│    Why: {{JUSTIFICATION}}                                          │
+│    Complexity: {{LOW|MEDIUM|HIGH}}                                 │
+└────────────────────────────────────────────────────────────────────┘
+```
+
+2. **Propose early interface sketch** (ASCII wireframe):
+```
+PROPOSED INTERFACE SKETCH:
+
+┌─────────────────────────────────────────────────────────────────┐
+│ {{SCREEN_TITLE}}                              [Actions]         │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│  [Search: _______________]  [Filter ▼]  [+ New]                │
+│                                                                 │
+│  ┌─────────────────────────────────────────────────────────┐   │
+│  │ List/Table/Form structure here                          │   │
+│  └─────────────────────────────────────────────────────────┘   │
+│                                                                 │
+│  Does this layout match your vision?                           │
+│  What would you change?                                         │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+3. **Ask user validation**:
+```
+AskUserQuestion({
+  questions: [
+    {
+      question: "I've proposed some related features and an interface sketch. What would you like to do?",
+      header: "Suggestions",
+      options: [
+        { label: "Add suggested features to scope", description: "Include them in this analysis" },
+        { label: "Note for later", description: "Track as future improvements" },
+        { label: "Reject suggestions", description: "Not relevant for this project" },
+        { label: "Modify interface sketch", description: "I have different ideas" }
+      ],
+      multiSelect: true
+    }
+  ]
+})
+```
+
+### Step 4: Create feature structure
+
+Increment counter and create structure:
 
 ```
 FEAT-{NNN}-{slug}
@@ -153,47 +258,47 @@ FEAT-{NNN}-{slug}
 mkdir -p ".business-analyse/applications/<app>/modules/<module>/features/FEAT-XXX-<slug>/tracking/bugs"
 ```
 
-### Étape 5 : Synthèse critique
+### Step 5: Critical synthesis
 
-Après les réponses, produire une analyse critique :
+After responses, produce critical analysis:
 
 ```
 ╔══════════════════════════════════════════════════════════════════════════╗
-║  ANALYSE CRITIQUE - ÉLICITATION                                          ║
+║  CRITICAL ANALYSIS - ELICITATION                                         ║
 ╠══════════════════════════════════════════════════════════════════════════╣
 ║                                                                          ║
-║  POINTS DE VIGILANCE                                                     ║
-║  ────────────────────                                                    ║
+║  ATTENTION POINTS                                                        ║
+║  ────────────────                                                        ║
 ║  • <point_1>                                                             ║
 ║  • <point_2>                                                             ║
 ║                                                                          ║
-║  HYPOTHÈSES IDENTIFIÉES                                                  ║
-║  ──────────────────────                                                  ║
-║  • <hypothèse_1> → À VALIDER avec <qui>                                  ║
-║  • <hypothèse_2> → À VALIDER avec <qui>                                  ║
+║  IDENTIFIED HYPOTHESES                                                   ║
+║  ────────────────────                                                    ║
+║  • <hypothesis_1> → TO VALIDATE with <who>                               ║
+║  • <hypothesis_2> → TO VALIDATE with <who>                               ║
 ║                                                                          ║
-║  ALTERNATIVES POSSIBLES                                                  ║
-║  ──────────────────────                                                  ║
+║  POSSIBLE ALTERNATIVES                                                   ║
+║  ────────────────────                                                    ║
 ║  1. <alternative_1>                                                      ║
-║     ✓ Avantage: ...                                                      ║
-║     ✗ Inconvénient: ...                                                  ║
+║     ✓ Advantage: ...                                                     ║
+║     ✗ Disadvantage: ...                                                  ║
 ║                                                                          ║
-║  RISQUES IDENTIFIÉS                                                      ║
-║  ─────────────────                                                       ║
-║  • <risque> (Impact: HAUT/MOYEN/BAS)                                     ║
+║  IDENTIFIED RISKS                                                        ║
+║  ───────────────                                                         ║
+║  • <risk> (Impact: HIGH/MEDIUM/LOW)                                      ║
 ║    → Mitigation: <solution>                                              ║
 ║                                                                          ║
-║  QUESTIONS BLOQUANTES                                                    ║
-║  ────────────────────                                                    ║
-║  ❓ <question_décisive_1>                                                 ║
-║  ❓ <question_décisive_2>                                                 ║
+║  BLOCKING QUESTIONS                                                      ║
+║  ──────────────────                                                      ║
+║  ❓ <decisive_question_1>                                                 ║
+║  ❓ <decisive_question_2>                                                 ║
 ║                                                                          ║
 ╚══════════════════════════════════════════════════════════════════════════╝
 ```
 
-### Étape 6 : Génération du document Discovery
+### Step 6: Generate Discovery document
 
-Créer `1-discovery.md` dans le dossier feature :
+Create `1-discovery.md` in the feature folder:
 
 ```markdown
 # Discovery - {{FEATURE_NAME}}
@@ -206,161 +311,161 @@ Créer `1-discovery.md` dans le dossier feature :
 
 ---
 
-## Résumé Exécutif
+## Executive Summary
 
-{{RESUME_2_3_PHRASES}}
+{{SUMMARY_2_3_SENTENCES}}
 
 ---
 
-## Contexte Stratégique
+## Strategic Context
 
-### Problème Adressé
-{{PROBLEME}}
+### Addressed Problem
+{{PROBLEM}}
 
-### Déclencheur
+### Trigger
 {{TRIGGER}}
 
-### Valeur Business
-{{VALEUR}}
+### Business Value
+{{VALUE}}
 
-### Métriques de Succès
-| KPI | Cible | Méthode de mesure |
-|-----|-------|-------------------|
-| {{KPI}} | {{CIBLE}} | {{METHODE}} |
+### Success Metrics
+| KPI | Target | Measurement method |
+|-----|--------|-------------------|
+| {{KPI}} | {{TARGET}} | {{METHOD}} |
 
-### Priorité
-{{PRIORITE}} - {{JUSTIFICATION}}
+### Priority
+{{PRIORITY}} - {{JUSTIFICATION}}
 
 ---
 
-## Utilisateurs
+## Users
 
-### Personas Principaux
-| Persona | Rôle | Contexte d'usage | Fréquence |
-|---------|------|------------------|-----------|
-| {{PERSONA}} | {{ROLE}} | {{CONTEXTE}} | {{FREQ}} |
+### Main Personas
+| Persona | Role | Usage context | Frequency |
+|---------|------|---------------|-----------|
+| {{PERSONA}} | {{ROLE}} | {{CONTEXT}} | {{FREQ}} |
 
-### Besoins et Frustrations
-{{BESOINS}}
+### Needs and Frustrations
+{{NEEDS}}
 
 ---
 
 ## Scope
 
-### Inclus
+### Included
 - {{IN_SCOPE_1}}
 - {{IN_SCOPE_2}}
 
-### Exclus
+### Excluded
 - {{OUT_SCOPE_1}}
 - {{OUT_SCOPE_2}}
 
-### Contraintes
-- Techniques: {{CONTRAINTES_TECH}}
-- Légales: {{CONTRAINTES_LEGAL}}
-- Temps: {{CONTRAINTES_TEMPS}}
+### Constraints
+- Technical: {{TECH_CONSTRAINTS}}
+- Legal: {{LEGAL_CONSTRAINTS}}
+- Time: {{TIME_CONSTRAINTS}}
 
-### Dépendances
-| Dépendance | Type | Impact |
+### Dependencies
+| Dependency | Type | Impact |
 |------------|------|--------|
 | {{DEP}} | {{TYPE}} | {{IMPACT}} |
 
 ---
 
-## Données
+## Data
 
-### Entités Concernées
-{{ENTITES}}
+### Concerned Entities
+{{ENTITIES}}
 
-### Volumétrie
-| Métrique | Actuel | 1 an | 3 ans |
-|----------|--------|------|-------|
-| {{METRIQUE}} | {{ACTUEL}} | {{1AN}} | {{3ANS}} |
+### Volume
+| Metric | Current | 1 year | 3 years |
+|--------|---------|--------|---------|
+| {{METRIC}} | {{CURRENT}} | {{1YEAR}} | {{3YEARS}} |
 
-### Sensibilité
-{{DONNEES_SENSIBLES}}
+### Sensitivity
+{{SENSITIVE_DATA}}
 
 ---
 
-## Flux Métier
+## Business Flows
 
 ### Happy Path
 1. {{STEP_1}}
 2. {{STEP_2}}
 3. {{STEP_3}}
 
-### Flux Alternatifs
-{{FLUX_ALT}}
+### Alternative Flows
+{{ALT_FLOWS}}
 
 ---
 
-## Règles Métier
+## Business Rules
 
-| ID | Règle | Condition | Action |
-|----|-------|-----------|--------|
-| RM-001 | {{REGLE}} | {{CONDITION}} | {{ACTION}} |
+| ID | Rule | Condition | Action |
+|----|------|-----------|--------|
+| RM-001 | {{RULE}} | {{CONDITION}} | {{ACTION}} |
 
 ---
 
-## Sécurité
+## Security
 
 ### Permissions
-| Rôle | Accès |
-|------|-------|
-| {{ROLE}} | {{ACCES}} |
+| Role | Access |
+|------|--------|
+| {{ROLE}} | {{ACCESS}} |
 
 ### Audit
-{{AUDIT_REQUIS}}
+{{AUDIT_REQUIRED}}
 
 ---
 
-## Risques
+## Risks
 
-| ID | Risque | Probabilité | Impact | Mitigation |
-|----|--------|-------------|--------|------------|
-| R-001 | {{RISQUE}} | {{PROBA}} | {{IMPACT}} | {{MITIGATION}} |
+| ID | Risk | Probability | Impact | Mitigation |
+|----|------|-------------|--------|------------|
+| R-001 | {{RISK}} | {{PROBA}} | {{IMPACT}} | {{MITIGATION}} |
 
 ---
 
-## Questions Ouvertes
+## Open Questions
 
 - [ ] {{QUESTION_1}}
 - [ ] {{QUESTION_2}}
 
 ---
 
-## Prochaines Étapes
+## Next Steps
 
-1. Valider avec {{STAKEHOLDER}}
-2. Exécuter `/business-analyse:analyse {{FEAT-XXX}}`
+1. Validate with {{STAKEHOLDER}}
+2. Execute `/business-analyse:analyse {{FEAT-XXX}}`
 
 ---
 
-*Généré par Business Analyse - {{DATE}}*
+*Generated by Business Analyse - {{DATE}}*
 ```
 
-### Résumé
+### Summary
 
 ```
-DISCOVERY COMPLÈTE
+DISCOVERY COMPLETE
 ═══════════════════════════════════════════════════════════
 Feature:     {{FEAT-XXX}} - {{NAME}}
 Module:      {{MODULE}}
-Complexité:  {{FAIBLE|MOYENNE|HAUTE}}
+Complexity:  {{LOW|MEDIUM|HIGH}}
 ═══════════════════════════════════════════════════════════
-Questions:   44/44 posées
-Risques:     {{X}} identifiés
-Questions ouvertes: {{Y}}
+Questions:   44/44 asked
+Risks:       {{X}} identified
+Open questions: {{Y}}
 ═══════════════════════════════════════════════════════════
 Document: .business-analyse/.../{{FEAT-XXX}}/1-discovery.md
 ═══════════════════════════════════════════════════════════
-Prochain: /business-analyse:analyse {{FEAT-XXX}}
+Next: /business-analyse:analyse {{FEAT-XXX}}
 ```
 
-## Règles
+## Rules
 
-1. **ULTRATHINK obligatoire** - Réflexion profonde sur chaque réponse
-2. **Toutes les questions** - Ne pas sauter de questions
-3. **Pas de réponses vagues** - Reformuler jusqu'à obtenir une réponse claire
-4. **Synthèse critique** - Challenger les réponses
-5. **Aucun code** - Ce document est purement métier
+1. **ULTRATHINK mandatory** - Deep thinking on each response
+2. **All questions** - Do not skip questions
+3. **No vague answers** - Rephrase until getting a clear answer
+4. **Critical synthesis** - Challenge the answers
+5. **No code** - This document is purely business

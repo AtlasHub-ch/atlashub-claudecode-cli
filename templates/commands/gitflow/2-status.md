@@ -19,10 +19,10 @@ Tu es expert GitFlow et EF Core. Affiche l'etat complet du projet .NET.
 - Dernier tag
 
 ### Version
-Lire depuis la source configuree dans `.claude/gitflow/config.json`:
+Read from configured source in [.claude/gitflow/config.json](.claude/gitflow/config.json):
 - `versioning.source` → type (csproj, Directory.Build.props, AssemblyInfo, VERSION, git-tag)
-- `versioning.sourceFile` → chemin du fichier
-- Lire la version actuelle depuis CE fichier (pas depuis config.json)
+- `versioning.sourceFile` → file path
+- Read current version from THAT file (not from config.json)
 
 ### EF Core
 - Lister les migrations (total et pending)

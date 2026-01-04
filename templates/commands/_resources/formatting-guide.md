@@ -1,48 +1,48 @@
-# Guide de formatage - Références cliquables & Commandes copiables
+# Formatting Guide - Clickable References & Copyable Commands
 
-Ce guide définit les standards de formatage pour tous les templates de commandes.
+This guide defines formatting standards for all command templates.
 
-## Références de fichiers (cliquables)
+## File References (clickable)
 
-### Format standard
+### Standard format
 
 ```markdown
-<!-- Fichier simple -->
+<!-- Simple file -->
 [filename.ts](path/to/filename.ts)
 
-<!-- Fichier avec ligne -->
+<!-- File with line -->
 [filename.ts:42](path/to/filename.ts#L42)
 
-<!-- Fichier avec range de lignes -->
+<!-- File with line range -->
 [filename.ts:42-51](path/to/filename.ts#L42-L51)
 
-<!-- Dossier -->
+<!-- Folder -->
 [src/components/](src/components/)
 ```
 
-### Exemples concrets
+### Concrete examples
 
-| Contexte | Format | Résultat |
-|----------|--------|----------|
-| Config GitFlow | `[config.json](.claude/gitflow/config.json)` | [config.json](.claude/gitflow/config.json) |
-| Ligne spécifique | `[installer.ts:45](src/lib/installer.ts#L45)` | [installer.ts:45](src/lib/installer.ts#L45) |
+| Context | Format | Result |
+|---------|--------|--------|
+| GitFlow Config | `[config.json](.claude/gitflow/config.json)` | [config.json](.claude/gitflow/config.json) |
+| Specific line | `[installer.ts:45](src/lib/installer.ts#L45)` | [installer.ts:45](src/lib/installer.ts#L45) |
 | Range | `[utils.ts:10-25](src/utils.ts#L10-L25)` | [utils.ts:10-25](src/utils.ts#L10-L25) |
-| Dossier | `[templates/](templates/)` | [templates/](templates/) |
+| Folder | `[templates/](templates/)` | [templates/](templates/) |
 
-### À éviter
+### Avoid
 
 ```markdown
 <!-- INCORRECT -->
 `config.json`
 `.claude/gitflow/config.json`
-Le fichier config.json
+The config.json file
 ```
 
-## Commandes (copiables)
+## Commands (copyable)
 
-### Commandes Claude Code
+### Claude Code Commands
 
-Toujours dans un bloc de code simple :
+Always in simple code block:
 
 ```markdown
 ```
@@ -50,9 +50,9 @@ Toujours dans un bloc de code simple :
 ```
 ```
 
-### Commandes Bash/Shell
+### Bash/Shell Commands
 
-Avec le langage spécifié :
+With language specified:
 
 ```markdown
 ```bash
@@ -61,64 +61,64 @@ dotnet ef migrations add Initial
 ```
 ```
 
-### Commandes multiples
+### Multiple commands
 
 ```markdown
 ```bash
-# Étape 1 : Build
+# Step 1: Build
 npm run build
 
-# Étape 2 : Test
+# Step 2: Test
 npm test
 ```
 ```
 
-### À éviter
+### Avoid
 
 ```markdown
 <!-- INCORRECT -->
-Exécutez `/gitflow:1-init`
-Lancez la commande `npm run build`
+Execute `/gitflow:1-init`
+Run the command `npm run build`
 ```
 
-## Tableaux de commandes
+## Command Tables
 
-Format recommandé pour lister des commandes :
+Recommended format for listing commands:
 
 ```markdown
-| Commande | Description |
-|----------|-------------|
-| `/test-web --quick` | Tests rapides |
-| `/test-web --chrome` | Tests E2E |
+| Command | Description |
+|---------|-------------|
+| `/test-web --quick` | Quick tests |
+| `/test-web --chrome` | E2E tests |
 ```
 
-## Chemins dans les instructions
+## Paths in Instructions
 
-### Bon exemple
+### Good example
 
 ```markdown
-1. Créer le fichier [config.json](.claude/test-web/config.json)
-2. Exécuter :
+1. Create file [config.json](.claude/test-web/config.json)
+2. Execute:
    ```
    /test-web --quick
    ```
-3. Vérifier le rapport dans [reports/](.claude/test-web/reports/)
+3. Check report in [reports/](.claude/test-web/reports/)
 ```
 
-### Mauvais exemple
+### Bad example
 
 ```markdown
-1. Créer le fichier `.claude/test-web/config.json`
-2. Exécuter `/test-web --quick`
-3. Vérifier le rapport dans `.claude/test-web/reports/`
+1. Create file `.claude/test-web/config.json`
+2. Execute `/test-web --quick`
+3. Check report in `.claude/test-web/reports/`
 ```
 
-## Résumé
+## Summary
 
-| Élément | Format | Exemple |
+| Element | Format | Example |
 |---------|--------|---------|
-| Fichier | `[name](path)` | `[config.json](.claude/config.json)` |
-| Fichier:ligne | `[name:L](path#LX)` | `[utils.ts:42](src/utils.ts#L42)` |
-| Dossier | `[name/](path/)` | `[templates/](templates/)` |
-| Commande Claude | ` ``` code ``` ` | `/command --flag` |
-| Commande Bash | ` ```bash code ``` ` | `npm run build` |
+| File | `[name](path)` | `[config.json](.claude/config.json)` |
+| File:line | `[name:L](path#LX)` | `[utils.ts:42](src/utils.ts#L42)` |
+| Folder | `[name/](path/)` | `[templates/](templates/)` |
+| Claude Command | ` ``` code ``` ` | `/command --flag` |
+| Bash Command | ` ```bash code ``` ` | `npm run build` |

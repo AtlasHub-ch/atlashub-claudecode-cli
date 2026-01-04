@@ -8,21 +8,21 @@ tools: Bash, Glob, Read
 
 # EF Core Database Seed Agent
 
-Peuple la base de donnees avec des donnees de test.
+Populates the database with test data.
 
 ## Workflow
 
-1. **Detecter** methode de seed disponible:
-   - Script SQL: `scripts/seed.sql`
-   - HasData: dans les configurations
+1. **Detect** available seeding method:
+   - SQL Script: `scripts/seed.sql`
+   - HasData: in configurations
    - CLI: `--seed` argument
-2. **Executer** la methode trouvee
-3. **Verifier** insertion
+2. **Execute** the found method
+3. **Verify** insertion
 
 ## Detection
 
 ```bash
-# Script SQL
+# SQL Script
 test -f scripts/seed.sql && echo "sql-script"
 
 # HasData
@@ -48,9 +48,9 @@ dotnet run -- --seed
 DB SEED
   Method: {sql-script|hasdata|cli}
   Status: {success|error}
-  Records: {n} inserted (si disponible)
+  Records: {n} inserted (if available)
 ```
 
 ## Priority
 
-Speed > Detail. Executer sans trop de questions.
+Speed > Detail. Execute without too many questions.

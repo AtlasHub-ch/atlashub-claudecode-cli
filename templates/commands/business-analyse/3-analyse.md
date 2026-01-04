@@ -1,11 +1,10 @@
 ---
-description: Phase 3 - Analyse métier et BRD (ULTRATHINK)
-model: opus
+description: Phase 3 - Business analysis and BRD (ULTRATHINK)
 ---
 
 # Business Analyse - Analyse
 
-Expert BA senior en modélisation. Mode ULTRATHINK obligatoire.
+Senior BA expert in modeling. ULTRATHINK mode mandatory.
 
 ## Arguments
 
@@ -13,33 +12,82 @@ Expert BA senior en modélisation. Mode ULTRATHINK obligatoire.
 /business-analyse:analyse [feature-id]
 ```
 
-- `feature-id` : Identifiant de la feature (ex: FEAT-001)
+- `feature-id`: Feature identifier (e.g., FEAT-001)
 
-## Pré-requis
+## Prerequisites
 
 ```bash
-# Vérifier que la discovery existe
+# Verify that discovery exists
 test -f ".business-analyse/applications/*/modules/*/features/$ARGUMENTS/1-discovery.md" || \
-  echo "Exécuter /business-analyse:discover d'abord"
+  echo "Execute /business-analyse:discover first"
 ```
 
-## Mode ULTRATHINK
+## ULTRATHINK Mode
 
-**IMPORTANT** : Cette phase utilise le skill `ultrathink` pour une modélisation approfondie.
+**IMPORTANT**: This phase uses the `ultrathink` skill for in-depth modeling.
 
 ```
-Skill(skill="ultrathink", args="Analyse métier et modélisation BRD")
+Skill(skill="ultrathink", args="Business analysis and BRD modeling")
 ```
 
-Approche à adopter :
-- Modéliser avec précision
-- Identifier les patterns métier
-- Valider la cohérence
-- Anticiper les évolutions
+Approach to adopt:
+- Model with precision
+- Identify business patterns
+- Validate consistency
+- Anticipate evolutions
 
 ## Workflow
 
-### Étape 1 : Chargement du contexte
+### Step 0: Scan existing specifications (Agent Sonnet)
+
+**MANDATORY**: Before any analysis, scan all existing specifications to understand the global context.
+
+```
+Task(subagent_type="Explore", model="sonnet", prompt="
+Scan all existing Business Analyse specifications in .business-analyse/
+
+SEARCH FOR:
+1. All existing features (FEAT-XXX)
+   - Path: .business-analyse/applications/**/features/*/
+   - Status of each (discovery/analysis/specified/validated)
+
+2. Existing FRDs (3-functional-specification.md)
+   - List entities already specified
+   - List APIs already documented
+   - List business rules already defined
+
+3. Dependencies between features
+   - Shared entities
+   - Shared business rules
+   - Integration points
+
+4. Glossary terms already defined
+   - Read .business-analyse/glossary.md
+
+RETURN a structured summary:
+{
+  'existing_features': [
+    {'id': 'FEAT-XXX', 'name': '...', 'status': '...', 'entities': [...]}
+  ],
+  'shared_entities': ['Entity1', 'Entity2'],
+  'shared_rules': ['BR-001', 'BR-002'],
+  'glossary_terms': ['term1', 'term2'],
+  'potential_conflicts': ['...']
+}
+
+This context will be used to ensure consistency with existing specifications.
+")
+```
+
+**Use scan results to:**
+- Avoid duplicating existing entities
+- Reuse existing business rules (BR-XXX)
+- Identify dependencies with other features
+- Ensure consistent naming conventions
+
+---
+
+### Step 1: Load context
 
 ```bash
 cat .business-analyse/config.json
@@ -47,31 +95,31 @@ cat ".business-analyse/applications/*/modules/*/features/$FEATURE_ID/1-discovery
 cat .business-analyse/glossary.md
 ```
 
-### Étape 2 : Modélisation des processus métier
+### Step 2: Business process modeling
 
-Créer les diagrammes de processus en **Mermaid** :
+Create process diagrams in **Mermaid**:
 
 ```mermaid
 flowchart TD
-    subgraph "Processus: {{PROCESS_NAME}}"
-        A[Déclencheur] --> B{Condition}
-        B -->|Oui| C[Action 1]
-        B -->|Non| D[Action 2]
-        C --> E[Résultat]
+    subgraph "Process: {{PROCESS_NAME}}"
+        A[Trigger] --> B{Condition}
+        B -->|Yes| C[Action 1]
+        B -->|No| D[Action 2]
+        C --> E[Result]
         D --> E
     end
 ```
 
-Pour chaque processus identifier :
-- **Déclencheur** : Qu'est-ce qui lance le processus ?
-- **Acteurs** : Qui intervient ?
-- **Actions** : Quelles étapes ?
-- **Décisions** : Quelles conditions/branchements ?
-- **Résultats** : Quels outputs ?
+For each process identify:
+- **Trigger**: What starts the process?
+- **Actors**: Who intervenes?
+- **Actions**: What steps?
+- **Decisions**: What conditions/branches?
+- **Results**: What outputs?
 
-### Étape 3 : Modélisation des données
+### Step 3: Data modeling
 
-Créer le diagramme ER conceptuel en **Mermaid** :
+Create conceptual ER diagram in **Mermaid**:
 
 ```mermaid
 erDiagram
@@ -88,83 +136,83 @@ erDiagram
     }
 ```
 
-Pour chaque entité documenter :
-- **Attributs clés** : Propriétés essentielles
-- **Identifiants** : Clés primaires/naturelles
-- **Relations** : Cardinalités et types
-- **Contraintes** : Règles de validité
+For each entity document:
+- **Key attributes**: Essential properties
+- **Identifiers**: Primary/natural keys
+- **Relations**: Cardinalities and types
+- **Constraints**: Validity rules
 
-### Étape 4 : Catalogue des règles métier
+### Step 4: Business rules catalog
 
-Documenter TOUTES les règles métier :
+Document ALL business rules:
 
-| ID | Catégorie | Règle | Condition | Action | Priorité |
-|----|-----------|-------|-----------|--------|----------|
-| BR-001 | Validation | {{REGLE}} | SI {{COND}} | ALORS {{ACTION}} | HAUTE |
-| BR-002 | Calcul | {{REGLE}} | {{FORMULE}} | {{RESULTAT}} | MOYENNE |
-| BR-003 | Workflow | {{REGLE}} | {{ETAT}} | {{TRANSITION}} | HAUTE |
+| ID | Category | Rule | Condition | Action | Priority |
+|----|----------|------|-----------|--------|----------|
+| BR-001 | Validation | {{RULE}} | IF {{COND}} | THEN {{ACTION}} | HIGH |
+| BR-002 | Calculation | {{RULE}} | {{FORMULA}} | {{RESULT}} | MEDIUM |
+| BR-003 | Workflow | {{RULE}} | {{STATE}} | {{TRANSITION}} | HIGH |
 
-Catégories de règles :
-- **Validation** : Règles de validation des données
-- **Calcul** : Formules et algorithmes métier
-- **Workflow** : Transitions d'état et processus
-- **Autorisation** : Règles de permissions
-- **Contrainte** : Limitations et restrictions
+Rule categories:
+- **Validation**: Data validation rules
+- **Calculation**: Business formulas and algorithms
+- **Workflow**: State transitions and processes
+- **Authorization**: Permission rules
+- **Constraint**: Limitations and restrictions
 
-### Étape 5 : Matrice des exigences métier
+### Step 5: Business requirements matrix
 
-Créer la matrice de traçabilité :
+Create traceability matrix:
 
-| ID | Exigence | Type | Priorité | Source | Critère d'acceptation |
-|----|----------|------|----------|--------|----------------------|
-| REQ-001 | {{EXIGENCE}} | Fonctionnel | Must | Discovery §X | {{CRITERE}} |
-| REQ-002 | {{EXIGENCE}} | Non-fonctionnel | Should | Discovery §Y | {{CRITERE}} |
+| ID | Requirement | Type | Priority | Source | Acceptance criteria |
+|----|-------------|------|----------|--------|---------------------|
+| REQ-001 | {{REQUIREMENT}} | Functional | Must | Discovery §X | {{CRITERIA}} |
+| REQ-002 | {{REQUIREMENT}} | Non-functional | Should | Discovery §Y | {{CRITERIA}} |
 
-Types d'exigences :
-- **Fonctionnel** : Ce que le système doit faire
-- **Non-fonctionnel** : Performance, sécurité, UX
-- **Contrainte** : Limitations techniques/légales
-- **Interface** : Intégrations externes
+Requirement types:
+- **Functional**: What the system must do
+- **Non-functional**: Performance, security, UX
+- **Constraint**: Technical/legal limitations
+- **Interface**: External integrations
 
-### Étape 6 : Analyse d'impact
+### Step 6: Impact analysis
 
 ```
 ╔══════════════════════════════════════════════════════════════════════════╗
-║  ANALYSE D'IMPACT                                                        ║
+║  IMPACT ANALYSIS                                                         ║
 ╠══════════════════════════════════════════════════════════════════════════╣
 ║                                                                          ║
-║  SYSTÈMES IMPACTÉS                                                       ║
-║  ─────────────────                                                       ║
-║  • {{SYSTEME_1}}: {{DESCRIPTION_IMPACT}}                                 ║
-║  • {{SYSTEME_2}}: {{DESCRIPTION_IMPACT}}                                 ║
+║  IMPACTED SYSTEMS                                                        ║
+║  ────────────────                                                        ║
+║  • {{SYSTEM_1}}: {{IMPACT_DESCRIPTION}}                                  ║
+║  • {{SYSTEM_2}}: {{IMPACT_DESCRIPTION}}                                  ║
 ║                                                                          ║
-║  DONNÉES IMPACTÉES                                                       ║
-║  ─────────────────                                                       ║
-║  • {{ENTITE_1}}: {{TYPE_MODIFICATION}} (CREATE/UPDATE/DELETE)            ║
-║  • {{ENTITE_2}}: {{TYPE_MODIFICATION}}                                   ║
+║  IMPACTED DATA                                                           ║
+║  ─────────────                                                           ║
+║  • {{ENTITY_1}}: {{MODIFICATION_TYPE}} (CREATE/UPDATE/DELETE)            ║
+║  • {{ENTITY_2}}: {{MODIFICATION_TYPE}}                                   ║
 ║                                                                          ║
-║  PROCESSUS IMPACTÉS                                                      ║
+║  IMPACTED PROCESSES                                                      ║
 ║  ──────────────────                                                      ║
-║  • {{PROCESS_1}}: {{DESCRIPTION_CHANGEMENT}}                             ║
+║  • {{PROCESS_1}}: {{CHANGE_DESCRIPTION}}                                 ║
 ║                                                                          ║
-║  UTILISATEURS IMPACTÉS                                                   ║
-║  ─────────────────────                                                   ║
-║  • {{ROLE_1}}: {{CHANGEMENT_WORKFLOW}}                                   ║
+║  IMPACTED USERS                                                          ║
+║  ──────────────                                                          ║
+║  • {{ROLE_1}}: {{WORKFLOW_CHANGE}}                                       ║
 ║                                                                          ║
-║  RISQUES DE RÉGRESSION                                                   ║
-║  ─────────────────────                                                   ║
-║  • {{RISQUE_REGRESSION}}                                                 ║
+║  REGRESSION RISKS                                                        ║
+║  ────────────────                                                        ║
+║  • {{REGRESSION_RISK}}                                                   ║
 ║                                                                          ║
 ╚══════════════════════════════════════════════════════════════════════════╝
 ```
 
-### Étape 7 : Mise à jour du glossaire
+### Step 7: Update glossary
 
-Ajouter les nouveaux termes métier identifiés dans `.business-analyse/glossary.md`.
+Add newly identified business terms to `.business-analyse/glossary.md`.
 
-### Étape 8 : Génération du BRD
+### Step 8: Generate BRD
 
-Créer `2-business-requirements.md` :
+Create `2-business-requirements.md`:
 
 ```markdown
 # Business Requirements Document - {{FEATURE_NAME}}
@@ -173,238 +221,238 @@ Créer `2-business-requirements.md` :
 **Version**: 1.0
 **Date**: {{DATE}}
 **Status**: Draft
-**Auteur**: Claude (Business Analyse)
+**Author**: Claude (Business Analyse)
 
 ---
 
-## 1. Résumé Exécutif
+## 1. Executive Summary
 
-### 1.1 Objectif
-{{OBJECTIF_BUSINESS}}
+### 1.1 Objective
+{{BUSINESS_OBJECTIVE}}
 
-### 1.2 Bénéfices Attendus
-| Bénéfice | Métrique | Cible |
-|----------|----------|-------|
-| {{BENEFICE}} | {{METRIQUE}} | {{CIBLE}} |
+### 1.2 Expected Benefits
+| Benefit | Metric | Target |
+|---------|--------|--------|
+| {{BENEFIT}} | {{METRIC}} | {{TARGET}} |
 
 ### 1.3 Scope
-- **Inclus**: {{IN_SCOPE}}
-- **Exclus**: {{OUT_SCOPE}}
+- **Included**: {{IN_SCOPE}}
+- **Excluded**: {{OUT_SCOPE}}
 
 ---
 
-## 2. Contexte Métier
+## 2. Business Context
 
-### 2.1 Situation Actuelle (As-Is)
-{{DESCRIPTION_AS_IS}}
+### 2.1 Current Situation (As-Is)
+{{AS_IS_DESCRIPTION}}
 
 ```mermaid
 flowchart LR
-    subgraph "Processus Actuel"
-        {{PROCESS_AS_IS}}
+    subgraph "Current Process"
+        {{AS_IS_PROCESS}}
     end
 ```
 
-### 2.2 Situation Cible (To-Be)
-{{DESCRIPTION_TO_BE}}
+### 2.2 Target Situation (To-Be)
+{{TO_BE_DESCRIPTION}}
 
 ```mermaid
 flowchart LR
-    subgraph "Processus Cible"
-        {{PROCESS_TO_BE}}
+    subgraph "Target Process"
+        {{TO_BE_PROCESS}}
     end
 ```
 
 ### 2.3 Gap Analysis
 | Aspect | As-Is | To-Be | Gap |
 |--------|-------|-------|-----|
-| {{ASPECT}} | {{ACTUEL}} | {{CIBLE}} | {{ECART}} |
+| {{ASPECT}} | {{CURRENT}} | {{TARGET}} | {{GAP}} |
 
 ---
 
-## 3. Parties Prenantes
+## 3. Stakeholders
 
-| Stakeholder | Rôle | Intérêt | Influence | Contact |
-|-------------|------|---------|-----------|---------|
-| {{NAME}} | {{ROLE}} | {{INTERET}} | HAUTE/MOY/BASSE | {{CONTACT}} |
+| Stakeholder | Role | Interest | Influence | Contact |
+|-------------|------|----------|-----------|---------|
+| {{NAME}} | {{ROLE}} | {{INTEREST}} | HIGH/MED/LOW | {{CONTACT}} |
 
 ---
 
-## 4. Exigences Métier
+## 4. Business Requirements
 
-### 4.1 Exigences Fonctionnelles
+### 4.1 Functional Requirements
 
-| ID | Exigence | Priorité | Source | Critère d'acceptation |
-|----|----------|----------|--------|----------------------|
-| REQ-F-001 | {{EXIGENCE}} | Must | Discovery | {{CRITERE}} |
+| ID | Requirement | Priority | Source | Acceptance criteria |
+|----|-------------|----------|--------|---------------------|
+| REQ-F-001 | {{REQUIREMENT}} | Must | Discovery | {{CRITERIA}} |
 
-### 4.2 Exigences Non-Fonctionnelles
+### 4.2 Non-Functional Requirements
 
-| ID | Catégorie | Exigence | Cible |
-|----|-----------|----------|-------|
-| REQ-NF-001 | Performance | {{EXIGENCE}} | {{CIBLE}} |
-| REQ-NF-002 | Sécurité | {{EXIGENCE}} | {{CIBLE}} |
-| REQ-NF-003 | Disponibilité | {{EXIGENCE}} | {{CIBLE}} |
+| ID | Category | Requirement | Target |
+|----|----------|-------------|--------|
+| REQ-NF-001 | Performance | {{REQUIREMENT}} | {{TARGET}} |
+| REQ-NF-002 | Security | {{REQUIREMENT}} | {{TARGET}} |
+| REQ-NF-003 | Availability | {{REQUIREMENT}} | {{TARGET}} |
 
-### 4.3 Contraintes
+### 4.3 Constraints
 
-| ID | Type | Contrainte | Impact |
+| ID | Type | Constraint | Impact |
 |----|------|------------|--------|
-| CON-001 | Technique | {{CONTRAINTE}} | {{IMPACT}} |
-| CON-002 | Légal | {{CONTRAINTE}} | {{IMPACT}} |
+| CON-001 | Technical | {{CONSTRAINT}} | {{IMPACT}} |
+| CON-002 | Legal | {{CONSTRAINT}} | {{IMPACT}} |
 
 ---
 
-## 5. Modèle de Données Conceptuel
+## 5. Conceptual Data Model
 
-### 5.1 Diagramme Entité-Relation
+### 5.1 Entity-Relationship Diagram
 
 ```mermaid
 erDiagram
     {{ER_DIAGRAM}}
 ```
 
-### 5.2 Description des Entités
+### 5.2 Entity Description
 
 #### {{ENTITY_NAME}}
-| Attribut | Description | Type logique | Obligatoire | Règle |
-|----------|-------------|--------------|-------------|-------|
-| {{ATTR}} | {{DESC}} | {{TYPE}} | Oui/Non | {{REGLE}} |
+| Attribute | Description | Logical type | Mandatory | Rule |
+|-----------|-------------|--------------|-----------|------|
+| {{ATTR}} | {{DESC}} | {{TYPE}} | Yes/No | {{RULE}} |
 
 ---
 
-## 6. Processus Métier
+## 6. Business Processes
 
-### 6.1 Vue d'ensemble
+### 6.1 Overview
 
 ```mermaid
 flowchart TD
     {{PROCESS_OVERVIEW}}
 ```
 
-### 6.2 Processus détaillés
+### 6.2 Detailed processes
 
 #### {{PROCESS_NAME}}
 
-**Déclencheur**: {{TRIGGER}}
-**Acteurs**: {{ACTORS}}
-**Résultat**: {{OUTPUT}}
+**Trigger**: {{TRIGGER}}
+**Actors**: {{ACTORS}}
+**Result**: {{OUTPUT}}
 
 ```mermaid
 flowchart TD
     {{PROCESS_DETAIL}}
 ```
 
-| Étape | Acteur | Action | Données | Règles |
-|-------|--------|--------|---------|--------|
+| Step | Actor | Action | Data | Rules |
+|------|-------|--------|------|-------|
 | 1 | {{ACTOR}} | {{ACTION}} | {{DATA}} | {{RULES}} |
 
 ---
 
-## 7. Règles Métier
+## 7. Business Rules
 
-### 7.1 Catalogue des règles
+### 7.1 Rules catalog
 
-| ID | Catégorie | Nom | Description | Condition | Action |
-|----|-----------|-----|-------------|-----------|--------|
-| BR-001 | {{CAT}} | {{NOM}} | {{DESC}} | SI {{COND}} | ALORS {{ACTION}} |
+| ID | Category | Name | Description | Condition | Action |
+|----|----------|------|-------------|-----------|--------|
+| BR-001 | {{CAT}} | {{NAME}} | {{DESC}} | IF {{COND}} | THEN {{ACTION}} |
 
-### 7.2 Matrice règles/entités
+### 7.2 Rules/entities matrix
 
-| Règle | {{Entity1}} | {{Entity2}} | {{Entity3}} |
-|-------|-------------|-------------|-------------|
+| Rule | {{Entity1}} | {{Entity2}} | {{Entity3}} |
+|------|-------------|-------------|-------------|
 | BR-001 | ✓ | | ✓ |
 
 ---
 
-## 8. Analyse d'Impact
+## 8. Impact Analysis
 
-### 8.1 Systèmes
-{{IMPACT_SYSTEMES}}
+### 8.1 Systems
+{{SYSTEMS_IMPACT}}
 
-### 8.2 Données
-{{IMPACT_DONNEES}}
+### 8.2 Data
+{{DATA_IMPACT}}
 
-### 8.3 Processus
-{{IMPACT_PROCESSUS}}
+### 8.3 Processes
+{{PROCESSES_IMPACT}}
 
-### 8.4 Utilisateurs
-{{IMPACT_UTILISATEURS}}
-
----
-
-## 9. Risques
-
-| ID | Risque | Probabilité | Impact | Mitigation | Owner |
-|----|--------|-------------|--------|------------|-------|
-| RISK-001 | {{RISQUE}} | H/M/L | H/M/L | {{MITIGATION}} | {{OWNER}} |
+### 8.4 Users
+{{USERS_IMPACT}}
 
 ---
 
-## 10. Hypothèses et Dépendances
+## 9. Risks
 
-### 10.1 Hypothèses
-- {{HYPOTHESE_1}}
-- {{HYPOTHESE_2}}
-
-### 10.2 Dépendances
-| Dépendance | Type | Status | Date prévue |
-|------------|------|--------|-------------|
-| {{DEP}} | Technique/Métier | En cours/Résolu | {{DATE}} |
+| ID | Risk | Probability | Impact | Mitigation | Owner |
+|----|------|-------------|--------|------------|-------|
+| RISK-001 | {{RISK}} | H/M/L | H/M/L | {{MITIGATION}} | {{OWNER}} |
 
 ---
 
-## 11. Critères de Succès
+## 10. Assumptions and Dependencies
 
-| Critère | Métrique | Valeur cible | Méthode de mesure |
-|---------|----------|--------------|-------------------|
-| {{CRITERE}} | {{METRIQUE}} | {{CIBLE}} | {{METHODE}} |
+### 10.1 Assumptions
+- {{ASSUMPTION_1}}
+- {{ASSUMPTION_2}}
 
----
-
-## 12. Prochaines Étapes
-
-1. [ ] Validation BRD par {{STAKEHOLDER}}
-2. [ ] Exécuter `/business-analyse:specify {{FEAT-XXX}}`
+### 10.2 Dependencies
+| Dependency | Type | Status | Expected date |
+|------------|------|--------|---------------|
+| {{DEP}} | Technical/Business | In progress/Resolved | {{DATE}} |
 
 ---
 
-## Historique des modifications
+## 11. Success Criteria
 
-| Version | Date | Auteur | Modifications |
+| Criterion | Metric | Target value | Measurement method |
+|-----------|--------|--------------|-------------------|
+| {{CRITERION}} | {{METRIC}} | {{TARGET}} | {{METHOD}} |
+
+---
+
+## 12. Next Steps
+
+1. [ ] BRD validation by {{STAKEHOLDER}}
+2. [ ] Execute `/business-analyse:specify {{FEAT-XXX}}`
+
+---
+
+## Modification History
+
+| Version | Date | Author | Modifications |
 |---------|------|--------|---------------|
-| 1.0 | {{DATE}} | Claude BA | Création initiale |
+| 1.0 | {{DATE}} | Claude BA | Initial creation |
 
 ---
 
-*Généré par Business Analyse - {{DATE}}*
+*Generated by Business Analyse - {{DATE}}*
 ```
 
-### Résumé
+### Summary
 
 ```
-ANALYSE MÉTIER COMPLÈTE
+BUSINESS ANALYSIS COMPLETE
 ═══════════════════════════════════════════════════════════
 Feature:     {{FEAT-XXX}} - {{NAME}}
 ═══════════════════════════════════════════════════════════
-Modélisation:
-  • Processus:    {{X}} diagrammes
-  • Entités:      {{Y}} modélisées
-  • Règles:       {{Z}} documentées
-  • Exigences:    {{W}} identifiées
+Modeling:
+  • Processes:    {{X}} diagrams
+  • Entities:     {{Y}} modeled
+  • Rules:        {{Z}} documented
+  • Requirements: {{W}} identified
 
-Glossaire:    +{{N}} termes ajoutés
+Glossary:    +{{N}} terms added
 ═══════════════════════════════════════════════════════════
 Document: .../{{FEAT-XXX}}/2-business-requirements.md
 ═══════════════════════════════════════════════════════════
-Prochain: /business-analyse:specify {{FEAT-XXX}}
+Next: /business-analyse:specify {{FEAT-XXX}}
 ```
 
-## Règles
+## Rules
 
-1. **ULTRATHINK obligatoire** - Modélisation réfléchie et complète
-2. **Diagrammes Mermaid** - Processus et données visualisés
-3. **Règles exhaustives** - Toutes les règles métier documentées
-4. **Traçabilité** - Chaque exigence a un ID et une source
-5. **Glossaire à jour** - Nouveaux termes ajoutés
-6. **Aucun code** - Modèle conceptuel, pas technique
+1. **ULTRATHINK mandatory** - Thoughtful and complete modeling
+2. **Mermaid diagrams** - Visualized processes and data
+3. **Exhaustive rules** - All business rules documented
+4. **Traceability** - Each requirement has an ID and source
+5. **Updated glossary** - New terms added
+6. **No code** - Conceptual model, not technical

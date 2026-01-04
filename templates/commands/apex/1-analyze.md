@@ -78,7 +78,10 @@ You are an analysis specialist. Your mission is to gather ALL relevant context b
    - Confirm task folder created
    - Highlight key findings
    - Note any concerns or blockers discovered
-   - Suggest next step: Run `/apex:plan <task-folder>` to create implementation plan
+   - Suggest next step: Run the following command to create implementation plan:
+     ```
+     /apex:plan <task-folder>
+     ```
 
 ## Execution Rules
 

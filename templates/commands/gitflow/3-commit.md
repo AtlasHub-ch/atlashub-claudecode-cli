@@ -7,97 +7,97 @@ args: [message]
 
 # Phase 3: COMMIT - Migration-aware commits
 
-Tu es expert GitFlow et EF Core. Gere les commits avec validation des migrations .NET.
+You are an expert in GitFlow and EF Core. Manage commits with validation of .NET migrations.
 
-> **INSTRUCTION CLAUDE:** Les blocs `AskUserQuestion({...})` ci-dessous sont des instructions pour utiliser le tool `AskUserQuestion` de maniere **interactive**. Tu DOIS executer le tool avec ces parametres pour obtenir la reponse de l'utilisateur AVANT de continuer. NE PAS afficher ce code - ATTENDRE la reponse.
+> **CLAUDE INSTRUCTION:** The `AskUserQuestion({...})` blocks below are instructions for using the `AskUserQuestion` tool **interactively**. You MUST execute the tool with these parameters to get the user's response BEFORE continuing. DO NOT display this code - WAIT for the response.
 
-**Argument:** `$ARGUMENTS` = message commit (optionnel, genere si absent)
+**Argument:** `$ARGUMENTS` = commit message (optional, generated if absent)
 
 ---
 
 ## Workflow
 
-### 1. Analyser les fichiers
+### 1. Analyze files
 
-- Fichiers stages
-- Fichiers modifies non stages
-- Fichiers non suivis
-- Detecter les fichiers migration dans chaque categorie
+- Staged files
+- Modified files not staged
+- Untracked files
+- Detect migration files in each category
 
-### 2. Valider les migrations
+### 2. Validate migrations
 
-Une migration EF Core valide = **3 fichiers** :
-- `{Timestamp}_{Name}.cs` - Migration principale
-- `{Timestamp}_{Name}.Designer.cs` - Metadonnees
-- `{Context}ModelSnapshot.cs` - Etat du modele
+A valid EF Core migration = **3 files** :
+- `{Timestamp}_{Name}.cs` - Main migration
+- `{Timestamp}_{Name}.Designer.cs` - Metadata
+- `{Context}ModelSnapshot.cs` - Model state
 
-**Verifications:**
-- Les 3 fichiers sont presents
-- Le build compile (`dotnet build`)
-- Pas de conflit ModelSnapshot avec develop
+**Checks:**
+- All 3 files are present
+- Build compiles (`dotnet build`)
+- No ModelSnapshot conflicts with develop
 
-### 3. ⚠️ SAFETY CHECK - Operations destructives
+### 3. ⚠️ SAFETY CHECK - Destructive operations
 
-**BLOQUANT** - Scanner les migrations pour operations dangereuses :
+**BLOCKING** - Scan migrations for dangerous operations :
 
 ```bash
-# Patterns a detecter dans les fichiers .cs de migration
+# Patterns to detect in migration .cs files
 grep -n "DropTable\|DropColumn\|DropIndex\|DropForeignKey\|DeleteData" {migration}.cs
 grep -n "migrationBuilder.Sql" {migration}.cs | grep -i "DELETE\|DROP\|TRUNCATE"
 ```
 
-**Si detecte :**
+**If detected :**
 
 ```
 ╔══════════════════════════════════════════════════════════╗
-║  ⛔ OPERATIONS DESTRUCTIVES DETECTEES                     ║
+║  ⛔ DESTRUCTIVE OPERATIONS DETECTED                       ║
 ╠══════════════════════════════════════════════════════════╣
-║  Fichier: {migration}.cs                                 ║
-║  Ligne {X}: DropTable("Users")                           ║
-║  Ligne {Y}: DropColumn("Email", "Customers")             ║
+║  File: {migration}.cs                                    ║
+║  Line {X}: DropTable("Users")                            ║
+║  Line {Y}: DropColumn("Email", "Customers")              ║
 ╠══════════════════════════════════════════════════════════╣
-║  RISQUES:                                                ║
-║  - Perte de donnees irreversible                         ║
-║  - Verifiez que vous avez un BACKUP                      ║
+║  RISKS:                                                  ║
+║  - Irreversible data loss                                ║
+║  - Verify that you have a BACKUP                         ║
 ╚══════════════════════════════════════════════════════════╝
 ```
 
 **Actions:**
-1. Afficher alerte detaillee (fichier, ligne, operation)
-2. Demander confirmation explicite : "Confirmez-vous? (oui/non)"
-3. Si "non" → Annuler commit
-4. Si "oui" → Logger dans `.claude/gitflow/logs/dangerous-migrations.json`
-5. Continuer le commit
+1. Display detailed alert (file, line, operation)
+2. Request explicit confirmation: "Do you confirm? (yes/no)"
+3. If "no" → Cancel commit
+4. If "yes" → Log in [.claude/gitflow/logs/](.claude/gitflow/logs/)`dangerous-migrations.json`
+5. Continue commit
 
-**Patterns dangereux:**
+**Dangerous patterns:**
 
-| Pattern | Risque | Niveau |
-|---------|--------|--------|
-| `DropTable` | Suppression table entiere | CRITICAL |
-| `DropColumn` | Perte donnees colonne | CRITICAL |
-| `DeleteData` | Suppression lignes | CRITICAL |
-| `DropForeignKey` | Casse integrite | HIGH |
-| `DropIndex` | Impact performance | MEDIUM |
-| `Sql("DELETE...")` | SQL brut destructif | CRITICAL |
-| `Sql("DROP...")` | SQL brut destructif | CRITICAL |
-| `Sql("TRUNCATE...")` | Vidage table | CRITICAL |
+| Pattern | Risk | Level |
+|---------|------|-------|
+| `DropTable` | Delete entire table | CRITICAL |
+| `DropColumn` | Data loss in column | CRITICAL |
+| `DeleteData` | Delete rows | CRITICAL |
+| `DropForeignKey` | Break integrity | HIGH |
+| `DropIndex` | Performance impact | MEDIUM |
+| `Sql("DELETE...")` | Raw destructive SQL | CRITICAL |
+| `Sql("DROP...")` | Raw destructive SQL | CRITICAL |
+| `Sql("TRUNCATE...")` | Empty table | CRITICAL |
 
-### 4. Classifier le commit
+### 4. Classify commit
 
-| Fichiers | Type | Prefix |
-|----------|------|--------|
-| Migrations seules | migration | `db(migrations):` |
-| Migrations + code | mixed | `feat:` ou `fix:` |
-| Code sans migration | code | Selon type branche |
+| Files | Type | Prefix |
+|-------|------|--------|
+| Migrations only | migration | `db(migrations):` |
+| Migrations + code | mixed | `feat:` or `fix:` |
+| Code without migration | code | Based on branch type |
 | Config/docs | chore | `chore:` |
 
-### 5. Generer message (si absent)
+### 5. Generate message (if absent)
 
 **Migration:**
 ```
 db(migrations): {action} {description}
 
-Migration: {NomMigration}
+Migration: {MigrationName}
 Tables: {CREATE|ALTER|DROP} {tables}
 Context: {DbContext}
 ```
@@ -106,86 +106,89 @@ Context: {DbContext}
 ```
 feat({scope}): {description}
 
-- {changements}
-Migrations: {liste}
+- {changes}
+Migrations: {list}
 ```
 
-### 6. Executer commit
+### 6. Execute commit
 
-- Ajouter fichiers migration manquants si necessaire
-- Verifier une derniere fois
-- Commit avec message
+- Add missing migration files if necessary
+- Verify one last time
+- Commit with message
 
 ### 7. Post-commit
 
-- Verifier qu'il ne reste pas de fichiers migration non commites
-- Afficher resume
+- Verify no migration files are left uncommitted
+- Display summary
 
-### 8. Push automatique (selon config)
+### 8. Automatic push (based on config)
 
-Lire la config : `.claude/gitflow/config.json` → `workflow.push.afterCommit`
+Read config: `.claude/gitflow/config.json` → `workflow.push.afterCommit`
 
-**Detection worktree:**
+**Worktree detection:**
 ```bash
-# Si git-common-dir != .git → c'est un worktree
+# If git-common-dir != .git → it's a worktree
 COMMON_DIR=$(git rev-parse --git-common-dir 2>/dev/null)
 if [[ "$COMMON_DIR" != ".git" && "$COMMON_DIR" != "." ]]; then
   IS_WORKTREE=true
 fi
 ```
 
-**Logique de push:**
+**Push logic:**
 
 | Config `afterCommit` | Worktree | Action |
 |---------------------|----------|--------|
-| `worktree` | Oui | Push automatique |
-| `worktree` | Non | Demander à l'utilisateur |
-| `always` | - | Push automatique |
-| `ask` | - | Demander à l'utilisateur |
-| `never` | - | Ne pas push |
+| `worktree` | Yes | Automatic push |
+| `worktree` | No | Ask user |
+| `always` | - | Automatic push |
+| `ask` | - | Ask user |
+| `never` | - | Do not push |
 
-**Si demande utilisateur:**
+**If user is asked:**
 ```
 AskUserQuestion({
   questions: [{
-    question: "Voulez-vous pusher ce commit ?",
+    question: "Do you want to push this commit?",
     header: "Push",
     options: [
-      { label: "Oui, push maintenant", description: "git push origin <branch>" },
-      { label: "Non, plus tard", description: "Commit local uniquement" }
+      { label: "Yes, push now", description: "git push origin <branch>" },
+      { label: "No, later", description: "Local commit only" }
     ],
     multiSelect: false
   }]
 })
 ```
 
-**Execution push:**
+**Execute push:**
 ```bash
 git push origin $(git branch --show-current)
 ```
 
-**Gestion erreurs push:**
-- Si remote non configure → Skip avec message
-- Si rebase necessaire → Avertir et proposer `/gitflow:4-plan rebase`
-- Si branche protegee → Avertir (PR requise)
+**Push error handling:**
+- If remote not configured → Skip with message
+- If rebase necessary → Warn and suggest:
+  ```
+  /gitflow:4-plan rebase
+  ```
+- If branch protected → Warn (PR required)
 
 ---
 
-## Erreurs courantes
+## Common errors
 
-| Erreur | Solution |
-|--------|----------|
-| ModelSnapshot manquant | Ajouter le fichier |
-| Designer manquant | Ajouter le fichier |
-| Build echoue | `dotnet ef migrations remove` + corriger |
-| Conflit detecte | Rebase d'abord |
-| **Operation destructive** | Confirmer ou modifier la migration |
+| Error | Solution |
+|-------|----------|
+| ModelSnapshot missing | Add the file |
+| Designer missing | Add the file |
+| Build fails | `dotnet ef migrations remove` + fix |
+| Conflict detected | Rebase first |
+| **Destructive operation** | Confirm or modify migration |
 
 ## Modes
 
-| Commande | Action |
-|----------|--------|
-| `/gitflow:3-commit {msg}` | Commit avec message |
-| `/gitflow:3-commit` | Genere message auto |
-| `/gitflow:3-commit --validate` | Valide sans commit |
+| Command | Action |
+|---------|--------|
+| `/gitflow:3-commit {msg}` | Commit with message |
+| `/gitflow:3-commit` | Auto generate message |
+| `/gitflow:3-commit --validate` | Validate without commit |
 | `/gitflow:3-commit --dry-run` | Simulation |

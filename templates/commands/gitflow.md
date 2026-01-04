@@ -4,9 +4,9 @@ description: GitFlow workflow with versioning and EF Core migration management
 
 # GitFlow Workflow
 
-Tu es expert GitFlow et EF Core. Gere le workflow de branches et migrations pour projets .NET.
+You are a GitFlow and EF Core expert. Manage branch workflow and migrations for .NET projects.
 
-**ULTRA THINK avant chaque phase.** Affiche le heading: `# 1. INIT`, `# 2. STATUS`, etc.
+**ULTRA THINK before each phase.** Display the heading: `# 1. INIT`, `# 2. STATUS`, etc.
 
 ---
 
@@ -37,66 +37,66 @@ hotfix/* ──3.COMMIT──► 7.PR(main) ──► 9.MERGE ──► 11.FINIS
      │                                               │
      └───────────────── merge back ◄─────────────────┘
 
-                    6. ABORT ◄── (rollback si probleme)
+                    6. ABORT ◄── (rollback if problem)
 
-                   12. CLEANUP ◄── (audit worktrees depuis main/develop)
+                   12. CLEANUP ◄── (audit worktrees from main/develop)
 ```
 
 ## Phases
 
-| # | Command | Quand | Action |
-|---|---------|-------|--------|
-| 1 | `/gitflow:1-init` | Premier setup | Config + Branches + Versioning |
-| 2 | `/gitflow:2-status` | Avant action | Etat complet |
-| 3 | `/gitflow:3-commit` | Apres modifs | Validation EF Core |
-| 4 | `/gitflow:4-plan` | Avant merge | Plan detaille |
-| 5 | `/gitflow:5-exec` | Executer | Merge + Tag + Version |
-| 6 | `/gitflow:6-abort` | Probleme | Rollback + cleanup worktree |
-| 7 | `/gitflow:7-pull-request` | Feature prete | Creer PR + checks |
+| # | Command | When | Action |
+|---|---------|------|--------|
+| 1 | `/gitflow:1-init` | Initial setup | Config + Branches + Versioning |
+| 2 | `/gitflow:2-status` | Before action | Complete state |
+| 3 | `/gitflow:3-commit` | After changes | EF Core validation |
+| 4 | `/gitflow:4-plan` | Before merge | Detailed plan |
+| 5 | `/gitflow:5-exec` | Execute | Merge + Tag + Version |
+| 6 | `/gitflow:6-abort` | Problem | Rollback + cleanup worktree |
+| 7 | `/gitflow:7-pull-request` | Feature ready | Create PR + checks |
 | 8 | `/gitflow:8-review` | Review PR | Checklist + feedback |
-| 9 | `/gitflow:9-merge` | PR approuvee | Merge + post-actions |
-| 10 | `/gitflow:10-start` | Nouvelle branche | Creer feature/release/hotfix |
-| 11 | `/gitflow:11-finish` | Apres merge | Tag + merge back + cleanup worktree |
-| 12 | `/gitflow:12-cleanup` | Maintenance | Audit + nettoyage worktrees |
+| 9 | `/gitflow:9-merge` | PR approved | Merge + post-actions |
+| 10 | `/gitflow:10-start` | New branch | Create feature/release/hotfix |
+| 11 | `/gitflow:11-finish` | After merge | Tag + merge back + cleanup worktree |
+| 12 | `/gitflow:12-cleanup` | Maintenance | Audit + cleanup worktrees |
 
-## Workflow typique
+## Typical Workflow
 
 ```bash
-# 1. Demarrer une feature
-/gitflow:10-start feature ma-feature
+# 1. Start a feature
+/gitflow:10-start feature my-feature
 
-# 2. Developper + commiter
+# 2. Develop + commit
 /gitflow:3-commit
 
-# 3. Creer PR vers develop
+# 3. Create PR to develop
 /gitflow:7-pull-request
 
-# 4. Review et merge
+# 4. Review and merge
 /gitflow:8-review {PR}
 /gitflow:9-merge {PR}
 
-# 5. Pour release: finaliser (tag + merge back + cleanup auto)
+# 5. For release: finalize (tag + merge back + auto cleanup)
 /gitflow:11-finish
 
-# 6. Maintenance: audit et nettoyage (depuis main ou develop)
+# 6. Maintenance: audit and cleanup (from main or develop)
 /gitflow:12-cleanup
 ```
 
-## Cleanup worktrees
+## Worktree Cleanup
 
-Le cleanup des worktrees est gere automatiquement et manuellement:
+Worktree cleanup is handled automatically and manually:
 
-| Mode | Declencheur | Scope |
-|------|-------------|-------|
-| **Automatique** | `/gitflow:11-finish` | Worktree de la branche finalisee |
-| **Automatique** | `/gitflow:6-abort --branch` | Worktree de la branche abandonnee |
-| **Manuel** | `/gitflow:12-cleanup` | Audit complet (orphelins + stale) |
+| Mode | Trigger | Scope |
+|------|---------|-------|
+| **Automatic** | `/gitflow:11-finish` | Worktree of finalized branch |
+| **Automatic** | `/gitflow:6-abort --branch` | Worktree of abandoned branch |
+| **Manual** | `/gitflow:12-cleanup` | Complete audit (orphaned + stale) |
 
-**Note:** `/gitflow:12-cleanup` doit etre execute depuis `main` ou `develop` uniquement.
+**Note:** `/gitflow:12-cleanup` must be executed from `main` or `develop` only.
 
 ## Versioning (.NET)
 
-**Sources (priorite):** csproj → Directory.Build.props → AssemblyInfo → VERSION → git-tag
+**Sources (priority):** csproj → Directory.Build.props → AssemblyInfo → VERSION → git-tag
 
 **Auto-increment:**
 - feature → minor (1.2.0 → 1.3.0)
@@ -105,11 +105,11 @@ Le cleanup des worktrees est gere automatiquement et manuellement:
 
 ## EF Core Rules
 
-1. **1 migration/feature** - Recreer, pas accumuler
-2. **3 fichiers requis** - Migration + Designer + ModelSnapshot
-3. **Sync avant merge** - Rebase sur develop
-4. **Conflit ModelSnapshot** - Accept theirs + Recreate
-5. **Release** - Script SQL idempotent
+1. **1 migration/feature** - Recreate, don't accumulate
+2. **3 required files** - Migration + Designer + ModelSnapshot
+3. **Sync before merge** - Rebase on develop
+4. **ModelSnapshot conflict** - Accept theirs + Recreate
+5. **Release** - Idempotent SQL script
 
 ## Priority
 

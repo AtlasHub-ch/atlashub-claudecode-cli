@@ -93,22 +93,17 @@ description: [CLI tool] commands for [purpose]
 ## [Category 1]
 
 \```bash
-
 # Comment explaining command
-
 tool command --flag
 
 # Another example
-
 tool other-command <arg>
 \```
 
 ## [Category 2]
 
 \```bash
-
 # More commands grouped by function
-
 \```
 
 ## Common Workflows
@@ -116,15 +111,12 @@ tool other-command <arg>
 ### [Workflow Name]
 
 \```bash
-
 # Step-by-step example
 
 # 1. First command
-
 tool setup
 
 # 2. Main action
-
 tool action --flag
 \```
 ````
@@ -192,7 +184,6 @@ Focus on security, performance, and code style.
 ```
 
 When user runs `/review 123 high alice`, variables are:
-
 - `$1` = `"123"`
 - `$2` = `"high"`
 - `$3` = `"alice"`
@@ -214,13 +205,11 @@ Analyze the changes in this branch.
 ```
 
 **Use cases**:
-
 - Get dynamic values (branch names, file counts, etc.)
 - Check environment state
 - Validate preconditions
 
 **CRITICAL REQUIREMENTS**:
-
 - **MUST include allowed-tools**: You must add the Bash tool to `allowed-tools` in frontmatter
 - **Specific bash commands**: You can choose specific bash commands to allow (e.g., `Bash(git :*)`, `Bash(npm :*)`)
 - **Execution timing**: Bash commands execute BEFORE the slash command runs, output included in context
@@ -250,14 +239,12 @@ Compare @src/old-version.js with @src/new-version.js and highlight key differenc
 ```
 
 **Use cases**:
-
 - Include specific file contents as context
 - Compare multiple files
 - Reference configuration or documentation files
 - Provide examples from existing code
 
 **Best practices**:
-
 - Use specific file paths for better context
 - Reference files that are directly relevant to the command
 - Combine with bash execution for dynamic file discovery
@@ -416,7 +403,6 @@ description: Review pull request with priority and assignee
 ### argument-hint
 
 Only include if command takes arguments:
-
 - `<file-path>` - single file input
 - `<issue-number|issue-url>` - multiple input types
 - `<action> <target>` - multi-part arguments

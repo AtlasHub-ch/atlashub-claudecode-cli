@@ -7,14 +7,17 @@ You are a strategic planning specialist. Transform analysis findings into execut
 
 **You need to ULTRA THINK about the complete implementation strategy.**
 
-> **INSTRUCTION CLAUDE:** Les blocs `AskUserQuestion({...})` sont des instructions pour utiliser le tool `AskUserQuestion` de maniere **interactive**. Tu DOIS executer le tool avec ces parametres pour obtenir la reponse de l'utilisateur AVANT de continuer.
+> **INSTRUCTION CLAUDE:** The `AskUserQuestion({...})` blocks are instructions to use the `AskUserQuestion` tool **interactively**. You MUST execute the tool with these parameters to get the user's response BEFORE continuing.
 
 ## Workflow
 
 1. **VALIDATE INPUT**: Verify task folder exists
    - Check that `.claude/tasks/<task-folder>/` exists
    - Verify `analyze.md` file is present
-   - **CRITICAL**: If missing, instruct user to run `/apex:analyze` first
+   - **CRITICAL**: If missing, instruct user to run:
+     ```
+     /apex:analyze
+     ```
 
 2. **READ ANALYSIS**: Load all context
    - Read `.claude/tasks/<task-folder>/analyze.md` completely
@@ -96,7 +99,15 @@ You are a strategic planning specialist. Transform analysis findings into execut
    - Confirm plan created
    - Highlight key implementation steps
    - Note any risks or complexity
-   - Suggest next step: Run `/apex:tasks <task-folder>` to divide plan into tasks or `/apex:execute <task-folder>` to execute plan directly
+   - Suggest next step: Run one of these commands:
+     - To divide plan into tasks:
+       ```
+       /apex:tasks <task-folder>
+       ```
+     - To execute plan directly:
+       ```
+       /apex:execute <task-folder>
+       ```
 
 ## Plan Quality Guidelines
 

@@ -12,7 +12,7 @@
         <header class="global-header">
             <div class="logo">CT</div>
             <span class="site-title">Claude Tools</span>
-            <span class="version-badge">v1.7.3</span>
+            <span class="version-badge">v1.7.5</span>
             <div class="header-divider"></div>
             <span class="page-title">EF Core Migrations</span>
             <nav class="breadcrumb">
@@ -28,8 +28,8 @@
             </nav>
             <!-- Language Select -->
             <select class="lang-select" id="lang-select" onchange="setLanguage(this.value); localStorage.setItem('doc-language', this.value);">
-                <option value="fr">🇫🇷 FR</option>
-                <option value="en">🇬🇧 EN</option>
+                <option value="fr">&#127467;&#127479; FR</option>
+                <option value="en">&#127468;&#127463; EN</option>
             </select>
             <!-- Search -->
             <div class="header-search">
@@ -81,31 +81,33 @@
                             <button class="toc-toggle">&#9654;</button>
                         </a>
                         <nav class="sidebar-toc">
+                            <a href="#quick-index" class="sidebar-toc-link">
+                                <span data-lang="fr">Index rapide</span>
+                                <span data-lang="en">Quick Index</span>
+                            </a>
                             <a href="#introduction" class="sidebar-toc-link">Introduction</a>
-                            <a href="#structure" class="sidebar-toc-link">
-                                <span data-lang="fr">Structure</span>
-                                <span data-lang="en">Structure</span>
+                            <a href="#understanding" class="sidebar-toc-link">
+                                <span data-lang="fr">Comprendre EF Core</span>
+                                <span data-lang="en">Understanding EF Core</span>
                             </a>
-                            <a href="#conflicts" class="sidebar-toc-link">
-                                <span data-lang="fr">Conflits</span>
-                                <span data-lang="en">Conflicts</span>
+                            <a href="#one-migration-rule" class="sidebar-toc-link">
+                                <span data-lang="fr">1 Migration par Feature</span>
+                                <span data-lang="en">1 Migration per Feature</span>
                             </a>
-                            <a href="#cross-branch" class="sidebar-toc-link">
-                                <span data-lang="fr">Cross-Branch (v1.2)</span>
-                                <span data-lang="en">Cross-Branch (v1.2)</span>
+                            <a href="#commands" class="sidebar-toc-link">
+                                <span data-lang="fr">Commandes (9)</span>
+                                <span data-lang="en">Commands (9)</span>
                             </a>
+                            <a href="#cross-branch" class="sidebar-toc-link">Cross-Branch (v1.2)</a>
                             <a href="#best-practices" class="sidebar-toc-link">
                                 <span data-lang="fr">Bonnes pratiques</span>
                                 <span data-lang="en">Best Practices</span>
                             </a>
                             <a href="#integration" class="sidebar-toc-link">
-                                <span data-lang="fr">Integration</span>
-                                <span data-lang="en">Integration</span>
+                                <span data-lang="fr">Integration GitFlow</span>
+                                <span data-lang="en">GitFlow Integration</span>
                             </a>
-                            <a href="#commands" class="sidebar-toc-link">
-                                <span data-lang="fr">Commandes</span>
-                                <span data-lang="en">Commands</span>
-                            </a>
+                            <a href="#configuration" class="sidebar-toc-link">Configuration</a>
                         </nav>
                     </div>
                     <a href="apex.html" class="nav-item">
@@ -148,7 +150,143 @@
             <!-- Main Content -->
             <main class="main-content">
                 <div class="content-full">
-                    <!-- Introduction -->
+
+                    <!-- ============================================================ -->
+                    <!-- SECTION: INDEX RAPIDE -->
+                    <!-- ============================================================ -->
+                    <section id="quick-index">
+                        <h2>
+                            <span data-lang="fr">Index rapide des commandes</span>
+                            <span data-lang="en">Quick Command Index</span>
+                        </h2>
+
+                        <p data-lang="fr">
+                            Acces direct a toutes les commandes EF Core. Cliquez sur une commande pour voir sa documentation complete.
+                        </p>
+                        <p data-lang="en">
+                            Direct access to all EF Core commands. Click a command to see its full documentation.
+                        </p>
+
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <span data-lang="fr">Commande</span>
+                                            <span data-lang="en">Command</span>
+                                        </th>
+                                        <th>Description</th>
+                                        <th>Agent</th>
+                                        <th>
+                                            <span data-lang="fr">Risque</span>
+                                            <span data-lang="en">Risk</span>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><a href="#cmd-migration"><code>/efcore:migration</code></a></td>
+                                        <td>
+                                            <span data-lang="fr">Creer/recreer la migration unique pour la branche</span>
+                                            <span data-lang="en">Create/recreate the unique migration for the branch</span>
+                                        </td>
+                                        <td><code>efcore-migration</code></td>
+                                        <td><span class="tag tag-workflow">MEDIUM</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="#cmd-db-status"><code>/efcore:db-status</code></a></td>
+                                        <td>
+                                            <span data-lang="fr">Afficher l'etat des migrations et de la DB</span>
+                                            <span data-lang="en">Show migrations and database status</span>
+                                        </td>
+                                        <td><code>efcore-db-status</code></td>
+                                        <td><span class="tag tag-command">READ</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="#cmd-db-deploy"><code>/efcore:db-deploy</code></a></td>
+                                        <td>
+                                            <span data-lang="fr">Appliquer les migrations en attente</span>
+                                            <span data-lang="en">Apply pending migrations</span>
+                                        </td>
+                                        <td><code>efcore-db-deploy</code></td>
+                                        <td><span class="tag tag-workflow">MEDIUM</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="#cmd-db-seed"><code>/efcore:db-seed</code></a></td>
+                                        <td>
+                                            <span data-lang="fr">Peupler la base avec des donnees de test</span>
+                                            <span data-lang="en">Populate database with test data</span>
+                                        </td>
+                                        <td><code>efcore-db-seed</code></td>
+                                        <td><span class="tag tag-workflow">MEDIUM</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="#cmd-db-reset"><code>/efcore:db-reset</code></a></td>
+                                        <td>
+                                            <span data-lang="fr">Supprimer et recreer la base (DESTRUCTIF)</span>
+                                            <span data-lang="en">Drop and recreate database (DESTRUCTIVE)</span>
+                                        </td>
+                                        <td><code>efcore-db-reset</code></td>
+                                        <td><span class="tag tag-danger">HIGH</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="#cmd-scan"><code>/efcore:scan</code></a></td>
+                                        <td>
+                                            <span data-lang="fr">Scanner les migrations sur toutes les branches</span>
+                                            <span data-lang="en">Scan migrations across all branches</span>
+                                        </td>
+                                        <td><code>efcore-scan</code></td>
+                                        <td><span class="tag tag-command">READ</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="#cmd-conflicts"><code>/efcore:conflicts</code></a></td>
+                                        <td>
+                                            <span data-lang="fr">Analyser les conflits avant merge (BLOQUANT)</span>
+                                            <span data-lang="en">Analyze conflicts before merge (BLOCKING)</span>
+                                        </td>
+                                        <td><code>efcore-conflicts</code></td>
+                                        <td><span class="tag tag-command">READ</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="#cmd-rebase-snapshot"><code>/efcore:rebase-snapshot</code></a></td>
+                                        <td>
+                                            <span data-lang="fr">Rebaser ModelSnapshot sur develop</span>
+                                            <span data-lang="en">Rebase ModelSnapshot on develop</span>
+                                        </td>
+                                        <td><code>efcore-rebase-snapshot</code></td>
+                                        <td><span class="tag tag-warning">MEDIUM</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="#cmd-squash"><code>/efcore:squash</code></a></td>
+                                        <td>
+                                            <span data-lang="fr">Fusionner plusieurs migrations en une seule</span>
+                                            <span data-lang="en">Merge multiple migrations into one</span>
+                                        </td>
+                                        <td><code>efcore-squash</code></td>
+                                        <td><span class="tag tag-danger">HIGH</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="alert alert-info">
+                            <span class="alert-icon">&#128161;</span>
+                            <div class="alert-content">
+                                <h5 data-lang="fr">Workflow typique</h5>
+                                <h5 data-lang="en">Typical Workflow</h5>
+                                <p data-lang="fr">
+                                    <code>/efcore:db-status</code> → <code>/efcore:migration</code> → <code>/efcore:db-deploy</code> → <code>/gitflow:3-commit</code>
+                                </p>
+                                <p data-lang="en">
+                                    <code>/efcore:db-status</code> → <code>/efcore:migration</code> → <code>/efcore:db-deploy</code> → <code>/gitflow:3-commit</code>
+                                </p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- ============================================================ -->
+                    <!-- SECTION: INTRODUCTION -->
+                    <!-- ============================================================ -->
                     <section id="introduction">
                         <h2>Introduction</h2>
                         <p data-lang="fr">
@@ -171,14 +309,81 @@
                                 </p>
                             </div>
                         </div>
+
+                        <h3 data-lang="fr">Fonctionnalites principales</h3>
+                        <h3 data-lang="en">Key Features</h3>
+
+                        <div class="card-grid">
+                            <div class="card">
+                                <div class="card-header">
+                                    <div class="card-icon" style="background: var(--primary);">&#128452;</div>
+                                    <div>
+                                        <div class="card-title" data-lang="fr">1 Migration par Feature</div>
+                                        <div class="card-title" data-lang="en">1 Migration per Feature</div>
+                                        <div class="card-subtitle" data-lang="fr">Regle d'or</div>
+                                        <div class="card-subtitle" data-lang="en">Golden rule</div>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <p data-lang="fr">Chaque branche feature/hotfix a exactement une migration. Si des changements sont necessaires, elle est supprimee et recreee.</p>
+                                    <p data-lang="en">Each feature/hotfix branch has exactly one migration. If changes are needed, it's deleted and recreated.</p>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-header">
+                                    <div class="card-icon" style="background: var(--success);">&#128256;</div>
+                                    <div>
+                                        <div class="card-title">Cross-Branch</div>
+                                        <div class="card-subtitle" data-lang="fr">Detection de conflits</div>
+                                        <div class="card-subtitle" data-lang="en">Conflict detection</div>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <p data-lang="fr">Analyse des ModelSnapshots sur toutes les branches actives pour prevenir les conflits avant le merge.</p>
+                                    <p data-lang="en">Analyze ModelSnapshots across all active branches to prevent conflicts before merge.</p>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-header">
+                                    <div class="card-icon" style="background: var(--warning);">&#128274;</div>
+                                    <div>
+                                        <div class="card-title" data-lang="fr">Securite</div>
+                                        <div class="card-title" data-lang="en">Safety</div>
+                                        <div class="card-subtitle" data-lang="fr">Operations protegees</div>
+                                        <div class="card-subtitle" data-lang="en">Protected operations</div>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <p data-lang="fr">Backup automatique avant operations destructives. Detection des DropTable, DropColumn, DeleteData.</p>
+                                    <p data-lang="en">Automatic backup before destructive operations. Detection of DropTable, DropColumn, DeleteData.</p>
+                                </div>
+                            </div>
+                        </div>
                     </section>
 
-                    <!-- Migration Structure -->
-                    <section id="structure">
+                    <!-- ============================================================ -->
+                    <!-- SECTION: COMPRENDRE EF CORE -->
+                    <!-- ============================================================ -->
+                    <section id="understanding">
                         <h2>
-                            <span data-lang="fr">Structure des migrations</span>
-                            <span data-lang="en">Migration Structure</span>
+                            <span data-lang="fr">Comprendre EF Core et les Migrations</span>
+                            <span data-lang="en">Understanding EF Core and Migrations</span>
                         </h2>
+
+                        <h3 data-lang="fr">Qu'est-ce qu'une Migration ?</h3>
+                        <h3 data-lang="en">What is a Migration?</h3>
+
+                        <p data-lang="fr">
+                            Une migration EF Core represente un changement incrementiel du schema de votre base de donnees. Elle capture les differences entre l'etat actuel de vos entites C# et l'etat precedent.
+                        </p>
+                        <p data-lang="en">
+                            An EF Core migration represents an incremental change to your database schema. It captures the differences between the current state of your C# entities and the previous state.
+                        </p>
+
+                        <h3 data-lang="fr">Les 3 fichiers d'une Migration</h3>
+                        <h3 data-lang="en">The 3 Files of a Migration</h3>
 
                         <p data-lang="fr">Une migration EF Core valide comprend <strong>3 fichiers</strong> :</p>
                         <p data-lang="en">A valid EF Core migration includes <strong>3 files</strong>:</p>
@@ -189,32 +394,48 @@
                                     <tr>
                                         <th>Fichier / File</th>
                                         <th>
-                                        <span data-lang="fr">Description</span>
-                                        <span data-lang="en">Description</span>
-                                    </th>
+                                            <span data-lang="fr">Description</span>
+                                            <span data-lang="en">Description</span>
+                                        </th>
+                                        <th>
+                                            <span data-lang="fr">Role</span>
+                                            <span data-lang="en">Role</span>
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
                                         <td><code>{Timestamp}_{Name}.cs</code></td>
                                         <td>
-                                        <span data-lang="fr">Migration principale avec Up() et Down()</span>
-                                        <span data-lang="en">Main migration with Up() and Down()</span>
-                                    </td>
+                                            <span data-lang="fr">Migration principale</span>
+                                            <span data-lang="en">Main migration</span>
+                                        </td>
+                                        <td>
+                                            <span data-lang="fr">Contient <code>Up()</code> et <code>Down()</code></span>
+                                            <span data-lang="en">Contains <code>Up()</code> and <code>Down()</code></span>
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td><code>{Timestamp}_{Name}.Designer.cs</code></td>
                                         <td>
-                                        <span data-lang="fr">Metadonnees et snapshot du modele au moment de la creation</span>
-                                        <span data-lang="en">Metadata and model snapshot at creation time</span>
-                                    </td>
+                                            <span data-lang="fr">Metadonnees</span>
+                                            <span data-lang="en">Metadata</span>
+                                        </td>
+                                        <td>
+                                            <span data-lang="fr">Snapshot du modele au moment de la creation</span>
+                                            <span data-lang="en">Model snapshot at creation time</span>
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td><code>{Context}ModelSnapshot.cs</code></td>
                                         <td>
-                                        <span data-lang="fr">Etat actuel du modele complet (source de conflits)</span>
-                                        <span data-lang="en">Current state of full model (conflict source)</span>
-                                    </td>
+                                            <span data-lang="fr">Etat actuel</span>
+                                            <span data-lang="en">Current state</span>
+                                        </td>
+                                        <td>
+                                            <span data-lang="fr">Modele complet - <strong>source de conflits!</strong></span>
+                                            <span data-lang="en">Full model - <strong>conflict source!</strong></span>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -253,9 +474,9 @@
                                     <rect x="0" y="0" width="180" height="30" rx="8" fill="rgba(0,0,0,0.2)"/>
                                     <text x="90" y="20" text-anchor="middle" fill="white" font-size="11" font-weight="600">{Name}.cs</text>
                                     <text x="15" y="52" fill="rgba(255,255,255,0.9)" font-size="10">Up()</text>
-                                    <text x="15" y="68" fill="rgba(255,255,255,0.7)" font-size="9">→ Apply changes</text>
+                                    <text x="15" y="68" fill="rgba(255,255,255,0.7)" font-size="9">&#8594; Apply changes</text>
                                     <text x="15" y="85" fill="rgba(255,255,255,0.9)" font-size="10">Down()</text>
-                                    <text x="15" y="98" fill="rgba(255,255,255,0.7)" font-size="9">→ Rollback changes</text>
+                                    <text x="15" y="98" fill="rgba(255,255,255,0.7)" font-size="9">&#8594; Rollback changes</text>
                                 </g>
 
                                 <!-- Designer.cs file -->
@@ -264,9 +485,9 @@
                                     <rect x="0" y="0" width="180" height="30" rx="8" fill="rgba(0,0,0,0.2)"/>
                                     <text x="90" y="20" text-anchor="middle" fill="white" font-size="11" font-weight="600">{Name}.Designer.cs</text>
                                     <text x="15" y="52" fill="rgba(255,255,255,0.9)" font-size="10">Metadata</text>
-                                    <text x="15" y="68" fill="rgba(255,255,255,0.7)" font-size="9">→ MigrationId</text>
-                                    <text x="15" y="82" fill="rgba(255,255,255,0.7)" font-size="9">→ ProductVersion</text>
-                                    <text x="15" y="98" fill="rgba(255,255,255,0.7)" font-size="9">→ Model snapshot at time</text>
+                                    <text x="15" y="68" fill="rgba(255,255,255,0.7)" font-size="9">&#8594; MigrationId</text>
+                                    <text x="15" y="82" fill="rgba(255,255,255,0.7)" font-size="9">&#8594; ProductVersion</text>
+                                    <text x="15" y="98" fill="rgba(255,255,255,0.7)" font-size="9">&#8594; Model snapshot at time</text>
                                 </g>
 
                                 <!-- ModelSnapshot.cs file -->
@@ -275,9 +496,9 @@
                                     <rect x="0" y="0" width="180" height="30" rx="8" fill="rgba(0,0,0,0.2)"/>
                                     <text x="90" y="20" text-anchor="middle" fill="white" font-size="11" font-weight="600">ModelSnapshot.cs</text>
                                     <text x="15" y="52" fill="rgba(255,255,255,0.9)" font-size="10">Current State</text>
-                                    <text x="15" y="68" fill="rgba(255,255,255,0.7)" font-size="9">→ Full model definition</text>
-                                    <text x="15" y="82" fill="rgba(255,255,255,0.7)" font-size="9">→ All entities & relations</text>
-                                    <text x="15" y="98" fill="rgba(255,255,255,0.7)" font-size="9">→ ⚠️ Conflict source</text>
+                                    <text x="15" y="68" fill="rgba(255,255,255,0.7)" font-size="9">&#8594; Full model definition</text>
+                                    <text x="15" y="82" fill="rgba(255,255,255,0.7)" font-size="9">&#8594; All entities &amp; relations</text>
+                                    <text x="15" y="98" fill="rgba(255,255,255,0.7)" font-size="9">&#8594; &#9888;&#65039; Conflict source</text>
                                 </g>
 
                                 <!-- Connection arrows -->
@@ -319,139 +540,2188 @@
 
                                     <!-- Warning box -->
                                     <rect x="20" y="65" width="560" height="35" rx="4" fill="rgba(249, 115, 22, 0.1)" stroke="#f97316" stroke-width="1"/>
-                                    <text x="40" y="85" fill="#f97316" font-size="10">⚠️</text>
-                                    <text x="60" y="85" fill="#f97316" font-size="10" font-weight="500">ModelSnapshot.cs is regenerated on EVERY migration — source of merge conflicts!</text>
+                                    <text x="40" y="85" fill="#f97316" font-size="10">&#9888;&#65039;</text>
+                                    <text x="60" y="85" fill="#f97316" font-size="10" font-weight="500">ModelSnapshot.cs is regenerated on EVERY migration - source of merge conflicts!</text>
                                 </g>
                             </svg>
                         </div>
 
                         <div class="code-block">
                             <pre><code>Migrations/
-├── 20240101120000_InitialCreate.cs
-├── 20240101120000_InitialCreate.Designer.cs
-├── 20240115150000_AddUserTable.cs
-├── 20240115150000_AddUserTable.Designer.cs
-└── ApplicationDbContextModelSnapshot.cs  ← Fichier critique</code></pre>
+&#9500;&#9472;&#9472; 20240101120000_InitialCreate.cs
+&#9500;&#9472;&#9472; 20240101120000_InitialCreate.Designer.cs
+&#9500;&#9472;&#9472; 20240115150000_AddUserTable.cs
+&#9500;&#9472;&#9472; 20240115150000_AddUserTable.Designer.cs
+&#9492;&#9472;&#9472; ApplicationDbContextModelSnapshot.cs  &#8592; Fichier critique</code></pre>
                         </div>
 
                         <div class="alert alert-warning">
                             <span class="alert-icon">&#9888;</span>
                             <div class="alert-content">
-                                <h5>ModelSnapshot</h5>
+                                <h5>ModelSnapshot - Le point de conflit</h5>
                                 <p data-lang="fr">
-                                    Le fichier <code>ModelSnapshot.cs</code> represente l'etat actuel du modele. C'est la source principale de conflits lors des merges entre branches.
+                                    Le fichier <code>ModelSnapshot.cs</code> represente l'etat actuel du modele. Il est regenere a <strong>chaque</strong> nouvelle migration. C'est la source principale de conflits lors des merges entre branches.
                                 </p>
                                 <p data-lang="en">
-                                    The <code>ModelSnapshot.cs</code> file represents the current model state. It's the main source of conflicts when merging branches.
+                                    The <code>ModelSnapshot.cs</code> file represents the current model state. It's regenerated on <strong>every</strong> new migration. It's the main source of conflicts when merging branches.
                                 </p>
                             </div>
                         </div>
                     </section>
 
-                    <!-- Conflict Management -->
-                    <section id="conflicts">
+                    <!-- ============================================================ -->
+                    <!-- SECTION: REGLE 1 MIGRATION PAR FEATURE -->
+                    <!-- ============================================================ -->
+                    <section id="one-migration-rule">
                         <h2>
-                            <span data-lang="fr">Gestion des conflits ModelSnapshot</span>
-                            <span data-lang="en">ModelSnapshot Conflict Management</span>
+                            <span data-lang="fr">La regle "1 Migration par Feature"</span>
+                            <span data-lang="en">The "1 Migration per Feature" Rule</span>
                         </h2>
 
-                        <p data-lang="fr">
-                            Quand deux branches modifient le modele de donnees, un conflit sur <code>ModelSnapshot.cs</code> est inevitable. Claude Tools gere automatiquement ces conflits.
-                        </p>
-                        <p data-lang="en">
-                            When two branches modify the data model, a conflict on <code>ModelSnapshot.cs</code> is inevitable. Claude Tools automatically handles these conflicts.
-                        </p>
-
-                        <h3 data-lang="fr">Strategie de resolution</h3>
-                        <h3 data-lang="en">Resolution Strategy</h3>
-
-                        <div class="code-block">
-                            <button class="copy-btn">Copy</button>
-                            <pre><code># 1. Accepter la version de develop (base)
-git checkout --theirs */Migrations/*ModelSnapshot.cs
-
-# 2. Supprimer la migration locale (temporairement)
-dotnet ef migrations remove
-
-# 3. Continuer le rebase
-git rebase --continue
-
-# 4. Re-generer la migration avec le bon ModelSnapshot
-dotnet ef migrations add NomMigration
-
-# 5. La nouvelle migration inclut tous les changements</code></pre>
-                        </div>
-
                         <div class="alert alert-info">
-                            <span class="alert-icon">&#128161;</span>
+                            <span class="alert-icon">&#127919;</span>
                             <div class="alert-content">
-                                <h5 data-lang="fr">Automatisation</h5>
-                                <h5 data-lang="en">Automation</h5>
+                                <h5 data-lang="fr">Regle d'or</h5>
+                                <h5 data-lang="en">Golden Rule</h5>
                                 <p data-lang="fr">
-                                    <code>/gitflow:5-exec</code> detecte et resout automatiquement les conflits ModelSnapshot pendant l'execution du plan d'integration.
+                                    <strong>Chaque branche feature/hotfix doit avoir exactement 1 seule migration.</strong> Si elle existe deja et que vous devez la modifier, supprimez-la et recreez-la.
                                 </p>
                                 <p data-lang="en">
-                                    <code>/gitflow:5-exec</code> automatically detects and resolves ModelSnapshot conflicts during integration plan execution.
+                                    <strong>Each feature/hotfix branch must have exactly 1 migration.</strong> If it already exists and you need to modify it, delete and recreate it.
                                 </p>
                             </div>
                         </div>
 
-                        <h3 data-lang="fr">Scenarios de conflit</h3>
-                        <h3 data-lang="en">Conflict Scenarios</h3>
+                        <h3 data-lang="fr">Pourquoi cette regle ?</h3>
+                        <h3 data-lang="en">Why this rule?</h3>
 
                         <div class="table-container">
                             <table>
                                 <thead>
                                     <tr>
-                                        <th>Scenario</th>
                                         <th>
-                                        <span data-lang="fr">Resolution</span>
-                                        <span data-lang="en">Resolution</span>
-                                    </th>
+                                            <span data-lang="fr">Probleme</span>
+                                            <span data-lang="en">Problem</span>
+                                        </th>
+                                        <th>
+                                            <span data-lang="fr">Solution avec 1 migration</span>
+                                            <span data-lang="en">Solution with 1 migration</span>
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
                                         <td>
-                                        <span data-lang="fr">Feature A et Feature B modifient des tables differentes</span>
-                                        <span data-lang="en">Feature A and Feature B modify different tables</span>
-                                    </td>
+                                            <span data-lang="fr">Conflits de merge sur ModelSnapshot</span>
+                                            <span data-lang="en">ModelSnapshot merge conflicts</span>
+                                        </td>
                                         <td>
-                                        <span data-lang="fr">Accept theirs + re-add migration</span>
-                                        <span data-lang="en">Accept theirs + re-add migration</span>
-                                    </td>
+                                            <span data-lang="fr">1 seul point de conflit, facile a resoudre</span>
+                                            <span data-lang="en">Single conflict point, easy to resolve</span>
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td>
-                                        <span data-lang="fr">Meme table modifiee des deux cotes</span>
-                                        <span data-lang="en">Same table modified on both sides</span>
-                                    </td>
+                                            <span data-lang="fr">Historique de migrations pollue</span>
+                                            <span data-lang="en">Polluted migration history</span>
+                                        </td>
                                         <td>
-                                        <span data-lang="fr">Merge manuel puis <code>dotnet ef migrations add MergeSnapshot</code></span>
-                                        <span data-lang="en">Manual merge then <code>dotnet ef migrations add MergeSnapshot</code></span>
-                                    </td>
+                                            <span data-lang="fr">Historique propre et lisible</span>
+                                            <span data-lang="en">Clean and readable history</span>
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td>
-                                        <span data-lang="fr">Hotfix avec migration urgente</span>
-                                        <span data-lang="en">Hotfix with urgent migration</span>
-                                    </td>
+                                            <span data-lang="fr">Ordre de migrations complexe</span>
+                                            <span data-lang="en">Complex migration ordering</span>
+                                        </td>
                                         <td>
-                                        <span data-lang="fr">Prefix <code>Hotfix_</code> + script SQL idempotent</span>
-                                        <span data-lang="en">Prefix <code>Hotfix_</code> + idempotent SQL script</span>
-                                    </td>
+                                            <span data-lang="fr">Ordre simple : 1 feature = 1 migration</span>
+                                            <span data-lang="en">Simple order: 1 feature = 1 migration</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span data-lang="fr">Rollback difficile</span>
+                                            <span data-lang="en">Difficult rollback</span>
+                                        </td>
+                                        <td>
+                                            <span data-lang="fr">Rollback simple de la feature entiere</span>
+                                            <span data-lang="en">Simple rollback of entire feature</span>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
+
+                        <h3 data-lang="fr">Pattern de nommage</h3>
+                        <h3 data-lang="en">Naming Pattern</h3>
+
+                        <div class="code-block">
+                            <pre><code>{BranchType}_{Version}_{BranchName}_{Description}</code></pre>
+                        </div>
+
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <span data-lang="fr">Branche</span>
+                                            <span data-lang="en">Branch</span>
+                                        </th>
+                                        <th>Version</th>
+                                        <th>Description</th>
+                                        <th>
+                                            <span data-lang="fr">Nom genere</span>
+                                            <span data-lang="en">Generated name</span>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><code>feature/user-auth</code></td>
+                                        <td>1.2.0</td>
+                                        <td>AddRolesTable</td>
+                                        <td><code>Feature_1_2_0_UserAuth_AddRolesTable</code></td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>hotfix/login-fix</code></td>
+                                        <td>1.2.1</td>
+                                        <td>FixNullEmail</td>
+                                        <td><code>Hotfix_1_2_1_LoginFix_FixNullEmail</code></td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>release/v1.3.0</code></td>
+                                        <td>1.3.0</td>
+                                        <td>Initial</td>
+                                        <td><code>Release_1_3_0_Initial</code></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <h3 data-lang="fr">Workflow pratique</h3>
+                        <h3 data-lang="en">Practical Workflow</h3>
+
+                        <div class="code-block">
+                            <button class="copy-btn">Copy</button>
+                            <pre><code># Situation: You already have a migration and need to modify the model
+
+# 1. Check current state
+/efcore:db-status
+
+# 2. See there's already 1 migration for this branch
+#    Output: "1 migration for feature/user-auth"
+
+# 3. Create/Recreate migration (deletes old one automatically)
+/efcore:migration
+
+# 4. Choose "Recreate" when prompted
+# 5. Enter description (e.g., "AddRolesTable")
+# 6. Apply to local DB
+/efcore:db-deploy
+
+# 7. Commit
+/gitflow:3-commit</code></pre>
+                        </div>
                     </section>
 
-                    <!-- Cross-Branch (v1.2) -->
-                    <section id="cross-branch">
+                    <!-- ============================================================ -->
+                    <!-- SECTION: COMMANDES -->
+                    <!-- ============================================================ -->
+                    <section id="commands">
                         <h2>
-                            <span data-lang="fr">Cross-Branch (v1.2)</span>
-                            <span data-lang="en">Cross-Branch (v1.2)</span>
+                            <span data-lang="fr">Documentation des Commandes</span>
+                            <span data-lang="en">Command Documentation</span>
                         </h2>
+
+                        <p data-lang="fr">
+                            Claude Tools fournit 9 commandes specialisees pour gerer les migrations EF Core. Chaque commande utilise un agent dedie optimise pour sa tache.
+                        </p>
+                        <p data-lang="en">
+                            Claude Tools provides 9 specialized commands for EF Core migration management. Each command uses a dedicated agent optimized for its task.
+                        </p>
+
+                        <!-- ==================== /efcore:migration ==================== -->
+                        <div class="command-card" id="cmd-migration">
+                            <div class="command-header">
+                                <code class="command-name">/efcore:migration</code>
+                                <span class="tag tag-workflow">MEDIUM</span>
+                            </div>
+                            <div class="command-body">
+                                <p data-lang="fr"><strong>Creer ou recreer la migration unique pour la branche courante.</strong></p>
+                                <p data-lang="en"><strong>Create or recreate the unique migration for the current branch.</strong></p>
+
+                                <div class="table-container">
+                                    <table>
+                                        <tbody>
+                                            <tr>
+                                                <td><strong>Agent</strong></td>
+                                                <td><code>efcore-migration</code></td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Model</strong></td>
+                                                <td>sonnet</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Tools</strong></td>
+                                                <td>Bash, Glob, Read, Edit</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <h4 data-lang="fr">Workflow en 9 etapes</h4>
+                                <h4 data-lang="en">9-Step Workflow</h4>
+
+                                <div class="workflow-stepper-vertical" data-lang="fr">
+                                    <div class="step-item">
+                                        <div class="step-number step-validate">1</div>
+                                        <div class="step-content">
+                                            <div class="step-title">Cross-Branch</div>
+                                            <div class="step-desc">Verifie les conflits (v1.2)</div>
+                                        </div>
+                                    </div>
+                                    <div class="step-item">
+                                        <div class="step-number step-analyze">2</div>
+                                        <div class="step-content">
+                                            <div class="step-title">Contexte Git</div>
+                                            <div class="step-desc">Branche, type, version</div>
+                                        </div>
+                                    </div>
+                                    <div class="step-item">
+                                        <div class="step-number step-detect">3</div>
+                                        <div class="step-content">
+                                            <div class="step-title">Detection</div>
+                                            <div class="step-desc">Trouver le .csproj EF Core</div>
+                                        </div>
+                                    </div>
+                                    <div class="step-item">
+                                        <div class="step-number step-search">4</div>
+                                        <div class="step-content">
+                                            <div class="step-title">Recherche</div>
+                                            <div class="step-desc">Migration existante?</div>
+                                        </div>
+                                    </div>
+                                    <div class="step-item">
+                                        <div class="step-number step-decision">5</div>
+                                        <div class="step-content">
+                                            <div class="step-title">Decision</div>
+                                            <div class="step-desc">Creer ou Recreer</div>
+                                        </div>
+                                    </div>
+                                    <div class="step-item">
+                                        <div class="step-number step-input">6</div>
+                                        <div class="step-content">
+                                            <div class="step-title">Description</div>
+                                            <div class="step-desc">Add, Update, Fix, Remove</div>
+                                        </div>
+                                    </div>
+                                    <div class="step-item">
+                                        <div class="step-number step-generate">7</div>
+                                        <div class="step-content">
+                                            <div class="step-title">Nommage</div>
+                                            <div class="step-desc">Pattern standardise</div>
+                                        </div>
+                                    </div>
+                                    <div class="step-item">
+                                        <div class="step-number step-create">8</div>
+                                        <div class="step-content">
+                                            <div class="step-title">Creation</div>
+                                            <div class="step-desc">dotnet ef migrations add</div>
+                                        </div>
+                                    </div>
+                                    <div class="step-item">
+                                        <div class="step-number step-confirm">9</div>
+                                        <div class="step-content">
+                                            <div class="step-title">Validation</div>
+                                            <div class="step-desc">Apercu et confirmation</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="workflow-stepper-vertical" data-lang="en">
+                                    <div class="step-item">
+                                        <div class="step-number step-validate">1</div>
+                                        <div class="step-content">
+                                            <div class="step-title">Cross-Branch</div>
+                                            <div class="step-desc">Check conflicts (v1.2)</div>
+                                        </div>
+                                    </div>
+                                    <div class="step-item">
+                                        <div class="step-number step-analyze">2</div>
+                                        <div class="step-content">
+                                            <div class="step-title">Git Context</div>
+                                            <div class="step-desc">Branch, type, version</div>
+                                        </div>
+                                    </div>
+                                    <div class="step-item">
+                                        <div class="step-number step-detect">3</div>
+                                        <div class="step-content">
+                                            <div class="step-title">Detection</div>
+                                            <div class="step-desc">Find EF Core .csproj</div>
+                                        </div>
+                                    </div>
+                                    <div class="step-item">
+                                        <div class="step-number step-search">4</div>
+                                        <div class="step-content">
+                                            <div class="step-title">Search</div>
+                                            <div class="step-desc">Existing migration?</div>
+                                        </div>
+                                    </div>
+                                    <div class="step-item">
+                                        <div class="step-number step-decision">5</div>
+                                        <div class="step-content">
+                                            <div class="step-title">Decision</div>
+                                            <div class="step-desc">Create or Recreate</div>
+                                        </div>
+                                    </div>
+                                    <div class="step-item">
+                                        <div class="step-number step-input">6</div>
+                                        <div class="step-content">
+                                            <div class="step-title">Description</div>
+                                            <div class="step-desc">Add, Update, Fix, Remove</div>
+                                        </div>
+                                    </div>
+                                    <div class="step-item">
+                                        <div class="step-number step-generate">7</div>
+                                        <div class="step-content">
+                                            <div class="step-title">Naming</div>
+                                            <div class="step-desc">Standardized pattern</div>
+                                        </div>
+                                    </div>
+                                    <div class="step-item">
+                                        <div class="step-number step-create">8</div>
+                                        <div class="step-content">
+                                            <div class="step-title">Creation</div>
+                                            <div class="step-desc">dotnet ef migrations add</div>
+                                        </div>
+                                    </div>
+                                    <div class="step-item">
+                                        <div class="step-number step-confirm">9</div>
+                                        <div class="step-content">
+                                            <div class="step-title">Validation</div>
+                                            <div class="step-desc">Preview and confirm</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <h4>Options</h4>
+                                <div class="table-container">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>Option</th>
+                                                <th>Description</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><code>--name {name}</code></td>
+                                                <td>
+                                                    <span data-lang="fr">Forcer un nom specifique</span>
+                                                    <span data-lang="en">Force a specific name</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><code>--no-apply</code></td>
+                                                <td>
+                                                    <span data-lang="fr">Ne pas proposer d'appliquer</span>
+                                                    <span data-lang="en">Don't offer to apply</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><code>--force</code></td>
+                                                <td>
+                                                    <span data-lang="fr">Supprimer l'existante sans confirmation</span>
+                                                    <span data-lang="en">Delete existing without confirmation</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><code>--no-cross-check</code></td>
+                                                <td>
+                                                    <span data-lang="fr">Desactiver validation cross-branch</span>
+                                                    <span data-lang="en">Disable cross-branch validation</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><code>--rebase-first</code></td>
+                                                <td>
+                                                    <span data-lang="fr">Executer rebase-snapshot automatiquement si conflit</span>
+                                                    <span data-lang="en">Run rebase-snapshot automatically if conflict</span>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div class="code-block">
+                                    <button class="copy-btn">Copy</button>
+                                    <pre><code># Usage example
+/efcore:migration
+
+# With options
+/efcore:migration --force --no-apply</code></pre>
+                                </div>
+
+                                <!-- Template Section -->
+                                <details class="template-section">
+                                    <summary>
+                                        <h4 style="display: inline; margin: 0;">
+                                            <span data-lang="fr">Template Prompt</span>
+                                            <span data-lang="en">Prompt Template</span>
+                                        </h4>
+                                        <span class="template-badge">migration.md</span>
+                                    </summary>
+                                    <div class="template-content">
+                                        <p class="template-path">
+                                            <code>templates/commands/efcore/migration.md</code>
+                                        </p>
+                                        <div class="code-block template-code">
+                                            <button class="copy-btn">Copy</button>
+                                            <pre><code>---
+description: Create or recreate the EF Core migration for the current branch (1 migration per feature)
+agent: efcore-migration
+model: sonnet
+---
+
+# EF Core Migration - 1 Migration per Feature
+
+Creates or recreates the unique migration for the current branch.
+
+**GOLDEN RULE: 1 single migration per feature/hotfix. If it already exists, delete and recreate it.**
+
+---
+
+## STEP 0: Cross-Branch Validation (v1.2)
+
+**NEW:** Before creating a migration, check for conflicts with other branches.
+
+```bash
+CROSS_BRANCH_ENABLED=$(git config --get efcore.crossBranch.enabled 2>/dev/null || echo "true")
+BLOCK_ON_CONFLICT=$(git config --get efcore.crossBranch.blockOnConflict 2>/dev/null || echo "true")
+
+if [ "$CROSS_BRANCH_ENABLED" = "true" ]; then
+  echo "Cross-branch validation..."
+  # Scan other branches via worktrees
+  # ...
+fi
+```
+
+---
+
+## STEP 1: Analyze Git Context
+
+```bash
+CURRENT_BRANCH=$(git branch --show-current)
+
+if [[ "$CURRENT_BRANCH" == feature/* ]]; then
+  BRANCH_TYPE="Feature"
+  BRANCH_NAME=$(echo "$CURRENT_BRANCH" | sed 's/feature\///')
+elif [[ "$CURRENT_BRANCH" == hotfix/* ]]; then
+  BRANCH_TYPE="Hotfix"
+  BRANCH_NAME=$(echo "$CURRENT_BRANCH" | sed 's/hotfix\///')
+# ...
+fi
+```
+
+---
+
+## STEPS 2-8: Detection, Decision, Creation, Validation
+
+1. Detect EF Core project (.csproj)
+2. Search for existing migration for this branch
+3. Decision: Create or Recreate
+4. Request description (Add/Update/Fix/Remove)
+5. Generate name: {BranchType}_{Version}_{BranchName}_{Description}
+6. Create: `dotnet ef migrations add "$MIGRATION_NAME"`
+7. Content validation
+
+---
+
+## STEP 9: Summary
+
+```
+================================================================================
+                    MIGRATION CREATED
+================================================================================
+NAME:         Feature_1_2_0_UserAuth_AddRolesTable
+BRANCH:       feature/user-auth
+VERSION:      1.2.0
+
+NEXT STEPS:
+1. /efcore:db-deploy    → Apply to local DB
+2. /gitflow:3-commit    → Commit changes
+================================================================================
+```</code></pre>
+                                        </div>
+                                    </div>
+                                </details>
+                            </div>
+                        </div>
+
+                        <!-- ==================== /efcore:db-status ==================== -->
+                        <div class="command-card" id="cmd-db-status">
+                            <div class="command-header">
+                                <code class="command-name">/efcore:db-status</code>
+                                <span class="tag tag-command">READ</span>
+                            </div>
+                            <div class="command-body">
+                                <p data-lang="fr"><strong>Afficher l'etat complet des migrations et de la connexion a la base.</strong></p>
+                                <p data-lang="en"><strong>Display complete migration and database connection status.</strong></p>
+
+                                <div class="table-container">
+                                    <table>
+                                        <tbody>
+                                            <tr>
+                                                <td><strong>Agent</strong></td>
+                                                <td><code>efcore-db-status</code></td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Model</strong></td>
+                                                <td>haiku (fast)</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Tools</strong></td>
+                                                <td>Bash, Glob</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <h4 data-lang="fr">Informations affichees</h4>
+                                <h4 data-lang="en">Displayed Information</h4>
+
+                                <div class="feature-grid">
+                                    <div class="feature-item">
+                                        <span class="feature-icon">&#9881;</span>
+                                        <span class="feature-text" data-lang="fr">Configuration utilisee (appsettings.Local.json, etc.)</span>
+                                        <span class="feature-text" data-lang="en">Configuration used (appsettings.Local.json, etc.)</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <span class="feature-icon">&#128279;</span>
+                                        <span class="feature-text" data-lang="fr">Statut de connexion a la base</span>
+                                        <span class="feature-text" data-lang="en">Database connection status</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <span class="feature-icon">&#128202;</span>
+                                        <span class="feature-text" data-lang="fr">Nombre de migrations (total, appliquees, en attente)</span>
+                                        <span class="feature-text" data-lang="en">Migration count (total, applied, pending)</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <span class="feature-icon">&#9989;</span>
+                                        <span class="feature-text" data-lang="fr">Verification de la regle "1 migration par feature"</span>
+                                        <span class="feature-text" data-lang="en">"1 migration per feature" rule verification</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <span class="feature-icon">&#128451;</span>
+                                        <span class="feature-text" data-lang="fr">Taille de la base et nombre de tables</span>
+                                        <span class="feature-text" data-lang="en">Database size and table count</span>
+                                    </div>
+                                </div>
+
+                                <div class="code-block">
+                                    <pre><code>================================================================================
+                         EF CORE - DATABASE STATUS
+================================================================================
+
+PROJET
+  Nom:           MyApp.Data
+  Config:        appsettings.Local.json
+  DbContext:     ApplicationDbContext
+
+CONNEXION
+  Status:        OK
+  Server:        localhost
+  Database:      MyAppDb
+
+MIGRATIONS
+  Total:         12
+  Appliquees:    11
+  En attente:    1
+
+REGLE "1 MIGRATION PAR FEATURE"
+  Branche:      feature/user-auth
+  Migrations:   1 pour cette branche
+  Regle respectee
+
+================================================================================</code></pre>
+                                </div>
+
+                                <h4>Options</h4>
+                                <div class="table-container">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>Option</th>
+                                                <th>Description</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><code>--verbose</code></td>
+                                                <td>
+                                                    <span data-lang="fr">Afficher toutes les migrations avec details</span>
+                                                    <span data-lang="en">Show all migrations with details</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><code>--json</code></td>
+                                                <td>
+                                                    <span data-lang="fr">Sortie JSON pour scripting</span>
+                                                    <span data-lang="en">JSON output for scripting</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><code>--context {name}</code></td>
+                                                <td>
+                                                    <span data-lang="fr">Specifier le DbContext</span>
+                                                    <span data-lang="en">Specify DbContext</span>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <!-- Template Section -->
+                                <details class="template-section">
+                                    <summary>
+                                        <h4 style="display: inline; margin: 0;">
+                                            <span data-lang="fr">Template Prompt</span>
+                                            <span data-lang="en">Prompt Template</span>
+                                        </h4>
+                                        <span class="template-badge">db-status.md</span>
+                                    </summary>
+                                    <div class="template-content">
+                                        <p class="template-path">
+                                            <code>templates/commands/efcore/db-status.md</code>
+                                        </p>
+                                        <div class="code-block template-code">
+                                            <button class="copy-btn">Copy</button>
+                                            <pre><code>---
+description: Display migrations and database status
+agent: efcore-db-status
+model: haiku
+---
+
+# EF Core Database Status
+
+Displays the complete status of EF Core migrations and database connection.
+
+**Quick command, read-only, no modifications.**
+
+---
+
+## STEP 1: Detect configuration
+
+```bash
+CONFIG_LOCAL="appsettings.Local.json"
+CONFIG_DEV="appsettings.Development.json"
+CSPROJ=$(find . -name "*.csproj" -exec grep -l "Microsoft.EntityFrameworkCore" {} \; | head -1)
+```
+
+## STEP 2: Test connection
+
+```bash
+CONNECTION_OK=$(dotnet ef database list 2>&amp;1)
+```
+
+## STEP 3: List migrations
+
+```bash
+CODE_MIGRATIONS=$(dotnet ef migrations list 2>/dev/null)
+APPLIED=$(dotnet ef migrations list | grep "(Pending)" -v | wc -l)
+PENDING=$(dotnet ef migrations list | grep "(Pending)" | wc -l)
+```
+
+## STEP 4: Report + "1 migration per feature" verification
+
+```
+================================================================================
+                         EF CORE - DATABASE STATUS
+================================================================================
+PROJECT:       {PROJECT_NAME}
+CONNECTION:    {STATUS}
+MIGRATIONS:    {TOTAL} total, {APPLIED} applied, {PENDING} pending
+
+"1 MIGRATION PER FEATURE" RULE:
+  Branch: {CURRENT_BRANCH}
+  Status: {OK/WARNING}
+================================================================================
+```</code></pre>
+                                        </div>
+                                    </div>
+                                </details>
+                            </div>
+                        </div>
+
+                        <!-- ==================== /efcore:db-deploy ==================== -->
+                        <div class="command-card" id="cmd-db-deploy">
+                            <div class="command-header">
+                                <code class="command-name">/efcore:db-deploy</code>
+                                <span class="tag tag-workflow">MEDIUM</span>
+                            </div>
+                            <div class="command-body">
+                                <p data-lang="fr"><strong>Appliquer toutes les migrations en attente sur la base de donnees locale.</strong></p>
+                                <p data-lang="en"><strong>Apply all pending migrations to the local database.</strong></p>
+
+                                <div class="table-container">
+                                    <table>
+                                        <tbody>
+                                            <tr>
+                                                <td><strong>Agent</strong></td>
+                                                <td><code>efcore-db-deploy</code></td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Model</strong></td>
+                                                <td>haiku (fast)</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Tools</strong></td>
+                                                <td>Bash, Glob</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <h4 data-lang="fr">Prerequis</h4>
+                                <h4 data-lang="en">Prerequisites</h4>
+
+                                <div class="feature-grid">
+                                    <div class="feature-item">
+                                        <span class="feature-icon">&#128196;</span>
+                                        <span class="feature-text"><code>appsettings.Local.json</code> configure</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <span class="feature-icon">&#128421;</span>
+                                        <span class="feature-text" data-lang="fr">SQL Server accessible</span>
+                                        <span class="feature-text" data-lang="en">SQL Server accessible</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <span class="feature-icon">&#128260;</span>
+                                        <span class="feature-text" data-lang="fr">Migrations en attente</span>
+                                        <span class="feature-text" data-lang="en">Pending migrations</span>
+                                    </div>
+                                </div>
+
+                                <div class="code-block">
+                                    <button class="copy-btn">Copy</button>
+                                    <pre><code># Deploy migrations
+/efcore:db-deploy
+
+# Equivalent to:
+dotnet ef database update --verbose</code></pre>
+                                </div>
+
+                                <h4>Options</h4>
+                                <div class="table-container">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>Option</th>
+                                                <th>Description</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><code>--verbose</code></td>
+                                                <td>
+                                                    <span data-lang="fr">Afficher les details SQL</span>
+                                                    <span data-lang="en">Show SQL details</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><code>--connection "..."</code></td>
+                                                <td>
+                                                    <span data-lang="fr">Override connection string</span>
+                                                    <span data-lang="en">Override connection string</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><code>--context {name}</code></td>
+                                                <td>
+                                                    <span data-lang="fr">Specifier le DbContext si multiple</span>
+                                                    <span data-lang="en">Specify DbContext if multiple</span>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <!-- Template Section -->
+                                <details class="template-section">
+                                    <summary>
+                                        <h4 style="display: inline; margin: 0;">
+                                            <span data-lang="fr">Template Prompt</span>
+                                            <span data-lang="en">Prompt Template</span>
+                                        </h4>
+                                        <span class="template-badge">db-deploy.md</span>
+                                    </summary>
+                                    <div class="template-content">
+                                        <p class="template-path">
+                                            <code>templates/commands/efcore/db-deploy.md</code>
+                                        </p>
+                                        <div class="code-block template-code">
+                                            <button class="copy-btn">Copy</button>
+                                            <pre><code>---
+description: Deploy EF Core migrations to local database
+agent: efcore-db-deploy
+model: haiku
+---
+
+# EF Core Database Deploy
+
+Applies all pending migrations to the database configured in `appsettings.Local.json`.
+
+---
+
+## STEP 1: Check configuration
+
+```bash
+if [ ! -f "appsettings.Local.json" ]; then
+  echo "appsettings.Local.json not found"
+  exit 1
+fi
+
+CSPROJ=$(find . -name "*.csproj" -exec grep -l "Microsoft.EntityFrameworkCore" {} \; | head -1)
+```
+
+## STEP 2: Check pending migrations
+
+```bash
+PENDING_COUNT=$(dotnet ef migrations list --json | grep -c '"applied": false')
+```
+
+## STEP 3: Apply migrations
+
+```bash
+dotnet ef database update --configuration Release --verbose
+```
+
+## STEP 4: Confirmation
+
+```
+================================================================================
+                         DEPLOYMENT COMPLETE
+================================================================================
+OK {N} migration(s) applied
+OK Database is up to date
+
+NEXT COMMANDS:
+  /efcore:db-status  - Check status
+  /efcore:db-seed    - Populate test data
+================================================================================
+```</code></pre>
+                                        </div>
+                                    </div>
+                                </details>
+                            </div>
+                        </div>
+
+                        <!-- ==================== /efcore:db-seed ==================== -->
+                        <div class="command-card" id="cmd-db-seed">
+                            <div class="command-header">
+                                <code class="command-name">/efcore:db-seed</code>
+                                <span class="tag tag-workflow">MEDIUM</span>
+                            </div>
+                            <div class="command-body">
+                                <p data-lang="fr"><strong>Peupler la base de donnees avec des donnees de test ou initiales.</strong></p>
+                                <p data-lang="en"><strong>Populate database with test or initial data.</strong></p>
+
+                                <div class="table-container">
+                                    <table>
+                                        <tbody>
+                                            <tr>
+                                                <td><strong>Agent</strong></td>
+                                                <td><code>efcore-db-seed</code></td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Model</strong></td>
+                                                <td>haiku (fast)</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Tools</strong></td>
+                                                <td>Bash, Glob, Read</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <h4 data-lang="fr">Methodes de seeding detectees</h4>
+                                <h4 data-lang="en">Detected Seeding Methods</h4>
+
+                                <div class="table-container">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>
+                                                    <span data-lang="fr">Methode</span>
+                                                    <span data-lang="en">Method</span>
+                                                </th>
+                                                <th>
+                                                    <span data-lang="fr">Detection</span>
+                                                    <span data-lang="en">Detection</span>
+                                                </th>
+                                                <th>
+                                                    <span data-lang="fr">Execution</span>
+                                                    <span data-lang="en">Execution</span>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Seeder Class</td>
+                                                <td><code>class.*Seeder</code></td>
+                                                <td><code>dotnet run -- --seed</code></td>
+                                            </tr>
+                                            <tr>
+                                                <td>HasData()</td>
+                                                <td><code>.HasData(</code></td>
+                                                <td>
+                                                    <span data-lang="fr">Via migrations</span>
+                                                    <span data-lang="en">Via migrations</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Script SQL</td>
+                                                <td><code>./scripts/seed.sql</code></td>
+                                                <td><code>sqlcmd -i seed.sql</code></td>
+                                            </tr>
+                                            <tr>
+                                                <td>CLI --seed</td>
+                                                <td><code>--seed</code> in Program.cs</td>
+                                                <td><code>dotnet run -- --seed</code></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div class="code-block">
+                                    <button class="copy-btn">Copy</button>
+                                    <pre><code># Execute seeding
+/efcore:db-seed
+
+# The agent automatically detects available methods
+# and offers you a choice</code></pre>
+                                </div>
+
+                                <!-- Template Section -->
+                                <details class="template-section">
+                                    <summary>
+                                        <h4 style="display: inline; margin: 0;">
+                                            <span data-lang="fr">Template Prompt</span>
+                                            <span data-lang="en">Prompt Template</span>
+                                        </h4>
+                                        <span class="template-badge">db-seed.md</span>
+                                    </summary>
+                                    <div class="template-content">
+                                        <p class="template-path">
+                                            <code>templates/commands/efcore/db-seed.md</code>
+                                        </p>
+                                        <div class="code-block template-code">
+                                            <button class="copy-btn">Copy</button>
+                                            <pre><code>---
+description: Populate database with test or initial data
+agent: efcore-db-seed
+model: haiku
+---
+
+# EF Core Database Seed
+
+Inserts test or initial data into the database.
+
+---
+
+## STEP 1: Detect available seeding methods
+
+```bash
+# 1. DbSeeder or DataSeeder class
+grep -rq "class.*Seeder" . --include="*.cs"
+
+# 2. HasData() in configurations
+grep -rq ".HasData(" . --include="*.cs"
+
+# 3. SQL seed script
+[ -f "./scripts/seed.sql" ]
+
+# 4. --seed argument in Program.cs
+grep -q "--seed" ./Program.cs
+```
+
+## STEP 2: Propose options (via AskUserQuestion)
+
+The agent asks the user which method to use from those detected.
+
+## STEP 3: Execute seeding
+
+```bash
+# Option A: Seeder Class
+dotnet run --project "$STARTUP_PROJECT" -- --seed
+
+# Option B: SQL Script
+sqlcmd -S "$SERVER" -E -d "$DATABASE" -i "./scripts/seed.sql"
+
+# Option C: CLI --seed
+dotnet run -- --seed
+```
+
+## STEP 4: Verification and Summary
+
+```
+================================================================================
+                         SEEDING COMPLETE
+================================================================================
+METHOD:      {method used}
+RESULTS:
+  Users:     {N} records
+  Products:  {N} records
+================================================================================
+```</code></pre>
+                                        </div>
+                                    </div>
+                                </details>
+                            </div>
+                        </div>
+
+                        <!-- ==================== /efcore:db-reset ==================== -->
+                        <div class="command-card" id="cmd-db-reset">
+                            <div class="command-header">
+                                <code class="command-name">/efcore:db-reset</code>
+                                <span class="tag tag-danger">HIGH - DESTRUCTIVE</span>
+                            </div>
+                            <div class="command-body">
+                                <p data-lang="fr"><strong>Supprimer et recreer la base de donnees, puis appliquer toutes les migrations.</strong></p>
+                                <p data-lang="en"><strong>Drop and recreate database, then apply all migrations.</strong></p>
+
+                                <div class="alert alert-warning">
+                                    <span class="alert-icon">&#9888;</span>
+                                    <div class="alert-content">
+                                        <p data-lang="fr"><strong>ATTENTION:</strong> Cette commande SUPPRIME toutes les donnees!</p>
+                                        <p data-lang="en"><strong>WARNING:</strong> This command DELETES all data!</p>
+                                    </div>
+                                </div>
+
+                                <div class="table-container">
+                                    <table>
+                                        <tbody>
+                                            <tr>
+                                                <td><strong>Agent</strong></td>
+                                                <td><code>efcore-db-reset</code></td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Model</strong></td>
+                                                <td>sonnet (securite)</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Tools</strong></td>
+                                                <td>Bash, Glob, Read</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <h4 data-lang="fr">Protections de securite</h4>
+                                <h4 data-lang="en">Safety Protections</h4>
+
+                                <div class="feature-grid">
+                                    <div class="feature-item">
+                                        <span class="feature-icon">&#128274;</span>
+                                        <span class="feature-text" data-lang="fr"><strong>Confirmation obligatoire</strong> - Dialogue bloquant</span>
+                                        <span class="feature-text" data-lang="en"><strong>Mandatory confirmation</strong> - Blocking dialog</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <span class="feature-icon">&#128190;</span>
+                                        <span class="feature-text" data-lang="fr"><strong>Backup propose</strong> - Avant suppression</span>
+                                        <span class="feature-text" data-lang="en"><strong>Backup offered</strong> - Before deletion</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <span class="feature-icon">&#128683;</span>
+                                        <span class="feature-text" data-lang="fr"><strong>Check environnement</strong> - Bloque si Production</span>
+                                        <span class="feature-text" data-lang="en"><strong>Environment check</strong> - Blocks if Production</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <span class="feature-icon">&#127793;</span>
+                                        <span class="feature-text" data-lang="fr"><strong>Seed optionnel</strong> - Apres recreation</span>
+                                        <span class="feature-text" data-lang="en"><strong>Optional seed</strong> - After recreation</span>
+                                    </div>
+                                </div>
+
+                                <div class="code-block">
+                                    <button class="copy-btn">Copy</button>
+                                    <pre><code># Complete database reset
+/efcore:db-reset
+
+# Workflow:
+# 1. Mandatory confirmation
+# 2. Optional backup (recommended)
+# 3. DROP DATABASE
+# 4. CREATE DATABASE (via migrations)
+# 5. Optional seed</code></pre>
+                                </div>
+
+                                <!-- Template Section -->
+                                <details class="template-section">
+                                    <summary>
+                                        <h4 style="display: inline; margin: 0;">
+                                            <span data-lang="fr">Template Prompt</span>
+                                            <span data-lang="en">Prompt Template</span>
+                                        </h4>
+                                        <span class="template-badge">db-reset.md</span>
+                                    </summary>
+                                    <div class="template-content">
+                                        <p class="template-path">
+                                            <code>templates/commands/efcore/db-reset.md</code>
+                                        </p>
+                                        <div class="code-block template-code">
+                                            <button class="copy-btn">Copy</button>
+                                            <pre><code>---
+description: Completely reset database (Drop + Recreate + Migrations)
+agent: efcore-db-reset
+model: sonnet
+---
+
+# EF Core Database Reset
+
+Drops and recreates the database, then applies all migrations.
+
+**WARNING: This command DELETES all data!**
+
+---
+
+## STEP 1: Mandatory confirmation (AskUserQuestion)
+
+The agent asks for confirmation before any deletion.
+
+## STEP 2: Check configuration
+
+```bash
+if [ ! -f "appsettings.Local.json" ]; then
+  exit 1
+fi
+```
+
+## STEP 3: Optional backup (AskUserQuestion)
+
+The agent offers to create a backup in ./backups/
+
+## STEP 4: Drop database
+
+```bash
+dotnet ef database drop --force
+```
+
+## STEP 5: Recreate and apply migrations
+
+```bash
+dotnet ef database update --verbose
+```
+
+## STEP 6: Optional seed (AskUserQuestion)
+
+The agent offers to populate with test data.
+
+## STEP 7: Summary
+
+```
+================================================================================
+                         DATABASE RESET COMPLETE
+================================================================================
+OK Old database deleted
+OK New database created
+OK {N} migration(s) applied
+{OK Backup: ./backups/backup_xxx.bak}
+================================================================================
+```
+
+## Security
+
+| Protection    | Description                              |
+|---------------|------------------------------------------|
+| Confirmation  | Required before deletion                 |
+| Backup        | Automatically offered                    |
+| Env Check     | Blocked if ASPNETCORE_ENVIRONMENT=Production |</code></pre>
+                                        </div>
+                                    </div>
+                                </details>
+                            </div>
+                        </div>
+
+                        <!-- ==================== /efcore:scan ==================== -->
+                        <div class="command-card" id="cmd-scan">
+                            <div class="command-header">
+                                <code class="command-name">/efcore:scan</code>
+                                <span class="tag tag-command">READ</span>
+                            </div>
+                            <div class="command-body">
+                                <p data-lang="fr"><strong>Scanner toutes les branches actives pour detecter les migrations et analyser les risques de conflit.</strong></p>
+                                <p data-lang="en"><strong>Scan all active branches to detect migrations and analyze conflict risks.</strong></p>
+
+                                <div class="table-container">
+                                    <table>
+                                        <tbody>
+                                            <tr>
+                                                <td><strong>Agent</strong></td>
+                                                <td><code>efcore-scan</code></td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Model</strong></td>
+                                                <td>sonnet</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Tools</strong></td>
+                                                <td>Bash, Glob, Read</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <h4 data-lang="fr">Niveaux de risque</h4>
+                                <h4 data-lang="en">Risk Levels</h4>
+
+                                <div class="table-container">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>
+                                                    <span data-lang="fr">Niveau</span>
+                                                    <span data-lang="en">Level</span>
+                                                </th>
+                                                <th>
+                                                    <span data-lang="fr">Signification</span>
+                                                    <span data-lang="en">Meaning</span>
+                                                </th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><span class="tag tag-command">NONE</span></td>
+                                                <td>
+                                                    <span data-lang="fr">Snapshot = develop</span>
+                                                    <span data-lang="en">Snapshot = develop</span>
+                                                </td>
+                                                <td>Merge direct</td>
+                                            </tr>
+                                            <tr>
+                                                <td><span class="tag tag-workflow">LOW</span></td>
+                                                <td>
+                                                    <span data-lang="fr">Tables differentes</span>
+                                                    <span data-lang="en">Different tables</span>
+                                                </td>
+                                                <td>Merge OK</td>
+                                            </tr>
+                                            <tr>
+                                                <td><span class="tag tag-warning">MEDIUM</span></td>
+                                                <td>
+                                                    <span data-lang="fr">FK vers memes tables</span>
+                                                    <span data-lang="en">FK to same tables</span>
+                                                </td>
+                                                <td>
+                                                    <span data-lang="fr">Attention a l'ordre</span>
+                                                    <span data-lang="en">Order matters</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><span class="tag tag-danger">HIGH</span></td>
+                                                <td>
+                                                    <span data-lang="fr">Meme table modifiee</span>
+                                                    <span data-lang="en">Same table modified</span>
+                                                </td>
+                                                <td>
+                                                    <span data-lang="fr">Rebase requis</span>
+                                                    <span data-lang="en">Rebase required</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><span class="tag tag-danger">CRITICAL</span></td>
+                                                <td>
+                                                    <span data-lang="fr">Meme colonne modifiee</span>
+                                                    <span data-lang="en">Same column modified</span>
+                                                </td>
+                                                <td>
+                                                    <span data-lang="fr">Intervention manuelle</span>
+                                                    <span data-lang="en">Manual intervention</span>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div class="code-block">
+                                    <pre><code>================================================================================
+                    EF CORE CROSS-BRANCH SCAN
+================================================================================
+
+WORKTREES DETECTES (5)
+  main/                    [main]
+  develop/                 [develop]
+  features/user-auth/      [feature/user-auth]
+  features/add-products/   [feature/add-products]
+  hotfixes/login-fix/      [hotfix/login-fix]
+
+MIGRATIONS PAR BRANCHE
+  develop               | 12 migrations | Snapshot: a1b2c3d4 (REFERENCE)
+  feature/user-auth     | 13 migrations | Snapshot: e5f6g7h8
+  feature/add-products  | 13 migrations | Snapshot: i9j0k1l2
+  hotfix/login-fix      | 12 migrations | Snapshot: a1b2c3d4
+
+ANALYSE DES RISQUES
+  feature/user-auth     : LOW      (tables differentes)
+  feature/add-products  : MEDIUM   (FK vers meme table)
+  hotfix/login-fix      : NONE     (snapshot = develop)
+
+ORDRE DE MERGE RECOMMANDE
+  1. hotfix/login-fix      (NONE - merge direct)
+  2. feature/user-auth     (LOW - merge OK)
+  3. feature/add-products  (MEDIUM - apres user-auth)
+
+================================================================================</code></pre>
+                                </div>
+
+                                <h4>Options</h4>
+                                <div class="table-container">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>Option</th>
+                                                <th>Description</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><code>--json</code></td>
+                                                <td>
+                                                    <span data-lang="fr">Output en format JSON pour CI/CD</span>
+                                                    <span data-lang="en">JSON output for CI/CD</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><code>--branch {name}</code></td>
+                                                <td>
+                                                    <span data-lang="fr">Scanner une branche specifique</span>
+                                                    <span data-lang="en">Scan a specific branch</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><code>--verbose</code></td>
+                                                <td>
+                                                    <span data-lang="fr">Afficher les details des differences</span>
+                                                    <span data-lang="en">Show difference details</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><code>--no-recommend</code></td>
+                                                <td>
+                                                    <span data-lang="fr">Ne pas afficher les recommandations</span>
+                                                    <span data-lang="en">Don't show recommendations</span>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <!-- Template Section -->
+                                <details class="template-section">
+                                    <summary>
+                                        <h4 style="display: inline; margin: 0;">
+                                            <span data-lang="fr">Template Prompt</span>
+                                            <span data-lang="en">Prompt Template</span>
+                                        </h4>
+                                        <span class="template-badge">scan.md</span>
+                                    </summary>
+                                    <div class="template-content">
+                                        <p class="template-path">
+                                            <code>templates/commands/efcore/scan.md</code>
+                                        </p>
+                                        <div class="code-block template-code">
+                                            <button class="copy-btn">Copy</button>
+                                            <pre><code>---
+description: Scan all branches for migrations with risk analysis
+agent: efcore-scan
+model: sonnet
+---
+
+# EF Core Scan - Cross-Branch Migration Scanner
+
+Scans all active branches to detect migrations and analyze conflict risks.
+
+**USAGE:** Before creating a migration or before a merge.
+**SECURITY:** Read-only - no modifications.
+
+---
+
+## STEP 1: List active worktrees
+
+```bash
+WORKTREE_BASE=$(git config --get gitflow.worktrees.basePath || echo "../worktrees")
+git worktree list
+```
+
+## STEP 2: Scan migrations per branch
+
+For each worktree:
+- Count migrations
+- ModelSnapshot hash
+- Compare with develop
+
+## STEP 3: Analyze conflict risks
+
+| Level  | Criteria                       |
+|--------|--------------------------------|
+| NONE   | Snapshot identical to develop  |
+| LOW    | &lt; 50 lines diff             |
+| MEDIUM | 50-200 lines diff              |
+| HIGH   | &gt; 200 lines diff            |
+
+## STEP 4: Recommend merge order
+
+1. NONE (independent)
+2. LOW (minor modifications)
+3. MEDIUM (order matters)
+4. HIGH (rebase required)</code></pre>
+                                        </div>
+                                    </div>
+                                </details>
+                            </div>
+                        </div>
+
+                        <!-- ==================== /efcore:conflicts ==================== -->
+                        <div class="command-card" id="cmd-conflicts">
+                            <div class="command-header">
+                                <code class="command-name">/efcore:conflicts</code>
+                                <span class="tag tag-command">READ - BLOCKING</span>
+                            </div>
+                            <div class="command-body">
+                                <p data-lang="fr"><strong>Analyser les conflits potentiels entre la branche courante et develop. BLOQUANT si conflit detecte.</strong></p>
+                                <p data-lang="en"><strong>Analyze potential conflicts between current branch and develop. BLOCKING if conflict detected.</strong></p>
+
+                                <div class="table-container">
+                                    <table>
+                                        <tbody>
+                                            <tr>
+                                                <td><strong>Agent</strong></td>
+                                                <td><code>efcore-conflicts</code></td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Model</strong></td>
+                                                <td>sonnet</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Tools</strong></td>
+                                                <td>Bash, Glob, Read</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <h4 data-lang="fr">Exit Codes</h4>
+                                <h4 data-lang="en">Exit Codes</h4>
+
+                                <div class="table-container">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>Code</th>
+                                                <th>
+                                                    <span data-lang="fr">Signification</span>
+                                                    <span data-lang="en">Meaning</span>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><code>0</code></td>
+                                                <td>
+                                                    <span data-lang="fr">Aucun conflit ou conflit mineur</span>
+                                                    <span data-lang="en">No conflict or minor conflict</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><code>1</code></td>
+                                                <td>
+                                                    <span data-lang="fr">Conflit detecte - merge bloque</span>
+                                                    <span data-lang="en">Conflict detected - merge blocked</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><code>2</code></td>
+                                                <td>
+                                                    <span data-lang="fr">Erreur technique</span>
+                                                    <span data-lang="en">Technical error</span>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div class="code-block">
+                                    <button class="copy-btn">Copy</button>
+                                    <pre><code># Check conflicts before merge
+/efcore:conflicts
+
+# If conflict detected:
+# → /efcore:rebase-snapshot (recommended)
+# → /efcore:conflicts --force (not recommended)</code></pre>
+                                </div>
+
+                                <h4>Options</h4>
+                                <div class="table-container">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>Option</th>
+                                                <th>Description</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><code>--force</code></td>
+                                                <td>
+                                                    <span data-lang="fr">Ignorer le conflit (non recommande)</span>
+                                                    <span data-lang="en">Ignore conflict (not recommended)</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><code>--verbose</code></td>
+                                                <td>
+                                                    <span data-lang="fr">Afficher les differences detaillees</span>
+                                                    <span data-lang="en">Show detailed differences</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><code>--json</code></td>
+                                                <td>
+                                                    <span data-lang="fr">Output JSON pour CI/CD</span>
+                                                    <span data-lang="en">JSON output for CI/CD</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><code>--target {branch}</code></td>
+                                                <td>
+                                                    <span data-lang="fr">Comparer avec une autre branche que develop</span>
+                                                    <span data-lang="en">Compare with branch other than develop</span>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <!-- Template Section -->
+                                <details class="template-section">
+                                    <summary>
+                                        <h4 style="display: inline; margin: 0;">
+                                            <span data-lang="fr">Template Prompt</span>
+                                            <span data-lang="en">Prompt Template</span>
+                                        </h4>
+                                        <span class="template-badge">conflicts.md</span>
+                                    </summary>
+                                    <div class="template-content">
+                                        <p class="template-path">
+                                            <code>templates/commands/efcore/conflicts.md</code>
+                                        </p>
+                                        <div class="code-block template-code">
+                                            <button class="copy-btn">Copy</button>
+                                            <pre><code>---
+description: Analyze conflicts before merge (BLOCKING if conflict detected)
+agent: efcore-conflicts
+model: sonnet
+---
+
+# EF Core Conflicts - Cross-Branch Conflict Analysis
+
+Analyzes potential conflicts between current branch and develop. **BLOCKING** if conflict detected.
+
+**BEHAVIOR:** Returns exit code 1 if conflict detected (blocks merge/commit).
+
+---
+
+## STEP 1: Check current branch
+
+```bash
+CURRENT_BRANCH=$(git branch --show-current)
+if [ "$CURRENT_BRANCH" = "main" ] || [ "$CURRENT_BRANCH" = "develop" ]; then
+  exit 0  # No analysis needed
+fi
+```
+
+## STEP 2: Locate ModelSnapshots
+
+Compare local vs develop via worktrees or git show.
+
+## STEP 3: Compare ModelSnapshots
+
+```bash
+if diff -q "$LOCAL_SNAPSHOT" "$DEVELOP_SNAPSHOT"; then
+  CONFLICT_LEVEL="NONE"
+else
+  DIFF_LINES=$(diff ... | wc -l)
+  # Determine level: NONE, LOW, MEDIUM, HIGH, CRITICAL
+fi
+```
+
+## STEP 4: Analyze conflict type
+
+- Tables modified on both sides → HIGH
+- Same column modified → CRITICAL
+
+## STEP 5: Scan other active branches
+
+Detect if other branches have potential conflicts.
+
+## STEP 6: Final verdict
+
+| Code | Meaning                          |
+|------|----------------------------------|
+| 0    | No conflict or minor conflict    |
+| 1    | Conflict detected - merge blocked|
+| 2    | Technical error                  |</code></pre>
+                                        </div>
+                                    </div>
+                                </details>
+                            </div>
+                        </div>
+
+                        <!-- ==================== /efcore:rebase-snapshot ==================== -->
+                        <div class="command-card" id="cmd-rebase-snapshot">
+                            <div class="command-header">
+                                <code class="command-name">/efcore:rebase-snapshot</code>
+                                <span class="tag tag-warning">MEDIUM</span>
+                            </div>
+                            <div class="command-body">
+                                <p data-lang="fr"><strong>Rebaser le ModelSnapshot sur develop et regenerer une migration consolidee.</strong></p>
+                                <p data-lang="en"><strong>Rebase ModelSnapshot on develop and regenerate a consolidated migration.</strong></p>
+
+                                <div class="table-container">
+                                    <table>
+                                        <tbody>
+                                            <tr>
+                                                <td><strong>Agent</strong></td>
+                                                <td><code>efcore-rebase-snapshot</code></td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Model</strong></td>
+                                                <td>sonnet</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Tools</strong></td>
+                                                <td>Bash, Glob, Read, Edit</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <h4 data-lang="fr">Workflow en 8 etapes</h4>
+                                <h4 data-lang="en">8-Step Workflow</h4>
+
+                                <div class="workflow-stepper-vertical" data-lang="fr">
+                                    <div class="step-item">
+                                        <div class="step-number step-validate">1</div>
+                                        <div class="step-content">
+                                            <div class="step-title">Prerequis</div>
+                                            <div class="step-desc">Branche GitFlow, directory propre</div>
+                                        </div>
+                                    </div>
+                                    <div class="step-item">
+                                        <div class="step-number step-detect">2</div>
+                                        <div class="step-content">
+                                            <div class="step-title">Backup</div>
+                                            <div class="step-desc">Sauvegarde automatique</div>
+                                        </div>
+                                    </div>
+                                    <div class="step-item">
+                                        <div class="step-number step-search">3</div>
+                                        <div class="step-content">
+                                            <div class="step-title">Identification</div>
+                                            <div class="step-desc">Migrations branche vs develop</div>
+                                        </div>
+                                    </div>
+                                    <div class="step-item">
+                                        <div class="step-number step-decision">4</div>
+                                        <div class="step-content">
+                                            <div class="step-title">Reset Snapshot</div>
+                                            <div class="step-desc">Checkout depuis develop</div>
+                                        </div>
+                                    </div>
+                                    <div class="step-item">
+                                        <div class="step-number step-input">5</div>
+                                        <div class="step-content">
+                                            <div class="step-title">Suppression</div>
+                                            <div class="step-desc">Anciennes migrations</div>
+                                        </div>
+                                    </div>
+                                    <div class="step-item">
+                                        <div class="step-number step-create">6</div>
+                                        <div class="step-content">
+                                            <div class="step-title">Regeneration</div>
+                                            <div class="step-desc">Migration consolidee</div>
+                                        </div>
+                                    </div>
+                                    <div class="step-item">
+                                        <div class="step-number step-confirm">7</div>
+                                        <div class="step-content">
+                                            <div class="step-title">Validation</div>
+                                            <div class="step-desc">Build + script SQL</div>
+                                        </div>
+                                    </div>
+                                    <div class="step-item">
+                                        <div class="step-number step-generate">8</div>
+                                        <div class="step-content">
+                                            <div class="step-title">Resume</div>
+                                            <div class="step-desc">Prochaines etapes</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="workflow-stepper-vertical" data-lang="en">
+                                    <div class="step-item">
+                                        <div class="step-number step-validate">1</div>
+                                        <div class="step-content">
+                                            <div class="step-title">Prerequisites</div>
+                                            <div class="step-desc">GitFlow branch, clean directory</div>
+                                        </div>
+                                    </div>
+                                    <div class="step-item">
+                                        <div class="step-number step-detect">2</div>
+                                        <div class="step-content">
+                                            <div class="step-title">Backup</div>
+                                            <div class="step-desc">Automatic backup</div>
+                                        </div>
+                                    </div>
+                                    <div class="step-item">
+                                        <div class="step-number step-search">3</div>
+                                        <div class="step-content">
+                                            <div class="step-title">Identification</div>
+                                            <div class="step-desc">Branch migrations vs develop</div>
+                                        </div>
+                                    </div>
+                                    <div class="step-item">
+                                        <div class="step-number step-decision">4</div>
+                                        <div class="step-content">
+                                            <div class="step-title">Reset Snapshot</div>
+                                            <div class="step-desc">Checkout from develop</div>
+                                        </div>
+                                    </div>
+                                    <div class="step-item">
+                                        <div class="step-number step-input">5</div>
+                                        <div class="step-content">
+                                            <div class="step-title">Deletion</div>
+                                            <div class="step-desc">Old migrations</div>
+                                        </div>
+                                    </div>
+                                    <div class="step-item">
+                                        <div class="step-number step-create">6</div>
+                                        <div class="step-content">
+                                            <div class="step-title">Regeneration</div>
+                                            <div class="step-desc">Consolidated migration</div>
+                                        </div>
+                                    </div>
+                                    <div class="step-item">
+                                        <div class="step-number step-confirm">7</div>
+                                        <div class="step-content">
+                                            <div class="step-title">Validation</div>
+                                            <div class="step-desc">Build + SQL script</div>
+                                        </div>
+                                    </div>
+                                    <div class="step-item">
+                                        <div class="step-number step-generate">8</div>
+                                        <div class="step-content">
+                                            <div class="step-title">Summary</div>
+                                            <div class="step-desc">Next steps</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <h4 data-lang="fr">Quand utiliser</h4>
+                                <h4 data-lang="en">When to use</h4>
+
+                                <div class="table-container">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>Situation</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><code>/efcore:conflicts</code> retourne HIGH</td>
+                                                <td>
+                                                    <span data-lang="fr">Utiliser rebase-snapshot</span>
+                                                    <span data-lang="en">Use rebase-snapshot</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <span data-lang="fr">Merge conflit sur ModelSnapshot</span>
+                                                    <span data-lang="en">Merge conflict on ModelSnapshot</span>
+                                                </td>
+                                                <td>
+                                                    <span data-lang="fr">Utiliser rebase-snapshot</span>
+                                                    <span data-lang="en">Use rebase-snapshot</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <span data-lang="fr">Plusieurs migrations a consolider</span>
+                                                    <span data-lang="en">Multiple migrations to consolidate</span>
+                                                </td>
+                                                <td>
+                                                    <span data-lang="fr">Utiliser rebase-snapshot</span>
+                                                    <span data-lang="en">Use rebase-snapshot</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <span data-lang="fr">Migration cassee</span>
+                                                    <span data-lang="en">Broken migration</span>
+                                                </td>
+                                                <td>
+                                                    <span data-lang="fr">Utiliser rebase-snapshot</span>
+                                                    <span data-lang="en">Use rebase-snapshot</span>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <h4>Options</h4>
+                                <div class="table-container">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>Option</th>
+                                                <th>Description</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><code>--no-backup</code></td>
+                                                <td>
+                                                    <span data-lang="fr">Ne pas creer de backup (dangereux)</span>
+                                                    <span data-lang="en">Don't create backup (dangerous)</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><code>--name {name}</code></td>
+                                                <td>
+                                                    <span data-lang="fr">Forcer un nom de migration</span>
+                                                    <span data-lang="en">Force migration name</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><code>--dry-run</code></td>
+                                                <td>
+                                                    <span data-lang="fr">Afficher ce qui serait fait</span>
+                                                    <span data-lang="en">Show what would be done</span>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <!-- Template Section -->
+                                <details class="template-section">
+                                    <summary>
+                                        <h4 style="display: inline; margin: 0;">
+                                            <span data-lang="fr">Template Prompt</span>
+                                            <span data-lang="en">Prompt Template</span>
+                                        </h4>
+                                        <span class="template-badge">rebase-snapshot.md</span>
+                                    </summary>
+                                    <div class="template-content">
+                                        <p class="template-path">
+                                            <code>templates/commands/efcore/rebase-snapshot.md</code>
+                                        </p>
+                                        <div class="code-block template-code">
+                                            <button class="copy-btn">Copy</button>
+                                            <pre><code>---
+description: Rebase ModelSnapshot on develop and regenerate migration
+agent: efcore-rebase-snapshot
+model: sonnet
+---
+
+# EF Core Rebase-Snapshot - Resync with Develop
+
+Rebases the ModelSnapshot on develop and regenerates a consolidated migration.
+
+**USAGE:** After `/efcore:conflicts` signals a HIGH conflict.
+**WARNING:** Modifies migration files. Automatic backup.
+
+---
+
+## STEP 1: Check prerequisites
+
+```bash
+CURRENT_BRANCH=$(git branch --show-current)
+# Check GitFlow branch (feature/release/hotfix)
+# Check clean working directory
+```
+
+## STEP 2: Backup current migrations
+
+```bash
+BACKUP_DIR=".claude/gitflow/backup/migrations/rebase_$(date +%Y%m%d_%H%M%S)"
+cp "$MIGRATIONS_DIR"/*.cs "$BACKUP_DIR/"
+```
+
+## STEP 3: Identify this branch's migrations
+
+Compare with develop to find new migrations.
+
+## STEP 4: Reset ModelSnapshot on develop
+
+```bash
+git checkout origin/develop -- "$MIGRATIONS_DIR/$SNAPSHOT_NAME"
+```
+
+## STEP 5: Delete this branch's migrations
+
+## STEP 6: Regenerate consolidated migration
+
+```bash
+MIGRATION_NAME="${BRANCH_TYPE}_${VERSION}_${BRANCH_NAME}_Consolidated"
+dotnet ef migrations add "$MIGRATION_NAME"
+```
+
+## STEP 7: Validation (Build + Script)
+
+## STEP 8: Summary with restore instructions</code></pre>
+                                        </div>
+                                    </div>
+                                </details>
+                            </div>
+                        </div>
+
+                        <!-- ==================== /efcore:squash ==================== -->
+                        <div class="command-card" id="cmd-squash">
+                            <div class="command-header">
+                                <code class="command-name">/efcore:squash</code>
+                                <span class="tag tag-danger">HIGH - DESTRUCTIVE</span>
+                            </div>
+                            <div class="command-body">
+                                <p data-lang="fr"><strong>Fusionner plusieurs migrations en une seule migration consolidee. Typiquement utilise avant une release.</strong></p>
+                                <p data-lang="en"><strong>Merge multiple migrations into a single consolidated migration. Typically used before a release.</strong></p>
+
+                                <div class="alert alert-warning">
+                                    <span class="alert-icon">&#9888;</span>
+                                    <div class="alert-content">
+                                        <p data-lang="fr"><strong>ATTENTION:</strong> L'historique des migrations sera perdu!</p>
+                                        <p data-lang="en"><strong>WARNING:</strong> Migration history will be lost!</p>
+                                    </div>
+                                </div>
+
+                                <div class="table-container">
+                                    <table>
+                                        <tbody>
+                                            <tr>
+                                                <td><strong>Agent</strong></td>
+                                                <td><code>efcore-squash</code></td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Model</strong></td>
+                                                <td>sonnet</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Tools</strong></td>
+                                                <td>Bash, Glob, Read</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <h4 data-lang="fr">Quand utiliser Squash</h4>
+                                <h4 data-lang="en">When to use Squash</h4>
+
+                                <div class="table-container">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>Situation</th>
+                                                <th>Squash ?</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <span data-lang="fr">Avant release</span>
+                                                    <span data-lang="en">Before release</span>
+                                                </td>
+                                                <td>
+                                                    <span data-lang="fr">OUI - nettoyer l'historique</span>
+                                                    <span data-lang="en">YES - clean history</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <span data-lang="fr">Apres merge de plusieurs features</span>
+                                                    <span data-lang="en">After merging multiple features</span>
+                                                </td>
+                                                <td>
+                                                    <span data-lang="fr">OUI - consolider</span>
+                                                    <span data-lang="en">YES - consolidate</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <span data-lang="fr">En production</span>
+                                                    <span data-lang="en">In production</span>
+                                                </td>
+                                                <td>
+                                                    <span data-lang="fr">NON - utiliser scripts SQL</span>
+                                                    <span data-lang="en">NO - use SQL scripts</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <span data-lang="fr">Branche feature en cours</span>
+                                                    <span data-lang="en">Feature branch in progress</span>
+                                                </td>
+                                                <td>
+                                                    <span data-lang="fr">ATTENTION - preferer rebase-snapshot</span>
+                                                    <span data-lang="en">CAUTION - prefer rebase-snapshot</span>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <h4>Options</h4>
+                                <div class="table-container">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>Option</th>
+                                                <th>Description</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><code>--no-backup</code></td>
+                                                <td>
+                                                    <span data-lang="fr">Ne pas creer de backup (dangereux)</span>
+                                                    <span data-lang="en">Don't create backup (dangerous)</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><code>--no-script</code></td>
+                                                <td>
+                                                    <span data-lang="fr">Ne pas generer de script SQL</span>
+                                                    <span data-lang="en">Don't generate SQL script</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><code>--name {name}</code></td>
+                                                <td>
+                                                    <span data-lang="fr">Forcer un nom de migration</span>
+                                                    <span data-lang="en">Force migration name</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><code>--keep-snapshot</code></td>
+                                                <td>
+                                                    <span data-lang="fr">Garder le ModelSnapshot actuel</span>
+                                                    <span data-lang="en">Keep current ModelSnapshot</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><code>--dry-run</code></td>
+                                                <td>
+                                                    <span data-lang="fr">Afficher sans executer</span>
+                                                    <span data-lang="en">Show without executing</span>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <!-- Template Section -->
+                                <details class="template-section">
+                                    <summary>
+                                        <h4 style="display: inline; margin: 0;">
+                                            <span data-lang="fr">Template Prompt</span>
+                                            <span data-lang="en">Prompt Template</span>
+                                        </h4>
+                                        <span class="template-badge">squash.md</span>
+                                    </summary>
+                                    <div class="template-content">
+                                        <p class="template-path">
+                                            <code>templates/commands/efcore/squash.md</code>
+                                        </p>
+                                        <div class="code-block template-code">
+                                            <button class="copy-btn">Copy</button>
+                                            <pre><code>---
+description: Merge multiple migrations into one (for releases)
+agent: efcore-squash
+model: sonnet
+---
+
+# EF Core Squash - Consolidate Migrations
+
+Merges multiple migrations into a single consolidated migration.
+
+**USAGE:** Before creating a release branch.
+**WARNING:** DESTRUCTIVE operation. Migration history will be lost.
+
+---
+
+## STEP 1: Check prerequisites
+
+```bash
+# Check branch and clean state
+# Count existing migrations
+MIGRATION_COUNT=$(find "$MIGRATIONS_DIR" -name "*.cs" | grep -v "Designer" | grep -v "Snapshot" | wc -l)
+```
+
+## STEP 2: Request confirmation (AskUserQuestion)
+
+DESTRUCTIVE operation - confirmation required.
+
+## STEP 3: Full backup
+
+```bash
+BACKUP_DIR=".claude/gitflow/backup/migrations/squash_$(date +%Y%m%d_%H%M%S)"
+cp "$MIGRATIONS_DIR"/*.cs "$BACKUP_DIR/"
+```
+
+## STEP 4: Delete all migrations
+
+Keep only ModelSnapshot as reference.
+
+## STEP 5: Create consolidated migration
+
+```bash
+MIGRATION_NAME="Release_${VERSION_CLEAN}_Initial"
+# or: Consolidated_${VERSION_CLEAN}_AllMigrations
+dotnet ef migrations add "$MIGRATION_NAME"
+```
+
+## STEP 6: Generate idempotent SQL script
+
+```bash
+dotnet ef migrations script --idempotent -o "scripts/migrations/${MIGRATION_NAME}.sql"
+```
+
+## STEP 7: Validation (Build + Script)
+
+## STEP 8: Summary with production instructions
+
+IMPORTANT: For production databases with already applied migrations:
+1. DO NOT apply directly
+2. Use the idempotent SQL script
+3. Or mark as applied: --skip-apply</code></pre>
+                                        </div>
+                                    </div>
+                                </details>
+                            </div>
+                        </div>
+
+                    </section>
+
+                    <!-- ============================================================ -->
+                    <!-- SECTION: CROSS-BRANCH -->
+                    <!-- ============================================================ -->
+                    <section id="cross-branch">
+                        <h2>Cross-Branch (v1.2)</h2>
 
                         <div class="alert alert-info">
                             <span class="alert-icon">&#127775;</span>
@@ -473,97 +2743,25 @@ dotnet ef migrations add NomMigration
                             With GitFlow worktrees, multiple features can be developed simultaneously. The cross-branch system prevents ModelSnapshot conflicts before they occur.
                         </p>
 
-                        <h3 data-lang="fr">Nouvelles commandes</h3>
-                        <h3 data-lang="en">New Commands</h3>
-
-                        <div class="table-container">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>
-                                            <span data-lang="fr">Commande</span>
-                                            <span data-lang="en">Command</span>
-                                        </th>
-                                        <th>Description</th>
-                                        <th>
-                                            <span data-lang="fr">Risque</span>
-                                            <span data-lang="en">Risk</span>
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td><code>/efcore:scan</code></td>
-                                        <td>
-                                            <span data-lang="fr">Scanner les migrations sur toutes les branches actives</span>
-                                            <span data-lang="en">Scan migrations on all active branches</span>
-                                        </td>
-                                        <td><span class="tag tag-command">READ</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td><code>/efcore:conflicts</code></td>
-                                        <td>
-                                            <span data-lang="fr">Analyser les conflits potentiels (BLOQUANT)</span>
-                                            <span data-lang="en">Analyze potential conflicts (BLOCKING)</span>
-                                        </td>
-                                        <td><span class="tag tag-command">READ</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td><code>/efcore:rebase-snapshot</code></td>
-                                        <td>
-                                            <span data-lang="fr">Rebaser ModelSnapshot sur develop</span>
-                                            <span data-lang="en">Rebase ModelSnapshot on develop</span>
-                                        </td>
-                                        <td><span class="tag tag-warning">MEDIUM</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td><code>/efcore:squash</code></td>
-                                        <td>
-                                            <span data-lang="fr">Fusionner plusieurs migrations en une seule</span>
-                                            <span data-lang="en">Merge multiple migrations into one</span>
-                                        </td>
-                                        <td><span class="tag tag-danger">HIGH</span></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-
                         <h3 data-lang="fr">Workflow Cross-Branch</h3>
                         <h3 data-lang="en">Cross-Branch Workflow</h3>
 
                         <div class="code-block">
                             <button class="copy-btn">Copy</button>
-                            <pre><code># 1. Scanner toutes les branches actives
+                            <pre><code># 1. Scan all active branches
 /efcore:scan
 
-# 2. Verifier les conflits avant de creer une migration
+# 2. Check conflicts before creating a migration
 /efcore:conflicts
 
-# 3. Si conflit detecte, rebaser sur develop
+# 3. If conflict detected, rebase on develop
 /efcore:rebase-snapshot
 
-# 4. Creer la migration (validation cross-branch automatique)
+# 4. Create migration (automatic cross-branch validation)
 /efcore:migration</code></pre>
                         </div>
 
-                        <h3 data-lang="fr">Exemple de scan</h3>
-                        <h3 data-lang="en">Scan Example</h3>
-
-                        <div class="code-block">
-                            <pre><code>BRANCHES ACTIVES (3)
---------------------
-feature/user-roles    +1 migration    Conflit: NONE
-feature/add-products  +1 migration    Conflit: POTENTIAL
-feature/orders        +2 migrations   Conflit: HIGH
-
-ORDRE DE MERGE RECOMMANDE:
-1. feature/user-roles (independant)
-2. feature/add-products (avant orders)
-3. feature/orders (rebase requis)</code></pre>
-                        </div>
-
-                        <h3 data-lang="fr">Configuration</h3>
-                        <h3 data-lang="en">Configuration</h3>
+                        <h3>Configuration</h3>
 
                         <div class="code-block">
                             <button class="copy-btn">Copy</button>
@@ -629,7 +2827,9 @@ ORDRE DE MERGE RECOMMANDE:
                         </div>
                     </section>
 
-                    <!-- Best Practices -->
+                    <!-- ============================================================ -->
+                    <!-- SECTION: BONNES PRATIQUES -->
+                    <!-- ============================================================ -->
                     <section id="best-practices">
                         <h2>
                             <span data-lang="fr">Bonnes pratiques</span>
@@ -653,12 +2853,12 @@ ORDRE DE MERGE RECOMMANDE:
                                 <span data-lang="en">Name migrations descriptively</span>
                             </h4>
                             <div class="code-block">
-                                <pre><code># Bon
+                                <pre><code># Bon / Good
 dotnet ef migrations add AddUserEmailIndex
 dotnet ef migrations add CreateOrdersTable
 dotnet ef migrations add AddPaymentStatusToOrders
 
-# Mauvais
+# Mauvais / Bad
 dotnet ef migrations add Migration1
 dotnet ef migrations add Fix
 dotnet ef migrations add Update</code></pre>
@@ -680,54 +2880,54 @@ dotnet ef migrations add Update</code></pre>
                                         <tr>
                                             <th>Operation</th>
                                             <th>
-                                        <span data-lang="fr">Risque</span>
-                                        <span data-lang="en">Risk</span>
-                                    </th>
+                                                <span data-lang="fr">Risque</span>
+                                                <span data-lang="en">Risk</span>
+                                            </th>
                                             <th>
-                                        <span data-lang="fr">Niveau</span>
-                                        <span data-lang="en">Level</span>
-                                    </th>
+                                                <span data-lang="fr">Niveau</span>
+                                                <span data-lang="en">Level</span>
+                                            </th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
                                             <td><code>DropTable</code></td>
                                             <td>
-                                        <span data-lang="fr">Suppression de table entiere</span>
-                                        <span data-lang="en">Entire table deletion</span>
-                                    </td>
+                                                <span data-lang="fr">Suppression de table entiere</span>
+                                                <span data-lang="en">Entire table deletion</span>
+                                            </td>
                                             <td><span class="tag tag-danger">CRITICAL</span></td>
                                         </tr>
                                         <tr>
                                             <td><code>DropColumn</code></td>
                                             <td>
-                                        <span data-lang="fr">Perte de donnees de colonne</span>
-                                        <span data-lang="en">Column data loss</span>
-                                    </td>
+                                                <span data-lang="fr">Perte de donnees de colonne</span>
+                                                <span data-lang="en">Column data loss</span>
+                                            </td>
                                             <td><span class="tag tag-danger">CRITICAL</span></td>
                                         </tr>
                                         <tr>
                                             <td><code>DeleteData</code></td>
                                             <td>
-                                        <span data-lang="fr">Suppression de lignes</span>
-                                        <span data-lang="en">Row deletion</span>
-                                    </td>
+                                                <span data-lang="fr">Suppression de lignes</span>
+                                                <span data-lang="en">Row deletion</span>
+                                            </td>
                                             <td><span class="tag tag-danger">CRITICAL</span></td>
                                         </tr>
                                         <tr>
                                             <td><code>DropForeignKey</code></td>
                                             <td>
-                                        <span data-lang="fr">Casse l'integrite referentielle</span>
-                                        <span data-lang="en">Breaks referential integrity</span>
-                                    </td>
+                                                <span data-lang="fr">Casse l'integrite referentielle</span>
+                                                <span data-lang="en">Breaks referential integrity</span>
+                                            </td>
                                             <td><span class="tag tag-warning">HIGH</span></td>
                                         </tr>
                                         <tr>
                                             <td><code>DropIndex</code></td>
                                             <td>
-                                        <span data-lang="fr">Impact sur les performances</span>
-                                        <span data-lang="en">Performance impact</span>
-                                    </td>
+                                                <span data-lang="fr">Impact sur les performances</span>
+                                                <span data-lang="en">Performance impact</span>
+                                            </td>
                                             <td><span class="tag tag-workflow">MEDIUM</span></td>
                                         </tr>
                                     </tbody>
@@ -743,26 +2943,12 @@ dotnet ef migrations add Update</code></pre>
                             </h4>
                             <div class="code-block">
                                 <button class="copy-btn">Copy</button>
-                                <pre><code># Generer un script SQL idempotent
+                                <pre><code># Generate an idempotent SQL script
 dotnet ef migrations script --idempotent -o ./scripts/migrations/v1.2.0.sql
 
-# Le script verifie si chaque migration a deja ete appliquee
-# avant de l'executer, ce qui le rend sur pour une re-execution</code></pre>
+# The script checks if each migration has already been applied
+# before executing it, making it safe for re-execution</code></pre>
                             </div>
-                        </div>
-
-                        <div class="best-practice">
-                            <h4>
-                                <span class="bp-icon">&#9989;</span>
-                                <span data-lang="fr">Une migration par feature</span>
-                                <span data-lang="en">One migration per feature</span>
-                            </h4>
-                            <p data-lang="fr">
-                                Evitez les migrations multiples dans une meme feature. Si vous devez modifier le modele plusieurs fois, utilisez <code>dotnet ef migrations remove</code> et recreez une migration unique.
-                            </p>
-                            <p data-lang="en">
-                                Avoid multiple migrations in the same feature. If you need to modify the model multiple times, use <code>dotnet ef migrations remove</code> and recreate a single migration.
-                            </p>
                         </div>
 
                         <div class="alert alert-warning">
@@ -770,21 +2956,35 @@ dotnet ef migrations script --idempotent -o ./scripts/migrations/v1.2.0.sql
                             <div class="alert-content">
                                 <h5 data-lang="fr">Anti-patterns a eviter</h5>
                                 <h5 data-lang="en">Anti-patterns to avoid</h5>
-                                <ul>
-                                    <li data-lang="fr">Ne jamais modifier manuellement le ModelSnapshot</li>
-                                    <li data-lang="en">Never manually modify the ModelSnapshot</li>
-                                    <li data-lang="fr">Ne pas supprimer des migrations deja appliquees en production</li>
-                                    <li data-lang="en">Don't delete migrations already applied in production</li>
-                                    <li data-lang="fr">Eviter les migrations qui dependent de donnees specifiques</li>
-                                    <li data-lang="en">Avoid migrations that depend on specific data</li>
-                                    <li data-lang="fr">Ne pas utiliser SQL brut sans tester sur une copie</li>
-                                    <li data-lang="en">Don't use raw SQL without testing on a copy</li>
-                                </ul>
+                                <div class="feature-grid">
+                                    <div class="feature-item">
+                                        <span class="feature-icon">&#10060;</span>
+                                        <span class="feature-text" data-lang="fr">Ne jamais modifier manuellement le ModelSnapshot</span>
+                                        <span class="feature-text" data-lang="en">Never manually modify the ModelSnapshot</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <span class="feature-icon">&#10060;</span>
+                                        <span class="feature-text" data-lang="fr">Ne pas supprimer des migrations deja appliquees en production</span>
+                                        <span class="feature-text" data-lang="en">Don't delete migrations already applied in production</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <span class="feature-icon">&#10060;</span>
+                                        <span class="feature-text" data-lang="fr">Eviter les migrations qui dependent de donnees specifiques</span>
+                                        <span class="feature-text" data-lang="en">Avoid migrations that depend on specific data</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <span class="feature-icon">&#10060;</span>
+                                        <span class="feature-text" data-lang="fr">Ne pas utiliser SQL brut sans tester sur une copie</span>
+                                        <span class="feature-text" data-lang="en">Don't use raw SQL without testing on a copy</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </section>
 
-                    <!-- GitFlow Integration -->
+                    <!-- ============================================================ -->
+                    <!-- SECTION: INTEGRATION GITFLOW -->
+                    <!-- ============================================================ -->
                     <section id="integration">
                         <h2>
                             <span data-lang="fr">Integration avec GitFlow</span>
@@ -859,9 +3059,13 @@ dotnet ef migrations script --idempotent -o ./scripts/migrations/v1.2.0.sql
                                 </div>
                             </div>
                         </div>
+                    </section>
 
-                        <h3 data-lang="fr">Configuration EF Core</h3>
-                        <h3 data-lang="en">EF Core Configuration</h3>
+                    <!-- ============================================================ -->
+                    <!-- SECTION: CONFIGURATION -->
+                    <!-- ============================================================ -->
+                    <section id="configuration">
+                        <h2>Configuration</h2>
 
                         <p data-lang="fr">La configuration EF Core est stockee dans <code>.claude/gitflow/config.json</code> :</p>
                         <p data-lang="en">EF Core configuration is stored in <code>.claude/gitflow/config.json</code>:</p>
@@ -871,162 +3075,61 @@ dotnet ef migrations script --idempotent -o ./scripts/migrations/v1.2.0.sql
                             <pre><code>{
   "efcore": {
     "enabled": true,
+    "autoDetect": true,
     "contexts": [
       {
         "name": "ApplicationDbContext",
         "projectPath": "./src/Data",
         "migrationsFolder": "Migrations",
         "startupProject": "./src/Api"
-      },
-      {
-        "name": "IdentityDbContext",
-        "projectPath": "./src/Identity",
-        "migrationsFolder": "Migrations",
-        "startupProject": "./src/Api"
       }
     ],
+    "database": {
+      "configFile": "appsettings.Local.json",
+      "connectionStringName": "DefaultConnection",
+      "provider": "SqlServer"
+    },
+    "naming": {
+      "pattern": "{BranchType}_{Version}_{BranchName}_{Description}"
+    },
+    "crossBranch": {
+      "enabled": true,
+      "scanOnMigrationCreate": true,
+      "blockOnConflict": true,
+      "cacheExpiry": 300
+    },
+    "validation": {
+      "validateBeforeCommit": true,
+      "validateBeforeMerge": true,
+      "checkModelSnapshotConflicts": true,
+      "crossBranchValidation": true,
+      "requireBuildSuccess": true,
+      "warnOnPendingMigrations": true
+    },
+    "backup": {
+      "enabled": true,
+      "beforeRebase": true,
+      "beforeSquash": true,
+      "beforeMerge": true,
+      "retentionDays": 7,
+      "location": ".claude/gitflow/backup/migrations"
+    },
+    "rules": {
+      "oneMigrationPerFeature": true,
+      "recreateOnChange": true,
+      "requireDescription": true,
+      "validateNaming": true
+    },
     "scripts": {
       "generateOnRelease": true,
       "outputPath": "./scripts/migrations",
       "idempotent": true
-    },
-    "validation": {
-      "checkModelSnapshotConflicts": true,
-      "validateMigrationOrder": true,
-      "requireThreeFiles": true
     }
   }
 }</code></pre>
                         </div>
                     </section>
 
-                    <!-- Commands -->
-                    <section id="commands">
-                        <h2>
-                            <span data-lang="fr">Commandes EF Core</span>
-                            <span data-lang="en">EF Core Commands</span>
-                        </h2>
-
-                        <p data-lang="fr">
-                            La gestion des migrations EF Core est integree dans les commandes GitFlow principales. Voici les operations les plus courantes :
-                        </p>
-                        <p data-lang="en">
-                            EF Core migration management is integrated into the main GitFlow commands. Here are the most common operations:
-                        </p>
-
-                        <div class="command-card">
-                            <div class="command-header">
-                                <code class="command-name">dotnet ef migrations add</code>
-                                <span class="tag tag-command">Create</span>
-                            </div>
-                            <div class="command-body">
-                                <p data-lang="fr">Cree une nouvelle migration basee sur les changements du modele.</p>
-                                <p data-lang="en">Creates a new migration based on model changes.</p>
-                                <div class="code-block">
-                                    <button class="copy-btn">Copy</button>
-                                    <pre><code># Migration simple
-dotnet ef migrations add AddUserTable
-
-# Multi-context : specifier le context
-dotnet ef migrations add AddUserTable --context ApplicationDbContext
-
-# Specifier le projet de migration
-dotnet ef migrations add AddUserTable --project ./src/Data --startup-project ./src/Api</code></pre>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="command-card">
-                            <div class="command-header">
-                                <code class="command-name">dotnet ef migrations remove</code>
-                                <span class="tag tag-warning">Remove</span>
-                            </div>
-                            <div class="command-body">
-                                <p data-lang="fr">Supprime la derniere migration (non appliquee).</p>
-                                <p data-lang="en">Removes the last migration (unapplied).</p>
-                                <div class="code-block">
-                                    <button class="copy-btn">Copy</button>
-                                    <pre><code># Supprimer la derniere migration
-dotnet ef migrations remove
-
-# Forcer la suppression (meme si appliquee - DANGEREUX)
-dotnet ef migrations remove --force</code></pre>
-                                </div>
-                                <div class="alert alert-warning">
-                                    <span class="alert-icon">&#9888;</span>
-                                    <div class="alert-content">
-                                        <p data-lang="fr">Ne jamais utiliser <code>--force</code> sur une migration deja appliquee en production.</p>
-                                        <p data-lang="en">Never use <code>--force</code> on a migration already applied in production.</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="command-card">
-                            <div class="command-header">
-                                <code class="command-name">dotnet ef migrations script</code>
-                                <span class="tag tag-workflow">Script</span>
-                            </div>
-                            <div class="command-body">
-                                <p data-lang="fr">Genere un script SQL pour appliquer les migrations.</p>
-                                <p data-lang="en">Generates a SQL script to apply migrations.</p>
-                                <div class="code-block">
-                                    <button class="copy-btn">Copy</button>
-                                    <pre><code># Script idempotent (recommande pour la production)
-dotnet ef migrations script --idempotent -o ./scripts/migrations.sql
-
-# Script depuis une migration specifique
-dotnet ef migrations script FromMigration ToMigration -o ./scripts/upgrade.sql
-
-# Script pour un context specifique
-dotnet ef migrations script --context ApplicationDbContext --idempotent</code></pre>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="command-card">
-                            <div class="command-header">
-                                <code class="command-name">dotnet ef database update</code>
-                                <span class="tag tag-command">Apply</span>
-                            </div>
-                            <div class="command-body">
-                                <p data-lang="fr">Applique les migrations en attente sur la base de donnees.</p>
-                                <p data-lang="en">Applies pending migrations to the database.</p>
-                                <div class="code-block">
-                                    <button class="copy-btn">Copy</button>
-                                    <pre><code># Appliquer toutes les migrations en attente
-dotnet ef database update
-
-# Appliquer jusqu'a une migration specifique
-dotnet ef database update AddUserTable
-
-# Rollback a une migration precedente
-dotnet ef database update PreviousMigration</code></pre>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="command-card">
-                            <div class="command-header">
-                                <code class="command-name">dotnet ef migrations list</code>
-                                <span class="tag tag-command">List</span>
-                            </div>
-                            <div class="command-body">
-                                <p data-lang="fr">Liste toutes les migrations et leur statut.</p>
-                                <p data-lang="en">Lists all migrations and their status.</p>
-                                <div class="code-block">
-                                    <button class="copy-btn">Copy</button>
-                                    <pre><code># Lister les migrations
-dotnet ef migrations list
-
-# Output:
-# 20240101120000_InitialCreate (Applied)
-# 20240115150000_AddUserTable (Applied)
-# 20240120100000_AddOrdersTable (Pending)</code></pre>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
             </div>
             </main>
         </div>
