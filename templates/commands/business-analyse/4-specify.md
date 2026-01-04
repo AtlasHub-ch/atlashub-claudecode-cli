@@ -24,13 +24,15 @@ test -f ".business-analyse/applications/*/modules/*/features/$ARGUMENTS/2-busine
 
 ## ULTRATHINK Mode
 
-**IMPORTANT**: This phase uses the `ultrathink` skill for precise specifications.
+**IMPORTANT**: This phase requires ULTRATHINK behavioral mode for precise specifications.
 
-```
-Skill(skill="ultrathink", args="Detailed functional specifications FRD")
-```
+ULTRATHINK is a **behavioral mode**, not a tool or skill to invoke. Claude activates extended thinking to:
+- Consider all edge cases before specifying
+- Challenge assumptions aggressively
+- Generate comprehensive, unambiguous specifications
+- Validate completeness before outputting
 
-Approach to adopt:
+**Approach to adopt:**
 - Specify with surgical precision
 - No ambiguity tolerated
 - Complete use cases
@@ -83,6 +85,65 @@ For each feature, create a complete use case:
 │ • BR-002: {{RULE}}                                                      │
 └─────────────────────────────────────────────────────────────────────────┘
 ```
+
+### Step 2bis: State Machine (if entity has status/state field)
+
+For entities with lifecycle states, document the state machine:
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│ STATE MACHINE: {{ENTITY}}.{{STATUS_FIELD}}                              │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                         │
+│ VISUAL FLOW:                                                            │
+│ ────────────                                                            │
+│  [Draft] ──(publish)──► [Published] ──(archive)──► [Archived]           │
+│     │                        │                          │               │
+│     │                        └────(unpublish)───────────┘               │
+│     │                                                   │               │
+│     └─────────────────(delete)──────────────────────────┘               │
+│                                                                         │
+├─────────────────────────────────────────────────────────────────────────┤
+│ TRANSITION RULES                                                        │
+│ ─────────────────                                                       │
+│                                                                         │
+│ | From      | To        | Action     | Conditions           | Roles    │
+│ |-----------|-----------|------------|----------------------|----------|
+│ | Draft     | Published | publish    | All required fields  | Admin    │
+│ | Published | Archived  | archive    | None                 | Admin    │
+│ | Archived  | Published | unarchive  | None                 | Admin    │
+│ | Draft     | (deleted) | delete     | No dependencies      | Admin    │
+│ | Published | Draft     | ✗ ILLEGAL  | -                    | -        │
+│ | Archived  | Draft     | ✗ ILLEGAL  | -                    | -        │
+│                                                                         │
+├─────────────────────────────────────────────────────────────────────────┤
+│ TRANSITION EFFECTS                                                      │
+│ ──────────────────                                                      │
+│                                                                         │
+│ | Transition      | Side Effects                    | Notifications    │
+│ |-----------------|--------------------------------|------------------|
+│ | → Published     | Set publishedAt = now          | Email to owner   │
+│ | → Archived      | Hide from public listings      | None             │
+│ | → (deleted)     | Soft delete, set deletedAt     | Audit log only   │
+│                                                                         │
+├─────────────────────────────────────────────────────────────────────────┤
+│ UI REPRESENTATION                                                       │
+│ ─────────────────                                                       │
+│ • Current state: Badge with color (Draft=gray, Published=green, etc.)   │
+│ • Available actions: Buttons shown only for LEGAL transitions           │
+│ • Illegal actions: Hidden (not disabled) to reduce confusion            │
+│ • Confirmation: Required for destructive transitions (delete, archive)  │
+│                                                                         │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+**State Machine Summary Table:**
+
+| State | Entry Conditions | Exit Transitions | UI Badge Color |
+|-------|------------------|------------------|----------------|
+| Draft | Initial state | publish, delete | Gray |
+| Published | All required fields | archive, unpublish | Green |
+| Archived | From Published | unarchive | Orange |
 
 ### Step 3: Interface specifications (ASCII Wireframes)
 
@@ -140,8 +201,215 @@ For each screen, create an ASCII wireframe:
 │ • Deletion success: "{{ENTITY}} deleted"                                │
 │ • Error: "An error occurred. Please try again."                         │
 │ • Empty: "No results found. Create your first {{ENTITY}}."              │
+│                                                                         │
+│ UI STATES (mandatory for each screen)                                   │
+│ ─────────────────────────────────────                                   │
+│ • Loading: Skeleton with 5 placeholder rows                             │
+│ • Empty: Illustration + "No {{entity}} yet" + [+ Create first] CTA      │
+│ • Error: ⚠️ icon + "Failed to load" + [Retry] button                    │
+│ • Disabled: Grayed out, cursor: not-allowed, tooltip explains why       │
 └─────────────────────────────────────────────────────────────────────────┘
 ```
+
+**UI States Table (mandatory per screen):**
+
+| Screen | Loading State | Empty State | Error State | Disabled State |
+|--------|---------------|-------------|-------------|----------------|
+| List | Skeleton 5 rows | Illustration + CTA | Retry button | N/A |
+| Form | Spinner on submit | N/A | Inline errors | Submit disabled if invalid |
+| Detail | Skeleton | 404 page | Retry button | Edit disabled if no permission |
+
+### Step 3a: Bulk Operations (for list pages)
+
+For list pages with multiple items, document bulk operations:
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│ BULK OPERATIONS - {{LIST_PAGE}}                                         │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                         │
+│ SELECTION MECHANISM                                                     │
+│ ───────────────────                                                     │
+│ • Per-row checkbox: Select individual items                             │
+│ • Header checkbox: Toggle all on CURRENT PAGE                           │
+│ • "Select all N items": Extends to ALL matching items (across pages)    │
+│ • Selection counter: "X selected" visible in action bar                 │
+│ • Selection persistence: Maintained across pagination                   │
+│ • Clear selection: [x Clear] button or navigate away                    │
+│                                                                         │
+│ AVAILABLE ACTIONS                                                       │
+│ ─────────────────                                                       │
+│                                                                         │
+│ | Action       | Min | Max  | Confirmation | Roles  | API             │
+│ |--------------|-----|------|--------------|--------|-----------------|
+│ | Delete       | 1   | 100  | Modal        | Admin  | DELETE /bulk    │
+│ | Export CSV   | 1   | 1000 | None         | User   | POST /export    │
+│ | Change status| 1   | 100  | Toast        | Admin  | PATCH /bulk     │
+│ | Assign to    | 1   | 50   | Dropdown     | Admin  | PATCH /bulk     │
+│ | Move to      | 1   | 50   | Dropdown     | Admin  | PATCH /bulk     │
+│                                                                         │
+│ UI FEEDBACK                                                             │
+│ ───────────                                                             │
+│ • Progress: "Processing X of Y..." + progress bar (for > 10 items)      │
+│ • Partial failure: "3 succeeded, 2 failed" + [View details] link        │
+│ • Success: Toast "X items updated"                                      │
+│ • Action bar: Appears fixed at bottom when selection > 0                │
+│                                                                         │
+│ ACTION BAR LAYOUT                                                       │
+│ ─────────────────                                                       │
+│ ┌─────────────────────────────────────────────────────────────────┐     │
+│ │ ☑ 5 selected   [Delete] [Export] [Change status ▼]   [x Clear]  │     │
+│ └─────────────────────────────────────────────────────────────────┘     │
+│                                                                         │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+**Bulk Operations Summary Table:**
+
+| Action | Confirmation | Progress | Partial Failure Handling |
+|--------|--------------|----------|--------------------------|
+| Delete | Modal required | If > 10 items | Show failed IDs, offer retry |
+| Export | None | Always (download) | N/A |
+| Status change | Toast | If > 10 items | List failed, keep selection |
+
+### Step 3b: Search & Filter Patterns (for list pages)
+
+Document search and filtering capabilities:
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│ SEARCH & FILTER - {{LIST_PAGE}}                                         │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                         │
+│ SEARCH TYPES                                                            │
+│ ────────────                                                            │
+│                                                                         │
+│ | Type        | Trigger       | Debounce | Fields Searched        |    │
+│ |-------------|---------------|----------|------------------------|    │
+│ | Quick       | onChange      | 300ms    | name, code             |    │
+│ | Full-text   | onSubmit      | 0ms      | name, description, tags|    │
+│ | Advanced    | Query builder | 0ms      | All filterable fields  |    │
+│                                                                         │
+│ Quick search placeholder: "Search by name or code..."                   │
+│                                                                         │
+│ FILTER TYPES                                                            │
+│ ────────────                                                            │
+│                                                                         │
+│ | Field     | Widget       | Multi | Default     | Clear          |    │
+│ |-----------|--------------|-------|-------------|----------------|    │
+│ | status    | Dropdown     | Yes   | All         | "All" option   |    │
+│ | dateRange | DatePicker   | N/A   | Last 30d    | Clear (X)      |    │
+│ | category  | Checkbox list| Yes   | All checked | Uncheck all    |    │
+│ | owner     | Autocomplete | No    | None        | Clear (X)      |    │
+│ | tags      | Tag input    | Yes   | None        | Remove all     |    │
+│                                                                         │
+│ FILTER LAYOUT                                                           │
+│ ─────────────                                                           │
+│ ┌─────────────────────────────────────────────────────────────────┐     │
+│ │ Search: [_________________________] [🔍]                         │     │
+│ │ Filters: [Status ▼] [Date ▼] [Category ▼] [+ More] [Clear all]  │     │
+│ │                                                                  │     │
+│ │ Active: [Status: Active ×] [Category: Sales ×]   2 filters       │     │
+│ └─────────────────────────────────────────────────────────────────┘     │
+│                                                                         │
+├─────────────────────────────────────────────────────────────────────────┤
+│ URL PERSISTENCE                                                         │
+│ ───────────────                                                         │
+│ • All filters reflected in URL query params (shareable links)           │
+│ • Example: /items?status=active&category=sales&page=2                   │
+│ • Browser back/forward maintains filter state                           │
+│                                                                         │
+├─────────────────────────────────────────────────────────────────────────┤
+│ SAVED FILTERS (if applicable)                                           │
+│ ─────────────────────────────                                           │
+│ • Save: [💾 Save current filters] → Name prompt                         │
+│ • Load: [📁 Saved ▼] → List of saved filters                            │
+│ • Share: Generate URL with filters                                      │
+│ • Notify: Toggle "Email me when new items match"                        │
+│                                                                         │
+├─────────────────────────────────────────────────────────────────────────┤
+│ EMPTY STATE AFTER FILTER                                                │
+│ ────────────────────────                                                │
+│ • Message: "No results match your filters"                              │
+│ • Suggestions: "Try removing 'Status: Archived'"                        │
+│ • Action: [Clear all filters] button prominently displayed              │
+│                                                                         │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+**Filter Summary Table:**
+
+| Filter | Type | Multi-select | API Param | Default |
+|--------|------|--------------|-----------|---------|
+| {{FILTER}} | {{WIDGET}} | {{YES/NO}} | {{PARAM}} | {{DEFAULT}} |
+
+### Step 3c: Pagination Strategy (for list pages)
+
+Document pagination approach:
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│ PAGINATION - {{LIST_PAGE}}                                              │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                         │
+│ STRATEGY SELECTION                                                      │
+│ ──────────────────                                                      │
+│                                                                         │
+│ | Strategy       | Best For           | Trade-offs                    │
+│ |----------------|--------------------|------------------------------ │
+│ | Offset (page)  | Small datasets     | Slow on large data, drift     │
+│ | Cursor         | Large/real-time    | No random page access         │
+│ | Infinite scroll| Mobile/feeds       | Hard to bookmark position     │
+│ | Load more      | Append behavior    | Memory grows with scrolling   │
+│                                                                         │
+│ SELECTED: {{OFFSET|CURSOR|INFINITE|LOAD_MORE}}                          │
+│                                                                         │
+├─────────────────────────────────────────────────────────────────────────┤
+│ OFFSET PAGINATION SPEC (if selected)                                    │
+│ ─────────────────────────────────────                                   │
+│ • Page size: {{20}} items (configurable: 10, 20, 50, 100)               │
+│ • Display: "Showing 21-40 of 156 items"                                 │
+│ • Navigation: [◀ Prev] [1] [2] [3] ... [8] [Next ▶]                    │
+│ • URL: ?page=2&limit=20                                                 │
+│ • Edge: Page beyond range → redirect to last page                       │
+│                                                                         │
+├─────────────────────────────────────────────────────────────────────────┤
+│ CURSOR PAGINATION SPEC (if selected)                                    │
+│ ─────────────────────────────────────                                   │
+│ • Cursor field: {{createdAt}} + {{id}} (compound for stability)         │
+│ • Direction: Next only (or bidirectional if needed)                     │
+│ • Display: [Load more] button or infinite scroll                        │
+│ • URL: ?cursor=eyJpZCI6MTIzfQ== (base64 encoded)                        │
+│ • Edge: End of data → hide "Load more" button                           │
+│                                                                         │
+├─────────────────────────────────────────────────────────────────────────┤
+│ INFINITE SCROLL SPEC (if selected)                                      │
+│ ─────────────────────────────────                                       │
+│ • Trigger: Scroll reaches 80% of container height                       │
+│ • Loading: Skeleton rows appended at bottom                             │
+│ • Back navigation: Restore scroll position from state                   │
+│ • Performance: Virtualize if > 500 items visible                        │
+│ • End: "You've reached the end" message                                 │
+│                                                                         │
+├─────────────────────────────────────────────────────────────────────────┤
+│ COMMON REQUIREMENTS                                                     │
+│ ───────────────────                                                     │
+│ • Maintain filters across pagination                                    │
+│ • Show total count (if available)                                       │
+│ • Loading state: Skeleton or spinner (never blank)                      │
+│ • Empty page: "No more items" + option to go back                       │
+│                                                                         │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+**Pagination Configuration Table:**
+
+| Aspect | Value | Rationale |
+|--------|-------|-----------|
+| Strategy | {{OFFSET/CURSOR}} | {{WHY}} |
+| Default page size | {{20}} | Balances load time and usability |
+| Max page size | {{100}} | Prevents performance issues |
+| Cursor field | {{FIELD}} | Stable, indexed |
 
 ### Step 3bis: Navigation Matrix (Hierarchical Access)
 
@@ -260,6 +528,216 @@ For each form, precisely document the fields:
 | `status` | Status | select | Yes | [active, inactive] | active | - |
 | `date` | Date | date | No | >= today | today | - |
 
+**Validation Behavior (mandatory for forms):**
+
+| Field | Trigger | Debounce | Async Check | Priority | Error Display |
+|-------|---------|----------|-------------|----------|---------------|
+| `name` | onBlur | 300ms | Uniqueness API | 1 | Below field |
+| `email` | onChange | 500ms | Format only | 2 | Below field |
+| `password` | onChange | 0ms | Strength meter | 3 | Inline indicator |
+
+**Validation Order:**
+1. Required fields checked first (immediate, no debounce)
+2. Format validations second (client-side, with debounce)
+3. Async validations last (API calls, with debounce + loading indicator)
+
+### Step 4bis: Conditional Fields (if form has dynamic fields)
+
+For forms with fields that appear/hide based on other field values:
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│ CONDITIONAL FIELDS - Form {{FORM_NAME}}                                 │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                         │
+│ FIELD VISIBILITY RULES                                                  │
+│ ──────────────────────                                                  │
+│                                                                         │
+│ | Trigger Field | Trigger Value | Fields Shown    | Fields Hidden |    │
+│ |---------------|---------------|-----------------|---------------|    │
+│ | type          | "internal"    | department      | url, apiKey   |    │
+│ | type          | "external"    | url, apiKey     | department    |    │
+│ | hasExpiry     | true          | expiryDate      | -             |    │
+│ | hasExpiry     | false         | -               | expiryDate    |    │
+│                                                                         │
+│ CONDITIONAL VALIDATION                                                  │
+│ ──────────────────────                                                  │
+│ • type="external" → url is REQUIRED                                     │
+│ • type="internal" → department is REQUIRED                              │
+│ • hasExpiry=true → expiryDate must be > today                           │
+│ • Hidden fields are NOT validated (skip validation when hidden)         │
+│                                                                         │
+│ UI BEHAVIOR                                                             │
+│ ───────────                                                             │
+│ • Hidden fields: display: none (not just disabled)                      │
+│ • Animation: fade-in 200ms on show, fade-out 150ms on hide              │
+│ • Validation: clear errors on hidden fields                             │
+│ • Data: preserve values when hidden (restore if shown again)            │
+│ • Default: pre-populate most common trigger value                       │
+│                                                                         │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+**Conditional Fields Summary Table:**
+
+| Trigger | Value | Shows | Hides | Required When Visible |
+|---------|-------|-------|-------|----------------------|
+| {{TRIGGER}} | {{VALUE}} | {{FIELDS}} | {{FIELDS}} | {{YES/NO}} |
+
+### Step 4ter: Form Wizard (for multi-step forms)
+
+For complex forms requiring multiple steps:
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│ FORM WIZARD: {{WIZARD_NAME}}                                            │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                         │
+│ STEPS OVERVIEW                                                          │
+│ ──────────────                                                          │
+│ [1. Basic Info] → [2. Configuration] → [3. Review] → [4. Confirm]       │
+│      ●                 ○                   ○              ○              │
+│                                                                         │
+│ | Step | Name          | Fields              | Validation        |      │
+│ |------|---------------|---------------------|-------------------|      │
+│ | 1    | Basic Info    | name, type          | Required, unique  |      │
+│ | 2    | Configuration | settings[]          | At least 1        |      │
+│ | 3    | Review        | (read-only summary) | None              |      │
+│ | 4    | Confirm       | acceptTerms         | Must be checked   |      │
+│                                                                         │
+├─────────────────────────────────────────────────────────────────────────┤
+│ NAVIGATION RULES                                                        │
+│ ─────────────────                                                       │
+│ • Next: Validate current step BEFORE proceeding (block if invalid)      │
+│ • Back: Always allowed, preserve all data                               │
+│ • Direct jump: Only to COMPLETED steps (click on step indicator)        │
+│ • Browser back: Confirm modal "Unsaved changes will be lost"            │
+│ • URL state: Update URL hash (#step-2) for bookmarking                  │
+│                                                                         │
+├─────────────────────────────────────────────────────────────────────────┤
+│ DATA PERSISTENCE                                                        │
+│ ─────────────────                                                       │
+│ • Auto-save: After each step completion (localStorage or draft API)     │
+│ • Resume: On page reload, restore to last completed step                │
+│ • Clear: On successful submit OR explicit cancel                        │
+│ • Expiry: Draft expires after {{X}} hours (configurable)                │
+│                                                                         │
+├─────────────────────────────────────────────────────────────────────────┤
+│ PROGRESS INDICATOR                                                      │
+│ ──────────────────                                                      │
+│ • Show: Step numbers + names                                            │
+│ • Current: Highlighted (bold, primary color)                            │
+│ • Completed: Show ✓ checkmark, clickable                                │
+│ • Future: Grayed out, not clickable                                     │
+│ • Mobile: Collapse to "Step 2 of 4" + progress bar                      │
+│                                                                         │
+├─────────────────────────────────────────────────────────────────────────┤
+│ ERROR HANDLING                                                          │
+│ ───────────────                                                         │
+│ • Step validation fail: Scroll to first error, focus field              │
+│ • API error on save: Show toast, keep on current step                   │
+│ • Session expired: Save to localStorage, prompt re-login                │
+│                                                                         │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+### Step 4quater: Error Recovery Patterns
+
+Document how the UI handles and recovers from errors:
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│ ERROR RECOVERY PATTERNS                                                 │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                         │
+│ PATTERN 1: Conflict Resolution Modal (409 Concurrent Edit)              │
+│ ──────────────────────────────────────────────────────────              │
+│ Trigger: Another user modified the same record while editing            │
+│                                                                         │
+│ ┌─────────────────────────────────────────────────────────┐             │
+│ │ ⚠️ Conflict Detected                                    │             │
+│ │                                                         │             │
+│ │ This item was modified by {{userName}} at {{time}}.     │             │
+│ │                                                         │             │
+│ │ Your changes:        Server version:                    │             │
+│ │ ┌─────────────┐      ┌─────────────┐                    │             │
+│ │ │ Name: "Foo" │      │ Name: "Bar" │ ← different        │             │
+│ │ │ Status: X   │      │ Status: X   │ ← same             │             │
+│ │ └─────────────┘      └─────────────┘                    │             │
+│ │                                                         │             │
+│ │ [Discard my changes] [Override anyway] [Merge manually] │             │
+│ └─────────────────────────────────────────────────────────┘             │
+│                                                                         │
+│ Actions:                                                                │
+│ • Discard: Reload with server version, lose local changes               │
+│ • Override: Force save local version (requires confirmation)            │
+│ • Merge: Open diff view, manually select each field                     │
+│                                                                         │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                         │
+│ PATTERN 2: Retry with Exponential Backoff (Network Error)               │
+│ ─────────────────────────────────────────────────────────               │
+│ Trigger: Network timeout, 5xx errors, connection lost                   │
+│                                                                         │
+│ Retry sequence:                                                         │
+│ • Attempt 1: Immediate                                                  │
+│ • Attempt 2: After 2 seconds                                            │
+│ • Attempt 3: After 5 seconds                                            │
+│ • Give up: Show manual options                                          │
+│                                                                         │
+│ UI during retry:                                                        │
+│ • Spinner + "Retrying... (attempt 2 of 3)"                              │
+│ • [Cancel] button to stop retrying                                      │
+│                                                                         │
+│ After give up:                                                          │
+│ ┌─────────────────────────────────────────────────────────┐             │
+│ │ ⚠️ Connection Failed                                    │             │
+│ │                                                         │             │
+│ │ We couldn't save your changes after 3 attempts.         │             │
+│ │                                                         │             │
+│ │ [Retry now] [Save offline] [Discard]                    │             │
+│ └─────────────────────────────────────────────────────────┘             │
+│                                                                         │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                         │
+│ PATTERN 3: Optimistic Update with Rollback                              │
+│ ───────────────────────────────────────────                             │
+│ Trigger: Quick actions (toggle, like, small updates)                    │
+│                                                                         │
+│ Behavior:                                                               │
+│ 1. Update UI immediately (optimistic)                                   │
+│ 2. Send API request in background                                       │
+│ 3. If success: Do nothing (already updated)                             │
+│ 4. If failure: Revert UI + show toast "Failed to save"                  │
+│                                                                         │
+│ UI feedback:                                                            │
+│ • Subtle loading indicator (not blocking)                               │
+│ • Toast on failure with [Retry] action                                  │
+│ • Form data preserved for retry                                         │
+│                                                                         │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                         │
+│ PATTERN 4: Stale Data Warning (Long Session)                            │
+│ ─────────────────────────────────────────────                           │
+│ Trigger: User has had form open for > 10 minutes                        │
+│                                                                         │
+│ Before submit, check if server version changed:                         │
+│ • If unchanged: Proceed normally                                        │
+│ • If changed: Show PATTERN 1 (Conflict Resolution)                      │
+│                                                                         │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+**Error Recovery Summary Table:**
+
+| Error Type | HTTP Code | Pattern | User Action Options |
+|------------|-----------|---------|---------------------|
+| Concurrent edit | 409 | Conflict Modal | Discard, Override, Merge |
+| Network error | timeout/5xx | Retry + Backoff | Retry, Save offline, Discard |
+| Validation error | 400 | Inline errors | Fix and resubmit |
+| Session expired | 401 | Re-login prompt | Login, Save draft |
+| Permission denied | 403 | Error page | Go back, Contact admin |
+
 ### Step 5: API specifications (if applicable)
 
 For each endpoint, document:
@@ -356,6 +834,29 @@ Feature: {{FEATURE_NAME}}
       | valid_value   | success     |
       | empty_value   | error       |
       | too_long      | error       |
+
+  # MANDATORY EDGE CASES (at least 2 of these)
+  @edge @network
+  Scenario: Network timeout during submission
+    Given the user fills the form correctly
+    When they submit and the network times out after 10 seconds
+    Then the system displays "Connection timeout. Please try again."
+    And the form data is preserved
+    And a [Retry] button is displayed
+
+  @edge @concurrent
+  Scenario: Concurrent modification conflict
+    Given another user modified the same resource
+    When the user submits their changes
+    Then the system displays "This item was modified. Refresh to see changes."
+    And provides [Refresh] and [Override] options
+
+  @edge @offline
+  Scenario: Offline mode handling
+    Given the user loses network connectivity
+    When they try to perform an action
+    Then the system displays "You are offline. Changes will sync when reconnected."
+    And queues the action for retry (if applicable)
 ```
 
 ### Step 7: Completeness checklist (85% minimum)
@@ -380,6 +881,10 @@ cat .claude/commands/business-analyse/_resources/checklist-specification.md
 | | Postconditions | ✓/✗ |
 | | Actors identified | ✓/✗ |
 | | Linked business rules | ✓/✗ |
+| **State Machine (3/3)** | _(if entity has status field)_ | |
+| | States defined with transitions | ✓/✗/N/A |
+| | Transition conditions documented | ✓/✗/N/A |
+| | Illegal transitions marked | ✓/✗/N/A |
 | **Interface (6/6)** | | |
 | | Wireframes present | ✓/✗ |
 | | URLs defined | ✓/✗ |
@@ -387,6 +892,20 @@ cat .claude/commands/business-analyse/_resources/checklist-specification.md
 | | Interactive elements | ✓/✗ |
 | | Messages defined | ✓/✗ |
 | | Front validations | ✓/✗ |
+| **List Patterns (4/4)** | _(if list pages present)_ | |
+| | Bulk operations documented | ✓/✗/N/A |
+| | Search/Filter patterns defined | ✓/✗/N/A |
+| | Pagination strategy specified | ✓/✗/N/A |
+| | Empty/Loading states | ✓/✗/N/A |
+| **Form Patterns (3/3)** | _(if forms present)_ | |
+| | Conditional fields documented | ✓/✗/N/A |
+| | Validation behavior (async, debounce) | ✓/✗/N/A |
+| | Form wizard steps (if multi-step) | ✓/✗/N/A |
+| **Error Handling (4/4)** | | |
+| | Error recovery patterns documented | ✓/✗ |
+| | Conflict resolution UI (409) | ✓/✗ |
+| | Retry logic (network errors) | ✓/✗ |
+| | Optimistic update behavior | ✓/✗ |
 | **Data (5/5)** | | |
 | | Fields specified | ✓/✗ |
 | | Data types | ✓/✗ |
@@ -409,9 +928,15 @@ cat .claude/commands/business-analyse/_resources/checklist-specification.md
 | | Data Access Patterns documented | ✓/✗/N/A |
 | | Context preservation rules | ✓/✗/N/A |
 | | Breadcrumb structure | ✓/✗/N/A |
+| **Accessibility (4/4)** | _(mandatory for user-facing)_ | |
+| | Focus management after actions | ✓/✗ |
+| | Error announcements for screen readers | ✓/✗ |
+| | Keyboard navigation (Tab order) | ✓/✗ |
+| | Touch targets >= 44x44px | ✓/✗ |
 
-**Score**: {{X}}/30 ({{PERCENT}}%) _(+4 if hierarchical: {{X}}/34)_
-**Threshold**: 85% (26/30 or 29/34 if hierarchical)
+**Score**: {{X}}/52 ({{PERCENT}}%)
+_(Base: 30, +3 state machine, +4 list patterns, +3 form patterns, +4 error handling, +4 nav, +4 a11y if applicable)_
+**Threshold**: 85%
 
 ### Step 7bis: Implementation plan (if complexity > Standard)
 
@@ -666,9 +1191,19 @@ flowchart TD
 
 ### 7.2 Error messages
 
-| Error | Message | User action |
-|-------|---------|-------------|
-{{ERROR_MESSAGES}}
+| HTTP Code | Error Type | User Message | Recovery Action |
+|-----------|------------|--------------|-----------------|
+| 400 | Validation | "{{field}} is invalid: {{reason}}" | Fix field and retry |
+| 401 | Auth | "Session expired. Please log in again." | Redirect to login |
+| 403 | Permission | "You don't have permission for this action." | Contact admin |
+| 404 | Not Found | "{{Resource}} not found." | Go back to list |
+| 409 | Conflict | "'{{value}}' already exists." | Use different value |
+| 500 | Server | "Something went wrong. Please try again." | Retry or contact support |
+
+**Error message requirements:**
+- Always include the problematic value in context (e.g., "Name 'foo' already exists")
+- Provide actionable recovery (button or instruction)
+- Never expose technical details (stack traces, SQL errors)
 
 ---
 
@@ -760,7 +1295,23 @@ Score: {{SCORE}}/30 ({{PERCENT}}%) _(+4 if hierarchical data: {{SCORE}}/34)_
 - [ ] Context preservation rules
 - [ ] Breadcrumb structure
 
-### 10.2 Resolved questions
+### 10.2 Accessibility Requirements (per component)
+
+| Component | ARIA Role | Label Required | Focus Trap | Screen Reader Announcement |
+|-----------|-----------|----------------|------------|----------------------------|
+| Modal | `dialog` | Yes (title) | Yes | "Dialog opened: {title}" |
+| Toast | `alert` | No | No | Auto-announce on appear |
+| Dropdown | `listbox` | Yes | No | "{n} options available" |
+| Table | `table` | Caption | No | Row/column headers |
+| Form | `form` | Submit button | No | Errors on submit |
+| Button | `button` | Yes (action) | No | State if toggle |
+
+**Focus management rules:**
+- After modal close → return focus to trigger element
+- After item delete → focus next item or "empty" message
+- After form submit success → focus success message or redirect
+
+### 10.3 Resolved questions
 
 {{RESOLVED_QUESTIONS}}
 

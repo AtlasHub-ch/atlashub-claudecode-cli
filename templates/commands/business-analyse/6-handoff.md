@@ -17,6 +17,43 @@ Approach to adopt:
 - Optimize for Claude Code best practices
 - Generate prompt that can be directly piped to Claude
 
+## Context Loading Order (FOR CLAUDE CODE)
+
+```
+╔══════════════════════════════════════════════════════════════════════════╗
+║  READING ORDER: Execute in this exact sequence for optimal results       ║
+╠══════════════════════════════════════════════════════════════════════════╣
+║                                                                          ║
+║  STEP 1: Project Context (BEFORE anything else)                          ║
+║  ────────────────────────────────────────────────                        ║
+║  • Read CLAUDE.md → Project constraints, conventions, tech stack         ║
+║  • Read .gitignore, package.json/*.csproj → Understand project type      ║
+║                                                                          ║
+║  STEP 2: Feature Specifications (This document)                          ║
+║  ───────────────────────────────────────────────                         ║
+║  • Read Level 1 (Summary) → Understand scope                             ║
+║  • Read Level 2 (Core Specs) → Implementation details                    ║
+║  • Reference Level 3 (Appendix) → Only when needed                       ║
+║                                                                          ║
+║  STEP 3: Explore Existing Patterns (BEFORE writing code)                 ║
+║  ────────────────────────────────────────────────────────                ║
+║  • Use Glob/Grep to find similar entities, controllers, pages            ║
+║  • Identify naming conventions, folder structure                         ║
+║  • Match existing patterns in new implementation                         ║
+║                                                                          ║
+║  STEP 4: Implement (Following specs + patterns)                          ║
+║  ───────────────────────────────────────────────                         ║
+║  • Data layer first → API → UI → Tests                                   ║
+║  • Validate each phase before proceeding                                 ║
+║                                                                          ║
+╚══════════════════════════════════════════════════════════════════════════╝
+```
+
+**Why this order matters:**
+- CLAUDE.md may contain constraints that affect implementation choices
+- Exploring patterns ensures consistency with existing codebase
+- Reading specs before exploring prevents bias from existing (possibly bad) patterns
+
 ## Template Structure (3 Levels - Progressive Disclosure)
 
 ```
@@ -77,6 +114,7 @@ Approach to adopt:
 | Success Metrics | Optional | ✓ | ✗ | Optional | ✗ |
 | Feature Dependencies | If exists | ✓ | ✗ | If exists | ✗ |
 | Phased Delivery | ✗ | If > 5 entities | ✗ | ✗ | ✗ |
+| **Test Strategy (9.7)** | ✓ | ✓ | ✓ | ✓ | ✓ |
 
 **How to use:**
 1. Identify your feature type (column)
@@ -101,6 +139,7 @@ Approach to adopt:
 ║  [ ] All BR-XXX mapped to test scenarios                                 ║
 ║  [ ] MoSCoW priorities assigned to all scope items                       ║
 ║  [ ] Explore-First search patterns included                              ║
+║  [ ] Test Strategy section 9.7 completed with test mappings              ║
 ║                                                                          ║
 ║  STRUCTURE:                                                              ║
 ║  [ ] Used Section Applicability Matrix to include only relevant sections ║
@@ -874,140 +913,52 @@ erDiagram
 
 ### 5.2 Wireframes
 
-#### List Page
-
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│ {{APP_NAME}}                                    [User ▼] [Exit] │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                 │
-│  {{RESOURCE_PLURAL}}                           [+ New]          │
-│  ───────────────────────────────────────────────────────────    │
-│                                                                 │
-│  Search: [________________________] [🔍]                        │
-│  Filters:   [Status ▼]                                          │
-│                                                                 │
-│  ┌─────┬─────────────┬──────────┬──────────┬─────────────┐      │
-│  │ ☐   │ Name        │ Status   │ Created  │ Actions     │      │
-│  ├─────┼─────────────┼──────────┼──────────┼─────────────┤      │
-│  │ ☐   │ Item 1      │ ● Active │ 01/15/24 │ [✎] [🗑]   │      │
-│  │ ☐   │ Item 2      │ ○ Inactive│ 01/16/24│ [✎] [🗑]   │      │
-│  └─────┴─────────────┴──────────┴──────────┴─────────────┘      │
-│                                                                 │
-│  [◀ Previous]  Page 1/5  [Next ▶]                              │
-│                                                                 │
-└─────────────────────────────────────────────────────────────────┘
+╔══════════════════════════════════════════════════════════════════════════╗
+║  WIREFRAMES: Reference FRD - Do NOT duplicate here                       ║
+╠══════════════════════════════════════════════════════════════════════════╣
+║                                                                          ║
+║  Full wireframes are in the FRD (3-functional-specification.md):         ║
+║  → Used for HUMAN validation (user needs visuals to approve)             ║
+║                                                                          ║
+║  This handoff provides IMPLEMENTATION NOTES only:                        ║
+║  → Claude Code understands declarative specs, doesn't need ASCII art     ║
+║  → Avoids duplication and drift between documents                        ║
+║                                                                          ║
+╚══════════════════════════════════════════════════════════════════════════╝
 ```
 
-**Behaviors**:
-- Search: Real-time filter after 300ms debounce
-- [+ New]: Visible only if Admin role
-- [✎][🗑]: Visible only if Admin role
-- [🗑]: Confirmation before deletion
+**Reference**: See [FRD Section 6 - Wireframes](./3-functional-specification.md#6-wireframes) for visual layouts.
 
-#### Form Page
+#### Implementation Notes per Page Type
 
-```
-┌─────────────────────────────────────────────────────────────────┐
-│ {{APP_NAME}}                                    [User ▼] [Exit] │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                 │
-│  ◀ Back to list                                                 │
-│                                                                 │
-│  New {{RESOURCE}}                                               │
-│  ───────────────────────────────────────────────────────────    │
-│                                                                 │
-│  ┌─────────────────────────────────────────────────────────┐    │
-│  │                                                         │    │
-│  │  Name *                                                 │    │
-│  │  [_____________________________________________]        │    │
-│  │  ⚠️ 2 to 100 characters                                 │    │
-│  │                                                         │    │
-│  │  Description                                            │    │
-│  │  [                                                 ]    │    │
-│  │  [                                                 ]    │    │
-│  │  [_________________________________________________]    │    │
-│  │  0/500 characters                                       │    │
-│  │                                                         │    │
-│  │                          [Cancel] [Create]              │    │
-│  │                                                         │    │
-│  └─────────────────────────────────────────────────────────┘    │
-│                                                                 │
-└─────────────────────────────────────────────────────────────────┘
-```
+| Page Type | Key Implementation Points |
+|-----------|---------------------------|
+| **List Page** | Paginated table, search with 300ms debounce, role-based action visibility |
+| **Form Page** | Inline validation, submit disabled until valid, character counters |
+| **Detail Page** | Master-detail pattern with tabs, breadcrumb navigation, cross-references |
 
-**Front-end validations**:
-- Name: Required, 2-100 chars
-- Description: Max 500 chars
-- Create button: Disabled if form invalid
+#### Behaviors Summary (from FRD)
 
-#### Hierarchical Detail Page (Master-Detail Pattern)
+| Behavior | Specification |
+|----------|---------------|
+| Search debounce | 300ms delay before API call |
+| Role-based visibility | Admin-only: [+ New], [Edit], [Delete] |
+| Delete confirmation | Modal required before soft-delete |
+| Form validation | Real-time on blur/change per field config |
+| Pagination | Client-side state preserved on back navigation |
 
-> **Use this template when:** Feature involves hierarchical data where users need to access related entities from a parent context (e.g., Domain → Users/Projects/Sources).
+#### Navigation Patterns
 
-```
-┌─────────────────────────────────────────────────────────────────────────┐
-│ {{APP_NAME}}                                        [User ▼] [Exit]     │
-├─────────────────────────────────────────────────────────────────────────┤
-│                                                                         │
-│  ◀ Back to {{PARENT_LIST}}                                              │
-│                                                                         │
-│  ┌───────────────────────────────────────────────────────────────────┐  │
-│  │ {{MASTER_ENTITY}}: {{MASTER_NAME}}                    [✎] [🗑]    │  │
-│  │ Status: ● Active    Created: 01/15/24    Owner: John Doe          │  │
-│  └───────────────────────────────────────────────────────────────────┘  │
-│                                                                         │
-│  ┌───────────────────────────────────────────────────────────────────┐  │
-│  │ [{{CHILD_1}} (12)]  [{{CHILD_2}} (5)]  [{{CHILD_3}} (8)]          │  │
-│  ├───────────────────────────────────────────────────────────────────┤  │
-│  │                                                                   │  │
-│  │  {{CHILD_1}} - Contextual to {{MASTER_NAME}}     [+ Add]          │  │
-│  │  ─────────────────────────────────────────────────────────        │  │
-│  │                                                                   │  │
-│  │  Search: [________________________] [🔍]                          │  │
-│  │                                                                   │  │
-│  │  ┌──────┬─────────────┬──────────┬─────────────┐                  │  │
-│  │  │ Name │ Type        │ Status   │ Actions     │                  │  │
-│  │  ├──────┼─────────────┼──────────┼─────────────┤                  │  │
-│  │  │ A    │ Internal    │ ● Active │ [View] [✎]  │                  │  │
-│  │  │ B    │ External    │ ○ Pending│ [View] [✎]  │                  │  │
-│  │  └──────┴─────────────┴──────────┴─────────────┘                  │  │
-│  │                                                                   │  │
-│  │  [◀ Prev]  Page 1/3  [Next ▶]                                     │  │
-│  │                                                                   │  │
-│  └───────────────────────────────────────────────────────────────────┘  │
-│                                                                         │
-│  ┌───────────────────────────────────────────────────────────────────┐  │
-│  │ Cross-References:                                                 │  │
-│  │ • Owner: [John Doe →]  (links to User profile)                    │  │
-│  │ • Category: [Finance →]  (links to Category detail)               │  │
-│  └───────────────────────────────────────────────────────────────────┘  │
-│                                                                         │
-└─────────────────────────────────────────────────────────────────────────┘
-```
+| Pattern | Route Convention | Notes |
+|---------|------------------|-------|
+| List → Detail | `/{resource}/{id}` | Preserve list filters in state |
+| List → Create | `/{resource}/new` | Back returns to list |
+| Detail → Edit | `/{resource}/{id}/edit` | Pre-populate from detail |
+| Master → Child | `/{master}/{id}/{child}` | Tab navigation, master context preserved |
+| Cross-reference | `/{entity}/{id}` | Opens new context |
 
-**Hierarchical Navigation Behaviors**:
-- **Breadcrumb**: Shows full path (Module > Master List > Master Detail > Child Tab)
-- **Tabs**: Each child entity type gets a tab with count badge
-- **Context preservation**: Master entity info always visible at top
-- **Scoped actions**: [+ Add] creates child within current master context
-- **Cross-references**: Links to related entities open in same tab or new tab
-- **Back navigation**: Returns to list with preserved filters
-
-**Navigation Matrix for this screen**:
-
-| From | To | Route | Action | Context Preserved |
-|------|----|-------|--------|-------------------|
-| Master Detail | Child List | Tab switch | Click tab | Master ID, Name |
-| Master Detail | Child Detail | /{{master}}/{id}/{{child}}/{childId} | Click [View] | Master + Child context |
-| Master Detail | Add Child | Modal or /{{master}}/{id}/{{child}}/new | Click [+ Add] | Master ID pre-filled |
-| Master Detail | Cross-ref | /{{ref_entity}}/{refId} | Click [→] | None (new context) |
-| Child Detail | Parent Master | /{{master}}/{id} | Click breadcrumb | Full context |
-
-**Data Access Pattern**:
-- Current master: All attributes displayed, edit/delete available
-- Child tabs: List with CRUD actions (scoped to master)
-- Cross-references: View-only links to other masters
+**Developer instruction**: Explore existing pages for exact patterns: `Glob("**/*.razor")` or `Glob("**/*.tsx")`
 
 ### 5.3 Messages
 
@@ -1025,12 +976,64 @@ erDiagram
 
 ## 6. Business rules
 
-| ID | Rule | Implementation |
-|----|------|----------------|
-| BR-001 | Name must be unique | DB constraint + API validation |
-| BR-002 | Only Admin can create/modify | Auth middleware + [Authorize] |
-| BR-003 | Soft delete (archiving) | status = 'archived', no real DELETE |
-| BR-004 | Audit trail | created_by, created_at, updated_at auto |
+### 6.1 Constraint Hierarchy (by enforcement level)
+
+```
+╔══════════════════════════════════════════════════════════════════════════╗
+║  CONSTRAINT HIERARCHY: Not all rules are equal                           ║
+╠══════════════════════════════════════════════════════════════════════════╣
+║                                                                          ║
+║  MUST (Validation BLOCKS action - non-negotiable)                        ║
+║  ────────────────────────────────────────────────                        ║
+║  • Hard constraints enforced at API level                                ║
+║  • User cannot proceed without fixing                                    ║
+║  • Results in 4xx error codes                                            ║
+║                                                                          ║
+║  SHOULD (Warning but allows proceed - strong recommendation)             ║
+║  ───────────────────────────────────────────────────────────             ║
+║  • Soft constraints with confirmation                                    ║
+║  • "Are you sure?" prompt, user can override                             ║
+║  • Logged for audit but not blocked                                      ║
+║                                                                          ║
+║  MAY (Suggestion only - best practice hint)                              ║
+║  ────────────────────────────────────────────                            ║
+║  • Advisory information shown to user                                    ║
+║  • No blocking, no confirmation required                                 ║
+║  • Improves quality but not mandatory                                    ║
+║                                                                          ║
+╚══════════════════════════════════════════════════════════════════════════╝
+```
+
+### 6.2 Rules by priority
+
+**MUST (validation will BLOCK submit):**
+
+| ID | Rule | HTTP Code | Error Message |
+|----|------|-----------|---------------|
+| BR-001 | Name must be unique | 409 | "'{name}' already exists" |
+| BR-002 | Only Admin can create/modify | 403 | "Insufficient permissions" |
+
+**SHOULD (warning but allows proceed):**
+
+| ID | Rule | Warning Message | Override Action |
+|----|------|-----------------|-----------------|
+| BR-003 | Description recommended | "Consider adding a description" | [Skip] button |
+
+**MAY (suggestion only):**
+
+| ID | Rule | Hint Location | Display |
+|----|------|---------------|---------|
+| BR-004 | Add tags for discoverability | Below tags field | Tooltip icon |
+
+### 6.3 Implementation summary
+
+| ID | Rule | Level | Implementation |
+|----|------|-------|----------------|
+| BR-001 | Name must be unique | MUST | DB constraint + API validation |
+| BR-002 | Only Admin can create/modify | MUST | Auth middleware + [Authorize] |
+| BR-003 | Description recommended | SHOULD | Front-end warning, no API block |
+| BR-004 | Soft delete (archiving) | MUST | status = 'archived', no real DELETE |
+| BR-005 | Audit trail | MUST | created_by, created_at, updated_at auto |
 
 ---
 
@@ -1502,6 +1505,146 @@ LOW PRIORITY        Defer         Reject           Reject
 
 ---
 
+## 9.7 Non-Regression Test Strategy
+
+> ⚠️ **MANDATORY.** Every feature MUST have automated tests before deployment.
+
+```
+╔══════════════════════════════════════════════════════════════════════════╗
+║  TEST STRATEGY: Ensure feature works AND keeps working                   ║
+╠══════════════════════════════════════════════════════════════════════════╣
+║                                                                          ║
+║  Non-regression tests verify that:                                       ║
+║  • New functionality works as specified                                  ║
+║  • Existing functionality is not broken                                  ║
+║  • Edge cases are handled correctly                                      ║
+║                                                                          ║
+║  THE DEVELOPER MUST CREATE TESTS, NOT JUST IMPLEMENT CODE.               ║
+║                                                                          ║
+╚══════════════════════════════════════════════════════════════════════════╝
+```
+
+### [EXPLORE] Step 1: Check if test infrastructure exists
+
+**Search patterns to detect existing test setup:**
+
+| What to Find | Search Pattern | Indicates |
+|--------------|----------------|-----------|
+| Test files | `Glob("**/*.test.*")` OR `Glob("**/*.spec.*")` | Tests exist |
+| Test folders | `Glob("**/tests/**")` OR `Glob("**/__tests__/**")` | Structure exists |
+| Config files | `Glob("**/jest.config.*")` OR `Glob("**/*.runsettings")` | Framework configured |
+| Test project | `Glob("**/*.Tests.csproj")` OR `Glob("**/test_*.py")` | Test project exists |
+
+**Decision tree:**
+
+```
+Test infrastructure found?
+├── YES → Proceed to Step 3 (create tests for this feature)
+└── NO → Proceed to Step 2 (scaffold infrastructure first)
+```
+
+### [SPEC] Step 2: Create test infrastructure (if missing)
+
+> **Invoke agent:** `ba-scaffold-tests` (model: sonnet)
+
+If Step 1 finds NO test infrastructure, the developer/Claude MUST:
+
+1. **Detect** the project's technology stack
+2. **Create** appropriate test folder structure
+3. **Configure** test framework (xUnit/.NET, Jest/Node, pytest/Python)
+4. **Add** necessary dependencies
+
+**Stack-specific setup:**
+
+| Stack | Test Framework | Command | Folder Structure |
+|-------|----------------|---------|------------------|
+| .NET | xUnit | `dotnet new xunit -n {{Project}}.Tests` | `*.Tests/Unit/`, `Integration/`, `E2E/` |
+| Node.js | Jest/Vitest | `npm install --save-dev jest` | `tests/unit/`, `integration/`, `e2e/` |
+| Python | pytest | `pip install pytest pytest-cov` | `tests/unit/`, `integration/`, `e2e/` |
+
+### [SPEC] Step 3: Tests to create for this feature
+
+**Mapping Gherkin → Automated Tests:**
+
+| Gherkin Scenario | Test Type | File Pattern | Priority |
+|------------------|-----------|--------------|----------|
+| Happy path scenarios | E2E / Integration | `{{Feature}}.e2e.test.*` | MUST |
+| Validation scenarios | Integration | `{{Feature}}.validation.test.*` | MUST |
+| Permission scenarios | Integration | `{{Feature}}.auth.test.*` | MUST |
+| Edge case scenarios | Unit / Integration | `{{Feature}}.edge.test.*` | SHOULD |
+
+**Mapping Business Rules → Unit Tests:**
+
+| Business Rule | Test Type | What to Test |
+|---------------|-----------|--------------|
+| BR-XXX (validation) | Unit | Validator methods in isolation |
+| BR-XXX (calculation) | Unit | Service methods with mock data |
+| BR-XXX (authorization) | Integration | API endpoints with different roles |
+
+**Mapping Endpoints → Integration Tests:**
+
+| Endpoint | Test Scenarios |
+|----------|----------------|
+| `GET /api/{{resource}}` | Empty list, paginated results, filtered results |
+| `POST /api/{{resource}}` | Valid creation, validation errors, duplicate handling |
+| `PUT /api/{{resource}}/:id` | Valid update, not found, validation errors |
+| `DELETE /api/{{resource}}/:id` | Valid deletion, not found, cascade behavior |
+
+### Test Requirements (Minimum Coverage)
+
+```
+╔══════════════════════════════════════════════════════════════════════════╗
+║  MINIMUM TEST REQUIREMENTS: Before feature can be considered DONE        ║
+╠══════════════════════════════════════════════════════════════════════════╣
+║                                                                          ║
+║  UNIT TESTS:                                                             ║
+║  • One test per business rule (BR-XXX)                                   ║
+║  • Validator coverage for all entity validations                         ║
+║  • Service methods with edge cases                                       ║
+║                                                                          ║
+║  INTEGRATION TESTS:                                                      ║
+║  • One test per API endpoint                                             ║
+║  • Authentication/authorization scenarios                                ║
+║  • Database constraints validation                                       ║
+║                                                                          ║
+║  E2E TESTS (minimum 5):                                                  ║
+║  • 2 happy path scenarios                                                ║
+║  • 1 validation error scenario                                           ║
+║  • 1 permission denied scenario                                          ║
+║  • 1 edge case scenario                                                  ║
+║                                                                          ║
+╚══════════════════════════════════════════════════════════════════════════╝
+```
+
+### [VALIDATE] Test Checklist
+
+Before marking the feature as DONE, verify:
+
+| Category | Check | Status |
+|----------|-------|--------|
+| **Infrastructure** | Test project/folder exists | ☐ |
+| **Infrastructure** | Test framework configured | ☐ |
+| **Unit** | All BR-XXX have corresponding tests | ☐ |
+| **Unit** | Validators tested | ☐ |
+| **Integration** | All endpoints tested | ☐ |
+| **Integration** | Auth scenarios covered | ☐ |
+| **E2E** | Happy paths tested | ☐ |
+| **E2E** | Error paths tested | ☐ |
+| **Coverage** | Minimum 80% code coverage (if measured) | ☐ |
+| **CI** | Tests pass in CI pipeline | ☐ |
+
+### Test Execution Commands
+
+**Include in handoff:**
+
+| Stack | Run Tests | Coverage Report |
+|-------|-----------|-----------------|
+| .NET | `dotnet test` | `dotnet test --collect:"XPlat Code Coverage"` |
+| Node.js | `npm test` | `npm test -- --coverage` |
+| Python | `pytest` | `pytest --cov=src --cov-report=html` |
+
+---
+
 ## 10. References
 
 | Document | Description |
@@ -1521,8 +1664,11 @@ LOW PRIORITY        Defer         Reject           Reject
 - [ ] UI pages functional
 - [ ] Front + back validations
 - [ ] Permissions implemented
-- [ ] Unit tests passing
-- [ ] Integration tests passing
+- [ ] **Test infrastructure exists** (Section 9.7 Step 1-2)
+- [ ] Unit tests for all BR-XXX passing
+- [ ] Integration tests for all endpoints passing
+- [ ] E2E tests for Gherkin scenarios passing
+- [ ] Code coverage >= 80% (if measured)
 - [ ] Code review completed
 
 ---
