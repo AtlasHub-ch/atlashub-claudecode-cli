@@ -36,20 +36,102 @@ Parse `$ARGUMENTS` to determine the initialization mode:
 
 **Trigger:** `$ARGUMENTS` contains a repository URL
 
-### A.1 Parse Arguments
+### A.1 Parse Arguments and Detect Missing Info
 
 ```bash
 # Extract URL and target folder
 REPO_URL="$1"              # https://github.com/org/repo.git
-TARGET_FOLDER="$2"         # c:/dev (optional, defaults to current directory)
+TARGET_FOLDER="$2"         # c:/dev (may be empty!)
 REPO_NAME=$(basename "$REPO_URL" .git)  # Extract repo name from URL
+```
 
-# Determine project base path
-if [ -n "$TARGET_FOLDER" ]; then
-  PROJECT_BASE="$TARGET_FOLDER/$REPO_NAME"
+**CRITICAL CHECK:** If TARGET_FOLDER is empty, DO NOT default to current directory silently.
+Instead, proceed to A.1b to ask the user interactively.
+
+```bash
+# Check if we have all required info
+if [ -z "$TARGET_FOLDER" ]; then
+  # Missing target folder → Go to A.1b (Interactive questions)
+  NEEDS_INTERACTIVE=true
 else
-  PROJECT_BASE="./$REPO_NAME"
+  # All info provided → Can proceed directly
+  NEEDS_INTERACTIVE=false
+  PROJECT_BASE="$TARGET_FOLDER/$REPO_NAME"
 fi
+```
+
+### A.1b Interactive Questions (When TARGET_FOLDER Missing)
+
+**IMPORTANT:** When the user only provides the URL without specifying WHERE to create the project,
+we MUST ask them explicitly. Never assume or use defaults silently.
+
+#### Step 1: Ask for Target Directory
+
+```javascript
+AskUserQuestion({
+  questions: [{
+    question: "Where do you want to create this project?",
+    header: "Location",
+    options: [
+      { label: "C:/Dev", description: "Common development folder (Recommended)" },
+      { label: "Current directory", description: `Create in: ${process.cwd()}` },
+      { label: "Custom path", description: "Enter a different location" }
+    ],
+    multiSelect: false
+  }]
+})
+```
+
+**If "Custom path" selected:** Prompt for the path and validate it exists/is writable.
+
+#### Step 2: Confirm Project Name
+
+```javascript
+// SUGGESTED_NAME extracted from URL
+AskUserQuestion({
+  questions: [{
+    question: "What should we name this project folder?",
+    header: "Project Name",
+    options: [
+      { label: "${SUGGESTED_NAME}", description: `Use name from URL: "${SUGGESTED_NAME}" (Recommended)` },
+      { label: "Custom name", description: "Enter a different folder name" }
+    ],
+    multiSelect: false
+  }]
+})
+```
+
+**If "Custom name" selected:** Prompt for the name and validate (no spaces, valid chars, doesn't exist).
+
+#### Step 3: Final Confirmation
+
+```javascript
+AskUserQuestion({
+  questions: [{
+    question: `Create GitFlow project with these settings?
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  Project Name:  ${PROJECT_NAME}
+  Location:      ${TARGET_FOLDER}/
+  Full Path:     ${TARGET_FOLDER}/${PROJECT_NAME}/
+  Repository:    ${REPO_URL}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`,
+    header: "Confirm",
+    options: [
+      { label: "Yes, create project", description: "Create structure and clone repository (Recommended)" },
+      { label: "Change settings", description: "Go back and modify name or location" }
+    ],
+    multiSelect: false
+  }]
+})
+```
+
+**If "Change settings":** Return to Step 1.
+
+**After confirmation:** Set PROJECT_BASE and continue to A.2.
+
+```bash
+PROJECT_BASE="$TARGET_FOLDER/$PROJECT_NAME"
 ```
 
 ### A.2 Validate
