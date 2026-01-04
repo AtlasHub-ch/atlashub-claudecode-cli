@@ -2,8 +2,8 @@
 name: gitflow-init
 description: GitFlow initialization - setup config and directories
 color: blue
-model: haiku
-tools: Bash, Read, Write
+model: sonnet
+tools: Bash, Read, Write, Glob, AskUserQuestion
 ---
 
 # GitFlow Init Agent
