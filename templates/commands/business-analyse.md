@@ -45,18 +45,19 @@ Senior Business Analyst expert. Complete business analysis without writing code.
 
 ## Available Commands
 
-| Phase | Command | Description | Output |
-|-------|----------|-------------|--------|
-| 1 | `/business-analyse:init` | Initialize project structure + code scan | `config.json`, structure |
-| 2 | `/business-analyse:discover` | Requirements elicitation (ultrathink) | `1-discovery.md` |
-| 3 | `/business-analyse:analyse` | Business analysis BRD + doc scan (ultrathink) | `2-business-requirements.md` |
-| 4 | `/business-analyse:specify` | Functional specifications FRD (ultrathink) | `3-functional-specification.md` |
-| 5 | `/business-analyse:validate` | User validation gate | `validation.json` |
-| 6 | `/business-analyse:handoff` | Development prompt (ultrathink) | `4-development-handoff.md` |
-| 7 | `/business-analyse:document` | User-readable documentation (post-handoff) | Glossary, Dictionary, Diagrams |
-| + | `/business-analyse:bug` | Bug documentation | `tracking/bugs/BUG-XXX.md` |
-| ⚡ | `/business-analyse:hotfix` | Urgent fix (lightweight template) | `tracking/bugs/{{BUG-ID}}.md` |
-| 🔄 | `/business-analyse:change-request` | Formal spec change during dev | `tracking/changes/CR-XXX.md` |
+| Phase | Command | Model | Description | Output |
+|-------|----------|-------|-------------|--------|
+| 1 | `/business-analyse:1-init` | haiku | Initialize project structure + code scan | `config.json`, structure |
+| 2 | `/business-analyse:2-discover` | **opus** | Requirements elicitation (ultrathink) | `1-discovery.md` |
+| 3 | `/business-analyse:3-analyse` | sonnet | Business analysis BRD + doc scan (ultrathink) | `2-business-requirements.md` |
+| 4 | `/business-analyse:4-specify` | sonnet | Functional specifications FRD (ultrathink) | `3-functional-specification.md` |
+| 5 | `/business-analyse:5-validate` | haiku | User validation gate | `validation.json` |
+| 6 | `/business-analyse:6-handoff` | **opus** | Development prompt (ultrathink) | `4-development-handoff.md` |
+| → | **`/implement FEAT-XXX`** | **opus** | **Implement from handoff (skip explore)** | Code files |
+| 7 | `/business-analyse:7-document` | haiku | User-readable documentation (post-handoff) | Glossary, Dictionary, Diagrams |
+| + | `/business-analyse:bug` | sonnet | Bug documentation | `tracking/bugs/BUG-XXX.md` |
+| ⚡ | `/business-analyse:9-hotfix` | haiku | Urgent fix (lightweight template) | `tracking/bugs/{{BUG-ID}}.md` |
+| 🔄 | `/business-analyse:10-change-request` | sonnet | Formal spec change during dev | `tracking/changes/CR-XXX.md` |
 
 ## Artifact Structure
 
@@ -182,43 +183,117 @@ Senior Business Analyst expert. Complete business analysis without writing code.
 ╚══════════════════════════════════════════════════════════════════════════╝
 ```
 
+## Model Strategy
+
+```
+╔══════════════════════════════════════════════════════════════════════════╗
+║  MODEL REQUIREMENTS: Quality First, Then Cost Optimization               ║
+╠══════════════════════════════════════════════════════════════════════════╣
+║                                                                          ║
+║  OPUS (Critical phases - deep reasoning required):                       ║
+║  • 2-discover: Exhaustive elicitation, challenge assumptions             ║
+║  • 6-handoff: One-shot prompt generation, zero ambiguity                 ║
+║  • /implement: Production code generation                                ║
+║                                                                          ║
+║  SONNET (Analysis phases - balanced reasoning):                          ║
+║  • 3-analyse: Business modeling, process documentation                   ║
+║  • 4-specify: Technical specifications, edge cases                       ║
+║  • 10-change-request: Impact analysis, decision matrix                   ║
+║  • bug: Root cause analysis                                              ║
+║                                                                          ║
+║  HAIKU (Simple phases - template execution):                             ║
+║  • 1-init: Structure setup, no decisions                                 ║
+║  • 5-validate: Approval gate, yes/no                                     ║
+║  • 7-document: Generate from existing specs                              ║
+║  • 9-hotfix: Lightweight urgent fix                                      ║
+║                                                                          ║
+║  PRINCIPLE: Never sacrifice quality for cost savings.                    ║
+║  Each model is the MINIMUM capable of delivering quality output.         ║
+║                                                                          ║
+╚══════════════════════════════════════════════════════════════════════════╝
+```
+
+## Permission Specifications
+
+```
+╔══════════════════════════════════════════════════════════════════════════╗
+║  PERMISSIONS IN HANDOFF: Must be EXPLICIT and IMPLEMENTABLE              ║
+╠══════════════════════════════════════════════════════════════════════════╣
+║                                                                          ║
+║  The 6-handoff includes a dedicated Section 7 for permissions:           ║
+║                                                                          ║
+║  7.1 [EXPLORE] - Discover existing permission patterns                   ║
+║  7.2 Permission Keys - Exact string codes (e.g., "Module.View")          ║
+║  7.3 Role-Permission Matrix - Who can do what                            ║
+║  7.4 Endpoint-Permission Mapping - API protection                        ║
+║  7.5 UI Permission Checks - Button visibility rules                      ║
+║  7.6 Implementation Checklist - Step-by-step                             ║
+║                                                                          ║
+║  MANDATORY in 9-gherkin-scenarios:                                       ║
+║  • At least 1 permission denial scenario                                 ║
+║  • API 403 response test                                                 ║
+║  • UI element visibility test                                            ║
+║                                                                          ║
+║  "Admin can create" is NOT enough.                                       ║
+║  "POST /api/v2/domains requires Domains.Create permission" IS enough.    ║
+║                                                                          ║
+╚══════════════════════════════════════════════════════════════════════════╝
+```
+
 ## Golden Rules
 
 1. **NEVER code** - BA produces specs, not code. NO C#, JS, SQL, Razor in any document.
 2. **ULTRATHINK mandatory** - Phases 2, 3, 4, 6 use deep thinking
-3. **Structure respected** - Application > Module > Feature
-4. **Traceability** - Each requirement has a unique ID
-5. **User validation** - Phase 5 MUST be approved before handoff
-6. **NOK → Revise** - Rejected specs return to ANALYSE phase
-7. **Maintained glossary** - Business terms documented
-8. **Optimized prompts** - Handoff ready for one-shot implementation
-9. **Tables over code** - Use attribute tables, not class definitions
-10. **Explore-First** - Handoff instructs developer to explore existing patterns
+3. **Model per phase** - Use correct model (opus/sonnet/haiku) per phase complexity
+4. **Structure respected** - Application > Module > Feature
+5. **Traceability** - Each requirement has a unique ID
+6. **User validation** - Phase 5 MUST be approved before handoff
+7. **NOK → Revise** - Rejected specs return to ANALYSE phase
+8. **Maintained glossary** - Business terms documented
+9. **Optimized prompts** - Handoff ready for one-shot implementation
+10. **Tables over code** - Use attribute tables, not class definitions
+11. **Explore-First** - Handoff instructs developer to explore existing patterns
+12. **Explicit permissions** - Permission keys, endpoint mapping, Gherkin tests mandatory
 
 ## Quick Start
 
 ```bash
 # 1. Initialize project (scans code structure)
-/business-analyse:init
+/business-analyse:1-init
 
 # 2. New feature - Discovery
-/business-analyse:discover ModuleX "Need description"
+/business-analyse:2-discover ModuleX "Need description"
 
 # 3. Analyze (scans existing docs for consistency)
-/business-analyse:analyse FEAT-001
+/business-analyse:3-analyse FEAT-001
 
 # 4. Specify functional requirements
-/business-analyse:specify FEAT-001
+/business-analyse:4-specify FEAT-001
 
 # 5. User validates (REQUIRED before handoff)
-/business-analyse:validate FEAT-001
-#    → If NOK: Return to /business-analyse:analyse with feedback
+/business-analyse:5-validate FEAT-001
+#    → If NOK: Return to /business-analyse:3-analyse with feedback
 
 # 6. Generate dev prompt (after approval)
-/business-analyse:handoff FEAT-001
+/business-analyse:6-handoff FEAT-001
 
-# 7. Optional: User-readable documentation (after implementation)
-/business-analyse:document FEAT-001
+# 7. IMPLEMENT the feature from handoff (RECOMMENDED)
+/implement FEAT-001
+#    → Reads handoff, discovers patterns, generates code
+#    → Skips exploration (already done by BA)
+#    → Options: --phase=1|2|3|4 for partial implementation
+
+# 8. Optional: User-readable documentation (after implementation)
+/business-analyse:7-document FEAT-001
+```
+
+## Post-Implementation Changes
+
+```bash
+# If changes needed after implementation:
+/business-analyse:10-change-request FEAT-001 "Add preview feature to page X"
+#    → Documents change, generates implementation prompt
+#    → For small changes: offers immediate implementation
 ```
 
 ## Next
@@ -226,5 +301,5 @@ Senior Business Analyst expert. Complete business analysis without writing code.
 Execute the following command to begin:
 
 ```
-/business-analyse:init
+/business-analyse:1-init
 ```

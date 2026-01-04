@@ -1,5 +1,6 @@
 ---
 description: Phase 7 - User-readable documentation (after handoff)
+model: haiku
 ---
 
 # Business Analyse - Document
@@ -23,7 +24,7 @@ Approach to adopt:
 ## Arguments
 
 ```
-/business-analyse:document [feature-id]
+/business-analyse:7-document [feature-id]
 ```
 
 - `feature-id`: Feature identifier (e.g., FEAT-001)
@@ -33,7 +34,7 @@ Approach to adopt:
 ```bash
 # Verify that FRD exists
 test -f ".business-analyse/applications/*/modules/*/features/$ARGUMENTS/3-functional-specification.md" || \
-  echo "Execute /business-analyse:specify first"
+  echo "Execute /business-analyse:4-specify first"
 ```
 
 ## Workflow
@@ -351,7 +352,7 @@ Documents created/updated:
 
 ADRs: {{N}} (if applicable)
 ═══════════════════════════════════════════════════════════
-Next: /business-analyse:handoff {{FEAT-XXX}}
+Next: /business-analyse:6-handoff {{FEAT-XXX}}
 ```
 
 ## Rules

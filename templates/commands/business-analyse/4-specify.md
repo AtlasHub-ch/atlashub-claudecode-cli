@@ -1,5 +1,6 @@
 ---
 description: Phase 4 - Functional specifications FRD (ULTRATHINK)
+model: sonnet
 ---
 
 # Business Analyse - Specify
@@ -9,7 +10,7 @@ Senior BA expert in specifications. ULTRATHINK mode mandatory.
 ## Arguments
 
 ```
-/business-analyse:specify [feature-id]
+/business-analyse:4-specify [feature-id]
 ```
 
 - `feature-id`: Feature identifier (e.g., FEAT-001)
@@ -19,7 +20,7 @@ Senior BA expert in specifications. ULTRATHINK mode mandatory.
 ```bash
 # Verify that BRD exists
 test -f ".business-analyse/applications/*/modules/*/features/$ARGUMENTS/2-business-requirements.md" || \
-  echo "Execute /business-analyse:analyse first"
+  echo "Execute /business-analyse:3-analyse first"
 ```
 
 ## ULTRATHINK Mode
@@ -86,7 +87,7 @@ For each feature, create a complete use case:
 └─────────────────────────────────────────────────────────────────────────┘
 ```
 
-### Step 2bis: State Machine (if entity has status/state field)
+### Step 2.1: State Machine (if entity has status/state field)
 
 For entities with lifecycle states, document the state machine:
 
@@ -219,7 +220,7 @@ For each screen, create an ASCII wireframe:
 | Form | Spinner on submit | N/A | Inline errors | Submit disabled if invalid |
 | Detail | Skeleton | 404 page | Retry button | Edit disabled if no permission |
 
-### Step 3a: Bulk Operations (for list pages)
+### Step 3.1: Bulk Operations (for list pages)
 
 For list pages with multiple items, document bulk operations:
 
@@ -272,7 +273,7 @@ For list pages with multiple items, document bulk operations:
 | Export | None | Always (download) | N/A |
 | Status change | Toast | If > 10 items | List failed, keep selection |
 
-### Step 3b: Search & Filter Patterns (for list pages)
+### Step 3.2: Search & Filter Patterns (for list pages)
 
 Document search and filtering capabilities:
 
@@ -343,7 +344,7 @@ Document search and filtering capabilities:
 |--------|------|--------------|-----------|---------|
 | {{FILTER}} | {{WIDGET}} | {{YES/NO}} | {{PARAM}} | {{DEFAULT}} |
 
-### Step 3c: Pagination Strategy (for list pages)
+### Step 3.3: Pagination Strategy (for list pages)
 
 Document pagination approach:
 
@@ -411,7 +412,7 @@ Document pagination approach:
 | Max page size | {{100}} | Prevents performance issues |
 | Cursor field | {{FIELD}} | Stable, indexed |
 
-### Step 3bis: Navigation Matrix (Hierarchical Access)
+### Step 3.4: Navigation Matrix (Hierarchical Access)
 
 For applications with hierarchical data structures (Master-Detail patterns), document the navigation matrix:
 
@@ -459,7 +460,7 @@ For applications with hierarchical data structures (Master-Detail patterns), doc
 | {{MASTER}} | {{CHILD_2}} | /{{master}}/{id}/{{child2}} | 1:N | Master ID, Name |
 | {{CHILD_1}} | {{GRANDCHILD}} | /{{child1}}/{id}/{{grandchild}} | 1:N | Child + Master context |
 
-### Step 3ter: Data Access Patterns
+### Step 3.5: Data Access Patterns
 
 Document how users access related data from a given context:
 
@@ -541,7 +542,7 @@ For each form, precisely document the fields:
 2. Format validations second (client-side, with debounce)
 3. Async validations last (API calls, with debounce + loading indicator)
 
-### Step 4bis: Conditional Fields (if form has dynamic fields)
+### Step 4.1: Conditional Fields (if form has dynamic fields)
 
 For forms with fields that appear/hide based on other field values:
 
@@ -584,7 +585,7 @@ For forms with fields that appear/hide based on other field values:
 |---------|-------|-------|-------|----------------------|
 | {{TRIGGER}} | {{VALUE}} | {{FIELDS}} | {{FIELDS}} | {{YES/NO}} |
 
-### Step 4ter: Form Wizard (for multi-step forms)
+### Step 4.2: Form Wizard (for multi-step forms)
 
 For complex forms requiring multiple steps:
 
@@ -641,7 +642,7 @@ For complex forms requiring multiple steps:
 └─────────────────────────────────────────────────────────────────────────┘
 ```
 
-### Step 4quater: Error Recovery Patterns
+### Step 4.3: Error Recovery Patterns
 
 Document how the UI handles and recovers from errors:
 
@@ -938,7 +939,7 @@ cat .claude/commands/business-analyse/_resources/checklist-specification.md
 _(Base: 30, +3 state machine, +4 list patterns, +3 form patterns, +4 error handling, +4 nav, +4 a11y if applicable)_
 **Threshold**: 85%
 
-### Step 7bis: Implementation plan (if complexity > Standard)
+### Step 7.1: Implementation plan (if complexity > Standard)
 
 **Trigger**: If complexity detected in phase 2-Discover is "Complex" or "Critical", breakdown into testable phases is **mandatory**.
 
@@ -1352,7 +1353,7 @@ Threshold:           85% (26/30) ✓/✗
 ═══════════════════════════════════════════════════════════
 Document: .../{{FEAT-XXX}}/3-functional-specification.md
 ═══════════════════════════════════════════════════════════
-Next: /business-analyse:document {{FEAT-XXX}}
+Next: /business-analyse:5-validate {{FEAT-XXX}}
 ```
 
 ## Rules

@@ -1,5 +1,6 @@
 ---
 description: Bug resolution documentation and specification (ULTRATHINK)
+model: sonnet
 ---
 
 # Business Analyse - Bug
