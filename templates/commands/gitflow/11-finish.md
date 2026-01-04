@@ -147,7 +147,7 @@ Actions effectuees:
 
 ---
 
-### Hotfix (tag + merge back)
+### Hotfix (auto-increment PATCH + tag + merge back)
 
 ```bash
 # 0. Detecter si on est dans un worktree et trouver le repo principal
@@ -161,18 +161,36 @@ cd "$MAIN_WORKTREE"
 git checkout main
 git pull origin main
 
-# 2. Creer tag (patch version)
-VERSION=$(cat package.json | jq -r '.version')
-git tag -a "v$VERSION" -m "Hotfix v$VERSION"
-git push origin "v$VERSION"
+# 2. AUTO-INCREMENT PATCH VERSION
+# Lire la version actuelle
+CURRENT_VERSION=$(cat package.json | jq -r '.version')
 
-# 3. Merge back to develop
+# Calculer la nouvelle version (PATCH increment)
+# Ex: 1.7.1 → 1.7.2
+NEW_VERSION=$(node -e "
+  const [major, minor, patch] = '$CURRENT_VERSION'.split('.').map(Number);
+  console.log([major, minor, patch + 1].join('.'));
+")
+
+# Mettre a jour package.json avec la nouvelle version
+npm version $NEW_VERSION --no-git-tag-version
+
+# Committer le bump de version
+git add package.json package-lock.json
+git commit -m "chore: bump version to $NEW_VERSION"
+
+# 3. Creer tag avec la nouvelle version
+git tag -a "v$NEW_VERSION" -m "Hotfix v$NEW_VERSION"
+git push origin main
+git push origin "v$NEW_VERSION"
+
+# 4. Merge back to develop
 git checkout develop
 git pull origin develop
-git merge main --no-ff -m "chore: merge hotfix v$VERSION back to develop"
+git merge main --no-ff -m "chore: merge hotfix v$NEW_VERSION back to develop"
 git push origin develop
 
-# 4. Cleanup worktree + branche
+# 5. Cleanup worktree + branche
 WORKTREE_PATH="../worktrees/hotfixes/{name}"
 if [ -d "$WORKTREE_PATH" ]; then
   git worktree remove "$WORKTREE_PATH" --force 2>/dev/null || true
@@ -181,16 +199,20 @@ git branch -d hotfix/{name}
 git push origin --delete hotfix/{name} 2>/dev/null || true
 ```
 
+**⚠️ IMPORTANT:** Le bump de version PATCH est automatique. Pas besoin de le faire manuellement avant le finish.
+
 **Resume:**
 ```
 HOTFIX FINALISE
 ════════════════════════════════════════
 Hotfix:   {name}
-Version:  v{version}
-Tag:      v{version} ✓
+Version:  v{CURRENT_VERSION} → v{NEW_VERSION}
+Tag:      v{NEW_VERSION} ✓
 
 Actions effectuees:
-  ✓ Tag v{version} cree et pousse
+  ✓ Version incrementee (PATCH): {CURRENT_VERSION} → {NEW_VERSION}
+  ✓ package.json mis a jour
+  ✓ Tag v{NEW_VERSION} cree et pousse
   ✓ Main mis a jour
   ✓ Develop synchronise (merge back)
   ✓ Branche hotfix supprimee
