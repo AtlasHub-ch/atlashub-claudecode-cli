@@ -1,5 +1,6 @@
 ---
 description: Phase 5 - User validation of specifications
+model: haiku
 ---
 
 # Business Analyse - Validate
@@ -9,7 +10,7 @@ Senior BA expert. User validation of functional specifications (FRD).
 ## Arguments
 
 ```
-/business-analyse:validate [feature-id]
+/business-analyse:5-validate [feature-id]
 ```
 
 - `feature-id`: Feature identifier (e.g., FEAT-001)
@@ -19,7 +20,7 @@ Senior BA expert. User validation of functional specifications (FRD).
 ```bash
 # Verify that FRD exists
 test -f ".business-analyse/applications/*/modules/*/features/$ARGUMENTS/3-functional-specification.md" || \
-  echo "Execute /business-analyse:specify first"
+  echo "Execute /business-analyse:4-specify first"
 ```
 
 ## Purpose
@@ -280,7 +281,7 @@ Feature:     {{FEAT-XXX}} - {{NAME}}
 Status:      VALIDATED
 Date:        {{DATE}}
 
-Next step:   /business-analyse:handoff {{FEAT-XXX}}
+Next step:   /business-analyse:6-handoff {{FEAT-XXX}}
 
 +==============================================================================+
 ```
@@ -350,7 +351,7 @@ Create revision request in `.business-analyse/applications/.../features/{{FEAT-X
 
 ## Next Action
 
-Return to: `/business-analyse:analyse {{FEAT-XXX}}`
+Return to: `/business-analyse:3-analyse {{FEAT-XXX}}`
 ```
 
 **Output:**
@@ -365,7 +366,7 @@ Iteration:   {{N + 1}}
 
 Feedback saved to: .../revision-{{N}}.md
 
-Next step:   /business-analyse:analyse {{FEAT-XXX}}
+Next step:   /business-analyse:3-analyse {{FEAT-XXX}}
 
 The analysis phase will incorporate your feedback.
 
@@ -432,11 +433,11 @@ Iteration:   {{N}}
 Score:       {{SCORE}}%
 
 {{IF APPROVED}}
-  Next: /business-analyse:handoff {{FEAT-XXX}}
+  Next: /business-analyse:6-handoff {{FEAT-XXX}}
 {{ELSE IF MINOR_CHANGES}}
   Action: Updating FRD, then re-validate
 {{ELSE IF MAJOR_REVISION}}
-  Next: /business-analyse:analyse {{FEAT-XXX}}
+  Next: /business-analyse:3-analyse {{FEAT-XXX}}
   Feedback saved for analysis phase
 {{ELSE}}
   Feature archived

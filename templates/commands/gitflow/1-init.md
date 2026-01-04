@@ -187,62 +187,125 @@ NEXT STEPS
 
 This mode guides the user through setting up a new GitFlow project interactively.
 
-### C.1 Ask for Repository URL
+**Critical Flow Order:**
+```
+C.1 Target Directory (WHERE?) → C.2 Repository URL → C.3 Project Name (WHAT?) → C.4 Confirmation → C.5 Execute
+```
+
+### C.1 Ask for Target Directory (FIRST - Critical)
+
+**IMPORTANT:** Ask WHERE to create the project BEFORE asking for repository details.
 
 ```javascript
 AskUserQuestion({
   questions: [{
-    question: "No git repository detected. What repository do you want to clone?",
-    header: "Repo URL",
+    question: "Where do you want to create your GitFlow project?",
+    header: "Location",
     options: [
-      { label: "GitHub", description: "Enter a GitHub repository URL (https://github.com/...)" },
-      { label: "GitLab", description: "Enter a GitLab repository URL (https://gitlab.com/...)" },
-      { label: "Azure DevOps", description: "Enter an Azure DevOps repository URL" },
-      { label: "Other", description: "Enter any git remote URL" }
+      { label: "Current directory", description: `Create in: ${process.cwd()} (Recommended)` },
+      { label: "C:/Dev", description: "Common development folder (Windows)" },
+      { label: "~/projects", description: "Common development folder (Unix)" },
+      { label: "Custom path", description: "Enter a different location" }
     ],
     multiSelect: false
   }]
 })
 ```
 
-After user selects platform, prompt for the actual URL:
-
+**If "Custom path" selected:**
 ```
-Please provide the repository URL:
-> Example: https://github.com/organization/repository-name.git
+Enter the target parent folder (project will be created inside):
+> Example: C:/Projects or /home/user/dev
 ```
 
-**Validate URL:**
+**Validate path exists:**
+```bash
+# Expand ~ if present
+TARGET_PATH="${TARGET_PATH/#\~/$HOME}"
+
+# Check directory exists
+if [ ! -d "$TARGET_PATH" ]; then
+  echo "WARNING: Directory does not exist: $TARGET_PATH"
+  # Ask: Create it? or Choose different path?
+  AskUserQuestion({
+    questions: [{
+      question: "Directory '$TARGET_PATH' does not exist. Create it?",
+      header: "Create Dir",
+      options: [
+        { label: "Yes, create it", description: "Create the directory and continue (Recommended)" },
+        { label: "Choose different path", description: "Enter another location" }
+      ],
+      multiSelect: false
+    }]
+  })
+fi
+
+# Check write permissions
+if [ ! -w "$TARGET_PATH" ]; then
+  echo "ERROR: No write permission to: $TARGET_PATH"
+  # Ask again
+fi
+```
+
+### C.2 Ask for Repository URL
+
+```javascript
+AskUserQuestion({
+  questions: [{
+    question: "What repository do you want to clone?",
+    header: "Repository",
+    options: [
+      { label: "GitHub", description: "https://github.com/org/repo.git" },
+      { label: "GitLab", description: "https://gitlab.com/org/repo.git" },
+      { label: "Azure DevOps", description: "https://dev.azure.com/org/project/_git/repo" },
+      { label: "Other", description: "Any git remote URL (SSH or HTTPS)" }
+    ],
+    multiSelect: false
+  }]
+})
+```
+
+**Then prompt for the actual URL:**
+```
+Enter the repository URL:
+> Example: https://github.com/organization/my-project.git
+```
+
+**Validate URL is accessible:**
 ```bash
 git ls-remote "$REPO_URL" HEAD > /dev/null 2>&1 || {
   echo "ERROR: Cannot access repository: $REPO_URL"
-  echo "Please verify the URL and your access permissions."
+  echo "Please verify:"
+  echo "  - URL is correct"
+  echo "  - You have access permissions"
+  echo "  - Network connectivity"
   # Ask again
 }
 ```
 
-### C.2 Extract and Confirm Project Name
+### C.3 Ask for Project Name (EXPLICIT - Critical)
 
-Extract the project name from the URL and propose it to the user:
+**IMPORTANT:** This is a CRITICAL step. Ask EXPLICITLY for the project name, don't just confirm.
 
+Extract suggestion from URL:
 ```bash
 # Extract repo name from various URL formats
 # https://github.com/org/my-project.git → my-project
 # git@github.com:org/my-project.git → my-project
 # https://dev.azure.com/org/project/_git/repo → repo
 
-REPO_NAME=$(basename "$REPO_URL" .git)
+SUGGESTED_NAME=$(basename "$REPO_URL" .git)
 ```
 
-**Ask user to confirm or customize:**
+**Ask user EXPLICITLY for project name:**
 
 ```javascript
 AskUserQuestion({
   questions: [{
-    question: "Project folder name will be: \"${REPO_NAME}\". Is this correct?",
-    header: "Project Name",
+    question: "What should we name this project folder?",
+    header: "Project Name",  // Critical: explicit header
     options: [
-      { label: "${REPO_NAME}", description: "Use the repository name as folder name (Recommended)" },
+      { label: "${SUGGESTED_NAME}", description: `Use repository name: "${SUGGESTED_NAME}" (Recommended)` },
       { label: "Custom name", description: "Enter a different folder name" }
     ],
     multiSelect: false
@@ -256,55 +319,83 @@ Enter the project folder name:
 >
 ```
 
-**Validate folder name:**
+**Strict validation:**
 ```bash
-# Check folder doesn't already exist
-if [ -d "$PROJECT_NAME" ]; then
-  echo "ERROR: Folder '$PROJECT_NAME' already exists in current directory"
+# 1. Not empty
+if [ -z "$PROJECT_NAME" ]; then
+  echo "ERROR: Project name cannot be empty"
+  # Ask again
+fi
+
+# 2. Valid characters only
+if [[ ! "$PROJECT_NAME" =~ ^[a-zA-Z0-9._-]+$ ]]; then
+  echo "ERROR: Invalid characters in project name"
+  echo "Allowed: letters, numbers, dots (.), underscores (_), hyphens (-)"
+  echo "Not allowed: spaces, special characters"
+  # Ask again
+fi
+
+# 3. Doesn't already exist in target location
+FULL_PROJECT_PATH="$TARGET_PATH/$PROJECT_NAME"
+if [ -d "$FULL_PROJECT_PATH" ]; then
+  echo "ERROR: Folder already exists: $FULL_PROJECT_PATH"
   # Ask for different name
 fi
 
-# Validate folder name (no special characters)
-if [[ ! "$PROJECT_NAME" =~ ^[a-zA-Z0-9._-]+$ ]]; then
-  echo "ERROR: Folder name contains invalid characters"
-  echo "Use only: letters, numbers, dots, underscores, hyphens"
+# 4. Reasonable length
+if [ ${#PROJECT_NAME} -gt 100 ]; then
+  echo "ERROR: Project name too long (max 100 characters)"
   # Ask again
 fi
 ```
 
-### C.3 Confirm Target Location
+### C.4 Final Confirmation with Full Path
+
+**Display complete summary before creating:**
 
 ```javascript
 AskUserQuestion({
   questions: [{
-    question: "Create project in: \"$(pwd)/${PROJECT_NAME}/\". Continue?",
-    header: "Location",
+    question: `Create GitFlow project with these settings?\n
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  Project Name:  ${PROJECT_NAME}
+  Location:      ${TARGET_PATH}/
+  Full Path:     ${FULL_PROJECT_PATH}/
+  Repository:    ${REPO_URL}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Structure to be created:
+  ${PROJECT_NAME}/
+  ├── .bare/           (hidden bare repository)
+  ├── 01-Main/         (main branch)
+  ├── 02-Develop/      (develop branch) ← Working directory
+  ├── features/
+  ├── releases/
+  └── hotfixes/`,
+    header: "Confirm",
     options: [
-      { label: "Yes, create here", description: "Create the project structure in current directory (Recommended)" },
-      { label: "Choose different location", description: "Specify a different parent folder" }
+      { label: "Yes, create project", description: "Create structure and clone repository (Recommended)" },
+      { label: "Change settings", description: "Go back and modify name, location, or repository" }
     ],
     multiSelect: false
   }]
 })
 ```
 
-**If "Choose different location" selected:**
-```
-Enter the target parent folder (project will be created inside):
-> Example: C:/Dev or /home/user/projects
-```
+**If "Change settings" selected:**
+- Return to C.1 and let user modify any setting
 
-### C.4 Create Structure and Clone
+### C.5 Create Structure and Clone
 
 Once all inputs are confirmed, execute the same steps as MODE A:
 
 ```bash
-# Set final paths
-PROJECT_BASE="$TARGET_FOLDER/$PROJECT_NAME"
+# Final path is already set from C.3 validation
+# FULL_PROJECT_PATH="$TARGET_PATH/$PROJECT_NAME"
 
 # Create project folder with organized structure
-mkdir -p "$PROJECT_BASE"
-cd "$PROJECT_BASE"
+mkdir -p "$FULL_PROJECT_PATH"
+cd "$FULL_PROJECT_PATH"
 
 # Clone as bare repository (hidden)
 git clone --bare "$REPO_URL" .bare
@@ -331,7 +422,7 @@ cd "02-Develop"
 mkdir -p .claude/gitflow/{plans,logs,migrations,backup,cache}
 ```
 
-### C.5 Generate Config and Display Summary
+### C.6 Generate Config and Display Summary
 
 Generate the same config as MODE A (see A.4) and display:
 
@@ -345,7 +436,7 @@ REPOSITORY
   Remote: ${REPO_URL}
 
 STRUCTURE CREATED
-  ${PROJECT_BASE}/
+  ${FULL_PROJECT_PATH}/
   ├── .bare/          ← Bare repository (hidden)
   ├── .git            ← Pointer to .bare
   ├── 01-Main/        ← main branch (read-only reference)
@@ -355,11 +446,11 @@ STRUCTURE CREATED
   └── hotfixes/       ← Hotfix worktrees will go here
 
 WORKING DIRECTORY
-  ${PROJECT_BASE}/02-Develop
+  ${FULL_PROJECT_PATH}/02-Develop
 
 NEXT STEPS
   1. Open the project:
-     cd "${PROJECT_BASE}/02-Develop"
+     cd "${FULL_PROJECT_PATH}/02-Develop"
      code .
 
   2. Start a new feature:
@@ -715,27 +806,35 @@ Rename to `init_<DATE>_DONE_<TIMESTAMP>.md`
 
 | Step | Action |
 |------|--------|
-| 1 | Detect no git repo → ask for repository URL |
-| 2 | Validate URL is accessible |
-| 3 | Extract project name from URL → ask user to confirm or customize |
-| 4 | Confirm target location → allow user to change |
-| 5 | Create organized structure and clone |
+| 1 | Detect no git repo → **ask for target directory (WHERE?)** |
+| 2 | Ask for repository URL |
+| 3 | Validate URL is accessible |
+| 4 | **Ask EXPLICITLY for project name (WHAT?)** |
+| 5 | Final confirmation with full path |
+| 6 | Create organized structure and clone |
 
 **Flow:**
 ```
 User runs: /gitflow:1-init
 
-→ "No git repository detected. What repository do you want to clone?"
+→ "Where do you want to create your GitFlow project?"
+  [Current directory] [C:/Dev] [~/projects] [Custom path]
+
+→ "What repository do you want to clone?"
   [GitHub] [GitLab] [Azure DevOps] [Other]
 
-→ "Please provide the repository URL:"
+→ "Enter the repository URL:"
   > https://github.com/myorg/my-awesome-project.git
 
-→ "Project folder name will be: 'my-awesome-project'. Is this correct?"
+→ "What should we name this project folder?"
   [my-awesome-project (Recommended)] [Custom name]
 
-→ "Create project in: 'C:/Dev/my-awesome-project/'. Continue?"
-  [Yes, create here (Recommended)] [Choose different location]
+→ "Create GitFlow project with these settings?
+    Project Name: my-awesome-project
+    Location:     C:/Dev/
+    Full Path:    C:/Dev/my-awesome-project/
+    Repository:   https://github.com/myorg/my-awesome-project.git"
+  [Yes, create project (Recommended)] [Change settings]
 
 → Creates structure and clones...
 → Opens in 02-Develop

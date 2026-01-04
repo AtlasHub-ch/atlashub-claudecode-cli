@@ -1,5 +1,6 @@
 ---
 description: Phase 2 - Discovery and requirements elicitation (ULTRATHINK)
+model: opus
 ---
 
 # Business Analyse - Discover
@@ -31,7 +32,7 @@ Senior BA expert in elicitation. ULTRATHINK mode mandatory.
 ## Arguments
 
 ```
-/business-analyse:discover [module] "needs description"
+/business-analyse:2-discover [module] "needs description"
 ```
 
 - `module`: Name of the concerned module
@@ -41,7 +42,7 @@ Senior BA expert in elicitation. ULTRATHINK mode mandatory.
 
 ```bash
 # Verify initialization
-test -f .business-analyse/config.json || echo "Execute /business-analyse:init first"
+test -f .business-analyse/config.json || echo "Execute /business-analyse:1-init first"
 ```
 
 ## ULTRATHINK Mode
@@ -437,7 +438,7 @@ Create `1-discovery.md` in the feature folder:
 ## Next Steps
 
 1. Validate with {{STAKEHOLDER}}
-2. Execute `/business-analyse:analyse {{FEAT-XXX}}`
+2. Execute `/business-analyse:3-analyse {{FEAT-XXX}}`
 
 ---
 
@@ -459,7 +460,7 @@ Open questions: {{Y}}
 ═══════════════════════════════════════════════════════════
 Document: .business-analyse/.../{{FEAT-XXX}}/1-discovery.md
 ═══════════════════════════════════════════════════════════
-Next: /business-analyse:analyse {{FEAT-XXX}}
+Next: /business-analyse:3-analyse {{FEAT-XXX}}
 ```
 
 ## Rules

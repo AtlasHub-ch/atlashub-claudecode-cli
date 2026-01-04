@@ -95,9 +95,14 @@
                             <a href="#phase-2" class="sidebar-toc-link">2. Discover</a>
                             <a href="#phase-3" class="sidebar-toc-link">3. Analyse</a>
                             <a href="#phase-4" class="sidebar-toc-link">4. Specify <span style="color:#22c55e;">★</span></a>
-                            <a href="#phase-5" class="sidebar-toc-link">5. Document</a>
+                            <a href="#phase-5" class="sidebar-toc-link">5. Validate</a>
                             <a href="#phase-6" class="sidebar-toc-link">6. Handoff <span style="color:#22c55e;">★</span></a>
+                            <a href="#implement" class="sidebar-toc-link">→ /implement <span style="color:#f59e0b;">OPUS</span></a>
+                            <a href="#phase-7" class="sidebar-toc-link">7. Document</a>
                             <a href="#bug-tracking" class="sidebar-toc-link">Bug Tracking</a>
+                            <a href="#model-strategy" class="sidebar-toc-link">Model Strategy <span style="color:#22c55e;">★</span></a>
+                            <a href="#permissions" class="sidebar-toc-link">Permissions <span style="color:#22c55e;">★</span></a>
+                            <a href="#golden-rules" class="sidebar-toc-link">Golden Rules</a>
                         </nav>
                     </div>
                 </div>
@@ -368,49 +373,102 @@
                                     <tr>
                                         <th>Phase</th>
                                         <th>
-                                        <span data-lang="fr">Commande</span>
-                                        <span data-lang="en">Command</span>
-                                    </th>
+                                            <span data-lang="fr">Commande</span>
+                                            <span data-lang="en">Command</span>
+                                        </th>
+                                        <th>Model</th>
+                                        <th>Description</th>
                                         <th>Output</th>
-                                        <th>Mode</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
                                         <td><strong>1. Init</strong></td>
                                         <td><code>/business-analyse:1-init</code></td>
-                                        <td><code>config.json, glossary.md</code></td>
-                                        <td>ultrathink</td>
+                                        <td><span class="tag tag-info">haiku</span></td>
+                                        <td data-lang="fr">Initialisation structure projet + scan code</td>
+                                        <td data-lang="en">Initialize project structure + code scan</td>
+                                        <td><code>config.json</code></td>
                                     </tr>
                                     <tr>
                                         <td><strong>2. Discover</strong></td>
                                         <td><code>/business-analyse:2-discover</code></td>
-                                        <td><code>discovery.md</code></td>
-                                        <td><strong style="color: #ec4899;">OPUS</strong> + ultrathink</td>
+                                        <td><span class="tag tag-danger">opus</span></td>
+                                        <td data-lang="fr">Elicitation des exigences (ultrathink)</td>
+                                        <td data-lang="en">Requirements elicitation (ultrathink)</td>
+                                        <td><code>1-discovery.md</code></td>
                                     </tr>
                                     <tr>
                                         <td><strong>3. Analyse</strong></td>
                                         <td><code>/business-analyse:3-analyse</code></td>
-                                        <td><code>BRD.md, process-model.md</code></td>
-                                        <td>ultrathink</td>
+                                        <td><span class="tag tag-warning">sonnet</span></td>
+                                        <td data-lang="fr">Analyse metier BRD + scan docs (ultrathink)</td>
+                                        <td data-lang="en">Business analysis BRD + doc scan (ultrathink)</td>
+                                        <td><code>2-business-requirements.md</code></td>
                                     </tr>
                                     <tr>
                                         <td><strong>4. Specify</strong></td>
                                         <td><code>/business-analyse:4-specify</code></td>
-                                        <td><code>FRD.md</code></td>
-                                        <td>ultrathink</td>
+                                        <td><span class="tag tag-warning">sonnet</span></td>
+                                        <td data-lang="fr">Specifications fonctionnelles FRD (ultrathink)</td>
+                                        <td data-lang="en">Functional specifications FRD (ultrathink)</td>
+                                        <td><code>3-functional-specification.md</code></td>
                                     </tr>
                                     <tr>
-                                        <td><strong>5. Document</strong></td>
-                                        <td><code>/business-analyse:5-document</code></td>
-                                        <td><code>data-dictionary.md</code></td>
-                                        <td>ultrathink</td>
+                                        <td><strong>5. Validate</strong></td>
+                                        <td><code>/business-analyse:5-validate</code></td>
+                                        <td><span class="tag tag-info">haiku</span></td>
+                                        <td data-lang="fr">Validation utilisateur (gate)</td>
+                                        <td data-lang="en">User validation gate</td>
+                                        <td><code>validation.json</code></td>
                                     </tr>
                                     <tr>
                                         <td><strong>6. Handoff</strong></td>
                                         <td><code>/business-analyse:6-handoff</code></td>
-                                        <td><code>DEV-PROMPT.md (EN)</code></td>
-                                        <td>ultrathink</td>
+                                        <td><span class="tag tag-danger">opus</span></td>
+                                        <td data-lang="fr">Prompt de developpement (ultrathink)</td>
+                                        <td data-lang="en">Development prompt (ultrathink)</td>
+                                        <td><code>4-development-handoff.md</code></td>
+                                    </tr>
+                                    <tr style="background: rgba(245, 158, 11, 0.15); border-left: 3px solid #f59e0b;">
+                                        <td><strong>→ Implement</strong></td>
+                                        <td><code>/implement FEAT-XXX</code></td>
+                                        <td><span class="tag tag-danger">opus</span></td>
+                                        <td data-lang="fr"><strong>Implementation depuis handoff (skip explore)</strong></td>
+                                        <td data-lang="en"><strong>Implement from handoff (skip explore)</strong></td>
+                                        <td>Code files</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>7. Document</strong></td>
+                                        <td><code>/business-analyse:7-document</code></td>
+                                        <td><span class="tag tag-info">haiku</span></td>
+                                        <td data-lang="fr">Documentation utilisateur (post-handoff)</td>
+                                        <td data-lang="en">User-readable documentation (post-handoff)</td>
+                                        <td>Glossary, Dictionary, Diagrams</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>+ Bug</strong></td>
+                                        <td><code>/business-analyse:bug</code></td>
+                                        <td><span class="tag tag-warning">sonnet</span></td>
+                                        <td data-lang="fr">Documentation de bug</td>
+                                        <td data-lang="en">Bug documentation</td>
+                                        <td><code>tracking/bugs/BUG-XXX.md</code></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>⚡ Hotfix</strong></td>
+                                        <td><code>/business-analyse:9-hotfix</code></td>
+                                        <td><span class="tag tag-info">haiku</span></td>
+                                        <td data-lang="fr">Correction urgente (template leger)</td>
+                                        <td data-lang="en">Urgent fix (lightweight template)</td>
+                                        <td><code>tracking/bugs/*.md</code></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>🔄 Change Request</strong></td>
+                                        <td><code>/business-analyse:10-change-request</code></td>
+                                        <td><span class="tag tag-warning">sonnet</span></td>
+                                        <td data-lang="fr">Changement formel de spec pendant dev</td>
+                                        <td data-lang="en">Formal spec change during dev</td>
+                                        <td><code>tracking/changes/CR-*.md</code></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -1496,112 +1554,154 @@ Next: /business-analyse:document FEAT-XXX</code></pre>
                         </div>
                     </section>
 
-                    <!-- Phase 5: Document -->
+                    <!-- Phase 5: Validate -->
                     <section id="phase-5">
                         <h2>
-                            <span style="color: #22c55e;">5.</span> Document
+                            <span style="color: #22c55e;">5.</span> Validate
                         </h2>
 
                         <p data-lang="fr">
-                            <strong>Fonctionnalite :</strong> Cette phase genere la documentation transverse qui complete les specifications. Elle extrait tous les termes metier des documents precedents pour enrichir le glossaire global, cree un dictionnaire de donnees complet avec tous les attributs/types/contraintes de chaque entite, et documente les flux d'integration entre systemes avec des diagrammes de sequence Mermaid. Cette documentation assure la coherence terminologique et technique entre toutes les features du projet.
+                            <strong>Fonctionnalite :</strong> Cette phase est un <strong>point de controle OBLIGATOIRE</strong> avant de generer le prompt de developpement. L'utilisateur DOIT revoir et approuver le FRD avant de continuer. Si les specifications sont rejetees, le feedback est collecte et on retourne a la phase ANALYSE pour revision.
                         </p>
                         <p data-lang="en">
-                            <strong>Functionality:</strong> This phase generates cross-cutting documentation that completes the specifications. It extracts all business terms from previous documents to enrich the global glossary, creates a complete data dictionary with all attributes/types/constraints for each entity, and documents integration flows between systems with Mermaid sequence diagrams. This documentation ensures terminological and technical consistency across all project features.
+                            <strong>Functionality:</strong> This phase is a <strong>MANDATORY checkpoint</strong> before generating the dev prompt. The user MUST review and approve the FRD before proceeding. If specifications are rejected, feedback is collected and we return to ANALYSE phase for revision.
                         </p>
                         <p data-lang="fr">
-                            <strong>Output :</strong> <code>data-dictionary.md</code> (dictionnaire de donnees complet), <code>glossary.md</code> (glossaire metier mis a jour avec les nouveaux termes), <code>integration-flows.md</code> (flux d'integration et diagrammes de sequence entre systemes).
+                            <strong>Output :</strong> <code>validation.json</code> contenant le statut (APPROVED/REJECTED/REVISION), la date de validation, l'iteration, et les commentaires du validateur.
                         </p>
                         <p data-lang="en">
-                            <strong>Output:</strong> <code>data-dictionary.md</code> (complete data dictionary), <code>glossary.md</code> (business glossary updated with new terms), <code>integration-flows.md</code> (integration flows and sequence diagrams between systems).
+                            <strong>Output:</strong> <code>validation.json</code> containing status (APPROVED/REJECTED/REVISION), validation date, iteration number, and validator comments.
                         </p>
 
                         <div class="command-card">
                             <div class="command-header">
-                                <code class="command-name">/business-analyse:5-document</code>
-                                <span class="tag tag-command">Docs</span>
+                                <code class="command-name">/business-analyse:5-validate</code>
+                                <span class="tag tag-haiku">haiku</span>
                             </div>
                             <div class="command-body">
                                 <div class="code-block">
                                     <button class="copy-btn">Copy</button>
-                                    <pre><code>/business-analyse:5-document</code></pre>
+                                    <pre><code>/business-analyse:5-validate FEAT-001</code></pre>
                                 </div>
 
-                                <h4 data-lang="fr">Documents generes</h4>
-                                <h4 data-lang="en">Generated documents</h4>
+                                <h4 data-lang="fr">Decisions possibles</h4>
+                                <h4 data-lang="en">Possible decisions</h4>
 
                                 <div class="feature-grid">
                                     <div class="feature-item">
-                                        <span class="feature-icon">&#128218;</span>
-                                        <span class="feature-text" data-lang="fr"><strong>data-dictionary.md</strong> - Toutes les entites avec types et contraintes</span>
-                                        <span class="feature-text" data-lang="en"><strong>data-dictionary.md</strong> - All entities with types and constraints</span>
+                                        <span class="feature-icon">&#9989;</span>
+                                        <span class="feature-text" data-lang="fr"><strong>Approved</strong> - Specifications completes et correctes → handoff</span>
+                                        <span class="feature-text" data-lang="en"><strong>Approved</strong> - Specifications complete and correct → handoff</span>
                                     </div>
                                     <div class="feature-item">
-                                        <span class="feature-icon">&#128214;</span>
-                                        <span class="feature-text" data-lang="fr"><strong>glossary.md</strong> - Mise a jour du glossaire metier</span>
-                                        <span class="feature-text" data-lang="en"><strong>glossary.md</strong> - Updated business glossary</span>
+                                        <span class="feature-icon">&#128221;</span>
+                                        <span class="feature-text" data-lang="fr"><strong>Minor changes</strong> - Petits ajustements → mise a jour FRD</span>
+                                        <span class="feature-text" data-lang="en"><strong>Minor changes</strong> - Small adjustments → update FRD</span>
                                     </div>
                                     <div class="feature-item">
-                                        <span class="feature-icon">&#128279;</span>
-                                        <span class="feature-text" data-lang="fr"><strong>integration-flows.md</strong> - Flux entre systemes</span>
-                                        <span class="feature-text" data-lang="en"><strong>integration-flows.md</strong> - System integration flows</span>
+                                        <span class="feature-icon">&#128260;</span>
+                                        <span class="feature-text" data-lang="fr"><strong>Major revision</strong> - Problemes significatifs → retour a ANALYSE</span>
+                                        <span class="feature-text" data-lang="en"><strong>Major revision</strong> - Significant issues → return to ANALYSE</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <span class="feature-icon">&#10060;</span>
+                                        <span class="feature-text" data-lang="fr"><strong>Rejected</strong> - Ne repond pas aux besoins → archive</span>
+                                        <span class="feature-text" data-lang="en"><strong>Rejected</strong> - Does not meet requirements → archive</span>
                                     </div>
                                 </div>
 
-                                <details class="template-section">
-                                    <summary>
-                                        <h4 style="display: inline; margin: 0;">
-                                            <span data-lang="fr">Template Prompt</span>
-                                            <span data-lang="en">Prompt Template</span>
-                                        </h4>
-                                        <span class="template-badge">5-document.md</span>
-                                    </summary>
-                                    <div class="template-content">
-                                        <p class="template-path">
-                                            <code>templates/commands/business-analyse/5-document.md</code>
+                                <div class="alert alert-warning">
+                                    <span class="alert-icon">&#9888;</span>
+                                    <div class="alert-content">
+                                        <h5 data-lang="fr">Limite d'iterations</h5>
+                                        <h5 data-lang="en">Iteration Limit</h5>
+                                        <p data-lang="fr">
+                                            <strong>Maximum 3 revisions majeures.</strong> Apres 3 iterations sans approbation, escalade obligatoire vers Product Owner/Stakeholders pour decision (reduire le scope, reporter, ou abandonner la feature).
                                         </p>
-                                        <div class="code-block template-code">
-                                            <button class="copy-btn">Copy</button>
-                                            <pre><code># Business Analyse - Document
-
-Senior BA expert. Generate cross-cutting documentation.
-
-## Arguments
-/business-analyse:document &lt;feature-id&gt;
-- feature-id: Feature identifier (FEAT-XXX)
-
-## Prerequisites
-- Specification phase completed (3-functional-specification.md exists)
-
-## Workflow
-
-### Step 1: Read All Documents
-Read discovery, BRD, and FRD for context.
-
-### Step 2: Update Glossary
-Extract all business terms and update glossary.md.
-
-### Step 3: Generate Data Dictionary
-Create data-dictionary.md with:
-- All entities from data model
-- Field types and constraints
-- Relationships
-- Validation rules
-
-### Step 4: Document Integration Flows
-Create integration-flows.md with:
-- System interfaces
-- Data flows between systems
-- Sequence diagrams (Mermaid)
-
-## Output
-- data-dictionary.md (complete entity documentation)
-- glossary.md (updated with new terms)
-- integration-flows.md (system interactions)
-
-Next: /business-analyse:handoff FEAT-XXX</code></pre>
-                                        </div>
+                                        <p data-lang="en">
+                                            <strong>Maximum 3 major revisions.</strong> After 3 iterations without approval, mandatory escalation to Product Owner/Stakeholders for decision (reduce scope, defer, or abandon feature).
+                                        </p>
                                     </div>
-                                </details>
+                                </div>
+
+                                <h4 data-lang="fr">Criteres de validation</h4>
+                                <h4 data-lang="en">Validation Criteria</h4>
+
+                                <div class="table-container">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>
+                                                    <span data-lang="fr">Critere</span>
+                                                    <span data-lang="en">Criterion</span>
+                                                </th>
+                                                <th>%</th>
+                                                <th>
+                                                    <span data-lang="fr">Verification</span>
+                                                    <span data-lang="en">Check</span>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td data-lang="fr">Scope clair</td>
+                                                <td data-lang="en">Clear scope</td>
+                                                <td>20%</td>
+                                                <td data-lang="fr">In/Out scope definis</td>
+                                                <td data-lang="en">In/Out scope defined</td>
+                                            </tr>
+                                            <tr>
+                                                <td data-lang="fr">Entites completes</td>
+                                                <td data-lang="en">Complete entities</td>
+                                                <td>20%</td>
+                                                <td data-lang="fr">Tous les attributs, relations</td>
+                                                <td data-lang="en">All attributes, relations</td>
+                                            </tr>
+                                            <tr>
+                                                <td data-lang="fr">APIs documentees</td>
+                                                <td data-lang="en">APIs documented</td>
+                                                <td>20%</td>
+                                                <td data-lang="fr">Tous les endpoints, payloads</td>
+                                                <td data-lang="en">All endpoints, payloads</td>
+                                            </tr>
+                                            <tr>
+                                                <td data-lang="fr">Regles definies</td>
+                                                <td data-lang="en">Rules defined</td>
+                                                <td>20%</td>
+                                                <td data-lang="fr">Tous les BR-XXX documentes</td>
+                                                <td data-lang="en">All BR-XXX documented</td>
+                                            </tr>
+                                            <tr>
+                                                <td data-lang="fr">UI specifie</td>
+                                                <td data-lang="en">UI specified</td>
+                                                <td>10%</td>
+                                                <td data-lang="fr">Wireframes, comportements</td>
+                                                <td data-lang="en">Wireframes, behaviors</td>
+                                            </tr>
+                                            <tr>
+                                                <td data-lang="fr">Criteres d'acceptation</td>
+                                                <td data-lang="en">Acceptance criteria</td>
+                                                <td>10%</td>
+                                                <td data-lang="fr">Criteres testables</td>
+                                                <td data-lang="en">Testable criteria</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div class="alert alert-info">
+                                    <span class="alert-icon">&#128202;</span>
+                                    <div class="alert-content">
+                                        <h5 data-lang="fr">Score minimum</h5>
+                                        <h5 data-lang="en">Minimum score</h5>
+                                        <p data-lang="fr">
+                                            <strong>85%</strong> requis pour approbation. En dessous, revision necessaire.
+                                        </p>
+                                        <p data-lang="en">
+                                            <strong>85%</strong> required for approval. Below that, revision needed.
+                                        </p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </section>
@@ -2014,6 +2114,600 @@ Creates bug report in:
                                     </div>
                                 </details>
                             </div>
+                        </div>
+                    </section>
+
+                    <!-- Implement: Execute the Plan -->
+                    <section id="implement">
+                        <h2>
+                            <span style="color: #f59e0b;">→</span> /implement
+                            <span class="tag tag-opus" style="margin-left: 10px;">OPUS</span>
+                        </h2>
+
+                        <div class="alert alert-success">
+                            <span class="alert-icon">&#128640;</span>
+                            <div class="alert-content">
+                                <h5 data-lang="fr">Execution du Plan Business Analyse</h5>
+                                <h5 data-lang="en">Business Analyse Plan Execution</h5>
+                                <p data-lang="fr">
+                                    Cette commande implemente une feature <strong>directement depuis son handoff valide</strong>. Elle saute la phase d'exploration car le handoff contient deja tout le contexte necessaire.
+                                </p>
+                                <p data-lang="en">
+                                    This command implements a feature <strong>directly from its validated handoff</strong>. It skips the exploration phase because the handoff already contains all necessary context.
+                                </p>
+                            </div>
+                        </div>
+
+                        <p data-lang="fr">
+                            <strong>Prerequis :</strong> La feature doit avoir complete le workflow BA complet (discover → analyse → specify → validate → handoff) avec un statut <code>APPROVED</code> dans validation.json.
+                        </p>
+                        <p data-lang="en">
+                            <strong>Prerequisites:</strong> The feature must have completed the full BA workflow (discover → analyse → specify → validate → handoff) with an <code>APPROVED</code> status in validation.json.
+                        </p>
+
+                        <div class="command-card">
+                            <div class="command-header">
+                                <code class="command-name">/implement</code>
+                                <span class="tag tag-opus">opus</span>
+                            </div>
+                            <div class="command-body">
+                                <h4 data-lang="fr">Usage</h4>
+                                <h4 data-lang="en">Usage</h4>
+                                <div class="code-block">
+                                    <button class="copy-btn">Copy</button>
+                                    <pre><code>/implement FEAT-XXX [--phase=N] [--dry-run]</code></pre>
+                                </div>
+
+                                <div class="table-container">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>Argument</th>
+                                                <th>Description</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><code>FEAT-XXX</code></td>
+                                                <td data-lang="fr">Feature ID (requis) - ex: FEAT-001</td>
+                                                <td data-lang="en">Feature ID (required) - e.g., FEAT-001</td>
+                                            </tr>
+                                            <tr>
+                                                <td><code>--phase=1</code></td>
+                                                <td data-lang="fr">Data Layer uniquement (Entities, DbContext, Migration)</td>
+                                                <td data-lang="en">Data Layer only (Entities, DbContext, Migration)</td>
+                                            </tr>
+                                            <tr>
+                                                <td><code>--phase=2</code></td>
+                                                <td data-lang="fr">API Layer uniquement (DTOs, CQRS, Controllers)</td>
+                                                <td data-lang="en">API Layer only (DTOs, CQRS, Controllers)</td>
+                                            </tr>
+                                            <tr>
+                                                <td><code>--phase=3</code></td>
+                                                <td data-lang="fr">UI Layer uniquement (Services, Components, Pages)</td>
+                                                <td data-lang="en">UI Layer only (Services, Components, Pages)</td>
+                                            </tr>
+                                            <tr>
+                                                <td><code>--phase=4</code></td>
+                                                <td data-lang="fr">Tests uniquement</td>
+                                                <td data-lang="en">Tests only</td>
+                                            </tr>
+                                            <tr>
+                                                <td><code>--dry-run</code></td>
+                                                <td data-lang="fr">Affiche le plan sans executer</td>
+                                                <td data-lang="en">Show implementation plan without executing</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <h4 data-lang="fr">Phases d'Implementation</h4>
+                                <h4 data-lang="en">Implementation Phases</h4>
+
+                                <div class="feature-grid">
+                                    <div class="feature-item">
+                                        <span class="feature-icon">&#128451;</span>
+                                        <span class="feature-text" data-lang="fr"><strong>Phase 1: Data Layer</strong> - Entities, DbContext, Migration, Seed data</span>
+                                        <span class="feature-text" data-lang="en"><strong>Phase 1: Data Layer</strong> - Entities, DbContext, Migration, Seed data</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <span class="feature-icon">&#128279;</span>
+                                        <span class="feature-text" data-lang="fr"><strong>Phase 2: API Layer</strong> - DTOs, CQRS Queries/Commands, Controllers</span>
+                                        <span class="feature-text" data-lang="en"><strong>Phase 2: API Layer</strong> - DTOs, CQRS Queries/Commands, Controllers</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <span class="feature-icon">&#128187;</span>
+                                        <span class="feature-text" data-lang="fr"><strong>Phase 3: UI Layer</strong> - Services, Components Blazor, Pages</span>
+                                        <span class="feature-text" data-lang="en"><strong>Phase 3: UI Layer</strong> - Services, Blazor Components, Pages</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <span class="feature-icon">&#9989;</span>
+                                        <span class="feature-text" data-lang="fr"><strong>Phase 4: Tests</strong> - Tests unitaires, validation Gherkin</span>
+                                        <span class="feature-text" data-lang="en"><strong>Phase 4: Tests</strong> - Unit tests, Gherkin validation</span>
+                                    </div>
+                                </div>
+
+                                <h4 data-lang="fr">Workflow</h4>
+                                <h4 data-lang="en">Workflow</h4>
+
+                                <div class="alert alert-info">
+                                    <span class="alert-icon">&#128736;</span>
+                                    <div class="alert-content">
+                                        <h5 data-lang="fr">Etapes d'Execution</h5>
+                                        <h5 data-lang="en">Execution Steps</h5>
+                                        <ol data-lang="fr">
+                                            <li><strong>Validation des prerequis</strong> - Verifie que le handoff existe et est APPROVED</li>
+                                            <li><strong>Parse Handoff</strong> - Extrait entities, endpoints, UI, business rules, Gherkin</li>
+                                            <li><strong>Discover Patterns</strong> - Decouvre les patterns existants du projet (base classes, repositories, controllers)</li>
+                                            <li><strong>Implement by Phase</strong> - Execute les 4 phases sequentiellement, chaque phase doit compiler</li>
+                                            <li><strong>Final Validation</strong> - Build, tests, checklist de completude</li>
+                                        </ol>
+                                        <ol data-lang="en">
+                                            <li><strong>Validate Prerequisites</strong> - Verifies handoff exists and is APPROVED</li>
+                                            <li><strong>Parse Handoff</strong> - Extracts entities, endpoints, UI, business rules, Gherkin</li>
+                                            <li><strong>Discover Patterns</strong> - Discovers existing project patterns (base classes, repositories, controllers)</li>
+                                            <li><strong>Implement by Phase</strong> - Executes 4 phases sequentially, each phase must compile</li>
+                                            <li><strong>Final Validation</strong> - Build, tests, completeness checklist</li>
+                                        </ol>
+                                    </div>
+                                </div>
+
+                                <div class="alert alert-warning">
+                                    <span class="alert-icon">&#9888;</span>
+                                    <div class="alert-content">
+                                        <h5 data-lang="fr">Ne pas utiliser pour</h5>
+                                        <h5 data-lang="en">Do NOT use for</h5>
+                                        <ul data-lang="fr">
+                                            <li>Quick fixes → utiliser <code>/oneshot</code> ou <code>/business-analyse:10-change-request</code></li>
+                                            <li>Features sans handoff → utiliser <code>/epct</code></li>
+                                            <li>Taches d'exploration → utiliser <code>/explore</code></li>
+                                        </ul>
+                                        <ul data-lang="en">
+                                            <li>Quick fixes → use <code>/oneshot</code> or <code>/business-analyse:10-change-request</code></li>
+                                            <li>Features without handoff → use <code>/epct</code></li>
+                                            <li>Exploration tasks → use <code>/explore</code></li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <h4 data-lang="fr">Exemple de Sortie</h4>
+                                <h4 data-lang="en">Output Example</h4>
+
+                                <div class="code-block">
+                                    <button class="copy-btn">Copy</button>
+                                    <pre><code>================================================================================
+                    IMPLEMENTATION COMPLETE
+================================================================================
+
+FEATURE: FEAT-001 - Domain Focus Management
+
+PHASES COMPLETED:
+  [✓] Phase 1: Data Layer
+      • Created: 3 entities
+      • Migration: AddDataGovernanceRoles
+
+  [✓] Phase 2: API Layer
+      • Created: 5 DTOs
+      • Created: 4 CQRS handlers
+      • Created: 1 controller with 5 endpoints
+
+  [✓] Phase 3: UI Layer
+      • Created: 2 services
+      • Created: 3 components
+      • Created: 1 page
+
+  [✓] Phase 4: Tests
+      • Build: PASSED
+      • Tests: 42 passed, 0 failed
+
+PERMISSIONS APPLIED:
+  • ApplicationDomains.View → GET /api/v2/domains/{id}/focus
+  • ApplicationDomains.Update → POST /api/v2/domains/{id}/governance
+
+NEXT STEPS:
+  1. Review changes: git diff
+  2. Test manually in browser
+  3. Commit: /gitflow:3-commit
+
+================================================================================</code></pre>
+                                </div>
+
+                                <h4 data-lang="fr">Regles</h4>
+                                <h4 data-lang="en">Rules</h4>
+
+                                <div class="table-container">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>
+                                                    <span data-lang="fr">Regle</span>
+                                                    <span data-lang="en">Rule</span>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>1</td>
+                                                <td data-lang="fr"><strong>Handoff is source of truth</strong> - Suivre les specifications du handoff exactement</td>
+                                                <td data-lang="en"><strong>Handoff is source of truth</strong> - Follow handoff specifications exactly</td>
+                                            </tr>
+                                            <tr>
+                                                <td>2</td>
+                                                <td data-lang="fr"><strong>Patterns first</strong> - Toujours decouvrir les patterns existants avant de coder</td>
+                                                <td data-lang="en"><strong>Patterns first</strong> - Always discover existing patterns before coding</td>
+                                            </tr>
+                                            <tr>
+                                                <td>3</td>
+                                                <td data-lang="fr"><strong>Permissions are critical</strong> - Appliquer depuis Section 7 du handoff, tester avec Section 9</td>
+                                                <td data-lang="en"><strong>Permissions are critical</strong> - Apply from handoff Section 7, test with Section 9</td>
+                                            </tr>
+                                            <tr>
+                                                <td>4</td>
+                                                <td data-lang="fr"><strong>Phase isolation</strong> - Chaque phase doit passer le build avant de continuer</td>
+                                                <td data-lang="en"><strong>Phase isolation</strong> - Each phase must pass build before proceeding</td>
+                                            </tr>
+                                            <tr>
+                                                <td>5</td>
+                                                <td data-lang="fr"><strong>No assumptions</strong> - Si pas clair, verifier CLAUDE.md ou demander a l'utilisateur</td>
+                                                <td data-lang="en"><strong>No assumptions</strong> - If unclear, check CLAUDE.md or ask user</td>
+                                            </tr>
+                                            <tr>
+                                                <td>6</td>
+                                                <td data-lang="fr"><strong>Quality over speed</strong> - Utiliser OPUS pour toutes les decisions de generation de code</td>
+                                                <td data-lang="en"><strong>Quality over speed</strong> - Use OPUS for all code generation decisions</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Phase 7: Document -->
+                    <section id="phase-7">
+                        <h2>
+                            <span style="color: #22c55e;">7.</span> Document
+                            <span class="tag tag-haiku" style="margin-left: 10px;">haiku</span>
+                        </h2>
+
+                        <div class="alert alert-info">
+                            <span class="alert-icon">&#128218;</span>
+                            <div class="alert-content">
+                                <h5 data-lang="fr">Documentation Post-Implementation</h5>
+                                <h5 data-lang="en">Post-Implementation Documentation</h5>
+                                <p data-lang="fr">
+                                    Cette phase vient <strong>APRES le handoff et l'implementation</strong>. Elle genere la documentation que l'utilisateur metier peut lire et comprendre, pas les specifications techniques.
+                                </p>
+                                <p data-lang="en">
+                                    This phase comes <strong>AFTER handoff and implementation</strong>. It generates documentation that the business user can read and understand, not technical specifications.
+                                </p>
+                            </div>
+                        </div>
+
+                        <p data-lang="fr">
+                            <strong>Fonctionnalite :</strong> Genere la documentation transverse: mise a jour du glossaire avec les nouveaux termes metier, dictionnaire de donnees complet, flux de processus avec diagrammes Mermaid, matrice de tracabilite des exigences, et index de la feature.
+                        </p>
+                        <p data-lang="en">
+                            <strong>Functionality:</strong> Generates cross-cutting documentation: glossary update with new business terms, complete data dictionary, process flows with Mermaid diagrams, requirements traceability matrix, and feature index.
+                        </p>
+
+                        <div class="command-card">
+                            <div class="command-header">
+                                <code class="command-name">/business-analyse:7-document</code>
+                                <span class="tag tag-haiku">haiku</span>
+                            </div>
+                            <div class="command-body">
+                                <div class="code-block">
+                                    <button class="copy-btn">Copy</button>
+                                    <pre><code>/business-analyse:7-document FEAT-001</code></pre>
+                                </div>
+
+                                <h4 data-lang="fr">Documents generes</h4>
+                                <h4 data-lang="en">Generated documents</h4>
+
+                                <div class="feature-grid">
+                                    <div class="feature-item">
+                                        <span class="feature-icon">&#128214;</span>
+                                        <span class="feature-text" data-lang="fr"><strong>glossary.md</strong> - Mise a jour avec les nouveaux termes metier</span>
+                                        <span class="feature-text" data-lang="en"><strong>glossary.md</strong> - Updated with new business terms</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <span class="feature-icon">&#128218;</span>
+                                        <span class="feature-text" data-lang="fr"><strong>data-dictionary/FEAT-XXX.md</strong> - Toutes les entites avec types et contraintes</span>
+                                        <span class="feature-text" data-lang="en"><strong>data-dictionary/FEAT-XXX.md</strong> - All entities with types and constraints</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <span class="feature-icon">&#128260;</span>
+                                        <span class="feature-text" data-lang="fr"><strong>process-flows/FEAT-XXX.md</strong> - Flux avec diagrammes Mermaid</span>
+                                        <span class="feature-text" data-lang="en"><strong>process-flows/FEAT-XXX.md</strong> - Flows with Mermaid diagrams</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <span class="feature-icon">&#128279;</span>
+                                        <span class="feature-text" data-lang="fr"><strong>traceability-matrix.md</strong> - Exigence → Test</span>
+                                        <span class="feature-text" data-lang="en"><strong>traceability-matrix.md</strong> - Requirement → Test</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <span class="feature-icon">&#128221;</span>
+                                        <span class="feature-text" data-lang="fr"><strong>ADR-XXX.md</strong> - Decisions architecturales (si applicable)</span>
+                                        <span class="feature-text" data-lang="en"><strong>ADR-XXX.md</strong> - Architecture decisions (if applicable)</span>
+                                    </div>
+                                </div>
+
+                                <div class="alert alert-success">
+                                    <span class="alert-icon">&#9989;</span>
+                                    <div class="alert-content">
+                                        <h5 data-lang="fr">Regles de documentation</h5>
+                                        <h5 data-lang="en">Documentation rules</h5>
+                                        <ol data-lang="fr">
+                                            <li><strong>Glossaire coherent</strong> - Un terme = une definition</li>
+                                            <li><strong>Dictionnaire complet</strong> - Toutes les entites documentees</li>
+                                            <li><strong>Diagrammes Mermaid</strong> - Flux visualises</li>
+                                            <li><strong>Tracabilite</strong> - Exigence → Test</li>
+                                            <li><strong>ADR si decision</strong> - Documenter les choix importants</li>
+                                            <li><strong>Pas de code</strong> - Documentation metier uniquement</li>
+                                        </ol>
+                                        <ol data-lang="en">
+                                            <li><strong>Consistent glossary</strong> - One term = one definition</li>
+                                            <li><strong>Complete dictionary</strong> - All entities documented</li>
+                                            <li><strong>Mermaid diagrams</strong> - Visualized flows</li>
+                                            <li><strong>Traceability</strong> - Requirement → Test</li>
+                                            <li><strong>ADR if decision</strong> - Document important choices</li>
+                                            <li><strong>No code</strong> - Business documentation only</li>
+                                        </ol>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Model Strategy -->
+                    <section id="model-strategy">
+                        <h2>
+                            <span data-lang="fr">Strategie de Modeles</span>
+                            <span data-lang="en">Model Strategy</span>
+                        </h2>
+
+                        <div class="alert alert-info">
+                            <span class="alert-icon">&#129302;</span>
+                            <div class="alert-content">
+                                <h5 data-lang="fr">Principe: Qualite d'abord, puis optimisation des couts</h5>
+                                <h5 data-lang="en">Principle: Quality First, Then Cost Optimization</h5>
+                                <p data-lang="fr">
+                                    Chaque modele est le <strong>MINIMUM capable</strong> de delivrer un output de qualite. Ne jamais sacrifier la qualite pour les couts.
+                                </p>
+                                <p data-lang="en">
+                                    Each model is the <strong>MINIMUM capable</strong> of delivering quality output. Never sacrifice quality for cost savings.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="feature-grid" style="grid-template-columns: repeat(3, 1fr);">
+                            <div class="feature-item" style="background: rgba(236, 72, 153, 0.1); border: 1px solid rgba(236, 72, 153, 0.3);">
+                                <span class="feature-icon" style="color: #ec4899;">&#128142;</span>
+                                <span class="feature-text"><strong>OPUS</strong></span>
+                                <p data-lang="fr" style="font-size: 0.85em; margin-top: 8px;">
+                                    Phases critiques - raisonnement profond:<br/>
+                                    • <code>2-discover</code>: Elicitation exhaustive<br/>
+                                    • <code>6-handoff</code>: Generation de prompt one-shot<br/>
+                                    • <code>/implement</code>: Generation de code production
+                                </p>
+                                <p data-lang="en" style="font-size: 0.85em; margin-top: 8px;">
+                                    Critical phases - deep reasoning:<br/>
+                                    • <code>2-discover</code>: Exhaustive elicitation<br/>
+                                    • <code>6-handoff</code>: One-shot prompt generation<br/>
+                                    • <code>/implement</code>: Production code generation
+                                </p>
+                            </div>
+                            <div class="feature-item" style="background: rgba(249, 115, 22, 0.1); border: 1px solid rgba(249, 115, 22, 0.3);">
+                                <span class="feature-icon" style="color: #f97316;">&#9881;</span>
+                                <span class="feature-text"><strong>SONNET</strong></span>
+                                <p data-lang="fr" style="font-size: 0.85em; margin-top: 8px;">
+                                    Phases d'analyse - raisonnement equilibre:<br/>
+                                    • <code>3-analyse</code>: Modelisation metier<br/>
+                                    • <code>4-specify</code>: Specifications techniques<br/>
+                                    • <code>10-change-request</code>: Analyse d'impact<br/>
+                                    • <code>bug</code>: Analyse root cause
+                                </p>
+                                <p data-lang="en" style="font-size: 0.85em; margin-top: 8px;">
+                                    Analysis phases - balanced reasoning:<br/>
+                                    • <code>3-analyse</code>: Business modeling<br/>
+                                    • <code>4-specify</code>: Technical specifications<br/>
+                                    • <code>10-change-request</code>: Impact analysis<br/>
+                                    • <code>bug</code>: Root cause analysis
+                                </p>
+                            </div>
+                            <div class="feature-item" style="background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3);">
+                                <span class="feature-icon" style="color: #3b82f6;">&#9889;</span>
+                                <span class="feature-text"><strong>HAIKU</strong></span>
+                                <p data-lang="fr" style="font-size: 0.85em; margin-top: 8px;">
+                                    Phases simples - execution de template:<br/>
+                                    • <code>1-init</code>: Setup de structure<br/>
+                                    • <code>5-validate</code>: Porte d'approbation<br/>
+                                    • <code>7-document</code>: Generation depuis specs<br/>
+                                    • <code>9-hotfix</code>: Fix urgent leger
+                                </p>
+                                <p data-lang="en" style="font-size: 0.85em; margin-top: 8px;">
+                                    Simple phases - template execution:<br/>
+                                    • <code>1-init</code>: Structure setup<br/>
+                                    • <code>5-validate</code>: Approval gate<br/>
+                                    • <code>7-document</code>: Generate from specs<br/>
+                                    • <code>9-hotfix</code>: Lightweight urgent fix
+                                </p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Permission Specifications -->
+                    <section id="permissions">
+                        <h2>
+                            <span data-lang="fr">Specifications de Permissions</span>
+                            <span data-lang="en">Permission Specifications</span>
+                        </h2>
+
+                        <div class="alert alert-warning">
+                            <span class="alert-icon">&#9888;</span>
+                            <div class="alert-content">
+                                <h5 data-lang="fr">Les permissions doivent etre EXPLICITES et IMPLEMENTABLES</h5>
+                                <h5 data-lang="en">Permissions must be EXPLICIT and IMPLEMENTABLE</h5>
+                                <p data-lang="fr">
+                                    <strong>"L'admin peut creer"</strong> n'est PAS suffisant.<br/>
+                                    <strong>"POST /api/v2/domains requiert la permission Domains.Create"</strong> EST suffisant.
+                                </p>
+                                <p data-lang="en">
+                                    <strong>"Admin can create"</strong> is NOT enough.<br/>
+                                    <strong>"POST /api/v2/domains requires Domains.Create permission"</strong> IS enough.
+                                </p>
+                            </div>
+                        </div>
+
+                        <p data-lang="fr">Le <code>6-handoff</code> inclut une Section 7 dediee aux permissions avec:</p>
+                        <p data-lang="en">The <code>6-handoff</code> includes a dedicated Section 7 for permissions with:</p>
+
+                        <div class="feature-grid">
+                            <div class="feature-item">
+                                <span class="feature-icon">&#128270;</span>
+                                <span class="feature-text" data-lang="fr"><strong>7.1 [EXPLORE]</strong> - Decouvrir les patterns existants</span>
+                                <span class="feature-text" data-lang="en"><strong>7.1 [EXPLORE]</strong> - Discover existing patterns</span>
+                            </div>
+                            <div class="feature-item">
+                                <span class="feature-icon">&#128273;</span>
+                                <span class="feature-text" data-lang="fr"><strong>7.2 Permission Keys</strong> - Codes exacts (ex: "Module.View")</span>
+                                <span class="feature-text" data-lang="en"><strong>7.2 Permission Keys</strong> - Exact codes (e.g., "Module.View")</span>
+                            </div>
+                            <div class="feature-item">
+                                <span class="feature-icon">&#128101;</span>
+                                <span class="feature-text" data-lang="fr"><strong>7.3 Role-Permission Matrix</strong> - Qui peut faire quoi</span>
+                                <span class="feature-text" data-lang="en"><strong>7.3 Role-Permission Matrix</strong> - Who can do what</span>
+                            </div>
+                            <div class="feature-item">
+                                <span class="feature-icon">&#128279;</span>
+                                <span class="feature-text" data-lang="fr"><strong>7.4 Endpoint Mapping</strong> - Protection API</span>
+                                <span class="feature-text" data-lang="en"><strong>7.4 Endpoint Mapping</strong> - API protection</span>
+                            </div>
+                            <div class="feature-item">
+                                <span class="feature-icon">&#128065;</span>
+                                <span class="feature-text" data-lang="fr"><strong>7.5 UI Permission Checks</strong> - Regles de visibilite</span>
+                                <span class="feature-text" data-lang="en"><strong>7.5 UI Permission Checks</strong> - Visibility rules</span>
+                            </div>
+                            <div class="feature-item">
+                                <span class="feature-icon">&#9989;</span>
+                                <span class="feature-text" data-lang="fr"><strong>7.6 Checklist</strong> - Implementation step-by-step</span>
+                                <span class="feature-text" data-lang="en"><strong>7.6 Checklist</strong> - Step-by-step implementation</span>
+                            </div>
+                        </div>
+
+                        <h4 data-lang="fr">Scenarios Gherkin obligatoires</h4>
+                        <h4 data-lang="en">Mandatory Gherkin scenarios</h4>
+
+                        <div class="code-block">
+                            <button class="copy-btn">Copy</button>
+                            <pre><code>Scenario: Unauthorized user cannot create resource
+  Given I am logged in as User (without Module.Create permission)
+  When I navigate to the resource list page
+  Then I do NOT see the "New" button
+
+Scenario: API rejects unauthorized create attempt
+  Given I am authenticated as User (without Module.Create permission)
+  When I send POST /api/v2/resource with valid data
+  Then I receive HTTP 403 Forbidden
+  And the response contains "Insufficient permissions"</code></pre>
+                        </div>
+                    </section>
+
+                    <!-- Golden Rules -->
+                    <section id="golden-rules">
+                        <h2>
+                            <span data-lang="fr">Regles d'Or</span>
+                            <span data-lang="en">Golden Rules</span>
+                        </h2>
+
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>
+                                            <span data-lang="fr">Regle</span>
+                                            <span data-lang="en">Rule</span>
+                                        </th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>1</td>
+                                        <td><strong>NEVER code</strong></td>
+                                        <td data-lang="fr">BA produit des specs, pas du code. NO C#, JS, SQL, Razor.</td>
+                                        <td data-lang="en">BA produces specs, not code. NO C#, JS, SQL, Razor.</td>
+                                    </tr>
+                                    <tr>
+                                        <td>2</td>
+                                        <td><strong>ULTRATHINK mandatory</strong></td>
+                                        <td data-lang="fr">Phases 2, 3, 4, 6 utilisent la reflexion profonde</td>
+                                        <td data-lang="en">Phases 2, 3, 4, 6 use deep thinking</td>
+                                    </tr>
+                                    <tr>
+                                        <td>3</td>
+                                        <td><strong>Model per phase</strong></td>
+                                        <td data-lang="fr">Utiliser le bon modele (opus/sonnet/haiku) selon la complexite</td>
+                                        <td data-lang="en">Use correct model (opus/sonnet/haiku) per phase complexity</td>
+                                    </tr>
+                                    <tr>
+                                        <td>4</td>
+                                        <td><strong>Structure respected</strong></td>
+                                        <td>Application > Module > Feature</td>
+                                    </tr>
+                                    <tr>
+                                        <td>5</td>
+                                        <td><strong>Traceability</strong></td>
+                                        <td data-lang="fr">Chaque requirement a un ID unique</td>
+                                        <td data-lang="en">Each requirement has a unique ID</td>
+                                    </tr>
+                                    <tr>
+                                        <td>6</td>
+                                        <td><strong>User validation</strong></td>
+                                        <td data-lang="fr">Phase 5 DOIT etre approuvee avant handoff</td>
+                                        <td data-lang="en">Phase 5 MUST be approved before handoff</td>
+                                    </tr>
+                                    <tr>
+                                        <td>7</td>
+                                        <td><strong>NOK → Revise</strong></td>
+                                        <td data-lang="fr">Specs rejetees retournent a la phase ANALYSE</td>
+                                        <td data-lang="en">Rejected specs return to ANALYSE phase</td>
+                                    </tr>
+                                    <tr>
+                                        <td>8</td>
+                                        <td><strong>Maintained glossary</strong></td>
+                                        <td data-lang="fr">Termes metier documentes</td>
+                                        <td data-lang="en">Business terms documented</td>
+                                    </tr>
+                                    <tr>
+                                        <td>9</td>
+                                        <td><strong>Optimized prompts</strong></td>
+                                        <td data-lang="fr">Handoff pret pour implementation one-shot</td>
+                                        <td data-lang="en">Handoff ready for one-shot implementation</td>
+                                    </tr>
+                                    <tr>
+                                        <td>10</td>
+                                        <td><strong>Tables over code</strong></td>
+                                        <td data-lang="fr">Utiliser des tables d'attributs, pas des classes</td>
+                                        <td data-lang="en">Use attribute tables, not class definitions</td>
+                                    </tr>
+                                    <tr>
+                                        <td>11</td>
+                                        <td><strong>Explore-First</strong></td>
+                                        <td data-lang="fr">Handoff instruit le dev d'explorer les patterns existants</td>
+                                        <td data-lang="en">Handoff instructs developer to explore existing patterns</td>
+                                    </tr>
+                                    <tr>
+                                        <td>12</td>
+                                        <td><strong>Explicit permissions</strong></td>
+                                        <td data-lang="fr">Permission keys, endpoint mapping, tests Gherkin obligatoires</td>
+                                        <td data-lang="en">Permission keys, endpoint mapping, Gherkin tests mandatory</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </section>
             </div>

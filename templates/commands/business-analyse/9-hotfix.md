@@ -1,5 +1,6 @@
 ---
-description: Hotfix/Bugfix - Lightweight urgent fix documentation
+description: Phase 9 - Hotfix/Bugfix - Lightweight urgent fix documentation
+model: haiku
 ---
 
 # Business Analyse - Hotfix
@@ -31,7 +32,7 @@ Lightweight template for urgent bug fixes. Use when full BA workflow is too heav
 ## Arguments
 
 ```
-/business-analyse:hotfix [bug-id] "[brief-description]"
+/business-analyse:9-hotfix [bug-id] "[brief-description]"
 ```
 
 - `bug-id`: Bug identifier (e.g., BUG-001, JIRA-123)
