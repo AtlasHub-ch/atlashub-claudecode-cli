@@ -66,6 +66,28 @@ Bien que ce projet contienne des outils pour gérer EF Core dans d'autres projet
 
 ---
 
+## Working Rules
+
+### Git Operations
+
+**NEVER execute git commands.** The user has their own GitFlow commands:
+- `/gitflow:3-commit` - For commits
+- `/gitflow:7-pull-request` - For PRs
+- `/gitflow:11-finish` - For finishing branches
+
+**Claude's role:**
+1. Make changes to files
+2. Show summary of changes
+3. **STOP** - User will commit with their own commands
+
+### Code Quality
+
+- **Quality over speed** - Use OPUS for all code generation
+- **Explore first** - Always discover existing patterns before generating code
+- **No assumptions** - If unclear, ask user instead of guessing
+
+---
+
 ## Writing Guidelines
 
 ### Templates Language

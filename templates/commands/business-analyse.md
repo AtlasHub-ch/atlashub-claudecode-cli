@@ -56,8 +56,8 @@ Senior Business Analyst expert. Complete business analysis without writing code.
 | → | **`/implement FEAT-XXX`** | **Implement from handoff (skip explore)** | Code files |
 | 7 | `/business-analyse:7-document` | User-readable documentation (post-handoff) | Glossary, Dictionary, Diagrams |
 | + | `/business-analyse:bug` | Bug documentation | `tracking/bugs/BUG-XXX.md` |
-| ⚡ | `/business-analyse:7-hotfix` | Urgent fix (lightweight template) | `tracking/bugs/{{BUG-ID}}.md` |
-| 🔄 | `/business-analyse:8-change-request` | Formal spec change during dev | `tracking/changes/CR-XXX.md` |
+| ⚡ | `/business-analyse:9-hotfix` | Urgent fix (lightweight template) | `tracking/bugs/{{BUG-ID}}.md` |
+| 🔄 | `/business-analyse:10-change-request` | Formal spec change during dev | `tracking/changes/CR-XXX.md` |
 
 ## Artifact Structure
 
@@ -232,7 +232,7 @@ Senior Business Analyst expert. Complete business analysis without writing code.
 
 ```bash
 # If changes needed after implementation:
-/business-analyse:8-change-request FEAT-001 "Add preview feature to page X"
+/business-analyse:10-change-request FEAT-001 "Add preview feature to page X"
 #    → Documents change, generates implementation prompt
 #    → For small changes: offers immediate implementation
 ```

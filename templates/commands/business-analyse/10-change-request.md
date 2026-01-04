@@ -1,5 +1,5 @@
 ---
-description: Change Request - Formal specification change during development
+description: Phase 10 - Change Request - Formal specification change during development
 ---
 
 # Business Analyse - Change Request
@@ -9,7 +9,7 @@ Formal change request process for when specifications need to change AFTER devel
 ## Arguments
 
 ```
-/business-analyse:8-change-request [feature-id] "[change-description]"
+/business-analyse:10-change-request [feature-id] "[change-description]"
 ```
 
 - `feature-id`: Feature identifier (e.g., FEAT-001)
