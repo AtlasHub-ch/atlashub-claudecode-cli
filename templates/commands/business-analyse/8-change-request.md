@@ -278,13 +278,138 @@ Add to feature's change log:
 | CR-{{FEAT}}-001 | {{DATE}} | {{TYPE}} | {{PRIORITY}} | {{DECISION}} | {{HOURS}}h |
 ```
 
+## Step 7: Generate Implementation Prompt (If Approved)
+
+When a CR is APPROVED (or AUTO-APPROVED for small changes), generate an implementation prompt directly in the CR document:
+
+```markdown
+---
+
+## Implementation Prompt
+
+> **This section is an autonomous development prompt for the approved change.**
+> Copy-paste to Claude Code or use directly.
+
+### Context
+
+```
+CHANGE REQUEST: CR-{{FEAT-ID}}-{{NUMBER}}
+Feature: {{FEAT-ID}} - {{FEATURE_NAME}}
+Change Type: {{TYPE}}
+Status: APPROVED
+```
+
+### Objective
+
+{{ONE_SENTENCE_OBJECTIVE}}
+
+### Current State
+
+{{WHAT_EXISTS_NOW}}
+
+### Target State
+
+{{WHAT_SHOULD_EXIST_AFTER}}
+
+### Explore First (MANDATORY)
+
+Before implementing, explore the existing code:
+
+| Search | Pattern | Purpose |
+|--------|---------|---------|
+| Find affected component | `Grep("{{COMPONENT_NAME}}")` | Locate current implementation |
+| Find similar patterns | `Grep("{{SIMILAR_FEATURE}}")` | Match existing conventions |
+| Check dependencies | `Glob("**/*{{RELATED}}*")` | Identify related files |
+
+### Implementation Steps
+
+| Step | Action | Validation |
+|------|--------|------------|
+| 1 | {{STEP_1}} | {{VALIDATION_1}} |
+| 2 | {{STEP_2}} | {{VALIDATION_2}} |
+| 3 | {{STEP_3}} | {{VALIDATION_3}} |
+
+### Files to Modify
+
+| File | Action | Changes |
+|------|--------|---------|
+| `{{FILE_1}}` | MODIFY | {{CHANGE_DESC}} |
+| `{{FILE_2}}` | MODIFY | {{CHANGE_DESC}} |
+
+### Acceptance Criteria
+
+```gherkin
+Scenario: {{CHANGE_VALIDATED}}
+  Given {{PRECONDITION}}
+  When {{ACTION}}
+  Then {{EXPECTED_RESULT}}
+```
+
+### Test Commands
+
+```bash
+# After implementation, run:
+npm run lint && npm run typecheck
+# Or for .NET:
+dotnet build && dotnet test
+```
+
+---
+
+*Implementation prompt generated for CR-{{FEAT-ID}}-{{NUMBER}} on {{DATE}}*
+```
+
+### Step 8: Immediate Implementation Option (Small Changes)
+
+For AUTO-APPROVED changes (< 2h impact), offer immediate implementation:
+
+```javascript
+AskUserQuestion({
+  questions: [{
+    question: "This change is AUTO-APPROVED. Do you want to implement now?",
+    header: "Implement",
+    options: [
+      { label: "Yes, implement now", description: "Execute the implementation prompt immediately (Recommended)" },
+      { label: "Later", description: "Save CR document, implement manually later" }
+    ],
+    multiSelect: false
+  }]
+})
+```
+
+**If "Yes, implement now" selected:**
+
+1. Claude reads the Implementation Prompt section from the CR
+2. Follows the Explore First patterns
+3. Implements the change following the steps
+4. Validates with the acceptance criteria
+5. Updates the CR status to IMPLEMENTED
+
+```
+╔══════════════════════════════════════════════════════════════════════════╗
+║  IMMEDIATE IMPLEMENTATION MODE                                           ║
+╠══════════════════════════════════════════════════════════════════════════╣
+║                                                                          ║
+║  CR-{{FEAT-ID}}-{{NUMBER}} → AUTO-APPROVED → IMPLEMENTING...             ║
+║                                                                          ║
+║  1. Reading implementation prompt from CR document                       ║
+║  2. Exploring codebase for patterns                                      ║
+║  3. Making changes to identified files                                   ║
+║  4. Validating acceptance criteria                                       ║
+║  5. Running lint/typecheck                                               ║
+║                                                                          ║
+╚══════════════════════════════════════════════════════════════════════════╝
+```
+
 ## Rules
 
 1. **Document first** - Always create CR before implementing changes
 2. **Impact assessment** - Estimate effort before deciding
 3. **Decision matrix** - Apply consistently
-4. **Traceability** - Update affected documents
-5. **Communication** - Notify relevant stakeholders
+4. **Implementation prompt** - Generate for all approved changes
+5. **Immediate option** - Offer for small auto-approved changes
+6. **Traceability** - Update affected documents
+7. **Communication** - Notify relevant stakeholders
 
 ## Summary
 

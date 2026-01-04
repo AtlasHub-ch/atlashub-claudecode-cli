@@ -134,6 +134,13 @@ Approach to adopt:
 ║  [ ] Entities described with tables, not classes                         ║
 ║  [ ] All business rules have unique IDs (BR-XXX)                         ║
 ║                                                                          ║
+║  PERMISSIONS (CRITICAL):                                                 ║
+║  [ ] Section 7 has explicit permission KEYS (e.g., "Module.View")        ║
+║  [ ] Endpoint-Permission mapping table is complete                       ║
+║  [ ] UI elements have permission-hide rules                              ║
+║  [ ] Explore patterns for existing permission implementation included    ║
+║  [ ] At least 1 Gherkin scenario tests permission denial                 ║
+║                                                                          ║
 ║  COMPLETENESS:                                                           ║
 ║  [ ] At least 5 Gherkin scenarios (2 happy, 1 validation, 1 perm, 1 edge)║
 ║  [ ] All BR-XXX mapped to test scenarios                                 ║
@@ -1155,13 +1162,100 @@ erDiagram
 
 ## 7. Permissions
 
-| Action | Admin | User | Anonymous |
-|--------|-------|------|-----------|
-| View list | ✓ | ✓ | ✗ |
-| View detail | ✓ | ✓ | ✗ |
-| Create | ✓ | ✗ | ✗ |
-| Modify | ✓ | ✗ | ✗ |
-| Delete | ✓ | ✗ | ✗ |
+> ⚠️ **CRITICAL**: Permissions must be EXPLICIT and IMPLEMENTABLE, not just documented.
+
+```
+╔══════════════════════════════════════════════════════════════════════════╗
+║  PERMISSIONS: Must be discoverable and implementable                     ║
+╠══════════════════════════════════════════════════════════════════════════╣
+║                                                                          ║
+║  A permission specification MUST include:                                ║
+║  1. PERMISSION KEYS: Exact string codes (e.g., "Domains.View")           ║
+║  2. MAPPING: Which endpoint/action requires which permission             ║
+║  3. EXPLORE: Search patterns to find existing permission patterns        ║
+║                                                                          ║
+║  "Admin can create" is NOT enough.                                       ║
+║  "POST /api/v2/domains requires Domains.Create permission" IS enough.    ║
+║                                                                          ║
+╚══════════════════════════════════════════════════════════════════════════╝
+```
+
+### 7.1 [EXPLORE] Discover Existing Permission Patterns
+
+**MANDATORY before implementing any permission logic:**
+
+| What to Find | Search Pattern | Why |
+|--------------|----------------|-----|
+| Permission keys | `Grep("Permission")` | Find existing permission constants |
+| Authorization attributes | `Grep("Authorize")` | Find attribute patterns |
+| Permission service | `Grep("HasPermission\|CheckPermission")` | Find service usage |
+| Policy definitions | `Glob("**/*Authorization*.cs")` | Find policy configuration |
+| Existing controllers | `Grep("\\[Authorize.*Policy")` | See how permissions are applied |
+
+**Expected findings (to adapt to):**
+
+| Pattern Type | Example | Your Adaptation |
+|--------------|---------|-----------------|
+| Attribute-based | `[Authorize(Policy = "X")]` | Use same pattern |
+| Service-based | `_permissionService.HasPermissionAsync("X")` | Inject same service |
+| Custom filter | `[RequirePermission("X")]` | Use same filter |
+
+### 7.2 Permission Keys
+
+> ⚠️ Use EXACT permission keys that exist in the project OR will be created.
+
+| Permission Key | Description | Used By |
+|----------------|-------------|---------|
+| `{{Module}}.View` | View list and details | GET endpoints, list pages |
+| `{{Module}}.Create` | Create new records | POST endpoints, create button |
+| `{{Module}}.Update` | Modify existing records | PUT endpoints, edit button |
+| `{{Module}}.Delete` | Delete/archive records | DELETE endpoints, delete button |
+
+**If new permissions needed:**
+- Document them here
+- Specify where to add them (migration, seed data, admin config)
+
+### 7.3 Role-Permission Matrix
+
+| Action | Permission Key | Admin | User | Anonymous |
+|--------|----------------|-------|------|-----------|
+| View list | `{{Module}}.View` | ✓ | ✓ | ✗ |
+| View detail | `{{Module}}.View` | ✓ | ✓ | ✗ |
+| Create | `{{Module}}.Create` | ✓ | ✗ | ✗ |
+| Modify | `{{Module}}.Update` | ✓ | ✗ | ✗ |
+| Delete | `{{Module}}.Delete` | ✓ | ✗ | ✗ |
+
+### 7.4 Endpoint-Permission Mapping
+
+> ⚠️ Each endpoint MUST have explicit permission requirement.
+
+| Endpoint | HTTP | Permission Required | Failure Response |
+|----------|------|---------------------|------------------|
+| `/api/v2/{{resource}}` | GET | `{{Module}}.View` | 403 Forbidden |
+| `/api/v2/{{resource}}/:id` | GET | `{{Module}}.View` | 403 Forbidden |
+| `/api/v2/{{resource}}` | POST | `{{Module}}.Create` | 403 Forbidden |
+| `/api/v2/{{resource}}/:id` | PUT | `{{Module}}.Update` | 403 Forbidden |
+| `/api/v2/{{resource}}/:id` | DELETE | `{{Module}}.Delete` | 403 Forbidden |
+
+### 7.5 UI Permission Checks
+
+| UI Element | Permission Required | Behavior When Denied |
+|------------|---------------------|----------------------|
+| [+ New] button | `{{Module}}.Create` | Hidden |
+| [Edit] button | `{{Module}}.Update` | Hidden |
+| [Delete] button | `{{Module}}.Delete` | Hidden |
+| List page access | `{{Module}}.View` | Redirect to unauthorized |
+| Detail page access | `{{Module}}.View` | Redirect to unauthorized |
+
+### 7.6 Implementation Checklist
+
+| Step | Action | Validation |
+|------|--------|------------|
+| 1 | Explore existing patterns | Know how project handles permissions |
+| 2 | Verify permission keys exist | Check constants/enums/config |
+| 3 | Apply to API endpoints | All endpoints protected |
+| 4 | Apply to UI elements | Buttons hidden appropriately |
+| 5 | Test unauthorized access | 403 response verified |
 
 ---
 
@@ -1314,6 +1408,25 @@ Scenario: Unique name validation
   Given a {{resource}} "Existing" already exists
   When I create a {{resource}} with name "Existing"
   Then I see the error "This name is already in use"
+```
+
+### Permission scenarios (MANDATORY)
+```gherkin
+Scenario: Unauthorized user cannot create {{resource}}
+  Given I am logged in as User (without {{Module}}.Create permission)
+  When I navigate to the {{resource}} list page
+  Then I do NOT see the "New" button
+
+Scenario: API rejects unauthorized create attempt
+  Given I am authenticated as User (without {{Module}}.Create permission)
+  When I send POST /api/v2/{{resource}} with valid data
+  Then I receive HTTP 403 Forbidden
+  And the response contains "Insufficient permissions"
+
+Scenario: Unauthorized user cannot access restricted page
+  Given I am NOT logged in
+  When I navigate to /{{module}}/{{resource}}
+  Then I am redirected to the login page
 ```
 
 ### Scenario categories (minimum 5 required)
