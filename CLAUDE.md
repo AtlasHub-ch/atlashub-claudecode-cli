@@ -39,6 +39,27 @@ Ce repository utilise GitFlow avec la configuration suivante :
 
 La configuration complète se trouve dans [.claude/gitflow/config.json](.claude/gitflow/config.json)
 
+### Versioning des Hotfixes
+
+Le versioning des hotfixes est **automatique** lors du finish :
+
+**Workflow complet :**
+1. `/gitflow:10-start hotfix fix-xxx` - Crée la branche depuis `main`
+2. Modifications et commits normaux
+3. `/gitflow:7-pull-request` - Crée la PR vers `main`
+4. Merge de la PR (GitHub/GitLab)
+5. `/gitflow:11-finish` - Finalise automatiquement :
+   - Lit la version actuelle (`1.7.1`)
+   - Incrémente le PATCH (`1.7.2`)
+   - Met à jour `package.json`
+   - Crée le commit de bump
+   - Crée le tag `v1.7.2`
+   - Push `main` + tag
+   - Merge back vers `develop`
+   - Cleanup de la branche
+
+**Point clé :** Pas besoin de faire `npm version patch` manuellement - c'est géré par le finish.
+
 ### Note sur EF Core
 
 Bien que ce projet contienne des outils pour gérer EF Core dans d'autres projets .NET, il n'utilise pas lui-même Entity Framework Core car il s'agit d'un projet Node.js/TypeScript.

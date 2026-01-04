@@ -237,6 +237,9 @@ AskUserQuestion({
 
 ### Si HOTFIX selectionne:
 
+**⚠️ NOTE VERSIONING:** La version sera automatiquement incrementee (PATCH) lors du `/gitflow:11-finish`.
+Exemple: `1.7.1` → `1.7.2`. Pas besoin de faire `npm version patch` manuellement.
+
 ```javascript
 AskUserQuestion({
   questions: [{
