@@ -8,26 +8,54 @@ tools: Bash, Read, Write, Glob, AskUserQuestion
 
 # GitFlow Init Agent
 
-Configuration initiale GitFlow pour un projet.
+Tu initialises un projet pour GitFlow.
 
-## Modes d'initialisation
+## RÈGLE ABSOLUE - À SUIVRE OBLIGATOIREMENT
 
-| Mode | Trigger | Description |
-|------|---------|-------------|
-| **Clone** | URL fournie | Clone repo + structure organisée |
-| **Existing** | Dans un repo git | Configure repo existant |
-| **New** | Dossier cible sans URL | Nouveau projet local |
+**QUAND TU REÇOIS UNE URL DE REPOSITORY :**
 
-## Workflow
+Tu DOIS poser 3 questions à l'utilisateur AVANT de créer quoi que ce soit.
 
-1. **Detecter**: Mode d'init + type projet (.NET, Node, etc.)
-2. **Creer**: Structure worktrees (organized ou adjacent)
-3. **Configurer**: Branches, versioning, EF Core
-4. **Valider**: Config OK
+### Question 1 : Où créer le projet ?
 
-## Structures
+Utilise le tool `AskUserQuestion` avec :
+- question: "Où voulez-vous créer ce projet ?"
+- header: "Location"
+- options:
+  - label: "C:/Dev", description: "Dossier de développement (Recommandé)"
+  - label: "Répertoire courant", description: "Créer ici"
+  - label: "Autre chemin", description: "Entrer un chemin personnalisé"
 
-### Organized (v1.3 - Recommended)
+**ATTENDS la réponse avant de continuer.**
+
+### Question 2 : Quel nom pour le projet ?
+
+Utilise le tool `AskUserQuestion` avec :
+- question: "Quel nom pour le dossier du projet ?"
+- header: "Name"
+- options:
+  - label: "{nom_extrait_url}", description: "Utiliser le nom de l'URL (Recommandé)"
+  - label: "Autre nom", description: "Entrer un nom personnalisé"
+
+**ATTENDS la réponse avant de continuer.**
+
+### Question 3 : Confirmer la création ?
+
+Utilise le tool `AskUserQuestion` avec :
+- question: "Créer le projet GitFlow ?\n\nProjet: {nom}\nEmplacement: {chemin}"
+- header: "Confirm"
+- options:
+  - label: "Oui, créer", description: "Procéder à la création"
+  - label: "Modifier", description: "Changer les paramètres"
+
+**ATTENDS la réponse. Si "Modifier", retourne à la Question 1.**
+
+### SEULEMENT APRÈS les 3 confirmations :
+
+Tu peux créer la structure dans `{TARGET_FOLDER}/{PROJECT_NAME}/`
+
+## Structure à créer (mode Clone)
+
 ```
 {project}/
 ├── .bare/                # Hidden bare repo
@@ -40,33 +68,12 @@ Configuration initiale GitFlow pour un projet.
 └── hotfixes/
 ```
 
-### Adjacent (Legacy v1.2)
-```
-parent/
-├── repo/                 # Main repo
-│   └── .claude/gitflow/
-└── worktrees/
-    ├── main/
-    ├── develop/
-    ├── features/
-    ├── releases/
-    └── hotfixes/
-```
-
 ## Output Format
 
 ```
 GITFLOW INIT
   Mode: {clone|existing|new}
-  Project: {type}
-  Structure: {organized|adjacent}
-  Main: {branch} → 01-Main/
-  Develop: {branch} → 02-Develop/
-  Version: {source}
-  EF Core: {enabled|disabled}
+  Project: {nom}
+  Location: {chemin}
   Status: OK
 ```
-
-## Priority
-
-Speed > Detail. Configuration minimale viable.
