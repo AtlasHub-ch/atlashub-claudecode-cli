@@ -117,6 +117,38 @@ model: haiku|sonnet|opus
 English content...
 ```
 
+### Documentation Rules
+
+**All project documentation MUST be in `.documentation/` folder in HTML format.**
+
+```
+.documentation/
+├── index.html              # Documentation home
+├── guides/                 # User guides
+│   └── *.html
+├── reference/              # API/Command reference
+│   └── *.html
+└── assets/                 # CSS, images, etc.
+    ├── styles.css
+    └── images/
+```
+
+**FORBIDDEN:**
+- ❌ Creating `.md` files for documentation
+- ❌ README.md files (except root CLAUDE.md)
+- ❌ Documentation outside `.documentation/` folder
+
+**ALLOWED:**
+- ✅ HTML files in `.documentation/`
+- ✅ CLAUDE.md (project memory file - this file)
+- ✅ Template `.md` files in `templates/` (these are prompts, not docs)
+
+**Reasons:**
+- HTML provides better formatting and navigation
+- Consistent documentation structure
+- Easier to publish as static site
+- Separates documentation from code/templates
+
 ---
 
 *Initialisé le 2025-12-30*
