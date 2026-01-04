@@ -4,184 +4,115 @@ agent: gitflow-init
 model: sonnet
 ---
 
-# Phase 1: INIT - Project Initialization
+# GitFlow Init
 
-> **⛔⛔⛔ READ THIS FIRST - MANDATORY INSTRUCTIONS ⛔⛔⛔**
->
-> **BEFORE doing ANYTHING else**, check if `$ARGUMENTS` contains a URL (https:// or git@).
->
-> **IF URL DETECTED → YOU MUST ASK 3 QUESTIONS BEFORE ANY ACTION:**
->
-> 1. **ASK:** "Where do you want to create this project?" (Location)
-> 2. **ASK:** "What should we name this project folder?" (Name)
-> 3. **ASK:** "Create GitFlow project with these settings?" (Confirm)
->
-> **⛔ DO NOT skip these questions. DO NOT use defaults. WAIT for user response each time.**
->
-> **Only AFTER user confirms all 3 questions, proceed with creation.**
-
-**Arguments:** `$ARGUMENTS` = `[repository_url] [target_folder] [--exec] [--yes] [--no-worktrees]`
+**Arguments:** `$ARGUMENTS`
 
 ---
 
-## STEP 0: Check for URL in Arguments (DO THIS FIRST)
+## PREMIÈRE CHOSE À FAIRE
 
-```bash
-# Check if first argument looks like a URL
-if [[ "$1" =~ ^https?:// ]] || [[ "$1" =~ ^git@ ]]; then
-  # URL DETECTED → Go to MODE A (Clone from URL)
-  # ⛔ YOU MUST ASK THE 3 MANDATORY QUESTIONS BELOW
-  MODE="A"
-else
-  # No URL → Check other modes
-  MODE="B_or_C"
-fi
-```
+Regarde si `$ARGUMENTS` contient une URL (commence par `https://` ou `git@`).
 
-**⛔ IF MODE="A" (URL detected), you MUST execute the 3 AskUserQuestion calls below BEFORE any file operation.**
+**Si OUI (URL détectée)** → Tu DOIS suivre le workflow ci-dessous. NE SAUTE AUCUNE ÉTAPE.
+
+**Si NON** → Va directement à la section "MODE B ou C" plus bas.
 
 ---
 
-## MODE A: Clone from URL
+## WORKFLOW QUAND URL DÉTECTÉE
 
-**Trigger:** `$ARGUMENTS` contains a repository URL (https:// or git@)
+Tu as reçu une URL de repository. Avant de créer quoi que ce soit, tu DOIS poser 3 questions à l'utilisateur.
 
-### ⛔⛔⛔ MANDATORY: ASK THESE 3 QUESTIONS FIRST ⛔⛔⛔
+### ÉTAPE 1 : Extraire les informations de l'URL
 
-**You MUST call `AskUserQuestion` 3 times and WAIT for each response.**
-**DO NOT proceed without user answers. DO NOT use default values.**
+Extrais le nom suggéré du projet depuis l'URL :
+- `https://github.com/org/mon-projet.git` → nom suggéré = "mon-projet"
+- `https://dev.azure.com/org/project/_git/repo` → nom suggéré = "repo"
 
----
-
-### A.1 Extract URL (information only - NO file operations yet)
-
-```bash
-# ONLY extract the URL - DO NOT create any folders yet
-REPO_URL="$1"
-SUGGESTED_NAME=$(basename "$REPO_URL" .git)
-
-# Check if target folder was provided as second argument
-TARGET_FOLDER_ARG="$2"
-```
-
-**⛔ STOP HERE.** Even if `TARGET_FOLDER_ARG` is provided, you MUST still go through
-the confirmation flow below. The user MUST explicitly confirm before any creation.
+**NE CRÉE AUCUN DOSSIER MAINTENANT.** Tu dois d'abord poser les questions.
 
 ---
 
-### A.2 MANDATORY Question 1: Target Location
+### ÉTAPE 2 : DEMANDER OÙ CRÉER LE PROJET
 
-**⛔ YOU MUST EXECUTE THIS `AskUserQuestion` TOOL CALL. NO EXCEPTIONS.**
+**MAINTENANT, utilise le tool AskUserQuestion pour demander à l'utilisateur où créer le projet.**
 
-```javascript
-AskUserQuestion({
-  questions: [{
-    question: "Where do you want to create this project?",
-    header: "Location",
-    options: [
-      { label: "C:/Dev", description: "Common development folder (Recommended)" },
-      { label: "Current directory", description: `Create in: ${process.cwd()}` },
-      { label: "Custom path", description: "Enter a different location" }
-    ],
-    multiSelect: false
-  }]
-})
-```
+Pose cette question avec ces options :
+- Question : "Où voulez-vous créer ce projet ?"
+- Header : "Location"
+- Options :
+  1. "C:/Dev" - Dossier de développement recommandé
+  2. "Répertoire courant" - Créer ici (affiche le chemin actuel)
+  3. "Chemin personnalisé" - Entrer un autre chemin
 
-**⛔ WAIT FOR USER RESPONSE.** Do not proceed to A.3 until you receive the answer.
+**ATTENDS LA RÉPONSE DE L'UTILISATEUR.**
 
-**If "Custom path" selected:** Ask user to type the path, then validate it exists/is writable.
+Si l'utilisateur choisit "Chemin personnalisé", demande-lui de saisir le chemin.
 
-**Store result as:** `TARGET_FOLDER`
+Stocke le résultat dans `TARGET_FOLDER`.
 
 ---
 
-### A.3 MANDATORY Question 2: Project Name
+### ÉTAPE 3 : DEMANDER LE NOM DU PROJET
 
-**⛔ YOU MUST EXECUTE THIS `AskUserQuestion` TOOL CALL. NO EXCEPTIONS.**
+**MAINTENANT, utilise le tool AskUserQuestion pour demander le nom du dossier projet.**
 
-```javascript
-AskUserQuestion({
-  questions: [{
-    question: `What should we name this project folder? (Suggested from URL: "${SUGGESTED_NAME}")`,
-    header: "Name",
-    options: [
-      { label: "${SUGGESTED_NAME}", description: "Use name extracted from URL (Recommended)" },
-      { label: "Custom name", description: "Enter a different folder name" }
-    ],
-    multiSelect: false
-  }]
-})
-```
+Pose cette question avec ces options :
+- Question : "Quel nom pour le dossier du projet ? (Suggéré : {nom_extrait_de_url})"
+- Header : "Name"
+- Options :
+  1. "{nom_extrait_de_url}" - Utiliser le nom de l'URL (Recommandé)
+  2. "Nom personnalisé" - Entrer un autre nom
 
-**⛔ WAIT FOR USER RESPONSE.** Do not proceed to A.4 until you receive the answer.
+**ATTENDS LA RÉPONSE DE L'UTILISATEUR.**
 
-**If "Custom name" selected:** Ask user to type the name, validate (no spaces, valid chars).
+Si l'utilisateur choisit "Nom personnalisé", demande-lui de saisir le nom.
 
-**Store result as:** `PROJECT_NAME`
+Stocke le résultat dans `PROJECT_NAME`.
 
 ---
 
-### A.4 MANDATORY Question 3: Final Confirmation
+### ÉTAPE 4 : CONFIRMATION FINALE
 
-**⛔ YOU MUST EXECUTE THIS `AskUserQuestion` TOOL CALL. NO EXCEPTIONS.**
+**MAINTENANT, utilise le tool AskUserQuestion pour confirmer la création.**
 
-```javascript
-AskUserQuestion({
-  questions: [{
-    question: `Create GitFlow project with these settings?
+Affiche un récapitulatif et demande confirmation :
+- Question : "Créer le projet GitFlow avec ces paramètres ?\n\nProjet : {PROJECT_NAME}\nEmplacement : {TARGET_FOLDER}/\nChemin complet : {TARGET_FOLDER}/{PROJECT_NAME}/\nRepository : {URL}"
+- Header : "Confirm"
+- Options :
+  1. "Oui, créer le projet" - Procéder à la création (Recommandé)
+  2. "Modifier" - Revenir en arrière pour changer les paramètres
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  Project Name:  ${PROJECT_NAME}
-  Location:      ${TARGET_FOLDER}/
-  Full Path:     ${TARGET_FOLDER}/${PROJECT_NAME}/
-  Repository:    ${REPO_URL}
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`,
-    header: "Confirm",
-    options: [
-      { label: "Yes, create project", description: "Proceed with creation (Recommended)" },
-      { label: "Change settings", description: "Go back and modify location or name" }
-    ],
-    multiSelect: false
-  }]
-})
-```
+**ATTENDS LA RÉPONSE DE L'UTILISATEUR.**
 
-**⛔ WAIT FOR USER RESPONSE.**
-
-- **If "Change settings":** Return to A.2 and ask questions again.
-- **If "Yes, create project":** Proceed to A.5.
+Si l'utilisateur choisit "Modifier", retourne à l'ÉTAPE 2.
 
 ---
 
-### A.5 Set Variables (Only After All Confirmations)
+### ÉTAPE 5 : CRÉER LE PROJET (seulement après confirmation)
 
-**⛔ ONLY execute this section AFTER user confirmed "Yes, create project" in A.4.**
+**SEULEMENT si l'utilisateur a confirmé "Oui, créer le projet" à l'étape 4**, tu peux maintenant :
 
-```bash
-# Now we can set the final path
-PROJECT_BASE="$TARGET_FOLDER/$PROJECT_NAME"
-```
+1. Vérifier que l'URL est accessible
+2. Vérifier que le dossier n'existe pas déjà
+3. Créer la structure
+
+Le chemin final est : `{TARGET_FOLDER}/{PROJECT_NAME}/`
 
 ---
 
-### A.6 Validate
+### ÉTAPE 6 : Validation
 
-```bash
-# Check URL is accessible
-git ls-remote "$REPO_URL" HEAD > /dev/null 2>&1 || {
-  echo "ERROR: Cannot access repository: $REPO_URL"
-  exit 1
-}
+Vérifie que :
+1. L'URL du repository est accessible (test avec `git ls-remote`)
+2. Le dossier `{TARGET_FOLDER}/{PROJECT_NAME}` n'existe pas déjà
 
-# Check target doesn't exist
-if [ -d "$PROJECT_BASE" ]; then
-  echo "ERROR: Directory already exists: $PROJECT_BASE"
-  exit 1
-fi
-```
+Si un problème, informe l'utilisateur et arrête.
 
-### A.7 Create Organized Structure
+---
+
+### ÉTAPE 7 : Créer la structure organisée
 
 ```bash
 # Create project folder with organized structure
@@ -232,7 +163,7 @@ mkdir -p .claude/gitflow/{plans,logs,migrations,backup,cache}
     └── {hotfix-name}/
 ```
 
-### A.8 Config for Clone Mode
+### ÉTAPE 8 : Configuration
 
 ```json
 {
@@ -262,7 +193,7 @@ mkdir -p .claude/gitflow/{plans,logs,migrations,backup,cache}
 }
 ```
 
-### A.9 Display Summary
+### ÉTAPE 9 : Afficher le résumé
 
 ```
 ================================================================================
