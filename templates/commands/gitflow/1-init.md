@@ -36,36 +36,42 @@ Parse `$ARGUMENTS` to determine the initialization mode:
 
 **Trigger:** `$ARGUMENTS` contains a repository URL
 
-### A.1 Parse Arguments and Detect Missing Info
+---
+
+### ⛔ MANDATORY INTERACTIVE FLOW - BLOCKING INSTRUCTIONS
+
+> **CLAUDE INSTRUCTION:** The `AskUserQuestion({...})` blocks below are instructions for using
+> the `AskUserQuestion` tool **interactively**. You MUST execute the tool with these parameters
+> to get the user's response BEFORE continuing. DO NOT display this code - EXECUTE IT and WAIT for response.
+>
+> **⛔ CRITICAL RULES - NO EXCEPTIONS:**
+> 1. You MUST ask for TARGET_FOLDER - even if user didn't provide it
+> 2. You MUST ask for PROJECT_NAME confirmation - even if extractable from URL
+> 3. You MUST get final confirmation before ANY file system operation
+> 4. You MUST NOT use current directory as default without explicit user choice
+> 5. You MUST NOT skip any question - ALL THREE are mandatory
+
+---
+
+### A.1 Extract URL Only (DO NOT EXECUTE ANYTHING YET)
 
 ```bash
-# Extract URL and target folder
-REPO_URL="$1"              # https://github.com/org/repo.git
-TARGET_FOLDER="$2"         # c:/dev (may be empty!)
-REPO_NAME=$(basename "$REPO_URL" .git)  # Extract repo name from URL
+# ONLY extract the URL - DO NOT create any folders yet
+REPO_URL="$1"
+SUGGESTED_NAME=$(basename "$REPO_URL" .git)
+
+# Check if target folder was provided as second argument
+TARGET_FOLDER_ARG="$2"
 ```
 
-**CRITICAL CHECK:** If TARGET_FOLDER is empty, DO NOT default to current directory silently.
-Instead, proceed to A.1b to ask the user interactively.
+**⛔ STOP HERE.** Even if `TARGET_FOLDER_ARG` is provided, you MUST still go through
+the confirmation flow below. The user MUST explicitly confirm before any creation.
 
-```bash
-# Check if we have all required info
-if [ -z "$TARGET_FOLDER" ]; then
-  # Missing target folder → Go to A.1b (Interactive questions)
-  NEEDS_INTERACTIVE=true
-else
-  # All info provided → Can proceed directly
-  NEEDS_INTERACTIVE=false
-  PROJECT_BASE="$TARGET_FOLDER/$REPO_NAME"
-fi
-```
+---
 
-### A.1b Interactive Questions (When TARGET_FOLDER Missing)
+### A.2 MANDATORY Question 1: Target Location
 
-**IMPORTANT:** When the user only provides the URL without specifying WHERE to create the project,
-we MUST ask them explicitly. Never assume or use defaults silently.
-
-#### Step 1: Ask for Target Directory
+**⛔ YOU MUST EXECUTE THIS `AskUserQuestion` TOOL CALL. NO EXCEPTIONS.**
 
 ```javascript
 AskUserQuestion({
@@ -82,18 +88,25 @@ AskUserQuestion({
 })
 ```
 
-**If "Custom path" selected:** Prompt for the path and validate it exists/is writable.
+**⛔ WAIT FOR USER RESPONSE.** Do not proceed to A.3 until you receive the answer.
 
-#### Step 2: Confirm Project Name
+**If "Custom path" selected:** Ask user to type the path, then validate it exists/is writable.
+
+**Store result as:** `TARGET_FOLDER`
+
+---
+
+### A.3 MANDATORY Question 2: Project Name
+
+**⛔ YOU MUST EXECUTE THIS `AskUserQuestion` TOOL CALL. NO EXCEPTIONS.**
 
 ```javascript
-// SUGGESTED_NAME extracted from URL
 AskUserQuestion({
   questions: [{
-    question: "What should we name this project folder?",
-    header: "Project Name",
+    question: `What should we name this project folder? (Suggested from URL: "${SUGGESTED_NAME}")`,
+    header: "Name",
     options: [
-      { label: "${SUGGESTED_NAME}", description: `Use name from URL: "${SUGGESTED_NAME}" (Recommended)` },
+      { label: "${SUGGESTED_NAME}", description: "Use name extracted from URL (Recommended)" },
       { label: "Custom name", description: "Enter a different folder name" }
     ],
     multiSelect: false
@@ -101,40 +114,58 @@ AskUserQuestion({
 })
 ```
 
-**If "Custom name" selected:** Prompt for the name and validate (no spaces, valid chars, doesn't exist).
+**⛔ WAIT FOR USER RESPONSE.** Do not proceed to A.4 until you receive the answer.
 
-#### Step 3: Final Confirmation
+**If "Custom name" selected:** Ask user to type the name, validate (no spaces, valid chars).
+
+**Store result as:** `PROJECT_NAME`
+
+---
+
+### A.4 MANDATORY Question 3: Final Confirmation
+
+**⛔ YOU MUST EXECUTE THIS `AskUserQuestion` TOOL CALL. NO EXCEPTIONS.**
 
 ```javascript
 AskUserQuestion({
   questions: [{
     question: `Create GitFlow project with these settings?
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   Project Name:  ${PROJECT_NAME}
   Location:      ${TARGET_FOLDER}/
   Full Path:     ${TARGET_FOLDER}/${PROJECT_NAME}/
   Repository:    ${REPO_URL}
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`,
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`,
     header: "Confirm",
     options: [
-      { label: "Yes, create project", description: "Create structure and clone repository (Recommended)" },
-      { label: "Change settings", description: "Go back and modify name or location" }
+      { label: "Yes, create project", description: "Proceed with creation (Recommended)" },
+      { label: "Change settings", description: "Go back and modify location or name" }
     ],
     multiSelect: false
   }]
 })
 ```
 
-**If "Change settings":** Return to Step 1.
+**⛔ WAIT FOR USER RESPONSE.**
 
-**After confirmation:** Set PROJECT_BASE and continue to A.2.
+- **If "Change settings":** Return to A.2 and ask questions again.
+- **If "Yes, create project":** Proceed to A.5.
+
+---
+
+### A.5 Set Variables (Only After All Confirmations)
+
+**⛔ ONLY execute this section AFTER user confirmed "Yes, create project" in A.4.**
 
 ```bash
+# Now we can set the final path
 PROJECT_BASE="$TARGET_FOLDER/$PROJECT_NAME"
 ```
 
-### A.2 Validate
+---
+
+### A.6 Validate
 
 ```bash
 # Check URL is accessible
@@ -150,7 +181,7 @@ if [ -d "$PROJECT_BASE" ]; then
 fi
 ```
 
-### A.3 Create Organized Structure
+### A.7 Create Organized Structure
 
 ```bash
 # Create project folder with organized structure
@@ -201,7 +232,7 @@ mkdir -p .claude/gitflow/{plans,logs,migrations,backup,cache}
     └── {hotfix-name}/
 ```
 
-### A.4 Config for Clone Mode
+### A.8 Config for Clone Mode
 
 ```json
 {
@@ -231,7 +262,7 @@ mkdir -p .claude/gitflow/{plans,logs,migrations,backup,cache}
 }
 ```
 
-### A.5 Display Summary
+### A.9 Display Summary
 
 ```
 ================================================================================
