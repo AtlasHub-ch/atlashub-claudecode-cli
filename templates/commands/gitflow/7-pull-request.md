@@ -8,13 +8,13 @@ model: haiku
 
 Tu es expert GitFlow. Cree une Pull Request avec validation complete.
 
-**Argument:** `$ARGUMENTS` = branche cible (optionnel, default: develop)
+**Argument:** `$ARGUMENTS` = branche cible (optionnel, auto-detecte selon type de branche)
 
 ---
 
 ## Pre-checks obligatoires
 
-### 1. Validation branche
+### 1. Validation branche et detection cible
 
 ```bash
 # Branche courante
@@ -25,7 +25,43 @@ if [[ "$CURRENT" == "main" || "$CURRENT" == "develop" ]]; then
   echo "ERREUR: Impossible de creer PR depuis $CURRENT"
   exit 1
 fi
+
+# ============================================
+# DETECTION AUTOMATIQUE DE LA CIBLE
+# ============================================
+# GitFlow standard:
+#   - feature/* → develop
+#   - release/* → main (puis merge back to develop apres)
+#   - hotfix/*  → main (puis merge back to develop apres)
+# ============================================
+
+if [[ -n "$ARGUMENTS" && "$ARGUMENTS" != "--"* ]]; then
+  # Cible explicite fournie par l'utilisateur
+  TARGET="$ARGUMENTS"
+else
+  # Detection automatique selon le type de branche
+  if [[ "$CURRENT" == hotfix/* ]]; then
+    TARGET="main"
+    echo "Hotfix detecte → PR vers main (GitFlow standard)"
+  elif [[ "$CURRENT" == release/* ]]; then
+    TARGET="main"
+    echo "Release detectee → PR vers main (GitFlow standard)"
+  else
+    TARGET="develop"
+    echo "Feature/autre → PR vers develop"
+  fi
+fi
+
+echo "Cible: $TARGET"
 ```
+
+**Cibles par defaut (GitFlow standard):**
+
+| Type branche | Cible PR | Raison |
+|--------------|----------|--------|
+| `feature/*` | `develop` | Features integrees sur develop |
+| `release/*` | `main` | Releases deployees sur main |
+| `hotfix/*` | `main` | Hotfixes appliques sur main d'abord |
 
 ### 2. Synchronisation
 
@@ -173,7 +209,18 @@ Prochain: /gitflow:8-review #{number}
 
 | Commande | Action |
 |----------|--------|
-| `/gitflow:7-pull-request` | PR vers develop |
-| `/gitflow:7-pull-request main` | PR vers main |
+| `/gitflow:7-pull-request` | PR vers cible auto-detectee (feature→develop, hotfix/release→main) |
+| `/gitflow:7-pull-request develop` | PR vers develop (override) |
+| `/gitflow:7-pull-request main` | PR vers main (override) |
 | `/gitflow:7-pull-request --draft` | PR en draft |
 | `/gitflow:7-pull-request --dry-run` | Simulation |
+
+**Detection automatique de la cible:**
+
+```
+feature/*  → develop  (integration continue)
+release/*  → main     (deploiement production)
+hotfix/*   → main     (correction urgente production)
+```
+
+> **Note:** Le merge back vers develop est gere par `/gitflow:11-finish` apres le merge de la PR.
