@@ -6,13 +6,178 @@ model: haiku
 
 # Phase 1: INIT - Project Initialization
 
-You are a GitFlow and EF Core expert. Initialize the .NET project for the GitFlow workflow.
+You are a GitFlow and EF Core expert. Initialize a project for the GitFlow workflow.
 
 **Workflow:** Analysis → Generate plan → User validates → Execute with `--exec`
 
+**Arguments:** `$ARGUMENTS` = `[repository_url] [target_folder] [--exec] [--yes] [--no-worktrees]`
+
 ---
 
-## Default mode: Generate the plan
+## Detect Init Mode
+
+Parse `$ARGUMENTS` to determine the initialization mode:
+
+| Mode | Detection | Example |
+|------|-----------|---------|
+| **Clone from URL** | URL pattern (https:// or git@) | `/gitflow:1-init https://github.com/org/repo.git c:/dev` |
+| **Existing repo** | Inside a git repository | `/gitflow:1-init` |
+| **New local** | Target folder without URL | `/gitflow:1-init c:/dev/my-project` |
+
+---
+
+## MODE A: Clone from URL (New)
+
+**Trigger:** `$ARGUMENTS` contains a repository URL
+
+### A.1 Parse Arguments
+
+```bash
+# Extract URL and target folder
+REPO_URL="$1"              # https://github.com/org/repo.git
+TARGET_FOLDER="$2"         # c:/dev (optional, defaults to current directory)
+REPO_NAME=$(basename "$REPO_URL" .git)  # Extract repo name from URL
+
+# Determine project base path
+if [ -n "$TARGET_FOLDER" ]; then
+  PROJECT_BASE="$TARGET_FOLDER/$REPO_NAME"
+else
+  PROJECT_BASE="./$REPO_NAME"
+fi
+```
+
+### A.2 Validate
+
+```bash
+# Check URL is accessible
+git ls-remote "$REPO_URL" HEAD > /dev/null 2>&1 || {
+  echo "ERROR: Cannot access repository: $REPO_URL"
+  exit 1
+}
+
+# Check target doesn't exist
+if [ -d "$PROJECT_BASE" ]; then
+  echo "ERROR: Directory already exists: $PROJECT_BASE"
+  exit 1
+fi
+```
+
+### A.3 Create Organized Structure
+
+```bash
+# Create project folder with organized structure
+mkdir -p "$PROJECT_BASE"
+cd "$PROJECT_BASE"
+
+# Clone as bare repository (hidden)
+git clone --bare "$REPO_URL" .bare
+echo "gitdir: ./.bare" > .git
+
+# Configure bare repo for worktrees
+cd .bare
+git config core.bare false
+git config core.worktree ".."
+cd ..
+
+# Create organized worktree structure
+mkdir -p features releases hotfixes
+
+# Create permanent worktrees with numbered prefixes
+git worktree add "01-Main" main
+git worktree add "02-Develop" develop
+
+# Initialize GitFlow config in 02-Develop (working directory)
+cd "02-Develop"
+mkdir -p .claude/gitflow/{plans,logs,migrations,backup,cache}
+```
+
+**Resulting structure:**
+```
+{target_folder}/{repo_name}/
+├── .bare/                    # Hidden bare repository
+├── .git                      # gitdir pointer to .bare
+├── 01-Main/                  # Permanent worktree (main branch)
+│   └── ...
+├── 02-Develop/               # Permanent worktree (develop branch) ← WORKING DIR
+│   ├── .claude/gitflow/
+│   │   ├── config.json
+│   │   ├── plans/
+│   │   ├── logs/
+│   │   └── migrations/
+│   └── ...
+├── features/                 # Feature worktrees go here
+│   └── {feature-name}/
+├── releases/                 # Release worktrees go here
+│   └── v{version}/
+└── hotfixes/                 # Hotfix worktrees go here
+    └── {hotfix-name}/
+```
+
+### A.4 Config for Clone Mode
+
+```json
+{
+  "version": "1.3.0",
+  "initMode": "clone",
+  "repository": {
+    "name": "{repo_name}",
+    "remoteUrl": "{REPO_URL}",
+    "defaultBranch": "main"
+  },
+  "worktrees": {
+    "enabled": true,
+    "mode": "organized",
+    "basePath": "..",
+    "bareRepo": "../.bare",
+    "permanent": {
+      "main": { "path": "../01-Main", "prefix": "01" },
+      "develop": { "path": "../02-Develop", "prefix": "02" }
+    },
+    "structure": {
+      "features": "../features/",
+      "releases": "../releases/",
+      "hotfixes": "../hotfixes/"
+    },
+    "cleanupOnFinish": true
+  }
+}
+```
+
+### A.5 Display Summary
+
+```
+================================================================================
+                    GITFLOW INITIALIZED (Clone Mode)
+================================================================================
+
+REPOSITORY
+  Name:   {repo_name}
+  Remote: {REPO_URL}
+
+STRUCTURE CREATED
+  {PROJECT_BASE}/
+  ├── 01-Main/        ← main branch
+  ├── 02-Develop/     ← develop branch (current directory)
+  ├── features/       ← feature worktrees
+  ├── releases/       ← release worktrees
+  └── hotfixes/       ← hotfix worktrees
+
+WORKING DIRECTORY
+  {PROJECT_BASE}/02-Develop
+
+NEXT STEPS
+  1. cd "{PROJECT_BASE}/02-Develop"
+  2. code .   (or your preferred IDE)
+  3. /gitflow:10-start feature {name}
+
+================================================================================
+```
+
+---
+
+## MODE B: Existing Repository (Default)
+
+**Trigger:** Currently inside a git repository without URL argument
 
 ### 0. Check existing structure
 
@@ -163,9 +328,80 @@ Plan generated: .claude/gitflow/plans/init_<DATE>.md
 6. **VERSION**: Create file if no source detected
 7. **Commit** (ask): `chore(gitflow): initialization v{VERSION}`
 
-### Creating Worktrees (v1.2)
+### Creating Worktrees (v1.3)
 
-If `--with-worktrees` is specified (default: true), create the structure:
+If `--with-worktrees` is specified (default: true), ask user for structure preference:
+
+```javascript
+AskUserQuestion({
+  questions: [{
+    question: "Choose worktree organization style",
+    header: "Structure",
+    options: [
+      { label: "Organized (Recommended)", description: "01-Main/, 02-Develop/, features/, releases/, hotfixes/ in parent folder" },
+      { label: "Adjacent", description: "../worktrees/ folder next to repo (legacy mode)" },
+      { label: "Skip worktrees", description: "No worktree structure, use branch switching" }
+    ],
+    multiSelect: false
+  }]
+})
+```
+
+#### Option 1: Organized Structure (Recommended)
+
+```bash
+# Move current repo to subfolder with numbered prefix
+CURRENT_DIR=$(pwd)
+PARENT_DIR=$(dirname "$CURRENT_DIR")
+REPO_NAME=$(basename "$CURRENT_DIR")
+
+# Create organized structure in parent
+cd "$PARENT_DIR"
+mkdir -p "${REPO_NAME}-gitflow"
+mv "$REPO_NAME" "${REPO_NAME}-gitflow/.bare-temp"
+
+cd "${REPO_NAME}-gitflow"
+
+# Convert to bare repo structure
+git clone --bare ".bare-temp" .bare
+rm -rf .bare-temp
+echo "gitdir: ./.bare" > .git
+
+# Configure bare repo
+cd .bare
+git config core.bare false
+git config core.worktree ".."
+cd ..
+
+# Create worktree structure
+mkdir -p features releases hotfixes
+git worktree add "01-Main" main
+git worktree add "02-Develop" develop
+
+# Move to 02-Develop as working directory
+cd "02-Develop"
+```
+
+**Resulting structure (Organized):**
+```
+parent/
+└── {repo-name}-gitflow/         # Project folder
+    ├── .bare/                   # Bare repository
+    ├── .git                     # gitdir pointer
+    ├── 01-Main/                 # Permanent worktree (main)
+    │   └── ...
+    ├── 02-Develop/              # Permanent worktree (develop) ← WORKING DIR
+    │   ├── .claude/gitflow/
+    │   └── ...
+    ├── features/                # Feature worktrees
+    │   └── {feature-name}/
+    ├── releases/                # Release worktrees
+    │   └── v{version}/
+    └── hotfixes/                # Hotfix worktrees
+        └── {hotfix-name}/
+```
+
+#### Option 2: Adjacent Structure (Legacy)
 
 ```bash
 # Base path (relative to main repo)
@@ -181,13 +417,13 @@ git worktree add "$WORKTREE_BASE/main" main
 git worktree add "$WORKTREE_BASE/develop" develop
 ```
 
-**Resulting structure:**
+**Resulting structure (Adjacent/Legacy):**
 ```
 parent/
-├── atlashub-project/          # Main repo
+├── atlashub-project/          # Main repo (stays as-is)
 │   ├── .claude/gitflow/
 │   └── ...
-└── worktrees/
+└── worktrees/                 # Adjacent folder
     ├── main/                  # Permanent worktree
     ├── develop/               # Permanent worktree
     ├── features/              # Features in progress
@@ -199,24 +435,60 @@ parent/
 ```
 
 ### Config.json structure
+
+#### Organized Mode (v1.3)
 ```json
 {
-  "version": "1.2.0",
-  "repository": { "name", "defaultBranch", "remoteUrl" },
-  "versioning": { "strategy", "current", "source", "sourceFile", "tagPrefix", "autoIncrement" },
-  "git": { "branches", "mergeStrategy", "protectedBranches" },
+  "version": "1.3.0",
+  "initMode": "organized",
+  "repository": { "name": "", "defaultBranch": "main", "remoteUrl": "" },
+  "versioning": { "strategy": "semver", "current": "0.1.0", "source": "auto", "sourceFile": "", "tagPrefix": "v", "autoIncrement": { "feature": "minor", "hotfix": "patch", "release": "manual" } },
+  "git": { "branches": { "main": "main", "develop": "develop", "feature": "feature/", "release": "release/", "hotfix": "hotfix/" }, "mergeStrategy": "--no-ff", "protectedBranches": ["main", "develop"] },
   "worktrees": {
     "enabled": true,
-    "basePath": "../worktrees",
-    "permanent": { "main": true, "develop": true },
-    "structure": { "features", "releases", "hotfixes" },
+    "mode": "organized",
+    "basePath": "..",
+    "bareRepo": "../.bare",
+    "permanent": {
+      "main": { "path": "../01-Main", "prefix": "01" },
+      "develop": { "path": "../02-Develop", "prefix": "02" }
+    },
+    "structure": {
+      "features": "../features/",
+      "releases": "../releases/",
+      "hotfixes": "../hotfixes/"
+    },
     "cleanupOnFinish": true
   },
   "efcore": {
-    "enabled", "contexts", "generateScript", "scriptOutputPath",
-    "crossBranch": { "enabled", "scanOnMigrationCreate", "blockOnConflict", "cacheExpiry" }
+    "enabled": false, "contexts": [], "generateScript": false, "scriptOutputPath": "",
+    "crossBranch": { "enabled": true, "scanOnMigrationCreate": true, "blockOnConflict": true, "cacheExpiry": "1h" }
   },
-  "workflow": { "requireConfirmation", "createCheckpoints", "commitConventions" }
+  "workflow": { "requireConfirmation": true, "createCheckpoints": true, "commitConventions": "conventional", "push": { "afterCommit": "worktree", "afterFinish": "always" } }
+}
+```
+
+#### Adjacent/Legacy Mode (v1.2 compatible)
+```json
+{
+  "version": "1.3.0",
+  "initMode": "adjacent",
+  "repository": { "name": "", "defaultBranch": "main", "remoteUrl": "" },
+  "versioning": { "strategy": "semver", "current": "0.1.0", "source": "auto", "sourceFile": "", "tagPrefix": "v", "autoIncrement": { "feature": "minor", "hotfix": "patch", "release": "manual" } },
+  "git": { "branches": { "main": "main", "develop": "develop", "feature": "feature/", "release": "release/", "hotfix": "hotfix/" }, "mergeStrategy": "--no-ff", "protectedBranches": ["main", "develop"] },
+  "worktrees": {
+    "enabled": true,
+    "mode": "adjacent",
+    "basePath": "../worktrees",
+    "permanent": { "main": true, "develop": true },
+    "structure": { "features": "features/", "releases": "releases/", "hotfixes": "hotfixes/" },
+    "cleanupOnFinish": true
+  },
+  "efcore": {
+    "enabled": false, "contexts": [], "generateScript": false, "scriptOutputPath": "",
+    "crossBranch": { "enabled": true, "scanOnMigrationCreate": true, "blockOnConflict": true, "cacheExpiry": "1h" }
+  },
+  "workflow": { "requireConfirmation": true, "createCheckpoints": true, "commitConventions": "conventional", "push": { "afterCommit": "worktree", "afterFinish": "always" } }
 }
 ```
 
@@ -227,28 +499,96 @@ Rename to `init_<DATE>_DONE_<TIMESTAMP>.md`
 
 ## Modes
 
+### Clone Mode (New in v1.3)
+
 | Command | Action |
 |---------|--------|
-| `/gitflow:1-init` | Generate plan (asks if structure exists) |
+| `/gitflow:1-init {url}` | Clone repo to current directory with organized structure |
+| `/gitflow:1-init {url} {folder}` | Clone repo to target folder with organized structure |
+| `/gitflow:1-init {url} {folder} --yes` | Clone and initialize without prompts |
+
+**Examples:**
+```bash
+/gitflow:1-init https://github.com/org/repo.git
+/gitflow:1-init https://github.com/org/repo.git c:/dev
+/gitflow:1-init git@github.com:org/repo.git c:/dev --yes
+```
+
+### Existing Repo Mode
+
+| Command | Action |
+|---------|--------|
+| `/gitflow:1-init` | Generate plan (asks if structure exists, asks for structure style) |
 | `/gitflow:1-init --exec` | Execute existing plan |
 | `/gitflow:1-init --yes` | Generate + execute without intermediate file |
-| `/gitflow:1-init --migrate` | Force migration of existing structure to v1.2.0 |
+| `/gitflow:1-init --migrate` | Force migration of existing structure to v1.3.0 |
 | `/gitflow:1-init --reset` | Force reset (backup + recreate from scratch) |
-| `/gitflow:1-init --with-worktrees` | Generate plan with worktrees structure (default) |
+| `/gitflow:1-init --organized` | Force organized structure (01-Main, 02-Develop) |
+| `/gitflow:1-init --adjacent` | Force adjacent/legacy structure (../worktrees) |
 | `/gitflow:1-init --no-worktrees` | Generate plan without worktrees |
 
 ---
 
-## Migration Details (v1.0 → v1.2)
+## Migration Details
 
-When migrating from an older version, these changes are applied:
+### v1.2 → v1.3 (Organized Structure)
 
-### Config additions
+When migrating to v1.3, these changes are available:
+
+#### New Config Fields
 
 ```json
 {
-  "version": "1.2.0",           // Updated
-  "worktrees": {                // NEW SECTION
+  "version": "1.3.0",
+  "initMode": "organized",      // NEW - "organized" | "adjacent" | "clone"
+  "worktrees": {
+    "mode": "organized",        // NEW - matches initMode
+    "bareRepo": "../.bare",     // NEW - path to bare repo (organized mode)
+    "permanent": {
+      "main": { "path": "../01-Main", "prefix": "01" },     // CHANGED - object with path/prefix
+      "develop": { "path": "../02-Develop", "prefix": "02" } // CHANGED
+    }
+  }
+}
+```
+
+#### Migration Options
+
+```javascript
+AskUserQuestion({
+  questions: [{
+    question: "v1.2 config detected. How would you like to upgrade?",
+    header: "Migrate",
+    options: [
+      { label: "Keep adjacent", description: "Stay with ../worktrees structure (just update version)" },
+      { label: "Convert to organized", description: "Restructure to 01-Main/, 02-Develop/, etc. (Recommended)" },
+      { label: "Skip", description: "Keep v1.2 config unchanged" }
+    ],
+    multiSelect: false
+  }]
+})
+```
+
+#### Convert to Organized (if selected)
+
+1. Backup current worktrees
+2. Create new organized structure
+3. Move worktree contents to new locations
+4. Update config with new paths
+5. Clean up old structure
+
+---
+
+### v1.0 → v1.2 (Legacy)
+
+When migrating from v1.0/v1.1 to v1.2:
+
+#### Config additions
+
+```json
+{
+  "version": "1.2.0",
+  "worktrees": {
     "enabled": true,
     "basePath": "../worktrees",
     "permanent": { "main": true, "develop": true },
@@ -256,7 +596,7 @@ When migrating from an older version, these changes are applied:
     "cleanupOnFinish": true
   },
   "efcore": {
-    "crossBranch": {            // NEW SUBSECTION
+    "crossBranch": {
       "enabled": true,
       "scanOnMigrationCreate": true,
       "blockOnConflict": true,
@@ -264,7 +604,7 @@ When migrating from an older version, these changes are applied:
     }
   },
   "workflow": {
-    "push": {                   // NEW SUBSECTION
+    "push": {
       "afterCommit": "worktree",
       "afterFinish": "always"
     }
@@ -272,7 +612,7 @@ When migrating from an older version, these changes are applied:
 }
 ```
 
-### Structure additions
+#### Structure additions
 
 ```
 .claude/gitflow/
@@ -281,7 +621,7 @@ When migrating from an older version, these changes are applied:
 └── (existing folders preserved)
 ```
 
-### Preserved during migration
+### Preserved during all migrations
 
 - `versioning.source` and `versioning.sourceFile`
 - `repository.*` settings
