@@ -21,8 +21,14 @@ Parse `$ARGUMENTS` to determine the initialization mode:
 | Mode | Detection | Example |
 |------|-----------|---------|
 | **Clone from URL** | URL pattern (https:// or git@) | `/gitflow:1-init https://github.com/org/repo.git c:/dev` |
+| **Interactive** | NOT inside a git repo AND no URL provided | `/gitflow:1-init` (from empty folder) |
 | **Existing repo** | Inside a git repository | `/gitflow:1-init` |
 | **New local** | Target folder without URL | `/gitflow:1-init c:/dev/my-project` |
+
+**Detection order:**
+1. Check if `$ARGUMENTS` contains a URL → MODE A (Clone from URL)
+2. Check if current directory is a git repo (`git rev-parse --git-dir`) → MODE B (Existing repo)
+3. Otherwise → MODE C (Interactive - ask for repo URL)
 
 ---
 
@@ -169,6 +175,195 @@ NEXT STEPS
   1. cd "{PROJECT_BASE}/02-Develop"
   2. code .   (or your preferred IDE)
   3. /gitflow:10-start feature {name}
+
+================================================================================
+```
+
+---
+
+## MODE C: Interactive (No Repo Detected)
+
+**Trigger:** Current directory is NOT a git repository AND no URL provided in arguments
+
+This mode guides the user through setting up a new GitFlow project interactively.
+
+### C.1 Ask for Repository URL
+
+```javascript
+AskUserQuestion({
+  questions: [{
+    question: "No git repository detected. What repository do you want to clone?",
+    header: "Repo URL",
+    options: [
+      { label: "GitHub", description: "Enter a GitHub repository URL (https://github.com/...)" },
+      { label: "GitLab", description: "Enter a GitLab repository URL (https://gitlab.com/...)" },
+      { label: "Azure DevOps", description: "Enter an Azure DevOps repository URL" },
+      { label: "Other", description: "Enter any git remote URL" }
+    ],
+    multiSelect: false
+  }]
+})
+```
+
+After user selects platform, prompt for the actual URL:
+
+```
+Please provide the repository URL:
+> Example: https://github.com/organization/repository-name.git
+```
+
+**Validate URL:**
+```bash
+git ls-remote "$REPO_URL" HEAD > /dev/null 2>&1 || {
+  echo "ERROR: Cannot access repository: $REPO_URL"
+  echo "Please verify the URL and your access permissions."
+  # Ask again
+}
+```
+
+### C.2 Extract and Confirm Project Name
+
+Extract the project name from the URL and propose it to the user:
+
+```bash
+# Extract repo name from various URL formats
+# https://github.com/org/my-project.git → my-project
+# git@github.com:org/my-project.git → my-project
+# https://dev.azure.com/org/project/_git/repo → repo
+
+REPO_NAME=$(basename "$REPO_URL" .git)
+```
+
+**Ask user to confirm or customize:**
+
+```javascript
+AskUserQuestion({
+  questions: [{
+    question: "Project folder name will be: \"${REPO_NAME}\". Is this correct?",
+    header: "Project Name",
+    options: [
+      { label: "${REPO_NAME}", description: "Use the repository name as folder name (Recommended)" },
+      { label: "Custom name", description: "Enter a different folder name" }
+    ],
+    multiSelect: false
+  }]
+})
+```
+
+**If "Custom name" selected:**
+```
+Enter the project folder name:
+>
+```
+
+**Validate folder name:**
+```bash
+# Check folder doesn't already exist
+if [ -d "$PROJECT_NAME" ]; then
+  echo "ERROR: Folder '$PROJECT_NAME' already exists in current directory"
+  # Ask for different name
+fi
+
+# Validate folder name (no special characters)
+if [[ ! "$PROJECT_NAME" =~ ^[a-zA-Z0-9._-]+$ ]]; then
+  echo "ERROR: Folder name contains invalid characters"
+  echo "Use only: letters, numbers, dots, underscores, hyphens"
+  # Ask again
+fi
+```
+
+### C.3 Confirm Target Location
+
+```javascript
+AskUserQuestion({
+  questions: [{
+    question: "Create project in: \"$(pwd)/${PROJECT_NAME}/\". Continue?",
+    header: "Location",
+    options: [
+      { label: "Yes, create here", description: "Create the project structure in current directory (Recommended)" },
+      { label: "Choose different location", description: "Specify a different parent folder" }
+    ],
+    multiSelect: false
+  }]
+})
+```
+
+**If "Choose different location" selected:**
+```
+Enter the target parent folder (project will be created inside):
+> Example: C:/Dev or /home/user/projects
+```
+
+### C.4 Create Structure and Clone
+
+Once all inputs are confirmed, execute the same steps as MODE A:
+
+```bash
+# Set final paths
+PROJECT_BASE="$TARGET_FOLDER/$PROJECT_NAME"
+
+# Create project folder with organized structure
+mkdir -p "$PROJECT_BASE"
+cd "$PROJECT_BASE"
+
+# Clone as bare repository (hidden)
+git clone --bare "$REPO_URL" .bare
+echo "gitdir: ./.bare" > .git
+
+# Configure bare repo for worktrees
+cd .bare
+git config core.bare false
+git config core.worktree ".."
+cd ..
+
+# Create organized worktree structure
+mkdir -p features releases hotfixes
+
+# Create permanent worktrees with numbered prefixes
+git worktree add "01-Main" main
+git worktree add "02-Develop" develop 2>/dev/null || {
+  # If develop doesn't exist, create it from main
+  git worktree add "02-Develop" -b develop main
+}
+
+# Initialize GitFlow config in 02-Develop (working directory)
+cd "02-Develop"
+mkdir -p .claude/gitflow/{plans,logs,migrations,backup,cache}
+```
+
+### C.5 Generate Config and Display Summary
+
+Generate the same config as MODE A (see A.4) and display:
+
+```
+================================================================================
+                    GITFLOW INITIALIZED (Interactive Mode)
+================================================================================
+
+REPOSITORY
+  Name:   ${PROJECT_NAME}
+  Remote: ${REPO_URL}
+
+STRUCTURE CREATED
+  ${PROJECT_BASE}/
+  ├── .bare/          ← Bare repository (hidden)
+  ├── .git            ← Pointer to .bare
+  ├── 01-Main/        ← main branch (read-only reference)
+  ├── 02-Develop/     ← develop branch (WORKING DIRECTORY)
+  ├── features/       ← Feature worktrees will go here
+  ├── releases/       ← Release worktrees will go here
+  └── hotfixes/       ← Hotfix worktrees will go here
+
+WORKING DIRECTORY
+  ${PROJECT_BASE}/02-Develop
+
+NEXT STEPS
+  1. Open the project:
+     cd "${PROJECT_BASE}/02-Develop"
+     code .
+
+  2. Start a new feature:
+     /gitflow:10-start feature my-feature
 
 ================================================================================
 ```
@@ -514,6 +709,38 @@ Rename to `init_<DATE>_DONE_<TIMESTAMP>.md`
 /gitflow:1-init git@github.com:org/repo.git c:/dev --yes
 ```
 
+### Interactive Mode (New in v1.3)
+
+**Trigger:** Run `/gitflow:1-init` from a directory that is NOT a git repository
+
+| Step | Action |
+|------|--------|
+| 1 | Detect no git repo → ask for repository URL |
+| 2 | Validate URL is accessible |
+| 3 | Extract project name from URL → ask user to confirm or customize |
+| 4 | Confirm target location → allow user to change |
+| 5 | Create organized structure and clone |
+
+**Flow:**
+```
+User runs: /gitflow:1-init
+
+→ "No git repository detected. What repository do you want to clone?"
+  [GitHub] [GitLab] [Azure DevOps] [Other]
+
+→ "Please provide the repository URL:"
+  > https://github.com/myorg/my-awesome-project.git
+
+→ "Project folder name will be: 'my-awesome-project'. Is this correct?"
+  [my-awesome-project (Recommended)] [Custom name]
+
+→ "Create project in: 'C:/Dev/my-awesome-project/'. Continue?"
+  [Yes, create here (Recommended)] [Choose different location]
+
+→ Creates structure and clones...
+→ Opens in 02-Develop
+```
+
 ### Existing Repo Mode
 
 | Command | Action |
@@ -540,7 +767,7 @@ When migrating to v1.3, these changes are available:
 ```json
 {
   "version": "1.3.0",
-  "initMode": "organized",      // NEW - "organized" | "adjacent" | "clone"
+  "initMode": "organized",      // NEW - "organized" | "adjacent" | "clone" | "interactive"
   "worktrees": {
     "mode": "organized",        // NEW - matches initMode
     "bareRepo": "../.bare",     // NEW - path to bare repo (organized mode)
