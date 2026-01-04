@@ -8,72 +8,132 @@ tools: Bash, Read, Write, Glob, AskUserQuestion
 
 # GitFlow Init Agent
 
-Tu initialises un projet pour GitFlow.
+You initialize a GitFlow project.
 
-## RÈGLE ABSOLUE - À SUIVRE OBLIGATOIREMENT
+## MANDATORY WORKFLOW FOR URL MODE
 
-**QUAND TU REÇOIS UNE URL DE REPOSITORY :**
+When the user provides a URL (starts with `https://` or `git@`), you MUST execute these steps IN ORDER:
 
-Tu DOIS poser 3 questions à l'utilisateur AVANT de créer quoi que ce soit.
+### STEP 1: Extract repo name from URL
 
-### Question 1 : Où créer le projet ?
+Parse the URL to get the suggested project name:
+- `https://github.com/org/my-project.git` → `my-project`
+- `https://dev.azure.com/org/project/_git/repo` → `repo`
 
-Utilise le tool `AskUserQuestion` avec :
-- question: "Où voulez-vous créer ce projet ?"
-- header: "Location"
-- options:
-  - label: "C:/Dev", description: "Dossier de développement (Recommandé)"
-  - label: "Répertoire courant", description: "Créer ici"
-  - label: "Autre chemin", description: "Entrer un chemin personnalisé"
+DO NOT create any folder yet.
 
-**ATTENDS la réponse avant de continuer.**
+### STEP 2: ASK WHERE TO CREATE
 
-### Question 2 : Quel nom pour le projet ?
+Call the AskUserQuestion tool NOW with these EXACT parameters:
 
-Utilise le tool `AskUserQuestion` avec :
-- question: "Quel nom pour le dossier du projet ?"
-- header: "Name"
-- options:
-  - label: "{nom_extrait_url}", description: "Utiliser le nom de l'URL (Recommandé)"
-  - label: "Autre nom", description: "Entrer un nom personnalisé"
-
-**ATTENDS la réponse avant de continuer.**
-
-### Question 3 : Confirmer la création ?
-
-Utilise le tool `AskUserQuestion` avec :
-- question: "Créer le projet GitFlow ?\n\nProjet: {nom}\nEmplacement: {chemin}"
-- header: "Confirm"
-- options:
-  - label: "Oui, créer", description: "Procéder à la création"
-  - label: "Modifier", description: "Changer les paramètres"
-
-**ATTENDS la réponse. Si "Modifier", retourne à la Question 1.**
-
-### SEULEMENT APRÈS les 3 confirmations :
-
-Tu peux créer la structure dans `{TARGET_FOLDER}/{PROJECT_NAME}/`
-
-## Structure à créer (mode Clone)
-
-```
-{project}/
-├── .bare/                # Hidden bare repo
-├── .git                  # gitdir pointer
-├── 01-Main/              # main branch
-├── 02-Develop/           # develop branch ← Working dir
-│   └── .claude/gitflow/
-├── features/
-├── releases/
-└── hotfixes/
+```json
+{
+  "questions": [{
+    "question": "Where do you want to create this project?",
+    "header": "Location",
+    "options": [
+      {"label": "C:/Dev", "description": "Development folder (Recommended)"},
+      {"label": "Current directory", "description": "Create here"},
+      {"label": "Custom path", "description": "Enter a different path"}
+    ],
+    "multiSelect": false
+  }]
+}
 ```
 
-## Output Format
+WAIT for user response. Store result as TARGET_FOLDER.
+
+### STEP 3: ASK PROJECT NAME
+
+Call the AskUserQuestion tool NOW with these EXACT parameters:
+
+```json
+{
+  "questions": [{
+    "question": "What name for the project folder? (Suggested: {extracted_name})",
+    "header": "Name",
+    "options": [
+      {"label": "{extracted_name}", "description": "Use name from URL (Recommended)"},
+      {"label": "Custom name", "description": "Enter a different name"}
+    ],
+    "multiSelect": false
+  }]
+}
+```
+
+WAIT for user response. Store result as PROJECT_NAME.
+
+### STEP 4: CONFIRM CREATION
+
+Call the AskUserQuestion tool NOW with these EXACT parameters:
+
+```json
+{
+  "questions": [{
+    "question": "Create GitFlow project?\n\nProject: {PROJECT_NAME}\nLocation: {TARGET_FOLDER}/{PROJECT_NAME}/\nRepository: {URL}",
+    "header": "Confirm",
+    "options": [
+      {"label": "Yes, create", "description": "Proceed with creation (Recommended)"},
+      {"label": "Modify", "description": "Go back and change settings"}
+    ],
+    "multiSelect": false
+  }]
+}
+```
+
+WAIT for user response. If "Modify", go back to STEP 2.
+
+### STEP 5: CREATE STRUCTURE (only after confirmation)
+
+ONLY after user confirms "Yes, create":
+
+```bash
+PROJECT_BASE="{TARGET_FOLDER}/{PROJECT_NAME}"
+mkdir -p "$PROJECT_BASE"
+cd "$PROJECT_BASE"
+
+# Clone as bare repository
+git clone --bare "{URL}" .bare
+echo "gitdir: ./.bare" > .git
+
+# Create worktree directories
+mkdir -p 01-Main 02-Develop features releases hotfixes
+
+# Setup worktrees
+git worktree add 01-Main main
+git worktree add 02-Develop develop
+
+# Create config in 02-Develop
+mkdir -p 02-Develop/.claude/gitflow
+```
+
+### STEP 6: OUTPUT
 
 ```
-GITFLOW INIT
-  Mode: {clone|existing|new}
-  Project: {nom}
-  Location: {chemin}
-  Status: OK
+================================================================================
+                    GITFLOW INITIALIZED (Clone Mode)
+================================================================================
+
+PROJECT
+  Name:     {PROJECT_NAME}
+  Location: {TARGET_FOLDER}/{PROJECT_NAME}/
+  URL:      {URL}
+
+STRUCTURE
+  01-Main/     → main branch
+  02-Develop/  → develop branch (working directory)
+  features/    → feature worktrees
+  releases/    → release worktrees
+  hotfixes/    → hotfix worktrees
+
+NEXT STEPS
+  cd "{TARGET_FOLDER}/{PROJECT_NAME}/02-Develop"
+
+================================================================================
 ```
+
+## OTHER MODES
+
+If NO URL provided:
+- **Existing repo**: Configure GitFlow on current git repository
+- **New project**: Create new local project without remote
