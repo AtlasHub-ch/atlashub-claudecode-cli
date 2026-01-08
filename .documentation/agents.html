@@ -675,6 +675,135 @@ Accuracy > Speed. Preserve meaning and formatting while fixing obvious errors.</
                     </div>
                 </section>
 
+                <!-- Business Analyse Agents -->
+                <section id="business-analyse-agents">
+                    <h2>Business Analyse Agents</h2>
+
+                    <p data-lang="fr">
+                        Ces agents sont utilises par le workflow Business Analyse pour explorer le codebase et detecter les fonctionnalites similaires.
+                    </p>
+                    <p data-lang="en">
+                        These agents are used by the Business Analyse workflow to explore the codebase and detect similar features.
+                    </p>
+
+                    <div class="command-card" style="margin-bottom: 1.5rem;">
+                        <div class="command-header">
+                            <code class="command-name">ba-similarity</code>
+                            <span class="tag tag-agent">Agent</span>
+                            <span class="tag" style="background: #8b5cf6; color: #fff;">Phase 1</span>
+                        </div>
+                        <div class="command-body">
+                            <p data-lang="fr">
+                                <strong>Detection de similarite</strong> - Detecte si une fonctionnalite demandee existe deja ou chevauche une fonctionnalite existante.
+                            </p>
+                            <p data-lang="en">
+                                <strong>Similarity Detection</strong> - Detects if a requested feature already exists or overlaps with existing functionality.
+                            </p>
+
+                            <h4 data-lang="fr">Resultats possibles</h4>
+                            <h4 data-lang="en">Possible Results</h4>
+                            <table class="reference-table" style="margin-top: 0.5rem;">
+                                <thead>
+                                    <tr>
+                                        <th data-lang="fr">Resultat</th>
+                                        <th data-lang="en">Result</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr style="background: rgba(239, 68, 68, 0.1);">
+                                        <td><strong>DUPLICATE</strong></td>
+                                        <td data-lang="fr">STOP - Reference spec existante</td>
+                                        <td data-lang="en">STOP - Reference existing spec</td>
+                                    </tr>
+                                    <tr style="background: rgba(234, 179, 8, 0.1);">
+                                        <td><strong>EXTEND</strong></td>
+                                        <td data-lang="fr">Construire sur l'existant</td>
+                                        <td data-lang="en">Build on existing feature</td>
+                                    </tr>
+                                    <tr style="background: rgba(34, 197, 94, 0.1);">
+                                        <td><strong>NEW</strong></td>
+                                        <td data-lang="fr">Proceder normalement</td>
+                                        <td data-lang="en">Proceed normally</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Agent</th>
+                                    <th>
+                                        <span data-lang="fr">Mission</span>
+                                        <span data-lang="en">Mission</span>
+                                    </th>
+                                    <th>
+                                        <span data-lang="fr">Utilise en</span>
+                                        <span data-lang="en">Used in</span>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code>explore-api</code></td>
+                                    <td>
+                                        <span data-lang="fr">Endpoints, controllers, DTOs, patterns API</span>
+                                        <span data-lang="en">Endpoints, controllers, DTOs, API patterns</span>
+                                    </td>
+                                    <td>Phase 2</td>
+                                </tr>
+                                <tr>
+                                    <td><code>explore-schema</code></td>
+                                    <td>
+                                        <span data-lang="fr">Schema DB, entites, configurations</span>
+                                        <span data-lang="en">DB schema, entities, configurations</span>
+                                    </td>
+                                    <td>Phase 2</td>
+                                </tr>
+                                <tr>
+                                    <td><code>explore-permissions</code></td>
+                                    <td>
+                                        <span data-lang="fr">RBAC, roles, autorisations</span>
+                                        <span data-lang="en">RBAC, roles, authorizations</span>
+                                    </td>
+                                    <td>Phase 2</td>
+                                </tr>
+                                <tr>
+                                    <td><code>explore-navigation</code></td>
+                                    <td>
+                                        <span data-lang="fr">Menus, routes, pages</span>
+                                        <span data-lang="en">Menus, routes, pages</span>
+                                    </td>
+                                    <td>Phase 2</td>
+                                </tr>
+                                <tr>
+                                    <td><code>explore-theme</code></td>
+                                    <td>
+                                        <span data-lang="fr">UI patterns, composants, design system</span>
+                                        <span data-lang="en">UI patterns, components, design system</span>
+                                    </td>
+                                    <td>Phase 2</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="alert alert-info" style="margin-top: 1rem;">
+                        <span class="alert-icon">&#128161;</span>
+                        <div class="alert-content">
+                            <p data-lang="fr">
+                                Ces agents sont lances en parallele par <code>/business-analyse:2-explore</code>. Maximum 3 agents par execution pour optimiser les tokens.
+                            </p>
+                            <p data-lang="en">
+                                These agents are launched in parallel by <code>/business-analyse:2-explore</code>. Maximum 3 agents per execution to optimize tokens.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
                 <!-- Agent: action -->
                 <section id="action">
                     <h2>action</h2>

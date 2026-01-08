@@ -159,21 +159,18 @@ claude-tools uninstall --yes
 | `/apex:4-examine` | Validate and test |
 | `/apex:5-tasks` | Divide into task files |
 
-### Business Analyse (Specification to Implementation)
+### Business Analyse (6-Phase Workflow)
 
-| Command | Description |
-|---------|-------------|
-| `/business-analyse` | Full BA workflow (7 phases) |
-| `/business-analyse:1-init` | Initialize .business-analyse/ structure |
-| `/business-analyse:2-discover` | Adaptive questionnaire (ultrathink) |
-| `/business-analyse:3-analyse` | BRD generation (ultrathink) |
-| `/business-analyse:4-specify` | FRD with use cases & wireframes (ultrathink) |
-| `/business-analyse:5-document` | Cross-cutting documentation |
-| `/business-analyse:6-handoff` | Generate autonomous dev prompt |
-| `/business-analyse:7-dev` | Guided implementation with user validation |
-| `/business-analyse:bug` | Bug documentation & specification |
+| Command | Model | Description |
+|---------|-------|-------------|
+| `/business-analyse:1-discover` | ULTRATHINK | Elicitation + similarity detection |
+| `/business-analyse:2-explore` | Haiku | Technical context with parallel agents |
+| `/business-analyse:3-analyse` | ULTRATHINK | Merge business need + technical context |
+| `/business-analyse:4-specify` | ULTRATHINK | Functional Requirements Document (FRD) |
+| `/business-analyse:5-validate` | Sonnet | User validation (loop → Phase 3 if changes) |
+| `/business-analyse:6-handoff` | ULTRATHINK | Implementation brief in English |
 
-> **Note**: Phases 1-6 produce specifications only. Phase 7 implements with mandatory user validation before each step.
+> **Workflow**: Phases 1-3 focus on **WHAT** (user need), Phases 4-6 focus on **HOW** (technical solution). Output files saved to `.claude/ba/[feature-name]/`.
 
 ### EF Core Migrations
 
@@ -322,6 +319,13 @@ After installation, the following structure is created:
 │   │   └── 12-cleanup.md
 │   ├── apex.md              # APEX orchestrator
 │   ├── apex/                # APEX phases
+│   ├── business-analyse/    # BA phases (6)
+│   │   ├── 1-discover.md
+│   │   ├── 2-explore.md
+│   │   ├── 3-analyse.md
+│   │   ├── 4-specify.md
+│   │   ├── 5-validate.md
+│   │   └── 6-handoff.md
 │   ├── ef-migrations/       # EF Core commands
 │   ├── git/                 # Git workflow commands
 │   └── prompts/             # Prompt generators
@@ -339,6 +343,13 @@ After installation, the following structure is created:
 │   │   ├── start.md
 │   │   ├── finish.md
 │   │   └── cleanup.md
+│   ├── business-analyse/    # BA exploration agents
+│   │   ├── ba-similarity.md # Detect duplicate features
+│   │   ├── explore-api.md
+│   │   ├── explore-schema.md
+│   │   ├── explore-permissions.md
+│   │   ├── explore-navigation.md
+│   │   └── explore-theme.md
 │   ├── explore-codebase.md
 │   ├── explore-docs.md
 │   ├── action.md

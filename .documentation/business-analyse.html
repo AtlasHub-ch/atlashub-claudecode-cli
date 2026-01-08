@@ -180,158 +180,195 @@
                         <h2>Workflow</h2>
 
                         <div class="svg-diagram">
-                            <svg viewBox="0 0 800 700" xmlns="http://www.w3.org/2000/svg" style="font-family: 'Inter', system-ui, sans-serif;">
+                            <svg viewBox="0 0 700 740" xmlns="http://www.w3.org/2000/svg" style="font-family: 'Inter', system-ui, sans-serif;">
                                 <defs>
-                                    <linearGradient id="discoverGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                                        <stop offset="0%" style="stop-color:#8b5cf6"/>
-                                        <stop offset="100%" style="stop-color:#6d28d9"/>
-                                    </linearGradient>
-                                    <linearGradient id="exploreGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <!-- UML Activity colors - 2 main families -->
+                                    <linearGradient id="whatGrad" x1="0%" y1="0%" x2="0%" y2="100%">
                                         <stop offset="0%" style="stop-color:#3b82f6"/>
-                                        <stop offset="100%" style="stop-color:#1d4ed8"/>
+                                        <stop offset="100%" style="stop-color:#1e40af"/>
                                     </linearGradient>
-                                    <linearGradient id="analyseGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                                        <stop offset="0%" style="stop-color:#ec4899"/>
-                                        <stop offset="100%" style="stop-color:#be185d"/>
+                                    <linearGradient id="howGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                                        <stop offset="0%" style="stop-color:#0d9488"/>
+                                        <stop offset="100%" style="stop-color:#0f766e"/>
                                     </linearGradient>
-                                    <linearGradient id="specifyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                                        <stop offset="0%" style="stop-color:#a855f7"/>
-                                        <stop offset="100%" style="stop-color:#7c3aed"/>
+                                    <!-- Arrow gradients -->
+                                    <linearGradient id="arrowGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                                        <stop offset="0%" style="stop-color:#475569"/>
+                                        <stop offset="100%" style="stop-color:#94a3b8"/>
                                     </linearGradient>
-                                    <linearGradient id="validateGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                                        <stop offset="0%" style="stop-color:#22c55e"/>
-                                        <stop offset="100%" style="stop-color:#15803d"/>
-                                    </linearGradient>
-                                    <linearGradient id="handoffGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                                        <stop offset="0%" style="stop-color:#f97316"/>
-                                        <stop offset="100%" style="stop-color:#ea580c"/>
-                                    </linearGradient>
-                                    <linearGradient id="implementGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                                        <stop offset="0%" style="stop-color:#06b6d4"/>
-                                        <stop offset="100%" style="stop-color:#0891b2"/>
-                                    </linearGradient>
-                                    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
-                                        <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+                                    <!-- Arrows - larger, filled triangles -->
+                                    <marker id="arrowUml" markerWidth="12" markerHeight="10" refX="10" refY="5" orient="auto" markerUnits="userSpaceOnUse">
+                                        <path d="M0,0 L12,5 L0,10 L3,5 Z" fill="#94a3b8"/>
+                                    </marker>
+                                    <marker id="arrowLoop" markerWidth="12" markerHeight="10" refX="10" refY="5" orient="auto" markerUnits="userSpaceOnUse">
+                                        <path d="M0,0 L12,5 L0,10 L3,5 Z" fill="#f87171"/>
+                                    </marker>
+                                    <!-- Shadow filter -->
+                                    <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%">
+                                        <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.3"/>
+                                    </filter>
+                                    <!-- Arrow glow filter -->
+                                    <filter id="arrowGlow" x="-20%" y="-20%" width="140%" height="140%">
+                                        <feGaussianBlur stdDeviation="1" result="blur"/>
                                         <feMerge>
-                                            <feMergeNode in="coloredBlur"/>
+                                            <feMergeNode in="blur"/>
                                             <feMergeNode in="SourceGraphic"/>
                                         </feMerge>
                                     </filter>
-                                    <marker id="arrow" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
-                                        <polygon points="0 0, 10 3.5, 0 7" fill="#64748b"/>
-                                    </marker>
-                                    <marker id="arrowRed" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
-                                        <polygon points="0 0, 10 3.5, 0 7" fill="#ef4444"/>
-                                    </marker>
                                 </defs>
 
-                                <!-- USER REQUEST -->
-                                <g transform="translate(300, 20)" filter="url(#glow)">
-                                    <rect x="0" y="0" width="200" height="45" rx="10" fill="#475569"/>
-                                    <text x="100" y="28" text-anchor="middle" fill="#f1f5f9" font-size="14" font-weight="500">User Request</text>
+                                <!-- Background swimlanes -->
+                                <!-- WHAT swimlane -->
+                                <rect x="20" y="60" width="230" height="320" rx="8" fill="rgba(59, 130, 246, 0.08)" stroke="rgba(59, 130, 246, 0.3)" stroke-width="1"/>
+                                <rect x="20" y="60" width="230" height="32" rx="8" fill="rgba(59, 130, 246, 0.15)"/>
+                                <text x="135" y="82" text-anchor="middle" fill="#3b82f6" font-size="12" font-weight="700" data-lang="fr">QUOI</text>
+                                <text x="135" y="82" text-anchor="middle" fill="#3b82f6" font-size="12" font-weight="700" data-lang="en">WHAT</text>
+
+                                <!-- HOW swimlane -->
+                                <rect x="20" y="400" width="230" height="270" rx="8" fill="rgba(13, 148, 136, 0.08)" stroke="rgba(13, 148, 136, 0.3)" stroke-width="1"/>
+                                <rect x="20" y="400" width="230" height="32" rx="8" fill="rgba(13, 148, 136, 0.15)"/>
+                                <text x="135" y="422" text-anchor="middle" fill="#0d9488" font-size="12" font-weight="700" data-lang="fr">COMMENT</text>
+                                <text x="135" y="422" text-anchor="middle" fill="#0d9488" font-size="12" font-weight="700" data-lang="en">HOW</text>
+
+                                <!-- UML Initial node (filled circle with ring) -->
+                                <circle cx="350" cy="30" r="14" fill="#1e293b" stroke="#64748b" stroke-width="2"/>
+                                <circle cx="350" cy="30" r="6" fill="#94a3b8"/>
+                                <path d="M350,44 L350,68" stroke="#94a3b8" stroke-width="3" stroke-linecap="round" marker-end="url(#arrowUml)" filter="url(#arrowGlow)"/>
+
+                                <!-- USER REQUEST (rounded rect - UML action) -->
+                                <g transform="translate(270, 72)" filter="url(#shadow)">
+                                    <rect x="0" y="0" width="160" height="40" rx="20" fill="#334155" stroke="#475569" stroke-width="1"/>
+                                    <text x="80" y="25" text-anchor="middle" fill="#f1f5f9" font-size="12" font-weight="500" data-lang="fr">Demande utilisateur</text>
+                                    <text x="80" y="25" text-anchor="middle" fill="#f1f5f9" font-size="12" font-weight="500" data-lang="en">User Request</text>
                                 </g>
-                                <line x1="400" y1="65" x2="400" y2="85" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+                                <path d="M350,112 L350,128" stroke="#94a3b8" stroke-width="3" stroke-linecap="round" marker-end="url(#arrowUml)" filter="url(#arrowGlow)"/>
 
                                 <!-- PHASE 1: DISCOVER -->
-                                <g transform="translate(300, 90)" filter="url(#glow)">
-                                    <rect x="0" y="0" width="200" height="60" rx="10" fill="url(#discoverGrad)"/>
-                                    <text x="100" y="24" text-anchor="middle" fill="#f1f5f9" font-size="14" font-weight="700">1. DISCOVER</text>
-                                    <text x="100" y="42" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="11">Elicitation + Similarity</text>
-                                    <rect x="160" y="5" width="35" height="14" rx="3" fill="rgba(255,255,255,0.2)"/>
-                                    <text x="177" y="15" text-anchor="middle" fill="#fff" font-size="8" font-weight="600">ULTRA</text>
+                                <g transform="translate(40, 132)" filter="url(#shadow)">
+                                    <rect x="0" y="0" width="190" height="52" rx="6" fill="#1e3a5f" stroke="#3b82f6" stroke-width="2"/>
+                                    <text x="95" y="22" text-anchor="middle" fill="#f1f5f9" font-size="13" font-weight="700">1. DISCOVER</text>
+                                    <text x="95" y="40" text-anchor="middle" fill="#93c5fd" font-size="10" data-lang="fr">Elicitation + Similarite</text>
+                                    <text x="95" y="40" text-anchor="middle" fill="#93c5fd" font-size="10" data-lang="en">Elicitation + Similarity</text>
                                 </g>
-                                <line x1="400" y1="150" x2="400" y2="165" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+                                <!-- Connector line from center to phase 1 (L-shaped with rounded corner) -->
+                                <path d="M350,132 L350,158 Q350,163 345,163 L235,163" stroke="#94a3b8" stroke-width="3" stroke-linecap="round" fill="none" marker-end="url(#arrowUml)" filter="url(#arrowGlow)"/>
+                                <!-- Output from phase 1 -->
+                                <path d="M135,184 L135,204" stroke="#94a3b8" stroke-width="3" stroke-linecap="round" marker-end="url(#arrowUml)" filter="url(#arrowGlow)"/>
 
                                 <!-- PHASE 2: EXPLORE -->
-                                <g transform="translate(300, 170)" filter="url(#glow)">
-                                    <rect x="0" y="0" width="200" height="60" rx="10" fill="url(#exploreGrad)"/>
-                                    <text x="100" y="24" text-anchor="middle" fill="#f1f5f9" font-size="14" font-weight="700">2. EXPLORE</text>
-                                    <text x="100" y="42" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="11">Technical Context</text>
-                                    <rect x="160" y="5" width="35" height="14" rx="3" fill="rgba(255,255,255,0.2)"/>
-                                    <text x="177" y="15" text-anchor="middle" fill="#fff" font-size="8" font-weight="600">HAIKU</text>
+                                <g transform="translate(40, 208)" filter="url(#shadow)">
+                                    <rect x="0" y="0" width="190" height="52" rx="6" fill="#1e3a5f" stroke="#60a5fa" stroke-width="2" stroke-dasharray="4,2"/>
+                                    <text x="95" y="22" text-anchor="middle" fill="#f1f5f9" font-size="13" font-weight="700">2. EXPLORE</text>
+                                    <text x="95" y="40" text-anchor="middle" fill="#93c5fd" font-size="10" data-lang="fr">Contexte technique</text>
+                                    <text x="95" y="40" text-anchor="middle" fill="#93c5fd" font-size="10" data-lang="en">Technical Context</text>
+                                    <rect x="145" y="5" width="40" height="14" rx="3" fill="rgba(96, 165, 250, 0.3)"/>
+                                    <text x="165" y="15" text-anchor="middle" fill="#93c5fd" font-size="8" font-weight="600">HAIKU</text>
                                 </g>
-                                <line x1="400" y1="230" x2="400" y2="245" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+                                <path d="M135,260 L135,280" stroke="#94a3b8" stroke-width="3" stroke-linecap="round" marker-end="url(#arrowUml)" filter="url(#arrowGlow)"/>
 
                                 <!-- PHASE 3: ANALYSE -->
-                                <g transform="translate(300, 250)" filter="url(#glow)">
-                                    <rect x="0" y="0" width="200" height="60" rx="10" fill="url(#analyseGrad)"/>
-                                    <text x="100" y="24" text-anchor="middle" fill="#f1f5f9" font-size="14" font-weight="700">3. ANALYSE</text>
-                                    <text x="100" y="42" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="11">Enriched Requirements</text>
-                                    <rect x="160" y="5" width="35" height="14" rx="3" fill="rgba(255,255,255,0.2)"/>
-                                    <text x="177" y="15" text-anchor="middle" fill="#fff" font-size="8" font-weight="600">ULTRA</text>
+                                <g transform="translate(40, 284)" filter="url(#shadow)">
+                                    <rect x="0" y="0" width="190" height="52" rx="6" fill="#1e3a5f" stroke="#3b82f6" stroke-width="2"/>
+                                    <text x="95" y="22" text-anchor="middle" fill="#f1f5f9" font-size="13" font-weight="700">3. ANALYSE</text>
+                                    <text x="95" y="40" text-anchor="middle" fill="#93c5fd" font-size="10" data-lang="fr">Exigences enrichies</text>
+                                    <text x="95" y="40" text-anchor="middle" fill="#93c5fd" font-size="10" data-lang="en">Enriched Requirements</text>
                                 </g>
-                                <line x1="400" y1="310" x2="400" y2="325" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+
+                                <!-- Transition from WHAT to HOW -->
+                                <!-- Horizontal separator -->
+                                <line x1="20" y1="390" x2="250" y2="390" stroke="#475569" stroke-width="1" stroke-dasharray="8,4"/>
+                                <path d="M135,336 L135,438" stroke="#94a3b8" stroke-width="3" stroke-linecap="round" marker-end="url(#arrowUml)" filter="url(#arrowGlow)"/>
 
                                 <!-- PHASE 4: SPECIFY -->
-                                <g transform="translate(300, 330)" filter="url(#glow)">
-                                    <rect x="0" y="0" width="200" height="60" rx="10" fill="url(#specifyGrad)"/>
-                                    <text x="100" y="24" text-anchor="middle" fill="#f1f5f9" font-size="14" font-weight="700">4. SPECIFY</text>
-                                    <text x="100" y="42" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="11">Functional Spec (FRD)</text>
-                                    <rect x="160" y="5" width="35" height="14" rx="3" fill="rgba(255,255,255,0.2)"/>
-                                    <text x="177" y="15" text-anchor="middle" fill="#fff" font-size="8" font-weight="600">ULTRA</text>
+                                <g transform="translate(40, 442)" filter="url(#shadow)">
+                                    <rect x="0" y="0" width="190" height="52" rx="6" fill="#134e4a" stroke="#0d9488" stroke-width="2"/>
+                                    <text x="95" y="22" text-anchor="middle" fill="#f1f5f9" font-size="13" font-weight="700">4. SPECIFY</text>
+                                    <text x="95" y="40" text-anchor="middle" fill="#5eead4" font-size="10" data-lang="fr">Specification (FRD)</text>
+                                    <text x="95" y="40" text-anchor="middle" fill="#5eead4" font-size="10" data-lang="en">Functional Spec (FRD)</text>
                                 </g>
-                                <line x1="400" y1="390" x2="400" y2="405" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+                                <path d="M135,494 L135,514" stroke="#94a3b8" stroke-width="3" stroke-linecap="round" marker-end="url(#arrowUml)" filter="url(#arrowGlow)"/>
 
-                                <!-- PHASE 5: VALIDATE -->
-                                <g transform="translate(300, 410)" filter="url(#glow)">
-                                    <rect x="0" y="0" width="200" height="60" rx="10" fill="url(#validateGrad)"/>
-                                    <text x="100" y="24" text-anchor="middle" fill="#f1f5f9" font-size="14" font-weight="700">5. VALIDATE</text>
-                                    <text x="100" y="42" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="11">User Approval</text>
-                                    <rect x="160" y="5" width="35" height="14" rx="3" fill="rgba(255,255,255,0.2)"/>
-                                    <text x="177" y="15" text-anchor="middle" fill="#fff" font-size="8" font-weight="600">SONNET</text>
+                                <!-- PHASE 5: VALIDATE - UML Decision diamond -->
+                                <g transform="translate(40, 518)" filter="url(#shadow)">
+                                    <rect x="0" y="0" width="190" height="52" rx="6" fill="#134e4a" stroke="#14b8a6" stroke-width="2" stroke-dasharray="4,2"/>
+                                    <text x="95" y="22" text-anchor="middle" fill="#f1f5f9" font-size="13" font-weight="700">5. VALIDATE</text>
+                                    <text x="95" y="40" text-anchor="middle" fill="#5eead4" font-size="10" data-lang="fr">Validation utilisateur</text>
+                                    <text x="95" y="40" text-anchor="middle" fill="#5eead4" font-size="10" data-lang="en">User Approval</text>
+                                    <rect x="140" y="5" width="45" height="14" rx="3" fill="rgba(20, 184, 166, 0.3)"/>
+                                    <text x="162" y="15" text-anchor="middle" fill="#5eead4" font-size="8" font-weight="600">SONNET</text>
                                 </g>
 
-                                <!-- Validation loop back to Phase 3 -->
-                                <path d="M 300 440 L 220 440 L 220 280 L 295 280" fill="none" stroke="#ef4444" stroke-width="2" stroke-dasharray="5,3" marker-end="url(#arrowRed)"/>
-                                <rect x="180" y="350" width="60" height="20" rx="4" fill="rgba(239, 68, 68, 0.2)" stroke="#ef4444" stroke-width="1"/>
-                                <text x="210" y="364" text-anchor="middle" fill="#ef4444" font-size="9" font-weight="600">CHANGES</text>
+                                <!-- Decision diamond after VALIDATE -->
+                                <polygon points="350,544 385,570 350,596 315,570" fill="#1e293b" stroke="#94a3b8" stroke-width="2"/>
+                                <text x="350" y="574" text-anchor="middle" fill="#f1f5f9" font-size="11" font-weight="600">OK?</text>
 
-                                <!-- Arrow to Phase 6 -->
-                                <line x1="400" y1="470" x2="400" y2="485" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+                                <!-- Connector from VALIDATE to decision (L-shaped) -->
+                                <path d="M230,544 L310,544 Q315,544 315,549 L315,565" stroke="#94a3b8" stroke-width="3" stroke-linecap="round" fill="none" marker-end="url(#arrowUml)" filter="url(#arrowGlow)"/>
+
+                                <!-- Loop back path (NO) - curved path going up -->
+                                <path d="M350,544 L350,310 Q350,305 345,305 L235,305" stroke="#f87171" stroke-width="3" stroke-linecap="round" stroke-dasharray="8,4" fill="none" marker-end="url(#arrowLoop)" filter="url(#arrowGlow)"/>
+                                <rect x="268" y="293" width="84" height="20" rx="4" fill="rgba(248, 113, 113, 0.15)" stroke="#f87171" stroke-width="1.5"/>
+                                <text x="310" y="307" text-anchor="middle" fill="#f87171" font-size="9" font-weight="600" data-lang="fr">MODIFS</text>
+                                <text x="310" y="307" text-anchor="middle" fill="#f87171" font-size="9" font-weight="600" data-lang="en">CHANGES</text>
+
+                                <!-- YES path to HANDOFF (L-shaped with rounded corner) -->
+                                <path d="M350,596 L350,620 Q350,625 345,625 L235,625" stroke="#94a3b8" stroke-width="3" stroke-linecap="round" fill="none" marker-end="url(#arrowUml)" filter="url(#arrowGlow)"/>
 
                                 <!-- PHASE 6: HANDOFF -->
-                                <g transform="translate(300, 490)" filter="url(#glow)">
-                                    <rect x="0" y="0" width="200" height="60" rx="10" fill="url(#handoffGrad)"/>
-                                    <text x="100" y="24" text-anchor="middle" fill="#f1f5f9" font-size="14" font-weight="700">6. HANDOFF</text>
-                                    <text x="100" y="42" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="11">Implementation Brief</text>
-                                    <rect x="160" y="5" width="35" height="14" rx="3" fill="rgba(255,255,255,0.2)"/>
-                                    <text x="177" y="15" text-anchor="middle" fill="#fff" font-size="8" font-weight="600">ULTRA</text>
+                                <g transform="translate(40, 605)" filter="url(#shadow)">
+                                    <rect x="0" y="0" width="190" height="52" rx="6" fill="#134e4a" stroke="#0d9488" stroke-width="2"/>
+                                    <text x="95" y="22" text-anchor="middle" fill="#f1f5f9" font-size="13" font-weight="700">6. HANDOFF</text>
+                                    <text x="95" y="40" text-anchor="middle" fill="#5eead4" font-size="10" data-lang="fr">Brief d'implementation</text>
+                                    <text x="95" y="40" text-anchor="middle" fill="#5eead4" font-size="10" data-lang="en">Implementation Brief</text>
                                 </g>
-                                <line x1="400" y1="550" x2="400" y2="565" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+                                <path d="M135,657 L135,677" stroke="#94a3b8" stroke-width="3" stroke-linecap="round" marker-end="url(#arrowUml)" filter="url(#arrowGlow)"/>
 
-                                <!-- /IMPLEMENT -->
-                                <g transform="translate(300, 570)" filter="url(#glow)">
-                                    <rect x="0" y="0" width="200" height="50" rx="10" fill="url(#implementGrad)"/>
-                                    <text x="100" y="20" text-anchor="middle" fill="#f1f5f9" font-size="14" font-weight="700">/implement</text>
-                                    <text x="100" y="38" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="11">Execute Code</text>
+                                <!-- /implement - UML Final action -->
+                                <g transform="translate(270, 681)" filter="url(#shadow)">
+                                    <rect x="0" y="0" width="160" height="36" rx="18" fill="#475569" stroke="#94a3b8" stroke-width="1.5"/>
+                                    <text x="80" y="23" text-anchor="middle" fill="#f1f5f9" font-size="12" font-weight="600">/implement</text>
                                 </g>
-
-                                <!-- Side annotations -->
-                                <!-- Left: WHAT (User Focus) -->
-                                <rect x="60" y="90" width="100" height="220" rx="8" fill="rgba(139, 92, 246, 0.1)" stroke="rgba(139, 92, 246, 0.3)" stroke-width="1"/>
-                                <text x="110" y="115" text-anchor="middle" fill="#a78bfa" font-size="12" font-weight="700">WHAT</text>
-                                <text x="110" y="132" text-anchor="middle" fill="#a78bfa" font-size="9">User Focus</text>
-                                <text x="110" y="200" text-anchor="middle" fill="#a78bfa" font-size="9">Business</text>
-                                <text x="110" y="215" text-anchor="middle" fill="#a78bfa" font-size="9">Requirements</text>
-
-                                <!-- Right: HOW (Technical Focus) -->
-                                <rect x="640" y="330" width="100" height="220" rx="8" fill="rgba(249, 115, 22, 0.1)" stroke="rgba(249, 115, 22, 0.3)" stroke-width="1"/>
-                                <text x="690" y="355" text-anchor="middle" fill="#fb923c" font-size="12" font-weight="700">HOW</text>
-                                <text x="690" y="372" text-anchor="middle" fill="#fb923c" font-size="9">Technical Focus</text>
-                                <text x="690" y="440" text-anchor="middle" fill="#fb923c" font-size="9">Functional</text>
-                                <text x="690" y="455" text-anchor="middle" fill="#fb923c" font-size="9">Specification</text>
+                                <path d="M135,681 L135,699 Q135,704 140,704 L266,704" stroke="#94a3b8" stroke-width="3" stroke-linecap="round" fill="none" marker-end="url(#arrowUml)" filter="url(#arrowGlow)"/>
 
                                 <!-- Legend -->
-                                <g transform="translate(550, 100)">
-                                    <text x="0" y="0" fill="#94a3b8" font-size="11" font-weight="600">Legend:</text>
-                                    <rect x="0" y="10" width="30" height="12" rx="3" fill="rgba(255,255,255,0.2)"/>
-                                    <text x="15" y="19" text-anchor="middle" fill="#fff" font-size="7">ULTRA</text>
-                                    <text x="40" y="19" fill="#94a3b8" font-size="9">= ULTRATHINK</text>
-                                    <rect x="0" y="30" width="30" height="12" rx="3" fill="rgba(255,255,255,0.2)"/>
-                                    <text x="15" y="39" text-anchor="middle" fill="#fff" font-size="7">HAIKU</text>
-                                    <text x="40" y="39" fill="#94a3b8" font-size="9">= Fast agents</text>
-                                    <line x1="0" y1="55" x2="30" y2="55" stroke="#ef4444" stroke-width="2" stroke-dasharray="5,3"/>
-                                    <text x="40" y="58" fill="#94a3b8" font-size="9">= Loop back</text>
+                                <g transform="translate(520, 100)">
+                                    <text x="0" y="0" fill="#94a3b8" font-size="11" font-weight="700" data-lang="fr">Legende</text>
+                                    <text x="0" y="0" fill="#94a3b8" font-size="11" font-weight="700" data-lang="en">Legend</text>
+                                    <!-- WHAT box -->
+                                    <rect x="0" y="14" width="16" height="12" rx="2" fill="#1e3a5f" stroke="#3b82f6" stroke-width="1.5"/>
+                                    <text x="24" y="24" fill="#94a3b8" font-size="9" data-lang="fr">Phase QUOI</text>
+                                    <text x="24" y="24" fill="#94a3b8" font-size="9" data-lang="en">WHAT phase</text>
+                                    <!-- HOW box -->
+                                    <rect x="0" y="34" width="16" height="12" rx="2" fill="#134e4a" stroke="#0d9488" stroke-width="1.5"/>
+                                    <text x="24" y="44" fill="#94a3b8" font-size="9" data-lang="fr">Phase COMMENT</text>
+                                    <text x="24" y="44" fill="#94a3b8" font-size="9" data-lang="en">HOW phase</text>
+                                    <!-- Dashed = agents -->
+                                    <rect x="0" y="54" width="16" height="12" rx="2" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-dasharray="3,2"/>
+                                    <text x="24" y="64" fill="#94a3b8" font-size="9">Haiku agents</text>
+                                    <!-- Flow arrow -->
+                                    <path d="M0,80 L12,80" stroke="#94a3b8" stroke-width="3" stroke-linecap="round" marker-end="url(#arrowUml)"/>
+                                    <text x="24" y="84" fill="#94a3b8" font-size="9" data-lang="fr">Flux normal</text>
+                                    <text x="24" y="84" fill="#94a3b8" font-size="9" data-lang="en">Normal flow</text>
+                                    <!-- Loop -->
+                                    <path d="M0,100 L12,100" stroke="#f87171" stroke-width="3" stroke-linecap="round" stroke-dasharray="6,3" marker-end="url(#arrowLoop)"/>
+                                    <text x="24" y="104" fill="#94a3b8" font-size="9" data-lang="fr">Boucle retour</text>
+                                    <text x="24" y="104" fill="#94a3b8" font-size="9" data-lang="en">Feedback loop</text>
+                                    <!-- Decision -->
+                                    <polygon points="8,114 16,122 8,130 0,122" fill="#1e293b" stroke="#94a3b8" stroke-width="1.5"/>
+                                    <text x="24" y="126" fill="#94a3b8" font-size="9" data-lang="fr">Decision</text>
+                                    <text x="24" y="126" fill="#94a3b8" font-size="9" data-lang="en">Decision</text>
+                                </g>
+
+                                <!-- Annotations -->
+                                <g transform="translate(520, 260)">
+                                    <text x="0" y="0" fill="#64748b" font-size="10" font-weight="600" data-lang="fr">Fichiers de sortie</text>
+                                    <text x="0" y="0" fill="#64748b" font-size="10" font-weight="600" data-lang="en">Output Files</text>
+                                    <text x="0" y="18" fill="#94a3b8" font-size="9">01-business-requirements.md</text>
+                                    <text x="0" y="32" fill="#94a3b8" font-size="9">02-technical-context.md</text>
+                                    <text x="0" y="46" fill="#94a3b8" font-size="9">03-enriched-requirements.md</text>
+                                    <text x="0" y="60" fill="#94a3b8" font-size="9">04-functional-spec.md</text>
+                                    <text x="0" y="74" fill="#94a3b8" font-size="9">05-feedback-v[N].md</text>
+                                    <text x="0" y="88" fill="#94a3b8" font-size="9">06-implementation-brief.md</text>
                                 </g>
                             </svg>
                         </div>
