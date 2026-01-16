@@ -587,13 +587,13 @@ body {
 
 /* Content Area */
 .content {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 2rem;
+    max-width: none;
+    width: 100%;
+    padding: 2rem 2.5rem;
 }
 
 .content-wide {
-    max-width: 1200px;
+    max-width: none;
 }
 
 /* ============================================
@@ -738,6 +738,22 @@ td code {
     box-shadow: none !important;
 }
 
+/* Code in alerts - subtle style */
+.alert code,
+.alert-content code {
+    background: rgba(0, 0, 0, 0.3);
+    border: none;
+    color: #e2e8f0;
+    padding: 0.15rem 0.4rem;
+}
+
+/* Code in paragraphs - lighter style */
+p code {
+    background: rgba(30, 41, 59, 0.8);
+    border: none;
+    color: #93c5fd;
+}
+
 pre {
     background: var(--bg-code);
     border: 1px solid var(--border);
@@ -749,11 +765,48 @@ pre {
 }
 
 pre code {
-    background: none;
-    padding: 0;
+    background: none !important;
+    padding: 0 !important;
+    border: none !important;
     color: var(--text);
     font-size: 0.875rem;
     line-height: 1.6;
+}
+
+/* Code block container */
+.code-block pre code {
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+}
+
+/* Code syntax highlighting */
+.code-comment {
+    color: #6b7280;
+    font-style: italic;
+}
+
+.code-cmd {
+    color: #22d3ee;
+    font-weight: 600;
+}
+
+.code-arg {
+    color: #a78bfa;
+}
+
+.code-string {
+    color: #4ade80;
+}
+
+.code-flag {
+    color: #fbbf24;
+}
+
+.code-output {
+    color: #64748b;
+    font-style: italic;
 }
 
 .code-header {
@@ -1394,8 +1447,8 @@ body.lang-en [data-lang="fr"] { display: none !important; }
 
 /* Full width content (no inline TOC) */
 .content-full {
-    max-width: 1000px;
-    margin: 0 auto;
+    max-width: none;
+    width: 100%;
     padding: 2rem 2.5rem;
 }
 
@@ -1407,9 +1460,9 @@ body.lang-en [data-lang="fr"] { display: none !important; }
 
 /* Wide content (no TOC) */
 .content-wide {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 2rem;
+    max-width: none;
+    width: 100%;
+    padding: 2rem 2.5rem;
 }
 
 /* ============================================
@@ -1417,10 +1470,9 @@ body.lang-en [data-lang="fr"] { display: none !important; }
    ============================================ */
 
 .svg-diagram {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 2rem;
+    background: transparent;
+    border: none;
+    padding: 1rem 0;
     margin: 2rem 0;
     overflow-x: auto;
     display: flex;
