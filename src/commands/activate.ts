@@ -27,8 +27,8 @@ export const activateCommand = new Command('activate')
 
       if (!info.active) {
         logger.warn('No active license.');
-        logger.info(`Activate with: ${chalk.cyan('claude-tools activate <key>')}`);
-        logger.info(`Purchase at: ${chalk.cyan('https://atlashub.ch/claude-tools')}`);
+        logger.info(`Activate with: ${chalk.cyan('smartstack-tools activate <key>')}`);
+        logger.info(`Purchase at: ${chalk.cyan('https://atlashub.ch/smartstack-tools')}`);
         return;
       }
 
@@ -135,7 +135,7 @@ export const activateCommand = new Command('activate')
       } else {
         console.log();
         logger.error(result.error || 'License validation failed.');
-        logger.info(`Purchase at: ${chalk.cyan('https://atlashub.ch/claude-tools')}`);
+        logger.info(`Purchase at: ${chalk.cyan('https://atlashub.ch/smartstack-tools')}`);
       }
     } catch (error) {
       spinner.stop();

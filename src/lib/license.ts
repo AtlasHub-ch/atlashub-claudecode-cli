@@ -21,8 +21,8 @@ import {
 } from '../types/license.js';
 import { logger } from './logger.js';
 
-const PRODUCT_ID = 'claude-tools';
-const LICENSE_FILE = join(homedir(), '.claude-tools-license.json');
+const PRODUCT_ID = 'smartstack-tools';
+const LICENSE_FILE = join(homedir(), '.smartstack-tools-license.json');
 const GRACE_PERIOD_DAYS = 7;
 
 /**
@@ -142,7 +142,7 @@ export async function checkLicense(): Promise<{
   if (!stored) {
     return {
       valid: false,
-      error: 'No license found. Run: claude-tools activate',
+      error: 'No license found. Run: smartstack-tools activate',
     };
   }
 

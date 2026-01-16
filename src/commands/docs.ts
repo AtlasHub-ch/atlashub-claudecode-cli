@@ -39,7 +39,7 @@ export const docsCommand = new Command('docs')
         console.log(`  ${chalk.cyan(name)}${isIndex ? chalk.gray(' (default)') : ''}`);
       }
       console.log();
-      logger.info(`Open with: ${chalk.cyan('claude-tools docs <page>')}`);
+      logger.info(`Open with: ${chalk.cyan('smartstack-tools docs <page>')}`);
       return;
     }
 
@@ -49,7 +49,7 @@ export const docsCommand = new Command('docs')
 
     if (!(await fs.pathExists(pagePath))) {
       logger.error(`Documentation page "${pageName}" not found.`);
-      logger.info(`Use ${chalk.cyan('claude-tools docs --list')} to see available pages.`);
+      logger.info(`Use ${chalk.cyan('smartstack-tools docs --list')} to see available pages.`);
       return;
     }
 

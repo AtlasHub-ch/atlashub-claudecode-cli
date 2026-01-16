@@ -1,5 +1,5 @@
 {
-  "name": "@atlashub/claude-tools",
+  "name": "smartstack-tools",
   "version": "1.0.0",
   "description": "Claude Code automation toolkit - GitFlow, APEX, EF Core migrations, prompts and more",
   "author": {
@@ -13,8 +13,8 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "bin": {
-    "claude-tools": "./dist/index.js",
-    "ct": "./dist/index.js"
+    "smartstack-tools": "./dist/index.js",
+    "sst": "./dist/index.js"
   },
   "files": [
     "dist",
@@ -38,10 +38,10 @@
   },
   "homepage": "https://github.com/SIMON-Atlashub/atlashub-claudecode-cli#readme",
   "keywords": [
+    "smartstack",
+    "smartstack-tools",
     "claude",
     "claude-code",
-    "atlashub",
-    "claude-tools",
     "gitflow",
     "apex",
     "efcore",

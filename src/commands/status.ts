@@ -36,7 +36,7 @@ export const statusCommand = new Command('status')
     } else {
       licenseTable.push(
         [`Status: ${chalk.yellow('Not activated')}`],
-        [`Run: ${chalk.cyan('claude-tools activate <KEY>')}`]
+        [`Run: ${chalk.cyan('smartstack-tools activate <KEY>')}`]
       );
     }
 
@@ -144,6 +144,6 @@ export const statusCommand = new Command('status')
     // Quick help
     if (!installation.installed) {
       console.log();
-      logger.info(`Run ${chalk.cyan('claude-tools install')} to install commands`);
+      logger.info(`Run ${chalk.cyan('smartstack-tools install')} to install commands`);
     }
   });
