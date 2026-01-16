@@ -1,6 +1,6 @@
 {
   "name": "smartstack-tools",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Claude Code automation toolkit - GitFlow, APEX, EF Core migrations, prompts and more",
   "author": {
     "name": "David Truninger",
